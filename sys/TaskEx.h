@@ -133,16 +133,6 @@ namespace sys
             return TaskAwaiter<T>(this->handle);
         }
 
-        inline static auto yield()
-        requires (std::is_same<T, void>::value)
-        {
-            __task_yield_to_sched();
-        }
-        inline static Task<void> delay(uint32_t ms)
-        requires (std::is_same<T, void>::value)
-        {
-            __task_wait_while_sched();
-        }
         template <typename Pred>
         inline static Task<void> waitUntil(Pred&& func)
         {

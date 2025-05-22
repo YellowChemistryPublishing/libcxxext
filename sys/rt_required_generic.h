@@ -35,8 +35,18 @@ public:
     { }
 };
 
-#define __task_yield_to_sched() co_return;
-#define __task_wait_while_sched() co_return;
+#define __task_yield()                      \
+    inline static Task<void> yield()        \
+    requires (std::is_same<T, void>::value) \
+    {                                       \
+        co_return;                          \
+    }
+#define __task_delay()                          \
+    inline static Task<void> delay(uint32_t ms) \
+    requires (std::is_same<T, void>::value)     \
+    {                                           \
+        co_return;                              \
+    }
 #define __task_yield_and_resume()
 #define __task_yield_and_continue()
 
