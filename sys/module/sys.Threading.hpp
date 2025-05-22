@@ -1,5 +1,5 @@
 #pragma once
 
 #include <SpinLock.h>
-#include <Task.h>
+#include <TaskEx.h>
 #include <Thread.h>

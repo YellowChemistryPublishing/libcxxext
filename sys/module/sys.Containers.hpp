@@ -5,3 +5,4 @@
 #include <InplaceSet.h>
 #include <InplaceString.h>
 #include <InplaceVector.h>
+#include <ManagedArray.h>
