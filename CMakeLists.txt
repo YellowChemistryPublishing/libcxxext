@@ -4,6 +4,9 @@ project(libcxxext)
 
 set(LIBRARY_TYPE "STATIC" CACHE STRING "Build type of library.")
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 file(GLOB SYSCORE_SRCS CONFIGURE_DEPENDS
     "core/*.h"
     "core/*.cpp"

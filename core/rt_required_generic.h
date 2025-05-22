@@ -2,6 +2,8 @@
 
 #include <thread>
 
+#include <LanguageSupport.h>
+
 struct __tcs_isr
 {
     _inline_always __tcs_isr()
