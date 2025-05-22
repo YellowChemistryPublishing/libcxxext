@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rt_required_generic.h"
 #include <coroutine>
 #include <rt.h>
 
@@ -133,6 +134,8 @@ namespace sys
             return TaskAwaiter<T>(this->handle);
         }
 
+        __task_yield()
+        __task_delay()
         template <typename Pred>
         inline static Task<void> waitUntil(Pred&& func)
         {
