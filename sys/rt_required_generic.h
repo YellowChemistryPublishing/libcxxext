@@ -36,5 +36,8 @@ public:
 };
 
 #define __task_yield_to_sched() co_return;
+#define __task_wait_while_sched() co_return;
 #define __task_yield_and_resume()
 #define __task_yield_and_continue()
+
+constexpr u32 __task_max_delay = std::numeric_limits<u32>::max();

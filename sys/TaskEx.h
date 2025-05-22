@@ -120,7 +120,7 @@ namespace sys
     public:
         using promise_type = TaskPromise<T>;
 
-        constexpr static uint32_t MaxDelay = HAL_MAX_DELAY;
+        constexpr static uint32_t MaxDelay = __task_max_delay;
 
         _inline_always ~Task()
         {
@@ -141,8 +141,7 @@ namespace sys
         inline static Task<void> delay(uint32_t ms)
         requires (std::is_same<T, void>::value)
         {
-            uint32_t from = xTaskGetTickCount();
-            while (pdTICKS_TO_MS(xTaskGetTickCount() - from) < ms) co_await Task<>::yield();
+            __task_wait_while_sched();
         }
         template <typename Pred>
         inline static Task<void> waitUntil(Pred&& func)
