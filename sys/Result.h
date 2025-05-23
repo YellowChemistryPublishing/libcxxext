@@ -31,7 +31,7 @@
 
 namespace sys
 {
-    enum ResultStatus : u8
+    enum ResultStatus : byte
     {
         Ok,
         Error,

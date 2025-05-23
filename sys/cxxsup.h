@@ -13,7 +13,7 @@
 
 namespace sys
 {
-    template <INumber T, INumber ValueType>
+    template <INumberUnderlying T, INumberUnderlying ValueType>
     constexpr T numeric_cast(ValueType value, unsafe_tag)
     {
         if (std::cmp_less_equal(std::numeric_limits<T>::lowest(), value) && std::cmp_less_equal(value, std::numeric_limits<T>::max())) [[likely]]
@@ -23,7 +23,7 @@ namespace sys
         else // if (std::cmp_greater(value, std::numeric_limits<T>::max()))
             return std::numeric_limits<T>::max();
     }
-    template <INumber T, INumber ValueType>
+    template <INumberUnderlying T, INumberUnderlying ValueType>
     constexpr Result<T> numeric_cast(ValueType value)
     {
         if (std::cmp_less_equal(std::numeric_limits<T>::lowest(), value) && std::cmp_less_equal(value, std::numeric_limits<T>::max())) [[likely]]
@@ -35,23 +35,23 @@ namespace sys
     constexpr i32 nr2i32(i32 v)
     {
         v--;
-        v |= v >> 1;
-        v |= v >> 2;
-        v |= v >> 4;
-        v |= v >> 8;
-        v |= v >> 16;
+        v |= v >> 1u;
+        v |= v >> 2u;
+        v |= v >> 4u;
+        v |= v >> 8u;
+        v |= v >> 16u;
         v++;
         return v;
     }
     constexpr i64 nr2i64(i64 v)
     {
         v--;
-        v |= v >> 1;
-        v |= v >> 2;
-        v |= v >> 4;
-        v |= v >> 8;
-        v |= v >> 16;
-        v |= v >> 32;
+        v |= v >> 1u;
+        v |= v >> 2u;
+        v |= v >> 4u;
+        v |= v >> 8u;
+        v |= v >> 16u;
+        v |= v >> 32u;
         v++;
         return v;
     }
@@ -62,20 +62,20 @@ namespace sys
     /// @return Signed 16-bit integer.
     constexpr i16 s16fb2(u8 msb, u8 lsb)
     {
-        return (i16(msb) << 8) | i16(lsb);
+        return (i16(msb) << 8u) | lsb;
     }
     /// @brief Obtain the high byte from a signed 16-bit integer.
     /// @param val The signed 16-bit integer.
     /// @return The high byte.
     constexpr u8 hbfs16(i16 val)
     {
-        return u8(val >> 8);
+        return u8(+(val >> 8u));
     }
     /// @brief Obtain the low byte from a signed 16-bit integer.
     /// @param val The signed 16-bit integer.
     /// @return The low byte.
     constexpr u8 lbfs16(i16 val)
     {
-        return u8(val);
+        return u8(+val);
     }
 } // namespace sys

@@ -269,7 +269,7 @@ namespace sys
                 ManagedArray<CharType> buf;
                 ssz capacity = 0;
             } dataDynamic;
-            CharType dataStatic[sz(StaticCapacity)];
+            CharType dataStatic[+sz(StaticCapacity)];
         };
         bool _isDynamic = false;
         ssz _length = 0;
@@ -317,10 +317,10 @@ namespace sys
             return false;
         }
     };
-
-    using string = sys::String<char8_t>;
-    using str16 = sys::String<char16_t>;
-    using str32 = sys::String<char32_t>;
-    using cstr = sys::String<char>;
-    using wstr = sys::String<wchar_t>;
 } // namespace sys
+
+using string = sys::String<char8_t>;
+using str16 = sys::String<char16_t>;
+using str32 = sys::String<char32_t>;
+using cstr = sys::String<char>;
+using wstr = sys::String<wchar_t>;

@@ -95,4 +95,4 @@ public:
 #define __task_yield_and_resume()
 #define __task_yield_and_continue()
 
-constexpr i32 __task_max_delay = std::numeric_limits<i32>::max();
+constexpr i32 __task_max_delay = std::numeric_limits<i32::UnderlyingType>::max();
