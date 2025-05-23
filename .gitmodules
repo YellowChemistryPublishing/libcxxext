@@ -1,3 +1,0 @@
-[submodule "dep_concurrentqueue"]
-	path = dep_concurrentqueue
-	url = https://github.com/cameron314/concurrentqueue.git

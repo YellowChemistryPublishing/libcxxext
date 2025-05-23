@@ -159,7 +159,7 @@ namespace sys
     template <std::integral WithWidth>
     struct alignas(WithWidth) Integer
     {
-        using UnderlyingType = WithWidth;
+        using Underlying = WithWidth;
 
         WithWidth directAccess;
 
@@ -407,43 +407,43 @@ using ssz = ::sys::Integer<ptrdiff_t>;
 _push_nowarn(_clWarn_literal_suffix);
 constexpr i8 operator""i8(ullong lit) noexcept
 {
-    return i8(i8::UnderlyingType(lit));
+    return i8(i8::Underlying(lit));
 }
 constexpr i16 operator""i16(ullong lit) noexcept
 {
-    return i16(i16::UnderlyingType(lit));
+    return i16(i16::Underlying(lit));
 }
 constexpr i32 operator""i32(ullong lit) noexcept
 {
-    return i32(i32::UnderlyingType(lit));
+    return i32(i32::Underlying(lit));
 }
 constexpr i64 operator""i64(ullong lit) noexcept
 {
-    return i64(i64::UnderlyingType(lit));
+    return i64(i64::Underlying(lit));
 }
 constexpr u8 operator""u8(ullong lit) noexcept
 {
-    return u8(u8::UnderlyingType(lit));
+    return u8(u8::Underlying(lit));
 }
 constexpr u16 operator""u16(ullong lit) noexcept
 {
-    return u16(u16::UnderlyingType(lit));
+    return u16(u16::Underlying(lit));
 }
 constexpr u32 operator""u32(ullong lit) noexcept
 {
-    return u32(u32::UnderlyingType(lit));
+    return u32(u32::Underlying(lit));
 }
 constexpr u64 operator""u64(ullong lit) noexcept
 {
-    return u64(u64::UnderlyingType(lit));
+    return u64(u64::Underlying(lit));
 }
 constexpr ssz operator""zz(ullong lit) noexcept
 {
-    return ssz(ssz::UnderlyingType(lit));
+    return ssz(ssz::Underlying(lit));
 }
 constexpr sz operator""uzz(ullong lit) noexcept
 {
-    return sz(sz::UnderlyingType(lit));
+    return sz(sz::Underlying(lit));
 }
 _pop_nowarn();
 
