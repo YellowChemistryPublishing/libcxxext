@@ -60,22 +60,22 @@ namespace sys
     /// @param msb The most significant byte.
     /// @param lsb The least significant byte.
     /// @return Signed 16-bit integer.
-    constexpr int16_t s16fb2(uint8_t msb, uint8_t lsb)
+    constexpr i16 s16fb2(u8 msb, u8 lsb)
     {
-        return (int16_t(msb) << 8) | int16_t(lsb);
+        return (i16(msb) << 8) | i16(lsb);
     }
     /// @brief Obtain the high byte from a signed 16-bit integer.
     /// @param val The signed 16-bit integer.
     /// @return The high byte.
-    constexpr uint8_t hbfs16(int16_t val)
+    constexpr u8 hbfs16(i16 val)
     {
-        return uint8_t(val >> 8);
+        return u8(val >> 8);
     }
     /// @brief Obtain the low byte from a signed 16-bit integer.
     /// @param val The signed 16-bit integer.
     /// @return The low byte.
-    constexpr uint8_t lbfs16(int16_t val)
+    constexpr u8 lbfs16(i16 val)
     {
-        return uint8_t(val);
+        return u8(val);
     }
 } // namespace sys

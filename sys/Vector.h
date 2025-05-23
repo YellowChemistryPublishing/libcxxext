@@ -1,5 +1,6 @@
 #pragma once
 
+#include "LanguageSupport.h"
 #include <cmath>
 #include <cstdint>
 #include <initializer_list>
@@ -151,7 +152,7 @@ namespace sys::math
         { }
     };
     template <typename T = float>
-    struct Vector3T : public VectorOperators<Vector3T<T>, 3, T>
+    struct Vector3Of : public VectorOperators<Vector3Of<T>, 3, T>
     {
         _push_nowarn(_clWarn_pedantic);
         union
@@ -164,9 +165,9 @@ namespace sys::math
         };
         _pop_nowarn();
 
-        using VectorOperators<Vector3T<T>, 3, T>::VectorOperators;
+        using VectorOperators<Vector3Of<T>, 3, T>::VectorOperators;
 
-        constexpr Vector3T(T x, T y, T z) noexcept : x(x), y(y), z(z)
+        constexpr Vector3Of(T x, T y, T z) noexcept : x(x), y(y), z(z)
         { }
     };
     template <typename T = float>
@@ -209,7 +210,7 @@ namespace sys::math
         { }
     };
     template <typename T>
-    concept VectorType = std::same_as<T, Vector2T<typename T::ValueType>> || std::same_as<T, Vector3T<typename T::ValueType>> || std::same_as<T, Vector4T<typename T::ValueType>> ||
+    concept VectorType = std::same_as<T, Vector2T<typename T::ValueType>> || std::same_as<T, Vector3Of<typename T::ValueType>> || std::same_as<T, Vector4T<typename T::ValueType>> ||
         std::same_as<T, VectorT<T::size(), typename T::ValueType>>;
 
     template <VectorType T>
@@ -220,20 +221,20 @@ namespace sys::math
         return ret;
     }
     template <typename T = float>
-    Vector3T<T> cross(const Vector3T<T>& lhs, const Vector3T<T>& rhs) noexcept
+    Vector3Of<T> cross(const Vector3Of<T>& lhs, const Vector3Of<T>& rhs) noexcept
     {
-        return Vector3T<T> { lhs.y() * rhs.z() - lhs.z() * rhs.y(), lhs.z() * rhs.x() - lhs.x() * rhs.z(), lhs.x() * rhs.y() - lhs.y() * rhs.x() };
+        return Vector3Of<T> { lhs.y() * rhs.z() - lhs.z() * rhs.y(), lhs.z() * rhs.x() - lhs.x() * rhs.z(), lhs.x() * rhs.y() - lhs.y() * rhs.x() };
     }
 
-    using Vector3Int8 = Vector3T<int8_t>;
-    using Vector3Int16 = Vector3T<int16_t>;
-    using Vector3 = Vector3T<>;
+    using Vector3Int8 = Vector3Of<i8>;
+    using Vector3Int16 = Vector3Of<i16>;
+    using Vector3 = Vector3Of<>;
 
     struct Matrix3x3UInt8
     {
-        uint8_t m00, m01, m02;
-        uint8_t m10, m11, m12;
-        uint8_t m20, m21, m22;
+        u8 m00, m01, m02;
+        u8 m10, m11, m12;
+        u8 m20, m21, m22;
 
         constexpr bool operator==(const Matrix3x3UInt8& rhs) const noexcept = default;
     };
