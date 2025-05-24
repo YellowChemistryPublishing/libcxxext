@@ -14,9 +14,8 @@
 
 #include <CompilerWarnings.h>
 
-struct unsafe_tag
+struct unsafe
 { };
-constexpr unsafe_tag unsafe {};
 
 /// @def _inline_always
 /// @brief Force inline a function.
@@ -41,7 +40,7 @@ constexpr unsafe_tag unsafe {};
 #define _asd(T, ...) dynamic_cast<T>(__VA_ARGS__)
 #define _asc(T, ...) const_cast<T>(__VA_ARGS__)
 #define _asr(T, ...) reinterpret_cast<T>(__VA_ARGS__)
-#define _asi(T, ...) ::sys::numeric_cast<T>(__VA_ARGS__, unsafe)
+#define _asi(T, ...) ::sys::numeric_cast<T>(__VA_ARGS__, unsafe())
 
 /// @def _throw(value)
 /// @brief Logs a source location, and throws the value of the expression `value`.
@@ -189,13 +188,33 @@ namespace sys
             return this->directAccess;
         }
 
-        constexpr operator bool() const noexcept
+        constexpr explicit operator bool() const noexcept
         {
             return this->directAccess;
         }
         constexpr bool operator!() const noexcept
         {
             return !this->directAccess;
+        }
+        template <std::integral Other>
+        constexpr friend bool operator==(const sys::Integer<WithWidth>& a, const sys::Integer<Other>& b) noexcept
+        {
+            return std::cmp_equal(a.directAccess, b.directAccess);
+        }
+        template <std::integral Other>
+        constexpr friend int operator<=>(const sys::Integer<WithWidth>& a, const sys::Integer<Other>& b) noexcept
+        {
+            return -int(std::cmp_less(a.directAccess, b.directAccess)) + int(std::cmp_greater(a.directAccess, b.directAccess));
+        }
+        template <std::integral Other>
+        constexpr friend bool operator&&(const sys::Integer<WithWidth>& a, const sys::Integer<Other>& b) noexcept
+        {
+            return a.directAccess && b.directAccess;
+        }
+        template <std::integral Other>
+        constexpr friend bool operator||(const sys::Integer<WithWidth>& a, const sys::Integer<Other>& b) noexcept
+        {
+            return a.directAccess || b.directAccess;
         }
 
         constexpr Integer& operator++() noexcept
@@ -367,20 +386,25 @@ namespace sys
     };
 } // namespace sys
 
-template <std::integral T, std::integral U>
-constexpr int operator<=>(const sys::Integer<T>& a, const sys::Integer<U>& b) noexcept
+template <std::integral T, sys::INumberUnderlying U>
+constexpr int operator==(const sys::Integer<T>& a, U b) noexcept
 {
-    return -int(std::cmp_less(a.directAccess, b.directAccess)) + int(std::cmp_greater(a.directAccess, b.directAccess));
+    return std::cmp_equal(a.directAccess, b);
 }
-template <std::integral T, std::integral U>
-constexpr bool operator&&(const sys::Integer<T>& a, const sys::Integer<U>& b) noexcept
+template <sys::INumberUnderlying T, std::integral U>
+constexpr int operator==(U a, const sys::Integer<T>& b) noexcept
 {
-    return a.directAccess && b.directAccess;
+    return std::cmp_equal(a, b.directAccess);
 }
-template <std::integral T, std::integral U>
-constexpr bool operator||(const sys::Integer<T>& a, const sys::Integer<U>& b) noexcept
+template <std::integral T, sys::INumberUnderlying U>
+constexpr int operator<=>(const sys::Integer<T>& a, U b) noexcept
 {
-    return a.directAccess || b.directAccess;
+    return -int(std::cmp_less(a.directAccess, b)) + int(std::cmp_greater(a.directAccess, b));
+}
+template <sys::INumberUnderlying T, std::integral U>
+constexpr int operator<=>(U a, const sys::Integer<T>& b) noexcept
+{
+    return -int(std::cmp_less(a, b.directAccess)) + int(std::cmp_greater(a, b.directAccess));
 }
 
 using byte = unsigned char;

@@ -23,7 +23,7 @@ namespace sys
             for (auto& str : container) totalLength += str.length();
 
             String ret;
-            auto to = ret.alloc(nr2i64(totalLength + 1));
+            auto to = ret.alloc(nr2i64(totalLength + 1zz));
             if (!to)
                 return nullptr;
 
@@ -44,7 +44,7 @@ namespace sys
         }
         inline String(CharType c, ssz repeat)
         {
-            this->forEachAssign(repeat, [&](CharType* buf, ssz i) { buf[i] = c; }, [&, this] { return this->alloc(nr2i64(repeat + 1)); });
+            this->forEachAssign(repeat, [&](CharType* buf, ssz i) { buf[i] = c; }, [&, this] { return this->alloc(nr2i64(repeat + 1zz)); });
         }
         inline String(const std::span<CharType> str)
         {
@@ -54,7 +54,7 @@ namespace sys
         {
             ssz len = 0;
             while (str[len]) ++len;
-            this->forEachAssign(len, [&](CharType* buf, ssz i) { buf[i] = str[i]; }, [&, this] { return this->alloc(nr2i64(len + 1)); });
+            this->forEachAssign(len, [&](CharType* buf, ssz i) { buf[i] = str[i]; }, [&, this] { return this->alloc(nr2i64(len + 1zz)); });
         }
         template <bool OtherDynamicExtent, ssz OtherStaticCapacity>
         inline String(const String<CharType, OtherDynamicExtent, OtherStaticCapacity>&)
@@ -109,14 +109,14 @@ namespace sys
             return std::lexicographical_compare_three_way(a.begin(), a.end(), b.begin(), b.end());
         }
 
-        inline CharType& operator[](ssz i, unsafe_tag) noexcept
+        inline CharType& operator[](ssz i, unsafe) noexcept
         {
             if (this->isDynamic())
                 return this->dataDynamic.buf[i];
             else
                 return this->dataStatic[i];
         }
-        inline CharType operator[](ssz i, unsafe_tag) const noexcept
+        inline CharType operator[](ssz i, unsafe) const noexcept
         {
             if (this->isDynamic())
                 return this->dataDynamic.buf[i];
@@ -126,14 +126,14 @@ namespace sys
         inline Result<CharType&> operator[](ssz i)
         {
             if (ssz(0) <= i && i < this->_length)
-                return (*this)[i, unsafe];
+                return (*this)[i, unsafe()];
             else
                 return nullptr;
         }
         inline Result<CharType> operator[](ssz i) const
         {
             if (ssz(0) <= i && i < this->_length)
-                return (*this)[i, unsafe];
+                return (*this)[i, unsafe()];
             else
                 return nullptr;
         }
@@ -274,7 +274,7 @@ namespace sys
         bool _isDynamic = false;
         ssz _length = 0;
 
-        inline String(unsafe_tag)
+        inline String(unsafe)
         { }
 
         [[nodiscard]] inline CharType* alloc(ssz capacity)

@@ -14,7 +14,7 @@
 namespace sys
 {
     template <INumberUnderlying T, INumberUnderlying ValueType>
-    constexpr T numeric_cast(ValueType value, unsafe_tag)
+    constexpr T numeric_cast(ValueType value, unsafe)
     {
         if (std::cmp_less_equal(std::numeric_limits<T>::lowest(), value) && std::cmp_less_equal(value, std::numeric_limits<T>::max())) [[likely]]
             return T(value);

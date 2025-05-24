@@ -43,7 +43,7 @@ public:
     }
     constexpr static void sleep(i32 ms)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+        std::this_thread::sleep_for(std::chrono::milliseconds(+ms));
     }
 
     template <typename Func, typename... Args>
@@ -145,12 +145,12 @@ struct __thread_pool
     {                                       \
         co_return;                          \
     }
-#define __task_delay()                                                                 \
-    inline static Task<void> delay(i32 ms)                                             \
-    requires (std::is_same<T, void>::value)                                            \
-    {                                                                                  \
-        auto until = std::chrono::steady_clock::now() + std::chrono::milliseconds(ms); \
-        while (std::chrono::steady_clock::now() < until) co_await Task<>::yield();     \
+#define __task_delay()                                                                  \
+    inline static Task<void> delay(i32 ms)                                              \
+    requires (std::is_same<T, void>::value)                                             \
+    {                                                                                   \
+        auto until = std::chrono::steady_clock::now() + std::chrono::milliseconds(+ms); \
+        while (std::chrono::steady_clock::now() < until) co_await Task<>::yield();      \
     }
 #define __task_yield_and_resume()                          \
     if (auto* threadPool = __thread_pool::instance.load()) \

@@ -89,18 +89,18 @@ namespace sys
             return *this;
         }
 
-        _const inline const T& operator[](ssz index, unsafe_tag) const
+        _const inline const T& operator[](ssz index, unsafe) const
         {
             return this->data[index];
         }
-        _const inline T& operator[](ssz index, unsafe_tag)
+        _const inline T& operator[](ssz index, unsafe)
         {
-            return _invoke_const_member_overload(operator[](index, unsafe), _asc);
+            return _invoke_const_member_overload(operator[](index, unsafe()), _asc);
         }
         _const inline Result<const T&> operator[](ssz index) const
         {
             if (ssz(0) <= index && index < this->_length) [[likely]]
-                return (*this)[index, unsafe];
+                return (*this)[index, unsafe()];
             else
                 return nullptr;
         }
