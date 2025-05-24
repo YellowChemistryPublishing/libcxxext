@@ -1,15 +1,12 @@
 #pragma once
 
-#include <compare>
 #include <concepts>
 #include <cstdint>
 #include <limits>
-#include <numeric>
 #include <print>
 #include <source_location>
 #include <stdfloat>
 #include <type_traits>
-#include <typeinfo>
 #include <utility>
 
 #include <CompilerWarnings.h>
@@ -35,6 +32,9 @@ struct unsafe
 /// @def _restrict
 /// @brief Mark a parameter (or this) as restrict.
 #define _restrict __restrict__
+/// @def _pack(align)
+/// @brief Pack a structure to `align` bytes.
+#define _pack(align) _clPragma_fwd(pack(align))
 
 #define _as(T, ...) static_cast<T>(__VA_ARGS__)
 #define _asd(T, ...) dynamic_cast<T>(__VA_ARGS__)
@@ -154,8 +154,7 @@ namespace sys
                            std::conditional_t<std::is_const_v<From>, std::conditional_t<std::is_volatile_v<From>, std::add_const_t<std::add_volatile_t<T>>, std::add_const_t<T>>,
                                               std::conditional_t<std::is_volatile_v<From>, std::add_volatile_t<T>, T>>>;
 
-#pragma pack(1)
-    template <std::integral WithWidth>
+    _pack(1) template <std::integral WithWidth>
     struct alignas(WithWidth) Integer
     {
         using Underlying = WithWidth;
@@ -429,6 +428,7 @@ using sz = ::sys::Integer<size_t>;
 using ssz = ::sys::Integer<ptrdiff_t>;
 
 _push_nowarn(_clWarn_literal_suffix);
+// clang-format off: Space b/w "" and literal suffix.
 constexpr i8 operator""i8(ullong lit) noexcept
 {
     return i8(i8::Underlying(lit));
@@ -469,6 +469,7 @@ constexpr sz operator""uzz(ullong lit) noexcept
 {
     return sz(sz::Underlying(lit));
 }
+// clang-format on
 _pop_nowarn();
 
 #if !__STDCPP_FLOAT32_T__
