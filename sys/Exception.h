@@ -257,7 +257,7 @@ namespace sys
     };
     /// @brief Thrown when a contract is violated.
     /// @note
-    /// Please do not throw this exception directly, use the `_fence_contract_enforce` macro instead. Don't catch this exception either.
+    /// Prefer using the `_fence_contract_enforce` macro instead. Don't catch this exception.
     /// Pass `byref`.
     struct ContractViolationException : public ManagedException
     {

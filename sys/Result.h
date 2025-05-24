@@ -76,8 +76,9 @@ namespace sys
         {
             using ThisType = TypeWithQualRefFrom<ResultType, std::remove_pointer_t<decltype(this)>>*;
 
-            if (std::exchange(_as(ThisType, this)->status, ResultStatus::Empty) == ResultStatus::Ok)
+            if (_as(ThisType, this)->status == ResultStatus::Ok)
             {
+                _as(ThisType, this)->status = ResultStatus::Empty;
                 if constexpr (std::is_reference_v<T>)
                     return *_as(ThisType, this)->value;
                 else
@@ -119,7 +120,7 @@ namespace sys
         {
             swap(*this, other);
         }
-        constexpr ~Result() noexcept(false)
+        constexpr ~Result()
         {
             switch (this->status)
             {

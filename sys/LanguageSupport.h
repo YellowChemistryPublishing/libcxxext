@@ -386,12 +386,12 @@ namespace sys
 } // namespace sys
 
 template <std::integral T, sys::INumberUnderlying U>
-constexpr int operator==(const sys::Integer<T>& a, U b) noexcept
+constexpr bool operator==(const sys::Integer<T>& a, U b) noexcept
 {
     return std::cmp_equal(a.directAccess, b);
 }
 template <sys::INumberUnderlying T, std::integral U>
-constexpr int operator==(U a, const sys::Integer<T>& b) noexcept
+constexpr bool operator==(U a, const sys::Integer<T>& b) noexcept
 {
     return std::cmp_equal(a, b.directAccess);
 }
