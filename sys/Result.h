@@ -88,7 +88,7 @@ namespace sys
                 _throw(contract_violation_exception("Result is not ok!"));
         }
     private:
-        using result_type = result<T, Err>;
+        using result_type = Result<T, Err>;
     };
 
     /// @brief A result type that can hold either a value or an error.

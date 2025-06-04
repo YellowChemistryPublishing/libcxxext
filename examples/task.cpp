@@ -11,7 +11,7 @@ task<> doSomeWork(char taskID, i32 delayTime)
     co_await task<>::delay(delayTime);
     std::println("(In {}.) Work done!", taskID);
 }
-__async(void) parallelRoutine(char taskID, i32 delayTime)
+async parallelRoutine(char taskID, i32 delayTime)
 {
     for (int i = 0; i < 8; i++)
         co_await doSomeWork(taskID, delayTime);
