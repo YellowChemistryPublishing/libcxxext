@@ -2,10 +2,10 @@
 
 namespace sys
 {
-    using ThreadID = __thread_id;
+    using thread_id = __thread_id;
 
-    using ThreadCriticalSectionISR = __tcs_isr;
-    using ThreadCriticalSection = __tcs;
+    using thread_critical_section_isr = __tcs_isr;
+    using thread_critical_section = __tcs;
 
-    using Thread = __thread_type;
+    using thread = __thread_type;
 } // namespace sys

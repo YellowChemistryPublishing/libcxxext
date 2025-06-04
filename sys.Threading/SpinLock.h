@@ -4,9 +4,9 @@
 
 namespace sys
 {
-    struct LockGuard;
+    struct lock_guard;
 
-    class SpinLock
+    class spin_lock
     {
         std::atomic_flag locked = ATOMIC_FLAG_INIT;
     public:
@@ -23,25 +23,25 @@ namespace sys
             locked.clear(std::memory_order_release);
         }
 
-        inline LockGuard guard();
+        inline lock_guard guard();
     };
 
-    struct LockGuard
+    struct lock_guard
     {
-        inline LockGuard(SpinLock& lock) : lock(lock)
+        inline lock_guard(spin_lock& lock) : lock(lock)
         {
             this->lock.lock();
         }
-        inline ~LockGuard()
+        inline ~lock_guard()
         {
             this->lock.unlock();
         }
     private:
-        SpinLock& lock;
+        spin_lock& lock;
     };
 
-    LockGuard SpinLock::guard()
+    lock_guard spin_lock::guard()
     {
-        return LockGuard(*this);
+        return lock_guard(*this);
     }
 } // namespace sys

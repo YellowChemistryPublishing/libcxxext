@@ -140,17 +140,17 @@ struct __thread_pool
 };
 
 #define __task_yield()                      \
-    inline static Task<void> yield()        \
+    inline static task<void> yield()        \
     requires (std::is_same<T, void>::value) \
     {                                       \
         co_return;                          \
     }
 #define __task_delay()                                                                  \
-    inline static Task<void> delay(i32 ms)                                              \
+    inline static task<void> delay(i32 ms)                                              \
     requires (std::is_same<T, void>::value)                                             \
     {                                                                                   \
         auto until = std::chrono::steady_clock::now() + std::chrono::milliseconds(+ms); \
-        while (std::chrono::steady_clock::now() < until) co_await Task<>::yield();      \
+        while (std::chrono::steady_clock::now() < until) co_await task<>::yield();      \
     }
 #define __task_yield_and_resume()                          \
     if (auto* threadPool = __thread_pool::instance.load()) \

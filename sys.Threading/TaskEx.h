@@ -8,15 +8,15 @@
 namespace sys
 {
     template <typename T>
-    struct TaskPromise;
+    struct task_promise;
 
     template <typename T>
-    class Task;
+    class task;
 
     template <typename T>
-    struct TaskAwaiter
+    struct task_awaiter
     {
-        std::coroutine_handle<TaskPromise<T>> handle;
+        std::coroutine_handle<task_promise<T>> handle;
 
         _inline_always constexpr bool await_ready() const noexcept
         {
@@ -36,9 +36,9 @@ namespace sys
         }
     };
     template <typename T>
-    struct TaskFinalAwaiter
+    struct task_final_awaiter
     {
-        std::coroutine_handle<TaskPromise<T>> handle;
+        std::coroutine_handle<task_promise<T>> handle;
 
         _inline_always constexpr bool await_ready() const noexcept
         {
@@ -53,7 +53,7 @@ namespace sys
     };
 
     template <typename T>
-    struct TaskPromiseCore
+    struct task_promise_b
     {
         std::coroutine_handle<> continuation;
         std::exception_ptr exception = nullptr;
@@ -72,12 +72,12 @@ namespace sys
             return std::suspend_always();
         }
 
-        _inline_always Task<T> get_return_object()
+        _inline_always task<T> get_return_object()
         {
-            return Task<T>(std::coroutine_handle<TaskPromise<T>>::from_promise(*static_cast<TaskPromise<T>*>(this)));
+            return task<T>(std::coroutine_handle<task_promise<T>>::from_promise(*static_cast<task_promise<T>*>(this)));
         }
 
-        [[noreturn]] inline static Task<T> get_return_object_on_allocation_failure()
+        [[noreturn]] inline static task<T> get_return_object_on_allocation_failure()
         {
             _throw(std::bad_alloc());
         }
@@ -87,13 +87,13 @@ namespace sys
         }
     };
     template <typename T>
-    struct TaskPromise final : public TaskPromiseCore<T>
+    struct task_promise final : public task_promise_b<T>
     {
         alignas(T) unsigned char value[sizeof(T)];
 
-        _inline_always TaskFinalAwaiter<T> final_suspend() noexcept
+        _inline_always task_final_awaiter<T> final_suspend() noexcept
         {
-            return TaskFinalAwaiter<T> { std::coroutine_handle<TaskPromise<T>>::from_promise(*this) };
+            return task_final_awaiter<T> { std::coroutine_handle<task_promise<T>>::from_promise(*this) };
         }
 
         template <typename ReturnType>
@@ -103,11 +103,11 @@ namespace sys
         }
     };
     template <>
-    struct TaskPromise<void> final : public TaskPromiseCore<void>
+    struct task_promise<void> final : public task_promise_b<void>
     {
-        _inline_always TaskFinalAwaiter<void> final_suspend() noexcept
+        _inline_always task_final_awaiter<void> final_suspend() noexcept
         {
-            return TaskFinalAwaiter<void> { std::coroutine_handle<TaskPromise<void>>::from_promise(*this) };
+            return task_final_awaiter<void> { std::coroutine_handle<task_promise<void>>::from_promise(*this) };
         }
 
         _inline_always constexpr void return_void() const noexcept
@@ -115,51 +115,49 @@ namespace sys
     };
 
     template <typename T = void>
-    class [[nodiscard]] Task final
+    class [[nodiscard]] task final
     {
     public:
-        using promise_type = TaskPromise<T>;
+        using promise_type = task_promise<T>;
 
         constexpr static i32 MaxDelay = __task_max_delay;
 
-        _inline_always ~Task()
+        _inline_always ~task()
         {
             if (this->handle)
                 this->handle.destroy();
         }
 
-        _inline_always TaskAwaiter<T> operator co_await()
+        _inline_always task_awaiter<T> operator co_await()
         {
-            return TaskAwaiter<T>(this->handle);
+            return task_awaiter<T>(this->handle);
         }
 
-        __task_yield()
-        __task_delay()
-        template <typename Pred>
-        inline static Task<void> waitUntil(Pred&& func)
+        __task_yield() __task_delay() template <typename Pred>
+        inline static task<void> wait_until(Pred&& func)
         {
             if constexpr (!std::convertible_to<decltype(func()), bool>)
                 while (!co_await func());
             else
-                while (!func()) co_await Task<>::yield();
+                while (!func()) co_await task<>::yield();
         }
 
-        friend struct sys::TaskPromiseCore<T>;
+        friend struct sys::task_promise_b<T>;
     private:
-        std::coroutine_handle<TaskPromise<T>> handle;
+        std::coroutine_handle<task_promise<T>> handle;
 
-        _inline_always explicit Task(std::coroutine_handle<TaskPromise<T>> handle) : handle(handle)
+        _inline_always explicit task(std::coroutine_handle<task_promise<T>> handle) : handle(handle)
         { }
     };
 
-    struct Async;
+    struct async;
 
-    struct AsyncPromise
+    struct async_promise
     {
-        consteval AsyncPromise() noexcept = default;
-        _inline_always constexpr ~AsyncPromise() = default;
+        consteval async_promise() noexcept = default;
+        _inline_always constexpr ~async_promise() = default;
 
-        _inline_always Async get_return_object();
+        _inline_always async get_return_object();
 
         _inline_always constexpr std::suspend_always initial_suspend() const noexcept
         {
@@ -178,22 +176,20 @@ namespace sys
         { }
     };
 
-    struct Async
+    struct async
     {
-        using promise_type = AsyncPromise;
+        using promise_type = async_promise;
 
-        friend struct AsyncPromise;
+        friend struct async_promise;
     private:
-        _inline_always explicit Async(std::coroutine_handle<AsyncPromise> handle)
+        _inline_always explicit async(std::coroutine_handle<async_promise> handle)
         {
             __launch_async(handle.address());
         }
     };
 
-    Async AsyncPromise::get_return_object()
+    async async_promise::get_return_object()
     {
-        return Async(std::coroutine_handle<AsyncPromise>::from_promise(*this));
+        return async(std::coroutine_handle<async_promise>::from_promise(*this));
     }
 } // namespace sys
-
-#define __async(void) ::sys::Async

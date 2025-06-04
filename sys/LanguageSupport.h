@@ -68,14 +68,14 @@ struct unsafe
         co_return val;
 /// @def _fence_contract_enforce(cond)
 /// @brief Enforce a contract, throwing a `contract_violation_exception` if `cond` is false.
-#define _fence_contract_enforce(cond)                                                                                    \
-    do                                                                                                                   \
-    {                                                                                                                    \
-        const bool __expr = cond;                                                                                        \
-        if (!__expr)                                                                                                     \
+#define _fence_contract_enforce(cond)                                                                                      \
+    do                                                                                                                     \
+    {                                                                                                                      \
+        const bool __expr = cond;                                                                                          \
+        if (!__expr)                                                                                                       \
             _throw(::sys::contract_violation_exception("Contract violated, condition `" #cond "` evaluated to `false`.")); \
-        [[assume(__expr)]];                                                                                              \
-    }                                                                                                                    \
+        [[assume(__expr)]];                                                                                                \
+    }                                                                                                                      \
     while (false)
 
 namespace sys
@@ -292,19 +292,19 @@ namespace sys
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator&(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
             return typename type_largest_of<WithWidth, Other>::Type(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(a.directAccess) &
-                                                                  std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
+                                                                    std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator|(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
             return typename type_largest_of<WithWidth, Other>::Type(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(a.directAccess) |
-                                                                  std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
+                                                                    std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator^(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
             return typename type_largest_of<WithWidth, Other>::Type(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(a.directAccess) ^
-                                                                  std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
+                                                                    std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
         }
         template <std::unsigned_integral Other>
         friend constexpr integer operator<<(const integer<WithWidth>& a, const Other& b) noexcept

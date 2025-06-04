@@ -5,10 +5,10 @@
 
 using namespace sys;
 
-Task<> doSomeWork(char taskID, i32 delayTime)
+task<> doSomeWork(char taskID, i32 delayTime)
 {
     std::println("(In {}.) Doing some work...", taskID);
-    co_await Task<>::delay(delayTime);
+    co_await task<>::delay(delayTime);
     std::println("(In {}.) Work done!", taskID);
 }
 __async(void) parallelRoutine(char taskID, i32 delayTime)

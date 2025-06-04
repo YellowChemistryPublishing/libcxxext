@@ -11,22 +11,22 @@
 #include <LanguageSupport.h>
 
 #define _fence_result_return(rValRef, out) \
-    do                                      \
-    {                                       \
-        auto __result = rValRef;            \
-        if (!__result)                      \
-            return __result.err();          \
-        out = __result.move();              \
-    }                                       \
+    do                                     \
+    {                                      \
+        auto __result = rValRef;           \
+        if (!__result)                     \
+            return __result.err();         \
+        out = __result.move();             \
+    }                                      \
     while (false)
 #define _fence_result_co_return(rValRef, out) \
-    do                                         \
-    {                                          \
-        auto __result = rValRef;               \
-        if (!__result)                         \
-            co_return __result.err();          \
-        out = __result.move();                 \
-    }                                          \
+    do                                        \
+    {                                         \
+        auto __result = rValRef;              \
+        if (!__result)                        \
+            co_return __result.err();         \
+        out = __result.move();                \
+    }                                         \
     while (false)
 
 namespace sys
