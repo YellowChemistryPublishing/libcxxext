@@ -10,7 +10,7 @@
 #include <Exception.h>
 #include <LanguageSupport.h>
 
-#define __fence_result_return(rValRef, out) \
+#define _fence_result_return(rValRef, out) \
     do                                      \
     {                                       \
         auto __result = rValRef;            \
@@ -19,7 +19,7 @@
         out = __result.move();              \
     }                                       \
     while (false)
-#define __fence_result_co_return(rValRef, out) \
+#define _fence_result_co_return(rValRef, out) \
     do                                         \
     {                                          \
         auto __result = rValRef;               \
@@ -31,186 +31,186 @@
 
 namespace sys
 {
-    enum ResultStatus : byte
+    enum class result_status : byte
     {
-        Ok,
-        Error,
-        Empty
+        ok,
+        error,
+        empty
     };
 
     template <typename T, typename Err>
-    struct ResultAwaiter;
+    struct result_awaiter;
 
     template <typename T>
-    using ResultStorageType = std::conditional_t<!std::is_reference_v<T>, std::remove_const_t<T>, std::remove_reference_t<T>*>;
+    using result_storage_type = std::conditional_t<!std::is_reference_v<T>, std::remove_const_t<T>, std::remove_reference_t<T>*>;
 
     template <template <typename T, typename Err> class Result, typename T, typename Err>
-    struct ResultCommon
+    struct result_b
     {
         /// @brief Whether the result is good.
         constexpr operator bool() const noexcept
         {
-            using ThisType = TypeWithQualRefFrom<ResultType, std::remove_pointer_t<decltype(this)>>*;
-            return _as(ThisType, this)->status == ResultStatus::Ok;
+            using this_type = type_with_qual_ref_from<result_type, std::remove_pointer_t<decltype(this)>>*;
+            return _as(this_type, this)->status == result_status::ok;
         }
 
-        _inline_always ResultAwaiter<T, Err> operator co_await()
+        _inline_always result_awaiter<T, Err> operator co_await()
         {
-            return ResultAwaiter<T, Err>(*this);
+            return result_awaiter<T, Err>(*this);
         }
 
         /// @brief Takes the value if the result is good.
         /// @return The value held by the result.
         constexpr T move()
         {
-            using ThisType = TypeWithQualRefFrom<ResultType, std::remove_pointer_t<decltype(this)>>*;
+            using this_type = type_with_qual_ref_from<result_type, std::remove_pointer_t<decltype(this)>>*;
 
-            _fence_contract_enforce(_as(ThisType, this)->status == ResultStatus::Ok && "Taking value for a bad result!");
-            _as(ThisType, this)->status = ResultStatus::Empty;
+            _fence_contract_enforce(_as(this_type, this)->status == result_status::ok && "Taking value for a bad result!");
+            _as(this_type, this)->status = result_status::empty;
             if constexpr (std::is_reference_v<T>)
-                return *_as(ThisType, this)->value;
+                return *_as(this_type, this)->value;
             else
-                return _as(ThisType, this)->value;
+                return _as(this_type, this)->value;
         }
         constexpr T expect()
         {
-            using ThisType = TypeWithQualRefFrom<ResultType, std::remove_pointer_t<decltype(this)>>*;
+            using this_type = type_with_qual_ref_from<result_type, std::remove_pointer_t<decltype(this)>>*;
 
-            if (_as(ThisType, this)->status == ResultStatus::Ok)
+            if (_as(this_type, this)->status == result_status::ok)
             {
-                _as(ThisType, this)->status = ResultStatus::Empty;
+                _as(this_type, this)->status = result_status::empty;
                 if constexpr (std::is_reference_v<T>)
-                    return *_as(ThisType, this)->value;
+                    return *_as(this_type, this)->value;
                 else
-                    return _as(ThisType, this)->value;
+                    return _as(this_type, this)->value;
             }
             else
-                _throw(ContractViolationException("Result is not ok!"));
+                _throw(contract_violation_exception("Result is not ok!"));
         }
     private:
-        using ResultType = Result<T, Err>;
+        using result_type = result<T, Err>;
     };
 
     /// @brief A result type that can hold either a value or an error.
     /// @tparam T The type of the value to hold.
     /// @tparam Err The type of the error to hold.
     template <typename T, typename Err = void>
-    struct Result : ResultCommon<Result, T, Err>
+    struct result : result_b<result, T, Err>
     {
         /// @brief Constructs a result with a value.
         /// @param value Value to move into the result.
-        constexpr Result(T&& value)
+        constexpr result(T&& value)
         {
             if constexpr (std::is_reference_v<T>)
                 this->value = &value;
             else
-                new(&this->value) ResultStorageType<T>(std::forward<T>(value));
-            this->status = ResultStatus::Ok;
+                new(&this->value) result_storage_type<T>(std::forward<T>(value));
+            this->status = result_status::ok;
         }
         /// @brief Constructs a result with an error.
         /// @param error Error to move into the result.
-        constexpr Result(Err&& error) : status(ResultStatus::Error)
+        constexpr result(Err&& error) : status(result_status::error)
         {
             if constexpr (std::is_reference_v<T>)
                 this->error = &error;
             else
-                new(&this->error) ResultStorageType<Err>(std::forward<Err>(error));
+                new(&this->error) result_storage_type<Err>(std::forward<Err>(error));
         }
-        constexpr Result(Result&& other)
+        constexpr result(result&& other)
         {
             swap(*this, other);
         }
-        constexpr ~Result()
+        constexpr ~result()
         {
             switch (this->status)
             {
-            case ResultStatus::Ok:
+            case result_status::ok:
                 if constexpr (!std::is_reference_v<T>)
-                    this->value.~ResultStorageType<T>();
+                    this->value.~result_storage_type<T>();
                 break;
-            case ResultStatus::Error:
+            case result_status::error:
                 if constexpr (!std::is_reference_v<Err>)
-                    this->error.~ResultStorageType<Err>();
+                    this->error.~result_storage_type<Err>();
                 break;
             }
         }
 
         constexpr Err err()
         {
-            _fence_contract_enforce(this->status == ResultStatus::Error && "Taking error for a good or empty result!");
-            this->status = ResultStatus::Empty;
+            _fence_contract_enforce(this->status == result_status::error && "Taking error for a good or empty result!");
+            this->status = result_status::empty;
             return this->template obtainStorage<Err>();
         }
 
-        constexpr void swap(Result& a, Result& b)
+        constexpr void swap(result& a, result& b)
         {
             using std::swap;
 
-            if (&a != &b && (a.status == ResultStatus::Ok || a.status == ResultStatus::Error || b.status == ResultStatus::Ok || b.status == ResultStatus::Error))
-                std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + std::max(sizeof(ResultStorageType<T>), sizeof(ResultStorageType<Err>)), _asr(byte*, &b.value));
+            if (&a != &b && (a.status == result_status::ok || a.status == result_status::error || b.status == result_status::ok || b.status == result_status::error))
+                std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + std::max(sizeof(result_storage_type<T>), sizeof(result_storage_type<Err>)), _asr(byte*, &b.value));
             swap(a.status, b.status);
         }
 
-        friend struct sys::ResultCommon<Result, T, Err>;
+        friend struct sys::result_b<result, T, Err>;
     private:
         union
         {
-            ResultStorageType<T> value;
-            ResultStorageType<Err> error;
+            result_storage_type<T> value;
+            result_storage_type<Err> error;
         };
-        ResultStatus status = ResultStatus::Empty;
+        result_status status = result_status::empty;
     };
 
     template <typename T>
-    struct Result<T, void> : ResultCommon<Result, T, void>
+    struct result<T, void> : result_b<result, T, void>
     {
         /// @brief Constructs a result with a value.
         /// @param value Value to move into the result.
-        constexpr Result(T&& value)
+        constexpr result(T&& value)
         {
             if constexpr (std::is_reference_v<T>)
                 this->value = &value;
             else
-                new(&this->value) ResultStorageType<T>(std::forward<T>(value));
-            this->status = ResultStatus::Ok;
+                new(&this->value) result_storage_type<T>(std::forward<T>(value));
+            this->status = result_status::ok;
         }
-        constexpr Result(std::nullptr_t) : status(ResultStatus::Error)
+        constexpr result(std::nullptr_t) : status(result_status::error)
         { }
-        constexpr Result(Result&& other)
+        constexpr result(result&& other)
         {
             swap(*this, other);
         }
-        constexpr ~Result()
+        constexpr ~result()
         {
             if constexpr (!std::is_reference_v<T>)
-                if (this->status == ResultStatus::Ok)
-                    _asr(ResultStorageType<T>*, this->storage)->~T();
+                if (this->status == result_status::ok)
+                    _asr(result_storage_type<T>*, this->storage)->~T();
         }
 
-        constexpr void swap(Result& a, Result& b)
+        constexpr void swap(result& a, result& b)
         {
             using std::swap;
 
-            if (&a != &b && (a.status == ResultStatus::Ok || b.status == ResultStatus::Ok))
-                std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + sizeof(ResultStorageType<T>), _asr(byte*, &b.value));
+            if (&a != &b && (a.status == result_status::ok || b.status == result_status::ok))
+                std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + sizeof(result_storage_type<T>), _asr(byte*, &b.value));
             swap(a.status, b.status);
         }
 
-        friend struct sys::ResultCommon<Result, T, void>;
+        friend struct sys::result_b<result, T, void>;
     private:
         union
         {
             byte none;
-            ResultStorageType<T> value;
+            result_storage_type<T> value;
         };
-        ResultStatus status = ResultStatus::Empty;
+        result_status status = result_status::empty;
     };
 
     /// @brief Awaiter to enable short-circuiting, à la rustlang `operator?`.
     /// @tparam T The type of the value to hold.
     /// @tparam Err The type of the error to hold.
     template <typename T, typename Err>
-    struct ResultAwaiter
+    struct result_awaiter
     {
         _inline_always constexpr bool await_ready() const noexcept
         {
@@ -224,7 +224,7 @@ namespace sys
             else
                 []<bool _false = false>
                 {
-                    static_assert(_false, "`Result<...>::operator?` requires `typename Err` to be returnable in the current scope!");
+                    static_assert(_false, "`result<...>::operator?` requires `typename Err` to be returnable in the current scope!");
                 }();
 
             if constexpr (requires { parent.promise().continuation.resume(); })
@@ -235,8 +235,8 @@ namespace sys
             return res.takeValue();
         }
 
-        friend struct sys::Result<T, Err>;
+        friend struct sys::result<T, Err>;
     private:
-        Result<T, Err>& res;
+        result<T, Err>& res;
     };
 } // namespace sys

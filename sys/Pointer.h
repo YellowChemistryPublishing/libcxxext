@@ -54,7 +54,7 @@ namespace sys
     };
 
     template <typename T>
-    struct sc_ptr : sc_ptr_b<T>
+    struct sc_ptr : public sc_ptr_b<T>
     {
         using sc_ptr_b<T>::sc_ptr_b;
         inline ~sc_ptr()
@@ -63,7 +63,7 @@ namespace sys
         }
     };
     template <typename T>
-    struct sc_ptr<T[]> : sc_ptr_b<T>
+    struct sc_ptr<T[]> : public sc_ptr_b<T>
     {
         using sc_ptr_b<T>::sc_ptr_b;
         inline ~sc_ptr()

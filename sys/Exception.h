@@ -14,15 +14,15 @@ namespace sys
     /// @note
     /// Inherits from `std::exception`, no need to catch this type specifically.
     /// Pass `byref`.
-    struct ManagedException : public std::exception
+    struct managed_exception : public std::exception
     {
         /// @brief What went wrong.
         /// @return The reason for the exception.
         constexpr virtual const char* what() const noexcept override = 0;
     };
-    /// @brief Thrown when an `FencedPointer<T>` is dereferenced, addition-assigned, subtraction-assigned, incremented, or decremented when `nullptr`.
+    /// @brief Thrown when an `fenced_pointer<T>` is dereferenced, addition-assigned, subtraction-assigned, incremented, or decremented when `nullptr`.
     /// @note Pass `byref`.
-    struct NullPointerException : public ManagedException
+    struct null_pointer_exception : public managed_exception
     {
         /// @brief What went wrong.
         /// @return Literal string.
@@ -36,31 +36,31 @@ namespace sys
     /// @tparam T The type of the pointer.
     /// @note Pass `byval`.
     template <typename T>
-    struct FencedPointer
+    struct fenced_pointer
     {
-        /// @brief Construct `FencedPointer<T>` with the value `nullptr`.
-        inline FencedPointer() noexcept = default;
-        /// @brief Construct `FencedPointer<T>` with a value.
+        /// @brief Construct `fenced_pointer<T>` with the value `nullptr`.
+        inline fenced_pointer() noexcept = default;
+        /// @brief Construct `fenced_pointer<T>` with a value.
         /// @param value The value to assign to the pointer.
-        inline FencedPointer(T* value) noexcept : value(value)
+        inline fenced_pointer(T* value) noexcept : value(value)
         { }
         /// @brief Copy constructor.
-        /// @param other The other `FencedPointer<T>` to copy.
-        inline FencedPointer(const FencedPointer& other) noexcept : value(other.value)
+        /// @param other The other `fenced_pointer<T>` to copy.
+        inline fenced_pointer(const fenced_pointer& other) noexcept : value(other.value)
         { }
 
         /// @brief Assignment operator.
         /// @param value The value to assign to the pointer.
         /// @return Reference to `*this`.
-        inline FencedPointer& operator=(T* value) noexcept
+        inline fenced_pointer& operator=(T* value) noexcept
         {
             this->value = value;
             return *this;
         }
         /// @brief Copy assignment operator.
-        /// @param other The other `FencedPointer<T>` to copy.
+        /// @param other The other `fenced_pointer<T>` to copy.
         /// @return Reference to `*this`.
-        inline FencedPointer& operator=(const FencedPointer& other) noexcept
+        inline fenced_pointer& operator=(const fenced_pointer& other) noexcept
         {
             this->value = other.value;
             return *this;
@@ -77,117 +77,117 @@ namespace sys
         /// @return The underlying pointer value.
         [[nodiscard]] inline T& operator*() const
         {
-            return *this->obtainOrThrow();
+            return *this->obtain_or_throw();
         }
         /// @brief Obtain the pointer value, throwing if `nullptr`.
         /// @return The underlying pointer value.
         [[nodiscard]] inline T* operator->() const
         {
-            return this->obtainOrThrow();
+            return this->obtain_or_throw();
         }
         /// @brief Obtain value at index, throwing if `nullptr`.
         /// @param index The index to access.
         /// @return The value at the index.
         [[nodiscard]] inline T& operator[](std::size_t index) const
         {
-            return this->obtainOrThrow()[index];
+            return this->obtain_or_throw()[index];
         }
 
         /// @brief Spaceship operator.
-        /// @param other The other `FencedPointer<T>` to compare against.
+        /// @param other The other `fenced_pointer<T>` to compare against.
         /// @return The comparison result.
-        inline auto operator<=>(const FencedPointer& other) const noexcept = default;
+        inline auto operator<=>(const fenced_pointer& other) const noexcept = default;
 
         /// @brief Prefix increment operator.
         /// @return Reference to `*this`.
-        inline FencedPointer& operator++() noexcept
+        inline fenced_pointer& operator++() noexcept
         {
             _push_nowarn(_clWarn_pedantic);
             void* jmp[2] { &&ThrowNull, &&Op };
             goto* jmp[bool(this->value)];
             _pop_nowarn();
         ThrowNull:
-            _throw(NullPointerException());
+            _throw(null_pointer_exception());
         Op:
             ++this->value;
             return *this;
         }
         /// @brief Prefix decrement operator.
         /// @return Reference to `*this`.
-        inline FencedPointer& operator--() noexcept
+        inline fenced_pointer& operator--() noexcept
         {
             _push_nowarn(_clWarn_pedantic);
             void* jmp[2] { &&ThrowNull, &&Op };
             goto* jmp[bool(this->value)];
             _pop_nowarn();
         ThrowNull:
-            _throw(NullPointerException());
+            _throw(null_pointer_exception());
         Op:
             --this->value;
             return *this;
         }
         /// @brief Postfix increment operator.
         /// @return The value before incrementing.
-        inline FencedPointer operator++(int) noexcept
+        inline fenced_pointer operator++(int) noexcept
         {
             _push_nowarn(_clWarn_pedantic);
             void* jmp[2] { &&ThrowNull, &&Op };
             goto* jmp[bool(this->value)];
             _pop_nowarn();
         ThrowNull:
-            _throw(NullPointerException());
+            _throw(null_pointer_exception());
         Op:
-            FencedPointer ret = *this;
+            fenced_pointer ret = *this;
             ++this->value;
             return ret;
         }
         /// @brief Postfix decrement operator.
         /// @return The value before decrementing.
-        inline FencedPointer operator--(int) noexcept
+        inline fenced_pointer operator--(int) noexcept
         {
             _push_nowarn(_clWarn_pedantic);
             void* jmp[2] { &&ThrowNull, &&Op };
             goto* jmp[bool(this->value)];
             _pop_nowarn();
         ThrowNull:
-            _throw(NullPointerException());
+            _throw(null_pointer_exception());
         Op:
-            FencedPointer ret = *this;
+            fenced_pointer ret = *this;
             --this->value;
             return ret;
         }
         /// @brief Addition operator.
         /// @param offset The offset to add.
         /// @return The pointer with the offset added.
-        inline FencedPointer operator+(ptrdiff_t offset) const noexcept
+        inline fenced_pointer operator+(ptrdiff_t offset) const noexcept
         {
-            return FencedPointer { this->value + offset };
+            return fenced_pointer { this->value + offset };
         }
         /// @brief Subtraction operator.
         /// @param offset The offset to subtract.
         /// @return The pointer with the offset subtracted.
-        inline FencedPointer operator-(ptrdiff_t offset) const noexcept
+        inline fenced_pointer operator-(ptrdiff_t offset) const noexcept
         {
-            return FencedPointer { this->value - offset };
+            return fenced_pointer { this->value - offset };
         }
         /// @brief Addition operator.
         /// @param offset The offset to add.
         /// @return The pointer with the offset added.
-        inline ptrdiff_t operator-(const FencedPointer& other) const noexcept
+        inline ptrdiff_t operator-(const fenced_pointer& other) const noexcept
         {
             return this->value - other.value;
         }
         /// @brief Addition assignment operator.
         /// @param offset The offset to add.
         /// @return Reference to `*this`.
-        inline FencedPointer& operator+=(ptrdiff_t offset) noexcept
+        inline fenced_pointer& operator+=(ptrdiff_t offset) noexcept
         {
             _push_nowarn(_clWarn_pedantic);
             void* jmp[2] { &&ThrowNull, &&Op };
             goto* jmp[bool(this->value)];
             _pop_nowarn();
         ThrowNull:
-            _throw(NullPointerException());
+            _throw(null_pointer_exception());
         Op:
             this->value += offset;
             return *this;
@@ -195,14 +195,14 @@ namespace sys
         /// @brief Subtraction assignment operator.
         /// @param offset The offset to subtract.
         /// @return Reference to `*this`.
-        inline FencedPointer& operator-=(ptrdiff_t offset) noexcept
+        inline fenced_pointer& operator-=(ptrdiff_t offset) noexcept
         {
             _push_nowarn(_clWarn_pedantic);
             void* jmp[2] { &&ThrowNull, &&Op };
             goto* jmp[bool(this->value)];
             _pop_nowarn();
         ThrowNull:
-            _throw(NullPointerException());
+            _throw(null_pointer_exception());
         Op:
             this->value -= offset;
             return *this;
@@ -212,27 +212,27 @@ namespace sys
 
         /// @brief Obtain the pointer value, throwing if `nullptr`.
         /// @return The underlying pointer value.
-        [[nodiscard]] inline T* obtainOrThrow() const
+        [[nodiscard]] inline T* obtain_or_throw() const
         {
             _push_nowarn(_clWarn_pedantic);
             void* jmp[2] { &&ThrowNull, &&Op };
             goto* jmp[bool(this->value)];
             _pop_nowarn();
         ThrowNull:
-            _throw(NullPointerException());
+            _throw(null_pointer_exception());
         Op:
             return this->value;
         }
     };
 
 #if !defined(__clang__) && defined(__GNUC__)
-    inline std::unique_ptr<char, void (*)(void*)> exceptionTypeName(std::exception_ptr ex)
+    inline std::unique_ptr<char, void (*)(void*)> exception_type_name(std::exception_ptr ex)
     {
         return std::unique_ptr<char, void (*)(void*)>(abi::__cxa_demangle(ex.__cxa_exception_type()->name() /* Contract implied: `name != nullptr`. */, NULL, NULL, NULL),
                                                       std::free);
     }
 #else
-    inline std::unique_ptr<const char, void (*)(const void*)> exceptionTypeName([[maybe_unused]] std::exception_ptr ex)
+    inline std::unique_ptr<const char, void (*)(const void*)> exception_type_name([[maybe_unused]] std::exception_ptr ex)
     {
         return std::unique_ptr<const char, void (*)(const void* const)>("<unknown>", [](const void* const) { });
     }
@@ -240,10 +240,10 @@ namespace sys
 
     /// @brief Terminate the program.
     /// @note Pass `byref`.
-    struct TerminateException : public ManagedException
+    struct terminate_exception : public managed_exception
     {
         /// @brief On construction, terminate the program.
-        inline TerminateException() noexcept
+        inline terminate_exception() noexcept
         {
             std::terminate();
         }
@@ -259,12 +259,12 @@ namespace sys
     /// @note
     /// Prefer using the `_fence_contract_enforce` macro instead. Don't catch this exception.
     /// Pass `byref`.
-    struct ContractViolationException : public ManagedException
+    struct contract_violation_exception : public managed_exception
     {
         /// @brief Construct the exception with a reason, which is logged on construction.
         /// @param why The reason the contract was violated.
         template <size_t N>
-        inline ContractViolationException(const char (&why)[N]) noexcept : why(why)
+        inline contract_violation_exception(const char (&why)[N]) noexcept : why(why)
         {
             std::println(stderr, "Note: {}", why);
         }

@@ -6,7 +6,7 @@
 #include <LanguageSupport.h>
 #include <Result.h>
 
-#define _assert_ctor_can_fail() static_assert(false, "This constructor may fail, use `ctor` instead.")
+#define _assert_ctor_can_fail() static_assert(false, "This constructor may fail, use `...::ctor` instead.")
 #define _invoke_const_member_overload(memberFunction, cast)                                                                                                          \
     cast(std::remove_const_t<decltype(_as(std::add_const_t<decltype(*this)>, *this).memberFunction)>, _as(std::add_const_t<decltype(*this)>, *this).memberFunction);
 
@@ -23,7 +23,7 @@ namespace sys
             return std::numeric_limits<T>::max();
     }
     template <INumberUnderlying T, INumberUnderlying ValueType>
-    constexpr Result<T> numeric_cast(ValueType value)
+    constexpr result<T> numeric_cast(ValueType value)
     {
         if (std::cmp_less_equal(std::numeric_limits<T>::lowest(), value) && std::cmp_less_equal(value, std::numeric_limits<T>::max())) [[likely]]
             return T(value);

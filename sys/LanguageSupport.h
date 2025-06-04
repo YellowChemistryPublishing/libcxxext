@@ -67,13 +67,13 @@ struct unsafe
     if (retCond)                             \
         co_return val;
 /// @def _fence_contract_enforce(cond)
-/// @brief Enforce a contract, throwing a `ContractViolationException` if `cond` is false.
+/// @brief Enforce a contract, throwing a `contract_violation_exception` if `cond` is false.
 #define _fence_contract_enforce(cond)                                                                                    \
     do                                                                                                                   \
     {                                                                                                                    \
         const bool __expr = cond;                                                                                        \
         if (!__expr)                                                                                                     \
-            _throw(::sys::ContractViolationException("Contract violated, condition `" #cond "` evaluated to `false`.")); \
+            _throw(::sys::contract_violation_exception("Contract violated, condition `" #cond "` evaluated to `false`.")); \
         [[assume(__expr)]];                                                                                              \
     }                                                                                                                    \
     while (false)
@@ -89,28 +89,28 @@ namespace sys
     concept IStrictlyNarrowerUnderlying = IStrictlyWiderUnderlying<Than, T>;
 
     template <typename T, typename... WithSignednessOf>
-    using TypeIntWithSignednessUnderlying = std::conditional_t<(std::is_signed_v<WithSignednessOf> || ...), std::make_signed_t<T>, std::make_unsigned_t<T>>;
+    using type_int_with_signedness_underlying = std::conditional_t<(std::is_signed_v<WithSignednessOf> || ...), std::make_signed_t<T>, std::make_unsigned_t<T>>;
 
     template <typename T, typename... Rest>
-    struct TypeSmallestOf
+    struct type_smallest_of
     {
-        using RemainderType = TypeSmallestOf<Rest...>::Type;
+        using RemainderType = type_smallest_of<Rest...>::Type;
         using Type = std::conditional_t<(sizeof(RemainderType) > sizeof(T)), T, RemainderType>;
     };
     template <typename T>
-    struct TypeSmallestOf<T>
+    struct type_smallest_of<T>
     {
         using Type = T;
     };
 
     template <typename T, typename... Rest>
-    struct TypeLargestOf
+    struct type_largest_of
     {
-        using RemainderType = TypeLargestOf<Rest...>::Type;
+        using RemainderType = type_largest_of<Rest...>::Type;
         using Type = std::conditional_t<(sizeof(RemainderType) < sizeof(T)), T, RemainderType>;
     };
     template <typename T>
-    struct TypeLargestOf<T>
+    struct type_largest_of<T>
     {
         using Type = T;
     };
@@ -135,17 +135,17 @@ namespace sys
     };
 
     template <typename Functor, typename ReturnType, typename... Args>
-    struct TypeIsFunctor : std::is_invocable<ReturnType, Functor, Args...>
+    struct type_is_functor : std::is_invocable<ReturnType, Functor, Args...>
     { };
     template <typename Functor, typename ReturnType, typename... Args>
-    struct TypeIsFunctor<Functor, ReturnType(Args...)> : TypeIsFunctor<Functor, ReturnType, Args...>
+    struct type_is_functor<Functor, ReturnType(Args...)> : type_is_functor<Functor, ReturnType, Args...>
     { };
 
     template <typename Functor, typename Signature>
-    concept IFunc = TypeIsFunctor<Functor, Signature>::value;
+    concept IFunc = type_is_functor<Functor, Signature>::value;
 
     template <typename T, typename From>
-    using TypeWithQualRefFrom =
+    using type_with_qual_ref_from =
         std::conditional_t<std::is_reference_v<From>,
                            std::conditional_t<std::is_const_v<From>,
                                               std::conditional_t<std::is_volatile_v<From>, std::add_const_t<std::add_volatile_t<std::add_lvalue_reference_t<T>>>,
@@ -155,27 +155,27 @@ namespace sys
                                               std::conditional_t<std::is_volatile_v<From>, std::add_volatile_t<T>, T>>>;
 
     _pack(1) template <std::integral WithWidth>
-    struct alignas(WithWidth) Integer
+    struct alignas(WithWidth) integer
     {
         using Underlying = WithWidth;
 
         WithWidth directAccess;
 
-        constexpr Integer() noexcept = default;
+        constexpr integer() noexcept = default;
         template <IStrictlyNarrowerUnderlying<WithWidth> T>
-        constexpr Integer(T t) noexcept : directAccess(t)
+        constexpr integer(T t) noexcept : directAccess(t)
         { }
         template <std::integral T>
-        constexpr Integer(T t) noexcept : directAccess(T(t) & T(std::numeric_limits<WithWidth>::max()))
+        constexpr integer(T t) noexcept : directAccess(T(t) & T(std::numeric_limits<WithWidth>::max()))
         { }
         template <IStrictlyNarrowerUnderlying<WithWidth> T>
-        constexpr Integer(const Integer<T>& t) noexcept : directAccess(t.directAccess)
+        constexpr integer(const integer<T>& t) noexcept : directAccess(t.directAccess)
         { }
 
         template <std::integral T>
         constexpr explicit operator T() const noexcept
         {
-            return T((typename TypeLargestOf<T, WithWidth>::Type(this->directAccess)) & (typename TypeLargestOf<T, WithWidth>::Type(std::numeric_limits<T>::max())));
+            return T((typename type_largest_of<T, WithWidth>::Type(this->directAccess)) & (typename type_largest_of<T, WithWidth>::Type(std::numeric_limits<T>::max())));
         }
         template <std::floating_point T>
         constexpr explicit operator T() const noexcept
@@ -196,50 +196,50 @@ namespace sys
             return !this->directAccess;
         }
         template <std::integral Other>
-        constexpr friend bool operator==(const sys::Integer<WithWidth>& a, const sys::Integer<Other>& b) noexcept
+        constexpr friend bool operator==(const sys::integer<WithWidth>& a, const sys::integer<Other>& b) noexcept
         {
             return std::cmp_equal(a.directAccess, b.directAccess);
         }
         template <std::integral Other>
-        constexpr friend int operator<=>(const sys::Integer<WithWidth>& a, const sys::Integer<Other>& b) noexcept
+        constexpr friend int operator<=>(const sys::integer<WithWidth>& a, const sys::integer<Other>& b) noexcept
         {
             return -int(std::cmp_less(a.directAccess, b.directAccess)) + int(std::cmp_greater(a.directAccess, b.directAccess));
         }
         template <std::integral Other>
-        constexpr friend bool operator&&(const sys::Integer<WithWidth>& a, const sys::Integer<Other>& b) noexcept
+        constexpr friend bool operator&&(const sys::integer<WithWidth>& a, const sys::integer<Other>& b) noexcept
         {
             return a.directAccess && b.directAccess;
         }
         template <std::integral Other>
-        constexpr friend bool operator||(const sys::Integer<WithWidth>& a, const sys::Integer<Other>& b) noexcept
+        constexpr friend bool operator||(const sys::integer<WithWidth>& a, const sys::integer<Other>& b) noexcept
         {
             return a.directAccess || b.directAccess;
         }
 
-        constexpr Integer& operator++() noexcept
+        constexpr integer& operator++() noexcept
         {
             this->directAccess = WithWidth(std::make_unsigned_t<WithWidth>(this->directAccess) + std::make_unsigned_t<WithWidth>(1));
             return *this;
         }
-        constexpr Integer& operator--() noexcept
+        constexpr integer& operator--() noexcept
         {
             this->directAccess = WithWidth(std::make_unsigned_t<WithWidth>(this->directAccess) - std::make_unsigned_t<WithWidth>(1));
             return *this;
         }
-        constexpr Integer operator++(int) noexcept
+        constexpr integer operator++(int) noexcept
         {
-            Integer ret = *this;
+            integer ret = *this;
             this->directAccess = WithWidth(std::make_unsigned_t<WithWidth>(this->directAccess) + std::make_unsigned_t<WithWidth>(1));
             return ret;
         }
-        constexpr Integer operator--(int) noexcept
+        constexpr integer operator--(int) noexcept
         {
-            Integer ret = *this;
+            integer ret = *this;
             this->directAccess = WithWidth(std::make_unsigned_t<WithWidth>(this->directAccess) - std::make_unsigned_t<WithWidth>(1));
             return ret;
         }
 
-        constexpr Integer operator-() const noexcept
+        constexpr integer operator-() const noexcept
         {
             union
             {
@@ -250,7 +250,7 @@ namespace sys
             return ret.i;
         }
         template <std::integral Other>
-        friend constexpr Integer<typename TypeLargestOf<WithWidth, Other>::Type> operator+(const Integer<WithWidth>& a, const Integer<Other>& b) noexcept
+        friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator+(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
             union
             {
@@ -261,7 +261,7 @@ namespace sys
             return ret.i;
         }
         template <std::integral Other>
-        friend constexpr Integer<typename TypeLargestOf<WithWidth, Other>::Type> operator-(const Integer<WithWidth>& a, const Integer<Other>& b) noexcept
+        friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator-(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
             union
             {
@@ -272,7 +272,7 @@ namespace sys
             return ret.i;
         }
         template <std::integral Other>
-        friend constexpr Integer<typename TypeLargestOf<WithWidth, Other>::Type> operator*(const Integer<WithWidth>& a, const Integer<Other>& b) noexcept
+        friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator*(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
             union
             {
@@ -284,99 +284,99 @@ namespace sys
         }
         // todo: division, mod
 
-        constexpr Integer operator~() const noexcept
+        constexpr integer operator~() const noexcept
         {
             return WithWidth(~std::make_unsigned_t<WithWidth>(this->directAccess));
         }
         template <std::integral Other>
-        friend constexpr Integer<typename TypeLargestOf<WithWidth, Other>::Type> operator&(const Integer<WithWidth>& a, const Integer<Other>& b) noexcept
+        friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator&(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return typename TypeLargestOf<WithWidth, Other>::Type(std::make_unsigned_t<typename TypeLargestOf<WithWidth, Other>::Type>(a.directAccess) &
-                                                                  std::make_unsigned_t<typename TypeLargestOf<WithWidth, Other>::Type>(b.directAccess));
+            return typename type_largest_of<WithWidth, Other>::Type(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(a.directAccess) &
+                                                                  std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
         }
         template <std::integral Other>
-        friend constexpr Integer<typename TypeLargestOf<WithWidth, Other>::Type> operator|(const Integer<WithWidth>& a, const Integer<Other>& b) noexcept
+        friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator|(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return typename TypeLargestOf<WithWidth, Other>::Type(std::make_unsigned_t<typename TypeLargestOf<WithWidth, Other>::Type>(a.directAccess) |
-                                                                  std::make_unsigned_t<typename TypeLargestOf<WithWidth, Other>::Type>(b.directAccess));
+            return typename type_largest_of<WithWidth, Other>::Type(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(a.directAccess) |
+                                                                  std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
         }
         template <std::integral Other>
-        friend constexpr Integer<typename TypeLargestOf<WithWidth, Other>::Type> operator^(const Integer<WithWidth>& a, const Integer<Other>& b) noexcept
+        friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator^(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return typename TypeLargestOf<WithWidth, Other>::Type(std::make_unsigned_t<typename TypeLargestOf<WithWidth, Other>::Type>(a.directAccess) ^
-                                                                  std::make_unsigned_t<typename TypeLargestOf<WithWidth, Other>::Type>(b.directAccess));
+            return typename type_largest_of<WithWidth, Other>::Type(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(a.directAccess) ^
+                                                                  std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(b.directAccess));
         }
         template <std::unsigned_integral Other>
-        friend constexpr Integer operator<<(const Integer<WithWidth>& a, const Other& b) noexcept
+        friend constexpr integer operator<<(const integer<WithWidth>& a, const Other& b) noexcept
         {
-            return Integer(WithWidth(std::make_unsigned_t<WithWidth>(a.directAccess) << b));
+            return integer(WithWidth(std::make_unsigned_t<WithWidth>(a.directAccess) << b));
         }
         template <std::unsigned_integral Other>
-        friend constexpr Integer operator>>(const Integer<WithWidth>& a, const Other& b) noexcept
+        friend constexpr integer operator>>(const integer<WithWidth>& a, const Other& b) noexcept
         {
-            return Integer(WithWidth(std::make_unsigned_t<WithWidth>(a.directAccess) >> b));
+            return integer(WithWidth(std::make_unsigned_t<WithWidth>(a.directAccess) >> b));
         }
         template <std::unsigned_integral Other>
-        friend constexpr Integer operator<<(const Integer<WithWidth>& a, const Integer<Other>& b) noexcept
+        friend constexpr integer operator<<(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return Integer(WithWidth(std::make_unsigned_t<WithWidth>(a.directAccess) << b.directAccess));
+            return integer(WithWidth(std::make_unsigned_t<WithWidth>(a.directAccess) << b.directAccess));
         }
         template <std::unsigned_integral Other>
-        friend constexpr Integer operator>>(const Integer<WithWidth>& a, const Integer<Other>& b) noexcept
+        friend constexpr integer operator>>(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return Integer(WithWidth(std::make_unsigned_t<WithWidth>(a.directAccess) >> b.directAccess));
+            return integer(WithWidth(std::make_unsigned_t<WithWidth>(a.directAccess) >> b.directAccess));
         }
 
         template <std::integral T>
-        constexpr Integer& operator=(const Integer<T>& other) noexcept
+        constexpr integer& operator=(const integer<T>& other) noexcept
         {
             *this = other;
             return *this;
         }
         template <std::integral T>
-        constexpr Integer& operator+=(const Integer<T>& other) noexcept
+        constexpr integer& operator+=(const integer<T>& other) noexcept
         {
             *this = *this + other;
             return *this;
         }
         template <std::integral T>
-        constexpr Integer& operator-=(const Integer<T>& other) noexcept
+        constexpr integer& operator-=(const integer<T>& other) noexcept
         {
             *this = *this - other;
             return *this;
         }
         template <std::integral T>
-        constexpr Integer& operator*=(const Integer<T>& other) noexcept
+        constexpr integer& operator*=(const integer<T>& other) noexcept
         {
             *this = *this * other;
             return *this;
         }
         template <std::integral T>
-        constexpr Integer& operator&=(const Integer<T>& other) noexcept
+        constexpr integer& operator&=(const integer<T>& other) noexcept
         {
             *this = *this & other;
             return *this;
         }
         template <std::integral T>
-        constexpr Integer& operator|=(const Integer<T>& other) noexcept
+        constexpr integer& operator|=(const integer<T>& other) noexcept
         {
             *this = *this | other;
             return *this;
         }
         template <std::integral T>
-        constexpr Integer& operator^=(const Integer<T>& other) noexcept
+        constexpr integer& operator^=(const integer<T>& other) noexcept
         {
             *this = *this ^ other;
             return *this;
         }
         template <std::unsigned_integral T>
-        constexpr Integer& operator<<=(const Integer<T>& other) noexcept
+        constexpr integer& operator<<=(const integer<T>& other) noexcept
         {
             *this = *this << other;
             return *this;
         }
         template <std::unsigned_integral T>
-        constexpr Integer& operator>>=(const Integer<T>& other) noexcept
+        constexpr integer& operator>>=(const integer<T>& other) noexcept
         {
             *this = *this >> other;
             return *this;
@@ -386,22 +386,22 @@ namespace sys
 } // namespace sys
 
 template <std::integral T, sys::INumberUnderlying U>
-constexpr bool operator==(const sys::Integer<T>& a, U b) noexcept
+constexpr bool operator==(const sys::integer<T>& a, U b) noexcept
 {
     return std::cmp_equal(a.directAccess, b);
 }
 template <sys::INumberUnderlying T, std::integral U>
-constexpr bool operator==(U a, const sys::Integer<T>& b) noexcept
+constexpr bool operator==(U a, const sys::integer<T>& b) noexcept
 {
     return std::cmp_equal(a, b.directAccess);
 }
 template <std::integral T, sys::INumberUnderlying U>
-constexpr int operator<=>(const sys::Integer<T>& a, U b) noexcept
+constexpr int operator<=>(const sys::integer<T>& a, U b) noexcept
 {
     return -int(std::cmp_less(a.directAccess, b)) + int(std::cmp_greater(a.directAccess, b));
 }
 template <sys::INumberUnderlying T, std::integral U>
-constexpr int operator<=>(U a, const sys::Integer<T>& b) noexcept
+constexpr int operator<=>(U a, const sys::integer<T>& b) noexcept
 {
     return -int(std::cmp_less(a, b.directAccess)) + int(std::cmp_greater(a, b.directAccess));
 }
@@ -414,21 +414,21 @@ using ulong = unsigned long;
 using llong = long long;
 using ullong = unsigned long long;
 
-using i8 = ::sys::Integer<int_least8_t>;
-using i16 = ::sys::Integer<int_least16_t>;
-using i32 = ::sys::Integer<int_least32_t>;
-using i64 = ::sys::Integer<int_least64_t>;
+using i8 = ::sys::integer<int_least8_t>;
+using i16 = ::sys::integer<int_least16_t>;
+using i32 = ::sys::integer<int_least32_t>;
+using i64 = ::sys::integer<int_least64_t>;
 
-using u8 = ::sys::Integer<uint_least8_t>;
-using u16 = ::sys::Integer<uint_least16_t>;
-using u32 = ::sys::Integer<uint_least32_t>;
-using u64 = ::sys::Integer<uint_least64_t>;
+using u8 = ::sys::integer<uint_least8_t>;
+using u16 = ::sys::integer<uint_least16_t>;
+using u32 = ::sys::integer<uint_least32_t>;
+using u64 = ::sys::integer<uint_least64_t>;
 
-using sz = ::sys::Integer<size_t>;
-using ssz = ::sys::Integer<ptrdiff_t>;
+using sz = ::sys::integer<size_t>;
+using ssz = ::sys::integer<ptrdiff_t>;
 
 _push_nowarn(_clWarn_literal_suffix);
-// clang-format off: Space b/w "" and literal suffix.
+// clang-format off: C++23 -- no space b/w "" and literal suffix.
 constexpr i8 operator""i8(ullong lit) noexcept
 {
     return i8(i8::Underlying(lit));

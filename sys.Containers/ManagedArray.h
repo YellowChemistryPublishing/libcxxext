@@ -19,7 +19,7 @@ namespace sys
         {
             _assert_ctor_can_fail();
         }
-        [[nodiscard]] _const inline static Result<ManagedArray<T>> ctor(ssz len)
+        [[nodiscard]] _const inline static result<ManagedArray<T>> ctor(ssz len)
         {
             if (std::cmp_less(len, 0) || std::cmp_greater(len, std::numeric_limits<size_t>::max()))
                 return nullptr;
@@ -33,7 +33,7 @@ namespace sys
         {
             _assert_ctor_can_fail();
         }
-        [[nodiscard]] _const inline static Result<ManagedArray<T>> ctor(ssz len, T init)
+        [[nodiscard]] _const inline static result<ManagedArray<T>> ctor(ssz len, T init)
         {
             if (std::cmp_less(len, 0) || std::cmp_greater(len, std::numeric_limits<size_t>::max()))
                 return nullptr;
@@ -97,17 +97,17 @@ namespace sys
         {
             return _invoke_const_member_overload(operator[](index, unsafe()), _asc);
         }
-        _const inline Result<const T&> operator[](ssz index) const
+        _const inline result<const T&> operator[](ssz index) const
         {
             if (ssz(0) <= index && index < this->_length) [[likely]]
                 return (*this)[index, unsafe()];
             else
                 return nullptr;
         }
-        _const inline Result<T&> operator[](ssz index)
+        _const inline result<T&> operator[](ssz index)
         {
             auto ret = _as(const ManagedArray<T>*, this)->operator[](index);
-            return _asr(Result<T&>&, ret);
+            return _asr(result<T&>&, ret);
         }
 
         _const inline const T* cbegin() const noexcept
@@ -135,7 +135,7 @@ namespace sys
             return this->data + this->_length;
         }
 
-        _const inline bool isEmpty() const noexcept
+        _const inline bool is_empty() const noexcept
         {
             return this->_length == 0;
         }

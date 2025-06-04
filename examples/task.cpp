@@ -1,7 +1,7 @@
 #include <print>
 
-#include <module/sys.Threading.hpp>
-#include <module/sys.hpp>
+#include <module/sys.Threading>
+#include <module/sys>
 
 using namespace sys;
 

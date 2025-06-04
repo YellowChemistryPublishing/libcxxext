@@ -10,11 +10,11 @@
 namespace sys::math
 {
     template <typename VectorData, size_t N, typename T = float>
-    struct VectorOperators
+    struct vector_operators
     {
         using ValueType = T;
 
-        constexpr VectorOperators() noexcept = default;
+        constexpr vector_operators() noexcept = default;
 
         constexpr T& operator[](size_t i) noexcept
         {
@@ -133,7 +133,7 @@ namespace sys::math
     };
 
     template <typename T = float>
-    struct Vector2T : public VectorOperators<Vector2T<T>, 2, T>
+    struct vector2_of : public vector_operators<vector2_of<T>, 2, T>
     {
         _push_nowarn(_clWarn_pedantic);
         union
@@ -146,13 +146,13 @@ namespace sys::math
         };
         _pop_nowarn();
 
-        using VectorOperators<Vector2T<T>, 2, T>::VectorOperators;
+        using vector_operators<vector2_of<T>, 2, T>::vector_operators;
 
-        constexpr Vector2T(T x, T y) noexcept : x(x), y(y)
+        constexpr vector2_of(T x, T y) noexcept : x(x), y(y)
         { }
     };
     template <typename T = float>
-    struct Vector3Of : public VectorOperators<Vector3Of<T>, 3, T>
+    struct vector3_of : public vector_operators<vector3_of<T>, 3, T>
     {
         _push_nowarn(_clWarn_pedantic);
         union
@@ -165,13 +165,13 @@ namespace sys::math
         };
         _pop_nowarn();
 
-        using VectorOperators<Vector3Of<T>, 3, T>::VectorOperators;
+        using vector_operators<vector3_of<T>, 3, T>::vector_operators;
 
-        constexpr Vector3Of(T x, T y, T z) noexcept : x(x), y(y), z(z)
+        constexpr vector3_of(T x, T y, T z) noexcept : x(x), y(y), z(z)
         { }
     };
     template <typename T = float>
-    struct Vector4T : public VectorOperators<Vector4T<T>, 4, T>
+    struct vector4_of : public vector_operators<vector4_of<T>, 4, T>
     {
         _push_nowarn(_clWarn_pedantic);
         union
@@ -184,14 +184,14 @@ namespace sys::math
         };
         _pop_nowarn();
 
-        using VectorOperators<Vector4T<T>, 4, T>::VectorOperators;
+        using vector_operators<vector4_of<T>, 4, T>::vector_operators;
 
-        constexpr Vector4T(T x, T y, T z, T w) noexcept : x(x), y(y), z(z), w(w)
+        constexpr vector4_of(T x, T y, T z, T w) noexcept : x(x), y(y), z(z), w(w)
         { }
     };
     template <size_t N, typename T = float>
     requires (N > 4)
-    struct VectorT : public VectorOperators<VectorT<N, T>, N, T>
+    struct vector_of : public vector_operators<vector_of<N, T>, N, T>
     {
         _push_nowarn(_clWarn_pedantic);
         union
@@ -204,16 +204,16 @@ namespace sys::math
         };
         _pop_nowarn();
 
-        using VectorOperators<VectorT<N, T>, N, T>::VectorOperators;
+        using vector_operators<vector_of<N, T>, N, T>::vector_operators;
 
-        constexpr VectorT(std::initializer_list<T> elements) noexcept : elements { elements }
+        constexpr vector_of(std::initializer_list<T> elements) noexcept : elements { elements }
         { }
     };
     template <typename T>
-    concept VectorType = std::same_as<T, Vector2T<typename T::ValueType>> || std::same_as<T, Vector3Of<typename T::ValueType>> || std::same_as<T, Vector4T<typename T::ValueType>> ||
-        std::same_as<T, VectorT<T::size(), typename T::ValueType>>;
+    concept IVector = std::same_as<T, vector2_of<typename T::ValueType>> || std::same_as<T, vector3_of<typename T::ValueType>> ||
+        std::same_as<T, vector4_of<typename T::ValueType>> || std::same_as<T, vector_of<T::size(), typename T::ValueType>>;
 
-    template <VectorType T>
+    template <IVector T>
     T dot(const T& lhs, const T& rhs) noexcept
     {
         T ret = 0;
@@ -221,22 +221,22 @@ namespace sys::math
         return ret;
     }
     template <typename T = float>
-    Vector3Of<T> cross(const Vector3Of<T>& lhs, const Vector3Of<T>& rhs) noexcept
+    vector3_of<T> cross(const vector3_of<T>& lhs, const vector3_of<T>& rhs) noexcept
     {
-        return Vector3Of<T> { lhs.y() * rhs.z() - lhs.z() * rhs.y(), lhs.z() * rhs.x() - lhs.x() * rhs.z(), lhs.x() * rhs.y() - lhs.y() * rhs.x() };
+        return vector3_of<T> { lhs.y() * rhs.z() - lhs.z() * rhs.y(), lhs.z() * rhs.x() - lhs.x() * rhs.z(), lhs.x() * rhs.y() - lhs.y() * rhs.x() };
     }
 
-    using Vector3Int8 = Vector3Of<i8>;
-    using Vector3Int16 = Vector3Of<i16>;
-    using Vector3 = Vector3Of<>;
+    using vector3i8 = vector3_of<i8>;
+    using vector3i16 = vector3_of<i16>;
+    using vector3 = vector3_of<>;
 
-    struct Matrix3x3UInt8
+    struct matrix3x3u8
     {
         u8 m00, m01, m02;
         u8 m10, m11, m12;
         u8 m20, m21, m22;
 
-        constexpr bool operator==(const Matrix3x3UInt8& rhs) const noexcept = default;
+        constexpr bool operator==(const matrix3x3u8& rhs) const noexcept = default;
     };
 } // namespace sys::math
 
