@@ -120,7 +120,7 @@ namespace sys
     public:
         using promise_type = task_promise<T>;
 
-        constexpr static i32 MaxDelay = __task_max_delay;
+        constexpr static i32 max_delay = __task_max_delay;
 
         _inline_always ~task()
         {
