@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <coroutine>
+#include <mutex>
 #include <print>
 #include <queue>
 #include <stop_token>
@@ -30,18 +31,18 @@ class __thread_type
 {
     std::thread handle;
 
-    constexpr __thread_type(std::nullptr_t)
+    inline __thread_type(std::nullptr_t)
     { }
 public:
-    constexpr static const __thread_type currentThread()
+    inline static const __thread_type currentThread()
     {
         return nullptr;
     }
-    constexpr static void yield()
+    inline static void yield()
     {
         std::this_thread::yield();
     }
-    constexpr static void sleep(i32 ms)
+    inline static void sleep(i32 ms)
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(+ms));
     }
@@ -52,32 +53,32 @@ public:
     {
         this->handle = std::thread([](Func func, Args... args) { func(std::forward<Args>(args)...); }, std::forward<Func>(func), std::forward<Args>(args)...);
     }
-    constexpr __thread_type(__thread_type&& other) noexcept
+    inline __thread_type(__thread_type&& other) noexcept
     {
         swap(*this, other);
     }
-    constexpr ~__thread_type()
+    inline ~__thread_type()
     {
         this->join();
     }
 
-    constexpr bool isAlive()
+    inline bool isAlive()
     {
         return this->handle.joinable() || this->handle.get_id() == __thread_id();
     }
-    constexpr __thread_id id() const noexcept
+    inline __thread_id id() const noexcept
     {
         __thread_id id = this->handle.get_id();
         return id == __thread_id() ? std::this_thread::get_id() : id;
     }
 
-    constexpr void join()
+    inline void join()
     {
         if (this->handle.joinable())
             this->handle.join();
     }
 
-    friend constexpr void swap(__thread_type& a, __thread_type& b)
+    friend inline void swap(__thread_type& a, __thread_type& b)
     {
         using std::swap;
         swap(a.handle, b.handle);

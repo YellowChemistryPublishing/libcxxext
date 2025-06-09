@@ -1,6 +1,8 @@
 #pragma once
 
+#ifndef _MSC_VER
 #include <cxxabi.h>
+#endif
 #include <memory>
 #include <print>
 #include <utility>
@@ -102,13 +104,8 @@ namespace sys
         /// @return Reference to `*this`.
         inline fenced_pointer& operator++() noexcept
         {
-            _push_nowarn(_clWarn_pedantic);
-            void* jmp[2] { &&ThrowNull, &&Op };
-            goto* jmp[bool(this->value)];
-            _pop_nowarn();
-        ThrowNull:
-            _throw(null_pointer_exception());
-        Op:
+            if (!this->value) [[unlikely]]
+                _throw(null_pointer_exception());
             ++this->value;
             return *this;
         }
@@ -116,13 +113,8 @@ namespace sys
         /// @return Reference to `*this`.
         inline fenced_pointer& operator--() noexcept
         {
-            _push_nowarn(_clWarn_pedantic);
-            void* jmp[2] { &&ThrowNull, &&Op };
-            goto* jmp[bool(this->value)];
-            _pop_nowarn();
-        ThrowNull:
-            _throw(null_pointer_exception());
-        Op:
+            if (!this->value) [[unlikely]]
+                _throw(null_pointer_exception());
             --this->value;
             return *this;
         }
@@ -130,13 +122,8 @@ namespace sys
         /// @return The value before incrementing.
         inline fenced_pointer operator++(int) noexcept
         {
-            _push_nowarn(_clWarn_pedantic);
-            void* jmp[2] { &&ThrowNull, &&Op };
-            goto* jmp[bool(this->value)];
-            _pop_nowarn();
-        ThrowNull:
-            _throw(null_pointer_exception());
-        Op:
+            if (!this->value) [[unlikely]]
+                _throw(null_pointer_exception());
             fenced_pointer ret = *this;
             ++this->value;
             return ret;
@@ -145,13 +132,8 @@ namespace sys
         /// @return The value before decrementing.
         inline fenced_pointer operator--(int) noexcept
         {
-            _push_nowarn(_clWarn_pedantic);
-            void* jmp[2] { &&ThrowNull, &&Op };
-            goto* jmp[bool(this->value)];
-            _pop_nowarn();
-        ThrowNull:
-            _throw(null_pointer_exception());
-        Op:
+            if (!this->value) [[unlikely]]
+                _throw(null_pointer_exception());
             fenced_pointer ret = *this;
             --this->value;
             return ret;
@@ -182,13 +164,8 @@ namespace sys
         /// @return Reference to `*this`.
         inline fenced_pointer& operator+=(ptrdiff_t offset) noexcept
         {
-            _push_nowarn(_clWarn_pedantic);
-            void* jmp[2] { &&ThrowNull, &&Op };
-            goto* jmp[bool(this->value)];
-            _pop_nowarn();
-        ThrowNull:
-            _throw(null_pointer_exception());
-        Op:
+            if (!this->value) [[unlikely]]
+                _throw(null_pointer_exception());
             this->value += offset;
             return *this;
         }
@@ -197,13 +174,8 @@ namespace sys
         /// @return Reference to `*this`.
         inline fenced_pointer& operator-=(ptrdiff_t offset) noexcept
         {
-            _push_nowarn(_clWarn_pedantic);
-            void* jmp[2] { &&ThrowNull, &&Op };
-            goto* jmp[bool(this->value)];
-            _pop_nowarn();
-        ThrowNull:
-            _throw(null_pointer_exception());
-        Op:
+            if (!this->value) [[unlikely]]
+                _throw(null_pointer_exception());
             this->value -= offset;
             return *this;
         }
@@ -214,13 +186,8 @@ namespace sys
         /// @return The underlying pointer value.
         [[nodiscard]] inline T* obtain_or_throw() const
         {
-            _push_nowarn(_clWarn_pedantic);
-            void* jmp[2] { &&ThrowNull, &&Op };
-            goto* jmp[bool(this->value)];
-            _pop_nowarn();
-        ThrowNull:
-            _throw(null_pointer_exception());
-        Op:
+            if (!this->value) [[unlikely]]
+                _throw(null_pointer_exception());
             return this->value;
         }
     };
@@ -250,7 +217,7 @@ namespace sys
 
         /// @brief Never called.
         /// @return [[noreturn]]
-        [[noreturn]] constexpr const char* what() const noexcept override
+        [[noreturn]] inline const char* what() const noexcept override
         {
             std::unreachable();
         }

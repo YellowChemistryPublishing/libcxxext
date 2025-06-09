@@ -1,8 +1,10 @@
 #pragma once
 
+#include <bit>
 #include <concepts>
 #include <cstdint>
 #include <limits>
+#include <numeric>
 #include <print>
 #include <source_location>
 #include <stdfloat>
@@ -16,10 +18,18 @@ struct unsafe
 
 /// @def _inline_always
 /// @brief Force inline a function.
+#if !_MSC_VER
 #define _inline_always [[gnu::always_inline]] inline
+#else
+#define _inline_always __forceinline
+#endif
 /// @def _inline_never
 /// @brief Force noinline a function.
+#if !_MSC_VER
 #define _inline_never [[gnu::noinline]]
+#else
+#define _inline_never [[msvc::noinline]]
+#endif
 /// @def _weak
 /// @brief Mark a function as weak.
 #define _weak [[gnu::weak]]
@@ -28,7 +38,11 @@ struct unsafe
 #define _pure [[gnu::pure]]
 /// @def _const
 /// @brief Mark a function as const.
+#if !_MSC_VER
 #define _const [[gnu::const]]
+#else
+#define _const
+#endif
 /// @def _restrict
 /// @brief Mark a parameter (or this) as restrict.
 #define _restrict __restrict__
@@ -37,7 +51,11 @@ struct unsafe
 #define _pack(align) _clPragma_fwd(pack(align))
 /// @def _packed
 /// @brief Pack a structure to the smallest possible alignment.
+#if !_MSC_VER
 #define _packed [[gnu::packed]]
+#else
+#define _packed __declspec(align(1))
+#endif
 
 #define _as(T, ...) static_cast<T>(__VA_ARGS__)
 #define _asd(T, ...) dynamic_cast<T>(__VA_ARGS__)
@@ -165,11 +183,13 @@ namespace sys
         WithWidth underlying;
 
         constexpr integer() noexcept = default;
-        template <IStrictlyNarrowerUnderlying<WithWidth> T>
-        constexpr integer(T t) noexcept : underlying(t)
-        { }
         template <std::integral T>
-        constexpr integer(T t) noexcept : underlying(WithWidth(T(t) & T(std::numeric_limits<WithWidth>::max())))
+        constexpr integer(T t) noexcept :
+#ifndef _MSC_VER
+            underlying(std::saturate_cast<WithWidth>(t))
+#else
+            underlying(WithWidth(t))
+#endif
         { }
         template <IStrictlyNarrowerUnderlying<WithWidth> T>
         constexpr integer(const integer<T>& t) noexcept : underlying(t.underlying)
@@ -247,46 +267,25 @@ namespace sys
 
         constexpr integer operator-() const noexcept
         {
-            union
-            {
-                WithWidth i;
-                std::make_unsigned_t<WithWidth> u;
-            } ret { .u = 0 };
-            ret.u -= std::make_unsigned_t<WithWidth>(this->underlying);
-            return ret.i;
+            return std::bit_cast<WithWidth>(-std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator+(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            union
-            {
-                WithWidth i;
-                std::make_unsigned_t<WithWidth> u;
-            } ret { .u = a.underlying };
-            ret.u += std::make_unsigned_t<WithWidth>(b.underlying);
-            return ret.i;
+            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::bit_cast<std::make_unsigned_t<WithWidth>>(a) +
+                                                                                   std::bit_cast<std::make_unsigned_t<Other>>(b));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator-(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            union
-            {
-                WithWidth i;
-                std::make_unsigned_t<WithWidth> u;
-            } ret { .u = a.underlying };
-            ret.u -= std::make_unsigned_t<WithWidth>(b.underlying);
-            return ret.i;
+            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::bit_cast<std::make_unsigned_t<WithWidth>>(a) -
+                                                                                   std::bit_cast<std::make_unsigned_t<Other>>(b));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator*(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            union
-            {
-                WithWidth i;
-                std::make_unsigned_t<WithWidth> u;
-            } ret { .u = a.underlying };
-            ret.u *= std::make_unsigned_t<WithWidth>(b.underlying);
-            return ret.i;
+            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::bit_cast<std::make_unsigned_t<WithWidth>>(a) *
+                                                                                   std::bit_cast<std::make_unsigned_t<Other>>(b));
         }
         // todo: division, mod
 
@@ -478,9 +477,17 @@ constexpr sz operator""uzz(ullong lit) noexcept
 // clang-format on
 _pop_nowarn();
 
-#if !__STDCPP_FLOAT32_T__
+#if !defined(__STDCPP_FLOAT32_T__) || !__STDCPP_FLOAT32_T__
+#ifndef _MSC_VER
 using f32 = std::float32_t;
+#else
+using f32 = float;
 #endif
-#if !__STDCPP_FLOAT64_T__
+#endif
+#if !defined(__STDCPP_FLOAT64_T__) || !__STDCPP_FLOAT64_T__
+#ifndef _MSC_VER
 using f64 = std::float64_t;
+#else
+using f64 = double;
+#endif
 #endif

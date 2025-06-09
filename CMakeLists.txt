@@ -3,10 +3,18 @@ cmake_minimum_required(VERSION 3.30)
 project(libcxxext)
 
 set(LIBRARY_TYPE "STATIC" CACHE STRING "Build type of libraries." FORCE)
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(CXXEXT_DEVELOPMENT_MODE ON CACHE STRING "Build libcxxext in development mode." FORCE)
+else()
+    set(CXXEXT_DEVELOPMENT_MODE OFF CACHE STRING "Build libcxxext in development mode." FORCE)
+endif()
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 26)
 
-include (cmake/build_support.cmake)
+include(cmake/build_support.cmake)
+if (CXXEXT_DEVELOPMENT_MODE)
+    link_libraries(sys.BuildSupport.WarningsAsErrors)
+endif()
 
 add_library(sys INTERFACE)
 target_include_directories(sys INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys")

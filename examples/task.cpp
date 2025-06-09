@@ -1,3 +1,4 @@
+#include "CompilerWarnings.h"
 #include <print>
 
 #include <module/sys.Threading>
@@ -13,8 +14,7 @@ task<> doSomeWork(char taskID, i32 delayTime)
 }
 async parallelRoutine(char taskID, i32 delayTime)
 {
-    for (int i = 0; i < 8; i++)
-        co_await doSomeWork(taskID, delayTime);
+    for (int i = 0; i < 8; i++) co_await doSomeWork(taskID, delayTime);
 }
 
 int main()

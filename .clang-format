@@ -41,7 +41,7 @@ IndentWidth: 4
 SpaceInEmptyBlock: true # Won't work for initializer lists, implement when feature is available.
 PointerAlignment: Left
 LambdaBodyIndentation: OuterScope
-IndentPPDirectives: BeforeHash
+IndentPPDirectives: None
 NamespaceIndentation: All
 ContinuationIndentWidth: 4
 AlignEscapedNewlines: LeftWithLastLine

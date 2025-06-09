@@ -154,7 +154,7 @@ namespace sys
 
     struct async_promise
     {
-        consteval async_promise() noexcept = default;
+        constexpr async_promise() noexcept = default;
         _inline_always constexpr ~async_promise() = default;
 
         _inline_always async get_return_object();
