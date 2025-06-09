@@ -13,62 +13,62 @@
 namespace sys
 {
     template <typename T>
-    struct ManagedArray
+    struct managed_array
     {
-        inline ManagedArray(ssz)
+        inline managed_array(ssz)
         {
             _assert_ctor_can_fail();
         }
-        [[nodiscard]] _const inline static result<ManagedArray<T>> ctor(ssz len)
+        [[nodiscard]] _const inline static result<managed_array<T>> ctor(ssz len)
         {
             if (len < 0 || len > std::numeric_limits<size_t>::max())
                 return nullptr;
 
-            ManagedArray<T> ret;
+            managed_array<T> ret;
             ret.data = new T[+len];
             ret._length = len;
             return ret;
         }
-        inline ManagedArray(ssz, T)
+        inline managed_array(ssz, T)
         {
             _assert_ctor_can_fail();
         }
-        [[nodiscard]] _const inline static result<ManagedArray<T>> ctor(ssz len, T init)
+        [[nodiscard]] _const inline static result<managed_array<T>> ctor(ssz len, T init)
         {
             if (len < 0 || len > std::numeric_limits<size_t>::max())
                 return nullptr;
 
-            ManagedArray<T> ret;
+            managed_array<T> ret;
             sc_ptr<T[]> incomplete = new T[+len];
             for (auto it = &*incomplete; it != &*incomplete + len; ++it) *it = init;
             ret.data = incomplete.move();
             ret._length = len;
             return ret;
         }
-        inline ManagedArray(std::initializer_list<T> init)
+        inline managed_array(std::initializer_list<T> init)
         {
             sc_ptr<T[]> incomplete = new T[init.size()];
             for (auto it1 = &*incomplete, it2 = init.begin(); it1 != &*incomplete + init.size(); ++it1, ++it2) *it1 = *it2;
             this->data = incomplete.move();
             this->_length = init.size();
         }
-        inline ManagedArray(const ManagedArray& other)
+        inline managed_array(const managed_array& other)
         {
             sc_ptr<T[]> incomplete = new T[+other._length];
             for (auto it1 = &*incomplete, it2 = other.begin(); it2 != other.end(); ++it1, ++it2) *it1 = *it2;
             this->data = incomplete.move();
             this->_length = other._length;
         }
-        inline ManagedArray(ManagedArray&& other) noexcept
+        inline managed_array(managed_array&& other) noexcept
         {
             swap(*this, other);
         }
-        inline ~ManagedArray()
+        inline ~managed_array()
         {
             delete[] this->data;
         }
 
-        _const inline ManagedArray& operator=(const ManagedArray& other)
+        _const inline managed_array& operator=(const managed_array& other)
         {
             sc_ptr<T[]> incomplete = new T[+other._length];
             for (auto it1 = &*incomplete, it2 = other.begin(); it2 != other.end(); ++it1, ++it2) *it1 = *it2;
@@ -77,7 +77,7 @@ namespace sys
             this->_length = other._length;
             return *this;
         }
-        _const inline ManagedArray& operator=(ManagedArray&& other) noexcept
+        _const inline managed_array& operator=(managed_array&& other) noexcept
         {
             this->_length = 0;
             delete[] this->data;
@@ -103,7 +103,7 @@ namespace sys
         }
         _const inline result<T&> operator[](ssz index)
         {
-            auto ret = _as(const ManagedArray<T>*, this)->operator[](index);
+            auto ret = _as(const managed_array<T>*, this)->operator[](index);
             return _asr(result<T&>&, ret);
         }
 
@@ -155,7 +155,7 @@ namespace sys
             this->_length = 0;
         }
 
-        friend inline void swap(sys::ManagedArray<T>& a, sys::ManagedArray<T>& b) noexcept
+        friend inline void swap(sys::managed_array<T>& a, sys::managed_array<T>& b) noexcept
         {
             using std::swap;
 
@@ -166,7 +166,7 @@ namespace sys
         T* data = nullptr;
         ssz _length = 0;
 
-        inline ManagedArray()
+        inline managed_array()
         { }
     };
 } // namespace sys

@@ -73,7 +73,7 @@ namespace sys
                 string<CharType, DynamicExtent, StaticCapacity> ret;
                 ret->for_each_assign(other._length, [&](CharType* buf, ssz i) { buf[i] = other.dataDynamic.buf[i]; }, [&]
                 {
-                    ret->dataDynamic.buf = ManagedArray<CharType>(other.dataDynamic.capacity);
+                    ret->dataDynamic.buf = managed_array<CharType>(other.dataDynamic.capacity);
                     ret->dataDynamic.capacity = other.dataDynamic.capacity;
                     ret->_isDynamic = true;
                     return ret->dataDynamic.buf.begin();
@@ -271,7 +271,7 @@ namespace sys
         {
             struct
             {
-                ManagedArray<CharType> buf;
+                managed_array<CharType> buf;
                 ssz capacity = 0;
             } dataDynamic;
             CharType dataStatic[+sz(StaticCapacity)];
@@ -289,7 +289,7 @@ namespace sys
             {
                 if (capacity > StaticCapacity)
                 {
-                    this->dataDynamic.buf = ManagedArray<CharType>(capacity);
+                    this->dataDynamic.buf = managed_array<CharType>(capacity);
                     this->dataDynamic.capacity = capacity;
                     this->_isDynamic = true;
                     return this->dataDynamic.buf.begin();
@@ -309,7 +309,7 @@ namespace sys
         inline void dealloc()
         {
             if (this->is_dynamic())
-                this->dataDynamic.buf.~ManagedArray();
+                this->dataDynamic.buf.~managed_array();
         }
         inline bool for_each_assign(ssz len, auto&& withIndex, auto&& createFetchBuffer)
         {
