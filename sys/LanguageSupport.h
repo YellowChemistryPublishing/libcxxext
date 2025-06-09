@@ -244,24 +244,24 @@ namespace sys
 
         constexpr integer& operator++() noexcept
         {
-            this->underlying = WithWidth(std::make_unsigned_t<WithWidth>(this->underlying) + std::make_unsigned_t<WithWidth>(1));
+            this->underlying = std::bit_cast<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) + std::make_unsigned_t<WithWidth>(1));
             return *this;
         }
         constexpr integer& operator--() noexcept
         {
-            this->underlying = WithWidth(std::make_unsigned_t<WithWidth>(this->underlying) - std::make_unsigned_t<WithWidth>(1));
+            this->underlying = std::bit_cast<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) - std::make_unsigned_t<WithWidth>(1));
             return *this;
         }
         constexpr integer operator++(int) noexcept
         {
             integer ret = *this;
-            this->underlying = WithWidth(std::make_unsigned_t<WithWidth>(this->underlying) + std::make_unsigned_t<WithWidth>(1));
+            this->underlying = std::bit_cast<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) + std::make_unsigned_t<WithWidth>(1));
             return ret;
         }
         constexpr integer operator--(int) noexcept
         {
             integer ret = *this;
-            this->underlying = WithWidth(std::make_unsigned_t<WithWidth>(this->underlying) - std::make_unsigned_t<WithWidth>(1));
+            this->underlying = std::bit_cast<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) - std::make_unsigned_t<WithWidth>(1));
             return ret;
         }
 
@@ -291,7 +291,7 @@ namespace sys
 
         constexpr integer operator~() const noexcept
         {
-            return WithWidth(~std::make_unsigned_t<WithWidth>(this->underlying));
+            return std::bit_cast<WithWidth>(~std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator&(const integer<WithWidth>& a, const integer<Other>& b) noexcept
@@ -314,22 +314,26 @@ namespace sys
         template <std::unsigned_integral Other>
         friend constexpr integer operator<<(const integer<WithWidth>& a, const Other& b) noexcept
         {
-            return integer(WithWidth(std::make_unsigned_t<WithWidth>(a.underlying) << b));
+            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) << b) &
+                                                                                    std::numeric_limits<std::make_unsigned_t<WithWidth>>::max())));
         }
         template <std::unsigned_integral Other>
         friend constexpr integer operator>>(const integer<WithWidth>& a, const Other& b) noexcept
         {
-            return integer(WithWidth(std::make_unsigned_t<WithWidth>(a.underlying) >> b));
+            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) >> b) &
+                                                                                    std::numeric_limits<std::make_unsigned_t<WithWidth>>::max())));
         }
         template <std::unsigned_integral Other>
         friend constexpr integer operator<<(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return integer(WithWidth(std::make_unsigned_t<WithWidth>(a.underlying) << b.underlying));
+            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) << b.underlying) &
+                                                                                    std::numeric_limits<std::make_unsigned_t<WithWidth>>::max())));
         }
         template <std::unsigned_integral Other>
         friend constexpr integer operator>>(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return integer(WithWidth(std::make_unsigned_t<WithWidth>(a.underlying) >> b.underlying));
+            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) >> b.underlying) &
+                                                                                    std::numeric_limits<std::make_unsigned_t<WithWidth>>::max())));
         }
 
         template <std::integral T>
