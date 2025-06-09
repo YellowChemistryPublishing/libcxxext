@@ -32,15 +32,15 @@
 #define _clWarn_cast_align _clWarn_msvc_dummy
 #define _clWarn_unreachable 4702
 #else
-#define _clWarn_bad_offsetof ""
-#define _clWarn_nontrivial_memcpy ""
-#define _clWarn_unused_param ""
-#define _clWarn_pedantic ""
-#define _clWarn_terminate ""
-#define _clWarn_use_after_free ""
-#define _clWarn_literal_suffix ""
-#define _clWarn_cast_align ""
-#define _clWarn_unreachable ""
+#define _clWarn_bad_offsetof
+#define _clWarn_nontrivial_memcpy
+#define _clWarn_unused_param
+#define _clWarn_pedantic
+#define _clWarn_terminate
+#define _clWarn_use_after_free
+#define _clWarn_literal_suffix
+#define _clWarn_cast_align
+#define _clWarn_unreachable
 #endif
 
 #define _clPragma_fwd(...) _Pragma(#__VA_ARGS__)
