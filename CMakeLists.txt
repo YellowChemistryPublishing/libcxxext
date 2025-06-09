@@ -6,11 +6,15 @@ set(LIBRARY_TYPE "STATIC" CACHE STRING "Build type of libraries." FORCE)
 
 set(CMAKE_CXX_STANDARD 23)
 
+include (cmake/build_support.cmake)
+
 add_library(sys INTERFACE)
 target_include_directories(sys INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys")
+target_link_libraries(sys INTERFACE sys.BuildSupport.CompilerWarnings)
 
 add_library(sys.Containers INTERFACE)
 target_include_directories(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers")
+target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.CompilerWarnings)
 
 file(GLOB SYS_THREAD_SRCS CONFIGURE_DEPENDS
     "sys.Threading/*.h"
@@ -26,12 +30,13 @@ if (PLATFORM_SUPPORT_THREADING_LIBRARY)
 endif()
 
 add_library(sys.Threading ${LIBRARY_TYPE} ${SYS_THREAD_SRCS})
-target_include_directories(sys.Threading PUBLIC sys sys.Threading ${PLATFORM_SUPPORT_ADDITIONAL_INCLUDE_DIRS})
 if(MSVC)
     target_compile_options(sys.Threading PUBLIC /FI "${PLATFORM_SUPPORT_THREADING_HEADER}")
 else()
     target_compile_options(sys.Threading PUBLIC -include "${PLATFORM_SUPPORT_THREADING_HEADER}")
 endif()
+target_include_directories(sys.Threading PUBLIC sys sys.Threading ${PLATFORM_SUPPORT_ADDITIONAL_INCLUDE_DIRS})
+target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerWarnings)
 
 file(GLOB EXAMPLES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp")
 foreach(EXAMPLE_FILE ${EXAMPLES})
