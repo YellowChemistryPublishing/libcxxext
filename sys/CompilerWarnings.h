@@ -8,6 +8,7 @@
     #define _clWarn_terminate "-Wterminate"
     #define _clWarn_use_after_free "-Wblock-capture-autoreleasing"
     #define _clWarn_literal_suffix "-Wuser-defined-literals"
+    #define _clWarn_cast_align ""
 #elifdef __GNUC__
     #define _clWarn_bad_offsetof "-Winvalid-offsetof"
     #define _clWarn_nontrivial_memcpy "-Wclass-memaccess"
@@ -16,6 +17,7 @@
     #define _clWarn_terminate "-Wterminate"
     #define _clWarn_use_after_free "-Wuse-after-free"
     #define _clWarn_literal_suffix "-Wliteral-suffix"
+    #define _clWarn_cast_align "-Wcast-align"
 #else
     #define _clWarn_bad_offsetof ""
     #define _clWarn_nontrivial_memcpy ""
@@ -24,6 +26,7 @@
     #define _clWarn_terminate ""
     #define _clWarn_use_after_free ""
     #define _clWarn_literal_suffix ""
+    #define _clWarn_cast_align ""
 #endif
 
 #define _clPragma_fwd(...) _Pragma(#__VA_ARGS__)
