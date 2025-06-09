@@ -16,13 +16,19 @@ if (CXXEXT_DEVELOPMENT_MODE)
     link_libraries(sys.BuildSupport.WarningsAsErrors)
 endif()
 
+# sys
+
 add_library(sys INTERFACE)
 target_include_directories(sys INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys")
 target_link_libraries(sys INTERFACE sys.BuildSupport.CompilerWarnings)
 
+# sys.Containers
+
 add_library(sys.Containers INTERFACE)
 target_include_directories(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers")
 target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.CompilerWarnings)
+
+# sys.Threading
 
 file(GLOB SYS_THREAD_SRCS CONFIGURE_DEPENDS
     "sys.Threading/*.h"
@@ -45,6 +51,12 @@ else()
 endif()
 target_include_directories(sys.Threading PUBLIC sys sys.Threading ${PLATFORM_SUPPORT_ADDITIONAL_INCLUDE_DIRS})
 target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerWarnings)
+
+# Examples
+
+if (CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    link_libraries(stdc++exp) # For `std::print(...)`.
+endif()
 
 file(GLOB EXAMPLES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp")
 foreach(EXAMPLE_FILE ${EXAMPLES})

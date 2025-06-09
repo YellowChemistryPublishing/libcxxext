@@ -21,11 +21,11 @@ namespace sys
         }
         [[nodiscard]] _const inline static result<ManagedArray<T>> ctor(ssz len)
         {
-            if (std::cmp_less(len, 0) || std::cmp_greater(len, std::numeric_limits<size_t>::max()))
+            if (len < 0 || len > std::numeric_limits<size_t>::max())
                 return nullptr;
 
             ManagedArray<T> ret;
-            ret.data = new T[len];
+            ret.data = new T[+len];
             ret._length = len;
             return ret;
         }
@@ -35,11 +35,11 @@ namespace sys
         }
         [[nodiscard]] _const inline static result<ManagedArray<T>> ctor(ssz len, T init)
         {
-            if (std::cmp_less(len, 0) || std::cmp_greater(len, std::numeric_limits<size_t>::max()))
+            if (len < 0 || len > std::numeric_limits<size_t>::max())
                 return nullptr;
 
             ManagedArray<T> ret;
-            sc_ptr<T[]> incomplete = new T[len];
+            sc_ptr<T[]> incomplete = new T[+len];
             for (auto it = &*incomplete; it != &*incomplete + len; ++it) *it = init;
             ret.data = incomplete.move();
             ret._length = len;
@@ -48,16 +48,14 @@ namespace sys
         inline ManagedArray(std::initializer_list<T> init)
         {
             sc_ptr<T[]> incomplete = new T[init.size()];
-            for (auto it1 = &*incomplete, it2 = init.begin(); it1 != &*incomplete + init.size(); ++it1, ++it2)
-                *it1 = *it2;
+            for (auto it1 = &*incomplete, it2 = init.begin(); it1 != &*incomplete + init.size(); ++it1, ++it2) *it1 = *it2;
             this->data = incomplete.move();
             this->_length = init.size();
         }
         inline ManagedArray(const ManagedArray& other)
         {
-            sc_ptr<T[]> incomplete = new T[other._length];
-            for (auto it1 = &*incomplete, it2 = other.begin(); it2 != other.end(); ++it1, ++it2)
-                *it1 = *it2;
+            sc_ptr<T[]> incomplete = new T[+other._length];
+            for (auto it1 = &*incomplete, it2 = other.begin(); it2 != other.end(); ++it1, ++it2) *it1 = *it2;
             this->data = incomplete.move();
             this->_length = other._length;
         }
@@ -72,9 +70,8 @@ namespace sys
 
         _const inline ManagedArray& operator=(const ManagedArray& other)
         {
-            sc_ptr<T[]> incomplete = new T[other._length];
-            for (auto it1 = &*incomplete, it2 = other.begin(); it2 != other.end(); ++it1, ++it2)
-                *it1 = *it2;
+            sc_ptr<T[]> incomplete = new T[+other._length];
+            for (auto it1 = &*incomplete, it2 = other.begin(); it2 != other.end(); ++it1, ++it2) *it1 = *it2;
             delete[] this->data;
             this->data = incomplete.move();
             this->_length = other._length;

@@ -178,7 +178,7 @@ namespace sys
     template <std::integral WithWidth>
     struct _packed alignas(WithWidth) integer
     {
-        using Underlying = WithWidth;
+        using underlying_type = WithWidth;
 
         WithWidth underlying;
 
@@ -432,62 +432,60 @@ using u64 = ::sys::integer<uint_least64_t>;
 using sz = ::sys::integer<size_t>;
 using ssz = ::sys::integer<ptrdiff_t>;
 
-_push_nowarn(_clWarn_literal_suffix);
-// clang-format off: C++23 -- no space b/w "" and literal suffix.
-constexpr i8 operator""i8(ullong lit) noexcept
-{
-    return i8(i8::Underlying(lit));
-}
-constexpr i16 operator""i16(ullong lit) noexcept
-{
-    return i16(i16::Underlying(lit));
-}
-constexpr i32 operator""i32(ullong lit) noexcept
-{
-    return i32(i32::Underlying(lit));
-}
-constexpr i64 operator""i64(ullong lit) noexcept
-{
-    return i64(i64::Underlying(lit));
-}
-constexpr u8 operator""u8(ullong lit) noexcept
-{
-    return u8(u8::Underlying(lit));
-}
-constexpr u16 operator""u16(ullong lit) noexcept
-{
-    return u16(u16::Underlying(lit));
-}
-constexpr u32 operator""u32(ullong lit) noexcept
-{
-    return u32(u32::Underlying(lit));
-}
-constexpr u64 operator""u64(ullong lit) noexcept
-{
-    return u64(u64::Underlying(lit));
-}
-constexpr ssz operator""zz(ullong lit) noexcept
-{
-    return ssz(ssz::Underlying(lit));
-}
-constexpr sz operator""uzz(ullong lit) noexcept
-{
-    return sz(sz::Underlying(lit));
-}
-// clang-format on
-_pop_nowarn();
-
-#if !defined(__STDCPP_FLOAT32_T__) || !__STDCPP_FLOAT32_T__
-#ifndef _MSC_VER
+#if defined(__STDCPP_FLOAT32_T__) && __STDCPP_FLOAT32_T__
 using f32 = std::float32_t;
 #else
 using f32 = float;
 #endif
-#endif
-#if !defined(__STDCPP_FLOAT64_T__) || !__STDCPP_FLOAT64_T__
-#ifndef _MSC_VER
+#if defined(__STDCPP_FLOAT64_T__) && __STDCPP_FLOAT64_T__
 using f64 = std::float64_t;
 #else
 using f64 = double;
 #endif
+
+#if defined(__clang__) && __clang__
+#pragma clang system_header
 #endif
+
+// clang-format off: C++23 -- no space b/w "" and literal suffix.
+constexpr i8 operator""_i8(ullong lit) noexcept
+{
+    return i8(i8::underlying_type(lit));
+}
+constexpr i16 operator""_i16(ullong lit) noexcept
+{
+    return i16(i16::underlying_type(lit));
+}
+constexpr i32 operator""_i32(ullong lit) noexcept
+{
+    return i32(i32::underlying_type(lit));
+}
+constexpr i64 operator""_i64(ullong lit) noexcept
+{
+    return i64(i64::underlying_type(lit));
+}
+constexpr u8 operator""_u8(ullong lit) noexcept
+{
+    return u8(u8::underlying_type(lit));
+}
+constexpr u16 operator""_u16(ullong lit) noexcept
+{
+    return u16(u16::underlying_type(lit));
+}
+constexpr u32 operator""_u32(ullong lit) noexcept
+{
+    return u32(u32::underlying_type(lit));
+}
+constexpr u64 operator""_u64(ullong lit) noexcept
+{
+    return u64(u64::underlying_type(lit));
+}
+constexpr ssz operator""_z(ullong lit) noexcept
+{
+    return ssz(ssz::underlying_type(lit));
+}
+constexpr sz operator""_uz(ullong lit) noexcept
+{
+    return sz(sz::underlying_type(lit));
+}
+// clang-format on

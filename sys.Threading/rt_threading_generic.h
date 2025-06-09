@@ -160,4 +160,4 @@ struct __thread_pool
     if (auto* threadPool = __thread_pool::instance.load())         \
     threadPool->queue.enqueue(this->handle.promise().continuation)
 
-constexpr i32 __task_max_delay = std::numeric_limits<i32::Underlying>::max();
+constexpr i32 __task_max_delay = std::numeric_limits<i32::underlying_type>::max();

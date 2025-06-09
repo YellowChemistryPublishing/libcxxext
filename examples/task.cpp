@@ -1,4 +1,7 @@
-#include "CompilerWarnings.h"
+#if defined(_MSC_VER) && _MSC_VER
+#pragma warning(disable : _clWarn_unreachable, justification : "Erroneously generated for compiler coroutine codegen.")
+#endif
+
 #include <print>
 
 #include <module/sys.Threading>

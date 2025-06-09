@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CompilerWarnings.h"
 #include <algorithm>
 #include <concepts>
 #include <cxxsup.h>
@@ -26,7 +27,7 @@ namespace sys
             for (auto& str : container) totalLength += str.length();
 
             string ret;
-            auto to = ret.alloc(nr2i64(totalLength + 1zz));
+            auto to = ret.alloc(nr2i64(totalLength + 1_z));
             if (!to)
                 return nullptr;
 
@@ -47,7 +48,7 @@ namespace sys
         }
         inline string(CharType c, ssz repeat)
         {
-            this->for_each_assign(repeat, [&](CharType* buf, ssz i) { buf[i] = c; }, [&, this] { return this->alloc(nr2i64(repeat + 1zz)); });
+            this->for_each_assign(repeat, [&](CharType* buf, ssz i) { buf[i] = c; }, [&, this] { return this->alloc(nr2i64(repeat + 1_z)); });
         }
         inline string(const std::span<CharType> str)
         {
@@ -57,7 +58,7 @@ namespace sys
         {
             ssz len = 0;
             while (str[len]) ++len;
-            this->for_each_assign(len, [&](CharType* buf, ssz i) { buf[i] = str[i]; }, [&, this] { return this->alloc(nr2i64(len + 1zz)); });
+            this->for_each_assign(len, [&](CharType* buf, ssz i) { buf[i] = str[i]; }, [&, this] { return this->alloc(nr2i64(len + 1_z)); });
         }
         template <bool OtherDynamicExtent, ssz OtherStaticCapacity>
         inline string(const string<CharType, OtherDynamicExtent, OtherStaticCapacity>&)
@@ -265,6 +266,7 @@ namespace sys
                 std::swap_ranges(_asr(byte*, &a), _asr(byte*, &a) + sizeof(a), _asr(byte*, &b));
         }
     private:
+        _push_nowarn(_clWarn_nameless_struct_union);
         union
         {
             struct
@@ -274,6 +276,7 @@ namespace sys
             } dataDynamic;
             CharType dataStatic[+sz(StaticCapacity)];
         };
+        _pop_nowarn();
         bool _isDynamic = false;
         ssz _length = 0;
 

@@ -1,9 +1,10 @@
 #pragma once
 
-#include "LanguageSupport.h"
 #include <cmath>
 #include <cstdint>
 #include <initializer_list>
+
+#include <LanguageSupport.h>
 
 /* export module core.Math; */
 
@@ -136,6 +137,7 @@ namespace sys::math
     struct vector2_of : public vector_operators<vector2_of<T>, 2, T>
     {
         _push_nowarn(_clWarn_pedantic);
+        _push_nowarn(_clWarn_nameless_struct_union);
         union
         {
             T elements[2];
@@ -144,6 +146,7 @@ namespace sys::math
                 T x, y;
             };
         };
+        _pop_nowarn();
         _pop_nowarn();
 
         using vector_operators<vector2_of<T>, 2, T>::vector_operators;
@@ -155,6 +158,7 @@ namespace sys::math
     struct vector3_of : public vector_operators<vector3_of<T>, 3, T>
     {
         _push_nowarn(_clWarn_pedantic);
+        _push_nowarn(_clWarn_nameless_struct_union);
         union
         {
             T elements[3];
@@ -163,6 +167,7 @@ namespace sys::math
                 T x, y, z;
             };
         };
+        _pop_nowarn();
         _pop_nowarn();
 
         using vector_operators<vector3_of<T>, 3, T>::vector_operators;
@@ -174,6 +179,7 @@ namespace sys::math
     struct vector4_of : public vector_operators<vector4_of<T>, 4, T>
     {
         _push_nowarn(_clWarn_pedantic);
+        _push_nowarn(_clWarn_nameless_struct_union);
         union
         {
             T elements[4];
@@ -182,6 +188,7 @@ namespace sys::math
                 T x, y, z, w;
             };
         };
+        _pop_nowarn();
         _pop_nowarn();
 
         using vector_operators<vector4_of<T>, 4, T>::vector_operators;
@@ -194,6 +201,7 @@ namespace sys::math
     struct vector_of : public vector_operators<vector_of<N, T>, N, T>
     {
         _push_nowarn(_clWarn_pedantic);
+        _push_nowarn(_clWarn_nameless_struct_union);
         union
         {
             T elements[N];
@@ -202,6 +210,7 @@ namespace sys::math
                 T x, y, z, w;
             };
         };
+        _pop_nowarn();
         _pop_nowarn();
 
         using vector_operators<vector_of<N, T>, N, T>::vector_operators;

@@ -1,9 +1,13 @@
 add_library(sys.BuildSupport.CompilerWarnings INTERFACE)
-if (NOT MSVC)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+    if (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_compile_options(sys.BuildSupport.CompilerWarnings INTERFACE
             $<$<COMPILE_LANGUAGE:CXX>:-fconcepts-diagnostics-depth=4>
             -fno-signaling-nans -fcx-limited-range
+        )
+    elseif (CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_compile_options(sys.BuildSupport.CompilerWarnings INTERFACE
+            -Wno-extra-semi -Wno-c++98-compat-extra-semi # Let us put semicolons after `_Pragma(...)`.
         )
     endif()
 
@@ -20,22 +24,16 @@ if (NOT MSVC)
 
         -fdata-sections -ffunction-sections
     )
-else()
+elseif (MSVC)
     target_compile_options(sys.BuildSupport.CompilerWarnings INTERFACE
-        /Wall
-        /wd4820 # The type and order of elements caused the compiler to add padding to the end of a struct. See align for more information on padding in a struct.
-        /wd4625 # A copy constructor was deleted or not accessible in a base class and was therefore not generated for a derived class. Any attempt to copy an object of this type will cause a compiler error.
-        /wd4626 # An assignment operator was deleted or not accessible in a base class and was therefore not generated for a derived class. Any attempt to assign objects of this type will cause a compiler error.
-        /wd5026 # Move constructor was implicitly defined as deleted.
-        /wd5027 # Move assignment operator was implicitly defined as deleted.
-        /wd4201 # Nonstandard extension used: nameless struct/union.
-        /wd4514 # Unreferenced inline function has been removed.
-        /wd4702 # Unreachable code.
+        /W4
 
         /EHa
 
         /fp:fast
     )
+else()
+    message(FATAL_ERROR "Unsupported compiler!")
 endif()
 
 add_library(sys.BuildSupport.WarningsAsErrors INTERFACE)
