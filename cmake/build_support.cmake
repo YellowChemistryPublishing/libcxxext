@@ -1,17 +1,17 @@
-add_library(sys.BuildSupport.CompilerWarnings INTERFACE)
+add_library(sys.BuildSupport.CompilerOptions INTERFACE)
 if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
     if (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_compile_options(sys.BuildSupport.CompilerWarnings INTERFACE
+        target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
             $<$<COMPILE_LANGUAGE:CXX>:-fconcepts-diagnostics-depth=4>
             -fno-signaling-nans -fcx-limited-range
         )
     elseif (CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        target_compile_options(sys.BuildSupport.CompilerWarnings INTERFACE
+        target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
             -Wno-extra-semi -Wno-c++98-compat-extra-semi # Let us put semicolons after `_Pragma(...)`.
         )
     endif()
 
-    target_compile_options(sys.BuildSupport.CompilerWarnings INTERFACE
+    target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
         $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override> $<$<COMPILE_LANGUAGE:CXX>:-Wold-style-cast> $<$<COMPILE_LANGUAGE:CXX>:-Woverloaded-virtual> $<$<COMPILE_LANGUAGE:CXX>:-Wzero-as-null-pointer-constant>
 
         -Wall -Wextra -pedantic -Wconversion -Wsign-conversion -Wdouble-promotion -Wunused-result -Wuninitialized -Wimplicit-fallthrough -Wcast-align -Wnull-dereference -Wformat=2 -Werror=format-security -Wno-psabi
@@ -25,7 +25,7 @@ if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang" AND CMAKE_CXX_COMPILER_ID
         -fdata-sections -ffunction-sections
     )
 elseif (MSVC)
-    target_compile_options(sys.BuildSupport.CompilerWarnings INTERFACE
+    target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
         /W4
 
         /EHa

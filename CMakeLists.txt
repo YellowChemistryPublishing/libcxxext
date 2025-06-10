@@ -20,13 +20,13 @@ endif()
 
 add_library(sys INTERFACE)
 target_include_directories(sys INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys")
-target_link_libraries(sys INTERFACE sys.BuildSupport.CompilerWarnings)
+target_link_libraries(sys INTERFACE sys.BuildSupport.CompilerOptions)
 
 # sys.Containers
 
 add_library(sys.Containers INTERFACE)
 target_include_directories(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers")
-target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.CompilerWarnings)
+target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.CompilerOptions)
 
 # sys.Threading
 
@@ -50,7 +50,7 @@ else()
     target_compile_options(sys.Threading PUBLIC -include "${PLATFORM_SUPPORT_THREADING_HEADER}")
 endif()
 target_include_directories(sys.Threading PUBLIC sys sys.Threading ${PLATFORM_SUPPORT_ADDITIONAL_INCLUDE_DIRS})
-target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerWarnings)
+target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
 
 # Examples
 
@@ -67,4 +67,25 @@ foreach(EXAMPLE_FILE ${EXAMPLES})
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_link_libraries(${EXAMPLE_NAME} PUBLIC stdc++exp)
     endif()
+endforeach()
+
+# Tests
+
+enable_testing()
+
+set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
+set(CATCH_INSTALL_EXTRAS OFF CACHE INTERNAL "" FORCE)
+add_subdirectory(Catch2)
+
+file(GLOB TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
+foreach(TEST_FILE ${TESTS})
+    get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
+
+    add_executable(${TEST_NAME} ${TEST_FILE})
+    target_link_libraries(${TEST_NAME} PUBLIC gcc Catch2WithMain sys sys.Containers sys.Threading)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        target_link_libraries(${TEST_NAME} PUBLIC stdc++exp)
+    endif()
+
+    add_test(test_${TEST_NAME} ${TEST_NAME})
 endforeach()

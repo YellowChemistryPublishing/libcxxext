@@ -244,48 +244,52 @@ namespace sys
 
         constexpr integer& operator++() noexcept
         {
-            this->underlying = std::bit_cast<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) + std::make_unsigned_t<WithWidth>(1));
+            this->underlying =
+                std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) + std::make_unsigned_t<WithWidth>(1)));
             return *this;
         }
         constexpr integer& operator--() noexcept
         {
-            this->underlying = std::bit_cast<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) - std::make_unsigned_t<WithWidth>(1));
+            this->underlying =
+                std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) - std::make_unsigned_t<WithWidth>(1)));
             return *this;
         }
         constexpr integer operator++(int) noexcept
         {
             integer ret = *this;
-            this->underlying = std::bit_cast<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) + std::make_unsigned_t<WithWidth>(1));
+            this->underlying =
+                std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) + std::make_unsigned_t<WithWidth>(1)));
             return ret;
         }
         constexpr integer operator--(int) noexcept
         {
             integer ret = *this;
-            this->underlying = std::bit_cast<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) - std::make_unsigned_t<WithWidth>(1));
+            this->underlying =
+                std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying) - std::make_unsigned_t<WithWidth>(1)));
             return ret;
         }
 
         constexpr integer operator-() const noexcept
         {
-            return std::bit_cast<WithWidth>(-std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying));
+            return std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>(-std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying)));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator+(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::bit_cast<std::make_unsigned_t<WithWidth>>(a) +
-                                                                                   std::bit_cast<std::make_unsigned_t<Other>>(b));
+            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(
+                std::bit_cast<std::make_unsigned_t<WithWidth>>(a) + std::bit_cast<std::make_unsigned_t<Other>>(b)));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator-(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::bit_cast<std::make_unsigned_t<WithWidth>>(a) -
-                                                                                   std::bit_cast<std::make_unsigned_t<Other>>(b));
+            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(
+                std::bit_cast<std::make_unsigned_t<WithWidth>>(a) - std::bit_cast<std::make_unsigned_t<Other>>(b)));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator*(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::bit_cast<std::make_unsigned_t<WithWidth>>(a) *
-                                                                                   std::bit_cast<std::make_unsigned_t<Other>>(b));
+            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(
+                std::bit_cast<std::make_unsigned_t<WithWidth>>(a) * std::bit_cast<std::make_unsigned_t<Other>>(b)));
         }
         // todo: division, mod
 
