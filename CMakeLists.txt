@@ -2,17 +2,22 @@ cmake_minimum_required(VERSION 3.30)
 
 project(libcxxext)
 
-set(LIBRARY_TYPE "STATIC" CACHE STRING "Build type of libraries." FORCE)
+include(CMakeDependentOption)
+
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    set(CXXEXT_DEVELOPMENT_MODE ON CACHE STRING "Build libcxxext in development mode." FORCE)
+    set(LIBCXXEXT_DEVELOPMENT_MODE ON CACHE STRING "Build libcxxext in development mode.")
 else()
-    set(CXXEXT_DEVELOPMENT_MODE OFF CACHE STRING "Build libcxxext in development mode." FORCE)
+    set(LIBCXXEXT_DEVELOPMENT_MODE OFF CACHE STRING "Build libcxxext in development mode.")
 endif()
+
+cmake_dependent_option(LIBCXXEXT_EXAMPLES "Build examples." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
+cmake_dependent_option(LIBCXXEXT_TESTS "Build tests." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
+set(LIBCXXEXT_LIBRARY_TYPE "STATIC" CACHE STRING "Build type of libraries.")
 
 set(CMAKE_CXX_STANDARD 26)
 
 include(cmake/build_support.cmake)
-if (CXXEXT_DEVELOPMENT_MODE)
+if (LIBCXXEXT_DEVELOPMENT_MODE)
     link_libraries(sys.BuildSupport.WarningsAsErrors)
 endif()
 
@@ -43,7 +48,7 @@ if (PLATFORM_SUPPORT_THREADING_LIBRARY)
     list(APPEND SYS_THREAD_SRCS ${PLATFORM_SUPPORT_THREADING_LIBRARY})
 endif()
 
-add_library(sys.Threading ${LIBRARY_TYPE} ${SYS_THREAD_SRCS})
+add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} ${SYS_THREAD_SRCS})
 if(MSVC)
     target_compile_options(sys.Threading PUBLIC /FI "${PLATFORM_SUPPORT_THREADING_HEADER}")
 else()
@@ -54,38 +59,42 @@ target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
 
 # Examples
 
-if (CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    link_libraries(stdc++exp) # For `std::print(...)`.
-endif()
-
-file(GLOB EXAMPLES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp")
-foreach(EXAMPLE_FILE ${EXAMPLES})
-    get_filename_component(EXAMPLE_NAME ${EXAMPLE_FILE} NAME_WE)
-
-    add_executable(${EXAMPLE_NAME} ${EXAMPLE_FILE})
-    target_link_libraries(${EXAMPLE_NAME} PUBLIC sys sys.Containers sys.Threading)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_link_libraries(${EXAMPLE_NAME} PUBLIC stdc++exp)
+if (LIBCXXEXT_EXAMPLES)
+    if (CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        link_libraries(stdc++exp) # For `std::print(...)`.
     endif()
-endforeach()
+
+    file(GLOB EXAMPLES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp")
+    foreach(EXAMPLE_FILE ${EXAMPLES})
+        get_filename_component(EXAMPLE_NAME ${EXAMPLE_FILE} NAME_WE)
+
+        add_executable(${EXAMPLE_NAME} ${EXAMPLE_FILE})
+        target_link_libraries(${EXAMPLE_NAME} PUBLIC sys sys.Containers sys.Threading)
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            target_link_libraries(${EXAMPLE_NAME} PUBLIC stdc++exp)
+        endif()
+    endforeach()
+endif()
 
 # Tests
 
-enable_testing()
+if (LIBCXXEXT_TESTS)
+    enable_testing()
 
-set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
-set(CATCH_INSTALL_EXTRAS OFF CACHE INTERNAL "" FORCE)
-add_subdirectory(Catch2)
+    set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
+    set(CATCH_INSTALL_EXTRAS OFF CACHE INTERNAL "" FORCE)
+    add_subdirectory(Catch2)
 
-file(GLOB TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
-foreach(TEST_FILE ${TESTS})
-    get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
+    file(GLOB TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
+    foreach(TEST_FILE ${TESTS})
+        get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
 
-    add_executable(${TEST_NAME} ${TEST_FILE})
-    target_link_libraries(${TEST_NAME} PUBLIC gcc Catch2WithMain sys sys.Containers sys.Threading)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_link_libraries(${TEST_NAME} PUBLIC stdc++exp)
-    endif()
+        add_executable(${TEST_NAME} ${TEST_FILE})
+        target_link_libraries(${TEST_NAME} PUBLIC gcc Catch2WithMain sys sys.Containers sys.Threading)
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            target_link_libraries(${TEST_NAME} PUBLIC stdc++exp)
+        endif()
 
-    add_test(test_${TEST_NAME} ${TEST_NAME})
-endforeach()
+        add_test(test_${TEST_NAME} ${TEST_NAME})
+    endforeach()
+endif()
