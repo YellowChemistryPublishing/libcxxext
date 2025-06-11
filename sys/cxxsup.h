@@ -1,6 +1,7 @@
 #pragma once
 
 #include <limits>
+#include <numeric>
 #include <utility>
 
 #include <LanguageSupport.h>
@@ -15,12 +16,16 @@ namespace sys
     template <INumberUnderlying T, INumberUnderlying ValueType>
     constexpr T numeric_cast(ValueType value, unsafe)
     {
+#if !defined(_MSC_VER) || !_MSC_VER
+        return std::saturate_cast<T>(value);
+#else
         if (std::cmp_less_equal(std::numeric_limits<T>::lowest(), value) && std::cmp_less_equal(value, std::numeric_limits<T>::max())) [[likely]]
             return T(value);
         else if (std::cmp_less(value, std::numeric_limits<T>::lowest()))
             return std::numeric_limits<T>::lowest();
         else // if (std::cmp_greater(value, std::numeric_limits<T>::max()))
             return std::numeric_limits<T>::max();
+#endif
     }
     template <INumberUnderlying T, INumberUnderlying ValueType>
     constexpr result<T> numeric_cast(ValueType value)

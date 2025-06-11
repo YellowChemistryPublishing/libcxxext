@@ -21,6 +21,7 @@
 #define _clWarn_gcc_use_after_free "-Wuse-after-free"
 #define _clWarn_gcc_literal_suffix "-Wliteral-suffix"
 #define _clWarn_gcc_cast_align "-Wcast-align"
+#define _clWarn_gcc_conversion "-Wconversion"
 
 #define _clWarn_msvc_dummy 4001
 #define _clWarn_msvc_literal_suffix 4455
