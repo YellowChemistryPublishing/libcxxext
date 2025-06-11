@@ -13,6 +13,9 @@
 
 #include <CompilerWarnings.h>
 
+/// @defgroup except_operator_new
+/// @throw `::operator new`: `std::bad_alloc`
+
 struct unsafe
 { };
 
@@ -69,10 +72,12 @@ struct unsafe
     do                                                                                                                                                                          \
     {                                                                                                                                                                           \
         std::source_location __srcLoc = std::source_location::current();                                                                                                        \
-        _push_nowarn(_clWarn_use_after_free);                                                                                                                                   \
+        _push_nowarn_gcc(_clWarn_gcc_use_after_free);                                                                                                                           \
+        _push_nowarn_clang(_clWarn_clang_use_after_free);                                                                                                                       \
         std::println(stderr, "In function `{}` at \"{}:{}:{}\" - Throwing `{}`.", __srcLoc.function_name(), __srcLoc.file_name(), int(__srcLoc.line()), int(__srcLoc.column()), \
                      typeid(decltype(value)).name());                                                                                                                           \
-        _pop_nowarn();                                                                                                                                                          \
+        _pop_nowarn_clang();                                                                                                                                                    \
+        _pop_nowarn_gcc();                                                                                                                                                      \
         throw(value);                                                                                                                                                           \
     }                                                                                                                                                                           \
     while (false)

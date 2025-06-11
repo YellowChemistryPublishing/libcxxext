@@ -266,7 +266,8 @@ namespace sys
                 std::swap_ranges(_asr(byte*, &a), _asr(byte*, &a) + sizeof(a), _asr(byte*, &b));
         }
     private:
-        _push_nowarn(_clWarn_nameless_struct_union);
+        _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
+        _push_nowarn_msvc(_clWarn_msvc_nameless_struct_union);
         union
         {
             struct
@@ -276,7 +277,8 @@ namespace sys
             } dataDynamic;
             CharType dataStatic[+sz(StaticCapacity)];
         };
-        _pop_nowarn();
+        _pop_nowarn_msvc();
+        _pop_nowarn_clang();
         bool _isDynamic = false;
         ssz _length = 0;
 

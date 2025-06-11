@@ -136,8 +136,10 @@ namespace sys::math
     template <typename T = float>
     struct vector2_of : public vector_operators<vector2_of<T>, 2, T>
     {
-        _push_nowarn(_clWarn_pedantic);
-        _push_nowarn(_clWarn_nameless_struct_union);
+        _push_nowarn_gcc(_clWarn_gcc_pedantic);
+        _push_nowarn_clang(_clWarn_clang_pedantic);
+        _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
+        _push_nowarn_msvc(_clWarn_msvc_nameless_struct_union);
         union
         {
             T elements[2];
@@ -146,8 +148,10 @@ namespace sys::math
                 T x, y;
             };
         };
-        _pop_nowarn();
-        _pop_nowarn();
+        _pop_nowarn_msvc();
+        _pop_nowarn_clang();
+        _pop_nowarn_clang();
+        _pop_nowarn_gcc();
 
         using vector_operators<vector2_of<T>, 2, T>::vector_operators;
 
@@ -157,8 +161,10 @@ namespace sys::math
     template <typename T = float>
     struct vector3_of : public vector_operators<vector3_of<T>, 3, T>
     {
-        _push_nowarn(_clWarn_pedantic);
-        _push_nowarn(_clWarn_nameless_struct_union);
+        _push_nowarn_gcc(_clWarn_gcc_pedantic);
+        _push_nowarn_clang(_clWarn_clang_pedantic);
+        _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
+        _push_nowarn_msvc(_clWarn_msvc_nameless_struct_union);
         union
         {
             T elements[3];
@@ -167,8 +173,10 @@ namespace sys::math
                 T x, y, z;
             };
         };
-        _pop_nowarn();
-        _pop_nowarn();
+        _pop_nowarn_msvc();
+        _pop_nowarn_clang();
+        _pop_nowarn_clang();
+        _pop_nowarn_gcc();
 
         using vector_operators<vector3_of<T>, 3, T>::vector_operators;
 
@@ -178,8 +186,10 @@ namespace sys::math
     template <typename T = float>
     struct vector4_of : public vector_operators<vector4_of<T>, 4, T>
     {
-        _push_nowarn(_clWarn_pedantic);
-        _push_nowarn(_clWarn_nameless_struct_union);
+        _push_nowarn_gcc(_clWarn_gcc_pedantic);
+        _push_nowarn_clang(_clWarn_clang_pedantic);
+        _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
+        _push_nowarn_msvc(_clWarn_msvc_nameless_struct_union);
         union
         {
             T elements[4];
@@ -188,8 +198,10 @@ namespace sys::math
                 T x, y, z, w;
             };
         };
-        _pop_nowarn();
-        _pop_nowarn();
+        _pop_nowarn_msvc();
+        _pop_nowarn_clang();
+        _pop_nowarn_clang();
+        _pop_nowarn_gcc();
 
         using vector_operators<vector4_of<T>, 4, T>::vector_operators;
 
@@ -200,8 +212,10 @@ namespace sys::math
     requires (N > 4)
     struct vector_of : public vector_operators<vector_of<N, T>, N, T>
     {
-        _push_nowarn(_clWarn_pedantic);
-        _push_nowarn(_clWarn_nameless_struct_union);
+        _push_nowarn_gcc(_clWarn_gcc_pedantic);
+        _push_nowarn_clang(_clWarn_clang_pedantic);
+        _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
+        _push_nowarn_msvc(_clWarn_msvc_nameless_struct_union);
         union
         {
             T elements[N];
@@ -210,8 +224,10 @@ namespace sys::math
                 T x, y, z, w;
             };
         };
-        _pop_nowarn();
-        _pop_nowarn();
+        _pop_nowarn_msvc();
+        _pop_nowarn_clang();
+        _pop_nowarn_clang();
+        _pop_nowarn_gcc();
 
         using vector_operators<vector_of<N, T>, N, T>::vector_operators;
 

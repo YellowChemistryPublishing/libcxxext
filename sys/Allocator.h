@@ -7,7 +7,10 @@
 
 namespace sys
 {
-    template <typename T, i16 StaticSize = 0, bool DynamicExtents = true>
+    /// @defgroup except_allocator
+    /// @throw `sys::allocator<...>::allocate(...)`: `std::bad_alloc`
+
+    template <typename T, i16 StaticSize = 0_i16, bool DynamicExtents = true>
     requires (StaticSize >= 0)
     class allocator
     {
@@ -22,19 +25,21 @@ namespace sys
         using pointer = T*;
         using const_pointer = const T*;
 
-        inline allocator()
+        constexpr allocator() noexcept
         { }
 
+        /// @copydetail except_operator_new
+        /// @copydetail except_allocator
         inline T* allocate(size_t n)
         {
             auto beg = -1_i16;
             for (auto end = 0_i16; end < StaticSize; end++)
             {
-                if (beg < 0)
+                if (beg < 0_i16)
                     beg = end;
                 else if (end - beg >= i16(n))
                 {
-                    memset(this->bufferUnavail, 1u, n);
+                    std::memset(&this->bufferUnavail[+beg], 1u, n);
                     return &this->inplaceBuffer[+beg];
                 }
                 else if (bufferUnavail[+end] == 1u)
@@ -50,12 +55,12 @@ namespace sys
             if constexpr (DynamicExtents)
             {
                 if (this->inplaceBuffer <= p && p < this->inplaceBuffer + (+StaticSize))
-                    memset(this->bufferUnavail + (p - this->inplaceBuffer), 0u, n);
+                    std::memset(this->bufferUnavail + (p - this->inplaceBuffer), 0u, n);
                 else
                     ::operator delete(p);
             }
             else
-                memset(this->bufferUnavail + (p - this->inplaceBuffer), 0u, n);
+                std::memset(this->bufferUnavail + (p - this->inplaceBuffer), 0u, n);
         }
     };
 
@@ -67,6 +72,8 @@ namespace sys
         using pointer = T*;
         using const_pointer = const T*;
 
+        /// @copydetail except_operator_new
+        /// @copydetail except_allocator
         inline T* allocate(size_t n)
         {
             return _as(T*, ::operator new(n));

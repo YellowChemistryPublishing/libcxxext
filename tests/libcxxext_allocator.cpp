@@ -1,3 +1,4 @@
+#include "CompilerWarnings.h"
 #include <catch2/catch_all.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers.hpp>
@@ -5,17 +6,26 @@
 #include <cstring>
 #include <new>
 
+_push_nowarn_clang("-Wkeyword-macro");
 #define class struct
 #define private public
 #include <Allocator.h>
 #undef private
 #undef class
+_pop_nowarn_clang();
 
 TEST_CASE("basic | `sys::allocator<int, 16_i16, true>`")
 {
     sys::allocator<int, 16_i16, true> alloc;
 
-    int* allocated = alloc.allocate(24u);
+    int* allocated;
+    try
+    {
+        //          v Can throw `std::bad_alloc`.
+        allocated = alloc.allocate(24u);
+    }
+    catch (const std::bad_alloc&)
+    { }
     CHECK((_as(void*, allocated) < _as(void*, &alloc) || _as(void*, allocated) > _as(void*, &alloc + 1)));
     alloc.deallocate(allocated, 24u);
 
@@ -31,18 +41,33 @@ TEST_CASE("basic | `sys::allocator<int, 16_i16, false>`")
 
     auto block1 = alloc.allocate(6u);
     auto block2 = alloc.allocate(6u);
+    byte compare[16u] {};
+    std::memset(compare, 1u, 12u);
+    REQUIRE(std::memcmp(alloc.bufferUnavail, compare, sizeof(compare)) == 0);
+
     alloc.deallocate(block1, 6u);
+    std::memset(compare, 0u, 6u);
+    REQUIRE(std::memcmp(alloc.bufferUnavail, compare, sizeof(compare)) == 0);
+
     block1 = alloc.allocate(4u);
+    std::memset(compare, 1u, 4u);
+    REQUIRE(std::memcmp(alloc.bufferUnavail, compare, sizeof(compare)) == 0);
+
     alloc.deallocate(block2, 6u);
     alloc.deallocate(block1, 4u);
 
-    byte zeros[16u];
-    std::memset(zeros, 0u, sizeof(zeros));
-    CHECK(std::memcmp(alloc.bufferUnavail, zeros, sizeof(zeros)) == 0);
+    std::memset(compare, 0u, sizeof(compare));
+    REQUIRE(std::memcmp(alloc.bufferUnavail, compare, sizeof(compare)) == 0);
 }
 TEST_CASE("basic | `sys::allocator<int, 0_i16, true>`")
 {
     sys::allocator<int, 0_i16, true> alloc;
 
-    alloc.deallocate(alloc.allocate(32u), 32u);
+    try
+    {
+        //               v Can throw `std::bad_alloc`.
+        alloc.deallocate(alloc.allocate(32u), 32u);
+    }
+    catch (const std::bad_alloc&)
+    { }
 }
