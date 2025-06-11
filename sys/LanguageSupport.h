@@ -312,6 +312,11 @@ namespace sys
             return Floating(a.underlying) * b;
         }
         template <std::floating_point Floating>
+        friend constexpr Floating operator/(const integer<WithWidth>& a, Floating b) noexcept
+        {
+            return Floating(a.underlying) / b;
+        }
+        template <std::floating_point Floating>
         friend constexpr Floating operator+(Floating a, const integer<WithWidth>& b) noexcept
         {
             return a + Floating(b);
@@ -325,6 +330,11 @@ namespace sys
         friend constexpr Floating operator*(Floating a, const integer<WithWidth>& b) noexcept
         {
             return a * Floating(b);
+        }
+        template <std::floating_point Floating>
+        friend constexpr Floating operator/(Floating a, const integer<WithWidth>& b) noexcept
+        {
+            return a / Floating(b);
         }
         // todo: division, mod
 
