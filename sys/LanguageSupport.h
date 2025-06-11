@@ -296,6 +296,36 @@ namespace sys
             return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(
                 std::bit_cast<std::make_unsigned_t<WithWidth>>(a) * std::bit_cast<std::make_unsigned_t<Other>>(b)));
         }
+        template <std::floating_point Floating>
+        friend constexpr Floating operator+(const integer<WithWidth>& a, Floating b) noexcept
+        {
+            return Floating(a.underlying) + b;
+        }
+        template <std::floating_point Floating>
+        friend constexpr Floating operator-(const integer<WithWidth>& a, Floating b) noexcept
+        {
+            return Floating(a.underlying) - b;
+        }
+        template <std::floating_point Floating>
+        friend constexpr Floating operator*(const integer<WithWidth>& a, Floating b) noexcept
+        {
+            return Floating(a.underlying) * b;
+        }
+        template <std::floating_point Floating>
+        friend constexpr Floating operator+(Floating a, const integer<WithWidth>& b) noexcept
+        {
+            return a + Floating(b);
+        }
+        template <std::floating_point Floating>
+        friend constexpr Floating operator-(Floating a, const integer<WithWidth>& b) noexcept
+        {
+            return a - Floating(b);
+        }
+        template <std::floating_point Floating>
+        friend constexpr Floating operator*(Floating a, const integer<WithWidth>& b) noexcept
+        {
+            return a * Floating(b);
+        }
         // todo: division, mod
 
         constexpr integer operator~() const noexcept
