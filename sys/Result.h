@@ -94,6 +94,7 @@ namespace sys
     /// @brief A result type that can hold either a value or an error.
     /// @tparam T The type of the value to hold.
     /// @tparam Err The type of the error to hold.
+    /// @attention `T`, `Err` must be trivially destructible after moved from.
     template <typename T, typename Err = void>
     struct result : result_b<result, T, Err>
     {
@@ -132,6 +133,10 @@ namespace sys
                 if constexpr (!std::is_reference_v<Err>)
                     this->error.~result_storage_type<Err>();
                 break;
+            case result_status::empty:
+            default:
+                {
+                } // Do nothing.s
             }
         }
 
@@ -139,7 +144,7 @@ namespace sys
         {
             _fence_contract_enforce(this->status == result_status::error && "Taking error for a good or empty result!");
             this->status = result_status::empty;
-            return this->template obtainStorage<Err>();
+            return this->error;
         }
 
         constexpr void swap(result& a, result& b)
@@ -184,7 +189,7 @@ namespace sys
         {
             if constexpr (!std::is_reference_v<T>)
                 if (this->status == result_status::ok)
-                    _asr(result_storage_type<T>*, this->storage)->~T();
+                    this->value.~T();
         }
 
         constexpr void swap(result& a, result& b)
@@ -200,7 +205,7 @@ namespace sys
     private:
         union
         {
-            byte none;
+            byte _;
             result_storage_type<T> value;
         };
         result_status status = result_status::empty;

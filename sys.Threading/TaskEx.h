@@ -32,7 +32,7 @@ namespace sys
             if (this->handle.promise().exception) [[unlikely]]
                 std::rethrow_exception(this->handle.promise().exception);
             if constexpr (!std::is_same<T, void>::value)
-                return std::move(*reinterpret_cast<T*>(this->handle.promise().value));
+                return std::move(*reinterpret_cast<T*>(&this->handle.promise().value));
         }
     };
     template <typename T>
@@ -89,7 +89,20 @@ namespace sys
     template <typename T>
     struct task_promise final : public task_promise_b<T>
     {
-        alignas(T) unsigned char value[sizeof(T)];
+        union
+        {
+            byte _;
+            T value;
+        };
+        bool hasValue = false;
+
+        constexpr task_promise() noexcept
+        { }
+        inline ~task_promise() noexcept(noexcept(this->value.~T()))
+        {
+            if (this->hasValue) [[likely]]
+                this->value.~T();
+        }
 
         _inline_always task_final_awaiter<T> final_suspend() noexcept
         {
@@ -99,7 +112,8 @@ namespace sys
         template <typename ReturnType>
         _inline_always constexpr void return_value(ReturnType&& ret)
         {
-            new(this->value) T(std::forward<ReturnType>(ret));
+            new(&this->value) T(std::forward<ReturnType>(ret));
+            this->hasValue = true;
         }
     };
     template <>

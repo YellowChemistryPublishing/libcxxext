@@ -86,25 +86,27 @@ namespace sys
             return *this;
         }
 
-        _const inline const T& operator[](ssz index, unsafe) const
+        _const inline const T& operator[](ssz index, unsafe) const noexcept
         {
-            return this->data[index];
+            return this->data[+index];
         }
-        _const inline T& operator[](ssz index, unsafe)
+        _const inline T& operator[](ssz index, unsafe) noexcept
         {
-            return _invoke_const_member_overload(operator[](index, unsafe()), _asc);
+            return _asc(T&, (*_as(const std::remove_reference_t<decltype(*this)>*, this))[index, unsafe()]);
         }
-        _const inline result<const T&> operator[](ssz index) const
+        _const inline result<const T&> operator[](ssz index) const noexcept
         {
             if (ssz(0) <= index && index < this->_length) [[likely]]
                 return (*this)[index, unsafe()];
             else
                 return nullptr;
         }
-        _const inline result<T&> operator[](ssz index)
+        _const inline result<T&> operator[](ssz index) noexcept
         {
-            auto ret = _as(const managed_array<T>*, this)->operator[](index);
-            return _asr(result<T&>&, ret);
+            if (ssz(0) <= index && index < this->_length) [[likely]]
+                return (*this)[index, unsafe()];
+            else
+                return nullptr;
         }
 
         _const inline const T* cbegin() const noexcept
@@ -113,7 +115,7 @@ namespace sys
         }
         _const inline const T* cend() const noexcept
         {
-            return this->data + this->_length;
+            return this->data + (+this->_length);
         }
         _const inline const T* begin() const noexcept
         {
@@ -129,7 +131,7 @@ namespace sys
         }
         _const inline T* end() noexcept
         {
-            return this->data + this->_length;
+            return this->data + (+this->_length);
         }
 
         _const inline bool is_empty() const noexcept
