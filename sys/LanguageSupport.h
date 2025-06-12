@@ -190,14 +190,19 @@ namespace sys
         constexpr integer() noexcept = default;
         template <std::integral T>
         constexpr integer(T t) noexcept :
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) || !_MSC_VER
             underlying(std::saturate_cast<WithWidth>(t))
 #else
             underlying(WithWidth(t))
 #endif
         { }
-        template <IStrictlyNarrowerUnderlying<WithWidth> T>
-        constexpr integer(const integer<T>& t) noexcept : underlying(t.underlying)
+        template <std::integral T>
+        constexpr explicit integer(integer<T> t) noexcept :
+#if !defined(_MSC_VER) || !_MSC_VER
+            underlying(std::saturate_cast<WithWidth>(t.underlying))
+#else
+            underlying(WithWidth(t.underlying))
+#endif
         { }
         template <std::floating_point T>
         constexpr integer(T t) noexcept : underlying(static_cast<WithWidth>(t))

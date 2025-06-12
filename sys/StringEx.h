@@ -27,7 +27,7 @@ namespace sys
             for (auto& str : container) totalLength += str.length();
 
             string ret;
-            auto to = ret.alloc(nr2i64(totalLength + 1_z));
+            auto to = ret.alloc(nr2i64(i64(totalLength + 1_z)));
             if (!to)
                 return nullptr;
 
@@ -48,7 +48,7 @@ namespace sys
         }
         inline string(CharType c, ssz repeat)
         {
-            this->for_each_assign(repeat, [&](CharType* buf, ssz i) { buf[i] = c; }, [&, this] { return this->alloc(nr2i64(repeat + 1_z)); });
+            this->for_each_assign(repeat, [&](CharType* buf, ssz i) { buf[i] = c; }, [&, this] { return this->alloc(nr2i64(i64(repeat + 1_z))); });
         }
         inline string(const std::span<CharType> str)
         {
@@ -58,7 +58,7 @@ namespace sys
         {
             ssz len = 0;
             while (str[len]) ++len;
-            this->for_each_assign(len, [&](CharType* buf, ssz i) { buf[i] = str[i]; }, [&, this] { return this->alloc(nr2i64(len + 1_z)); });
+            this->for_each_assign(len, [&](CharType* buf, ssz i) { buf[i] = str[i]; }, [&, this] { return this->alloc(nr2i64(i64(len + 1_z))); });
         }
         template <bool OtherDynamicExtent, ssz OtherStaticCapacity>
         inline string(const string<CharType, OtherDynamicExtent, OtherStaticCapacity>&)
