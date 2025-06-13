@@ -33,9 +33,9 @@
 #define _push_nowarn_clang(compilerWarning)
 #define _push_nowarn_gcc(compilerWarning)
 #define _push_nowarn_msvc(compilerWarning)
-#define _pop_nowarn_clang(compilerWarning)
-#define _pop_nowarn_gcc(compilerWarning)
-#define _pop_nowarn_msvc(compilerWarning)
+#define _pop_nowarn_clang()
+#define _pop_nowarn_gcc()
+#define _pop_nowarn_msvc()
 
 #define _clPragma_fwd(...) _Pragma(#__VA_ARGS__)
 #if _libcxxext_compiler_clang
