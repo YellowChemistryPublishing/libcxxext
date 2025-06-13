@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Platform.h>
+
 #define _clWarn_clang_bad_offsetof "-Winvalid-offsetof"
 #define _clWarn_clang_nontrivial_memcpy "-Wsuspicious-memaccess"
 #define _clWarn_clang_unused_param "-Wunused-parameter"
@@ -31,31 +33,33 @@
 #define _push_nowarn_clang(compilerWarning)
 #define _push_nowarn_gcc(compilerWarning)
 #define _push_nowarn_msvc(compilerWarning)
-
-#define _pop_nowarn_clang()
-#define _pop_nowarn_gcc()
-#define _pop_nowarn_msvc()
+#define _pop_nowarn_clang(compilerWarning)
+#define _pop_nowarn_gcc(compilerWarning)
+#define _pop_nowarn_msvc(compilerWarning)
 
 #define _clPragma_fwd(...) _Pragma(#__VA_ARGS__)
-#if defined(__clang__) && __clang__
+#if _libcxxext_compiler_clang
 #undef _push_nowarn_clang
 #define _push_nowarn_clang(compilerWarning)                 \
     _Pragma("clang diagnostic push");                       \
     _Pragma("clang diagnostic ignored \"-Wextra-semi\"");   \
     _clPragma_fwd(clang diagnostic ignored compilerWarning)
-#define _pop_nowarn() _Pragma("clang diagnostic pop")
-#elif defined(__GNUC__) && __GNUC__
+#undef _pop_nowarn_clang
+#define _pop_nowarn_clang() _Pragma("clang diagnostic pop")
+#elif _libcxxext_compiler_gcc
 #undef _push_nowarn_gcc
 #define _push_nowarn_gcc(compilerWarning)                 \
     _Pragma("GCC diagnostic push");                       \
     _clPragma_fwd(GCC diagnostic ignored compilerWarning)
-#define _pop_nowarn() _Pragma("GCC diagnostic pop")
-#elif defined(_MSC_VER) && _MSC_VER
+#undef _pop_nowarn_gcc
+#define _pop_nowarn_gcc() _Pragma("GCC diagnostic pop")
+#elif _libcxxext_compiler_msvc
 #undef _push_nowarn_msvc
 #define _push_nowarn_msvc(compilerWarning)            \
     _Pragma("warning(push)");                         \
     _clPragma_fwd(warning(disable : compilerWarning))
-#define _pop_nowarn() _Pragma("warning(pop)")
+#undef _pop_nowarn_msvc
+#define _pop_nowarn_msvc() _Pragma("warning(pop)")
 #else
 #error "Unsupported compiler!"
 #endif

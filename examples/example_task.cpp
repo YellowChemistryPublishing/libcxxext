@@ -1,4 +1,4 @@
-#if defined(_MSC_VER) && _MSC_VER
+#if _libcxxext_compiler_msvc
 #pragma warning(disable : _clWarn_unreachable, justification : "Erroneously generated for compiler coroutine codegen.")
 #endif
 
@@ -26,3 +26,5 @@ int main()
     parallelRoutine('a', 1000);
     parallelRoutine('b', 10);
 }
+
+_pop_nowarn_msvc();

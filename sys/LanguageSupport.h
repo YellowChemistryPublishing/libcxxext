@@ -501,10 +501,6 @@ using f64 = std::float64_t;
 using f64 = double;
 #endif
 
-#if defined(__clang__) && __clang__
-#pragma clang system_header
-#endif
-
 // clang-format off: C++23 -- no space b/w "" and literal suffix.
 constexpr i8 operator""_i8(ullong lit) noexcept
 {
