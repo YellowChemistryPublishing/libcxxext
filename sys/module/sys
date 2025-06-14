@@ -5,6 +5,7 @@
 #include <CompilerWarnings.h>
 #include <Exception.h>
 #include <LanguageSupport.h>
+#include <ManagedArray.h>
 #include <Pointer.h>
 #include <Result.h>
 #include <StringEx.h>
