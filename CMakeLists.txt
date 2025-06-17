@@ -21,6 +21,14 @@ if (LIBCXXEXT_DEVELOPMENT_MODE)
     link_libraries(sys.BuildSupport.WarningsAsErrors)
 endif()
 
+find_program(RUN_CPPCHECK cppcheck PATHS "C:/Program Files/Cppcheck" "/usr/bin")
+if (NOT RUN_CPPCHECK)
+    message(FATAL_ERROR "Cppcheck not found. Required for static analysis.")
+endif()
+set(LINT_CPPCHECK ${RUN_CPPCHECK} --suppress=preprocessorErrorDirective --enable=all --inconclusive --inline-suppr --force --max-configs=64 -DconfigUSE_16_BIT_TICKS)
+
+include(cmake/clang_tidy.cmake)
+
 # sys
 
 add_library(sys INTERFACE)
@@ -52,10 +60,12 @@ add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} ${SYS_THREAD_SRCS})
 if(MSVC)
     target_compile_options(sys.Threading PUBLIC /FI "${PLATFORM_SUPPORT_THREADING_HEADER}")
 else()
-    target_compile_options(sys.Threading PUBLIC -include "${PLATFORM_SUPPORT_THREADING_HEADER}")
+    target_compile_definitions(sys.Threading PUBLIC PLATFORM_SUPPORT_THREADING_HEADER="${PLATFORM_SUPPORT_THREADING_HEADER}")
 endif()
 target_include_directories(sys.Threading PUBLIC sys sys.Threading ${PLATFORM_SUPPORT_ADDITIONAL_INCLUDE_DIRS})
 target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
+
+clang_tidy_target(sys.Threading "-header-filter=.* -checks=*")
 
 # Examples
 
@@ -95,6 +105,6 @@ if (LIBCXXEXT_TESTS)
             target_link_libraries(${TEST_NAME} PUBLIC stdc++exp)
         endif()
 
-        add_test(test_${TEST_NAME} ${TEST_NAME})
+        add_test(${TEST_NAME} ${TEST_NAME})
     endforeach()
 endif()

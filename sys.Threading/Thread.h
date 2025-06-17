@@ -1,5 +1,7 @@
 #pragma once
 
+#include PLATFORM_SUPPORT_THREADING_HEADER
+
 namespace sys
 {
     using thread_id = __thread_id;

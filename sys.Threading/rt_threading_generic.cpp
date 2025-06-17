@@ -1,5 +1,10 @@
 #include "rt.h"
 
+#include PLATFORM_SUPPORT_THREADING_HEADER
+
+#include <atomic>
+#include <coroutine>
+
 std::atomic<__thread_pool*> __thread_pool::instance;
 
 extern "C" void* __task_operator_new(size_t sz)

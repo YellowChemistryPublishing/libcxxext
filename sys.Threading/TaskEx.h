@@ -1,8 +1,10 @@
 #pragma once
 
-#include <coroutine>
-#include <rt.h>
+#include PLATFORM_SUPPORT_THREADING_HEADER
 
+#include <coroutine>
+
+#include <rt.h>
 #include <LanguageSupport.h>
 
 namespace sys

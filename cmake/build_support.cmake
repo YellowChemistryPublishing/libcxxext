@@ -1,5 +1,10 @@
 add_library(sys.BuildSupport.CompilerOptions INTERFACE)
-if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")
+
+if (NOT ((CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang") OR MSVC))
+    message(FATAL_ERROR "Unsupported compiler!")
+endif()
+
+if (NOT MSVC)
     if (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
             $<$<COMPILE_LANGUAGE:CXX>:-fconcepts-diagnostics-depth=4>
@@ -20,11 +25,11 @@ if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang" AND CMAKE_CXX_COMPILER_ID
         
         -fno-math-errno -funsafe-math-optimizations -fno-rounding-math -fno-signed-zeros -fno-trapping-math -fexcess-precision=fast
 
-        -foptimize-sibling-calls # Force symmetric transfer optimization for coroutines.
+        -foptimize-sibling-calls # Force symmetric transfer optimization for coroutines. Needed for embedded targets.
 
         -fdata-sections -ffunction-sections
     )
-elseif (MSVC)
+else()
     target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
         /W4
 
@@ -32,8 +37,6 @@ elseif (MSVC)
 
         /fp:fast
     )
-else()
-    message(FATAL_ERROR "Unsupported compiler!")
 endif()
 
 add_library(sys.BuildSupport.WarningsAsErrors INTERFACE)

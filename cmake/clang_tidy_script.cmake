@@ -1,0 +1,30 @@
+# This is a script!
+
+if (NOT DEFINED CLANG_TIDY_SOURCES OR NOT DEFINED CLANG_TIDY_COMMAND OR NOT DEFINED CLANG_TIDY_ARGS)
+    message(FATAL_ERROR "Not enough script parameters provided!")
+endif()
+if (NOT DEFINED CLANG_TIDY_CXX_STANDARD)
+    set(CLANG_TIDY_CXX_STANDARD "c++26")
+endif()
+
+foreach (SOURCE ${CLANG_TIDY_SOURCES})
+    set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} "${SOURCE}")
+endforeach()
+set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} ${CLANG_TIDY_ARGS} "--")
+if (DEFINED CLANG_TIDY_INCLUDE_DIRS AND NOT CLANG_TIDY_INCLUDE_DIRS MATCHES "-NOTFOUND$")
+    foreach (INCLUDE_DIR ${CLANG_TIDY_INCLUDE_DIRS})
+        set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} "-I${INCLUDE_DIR}")
+    endforeach()
+endif()
+if (DEFINED CLANG_TIDY_COMPILE_DEFS AND NOT CLANG_TIDY_COMPILE_DEFS MATCHES "-NOTFOUND$")
+    foreach (COMPILE_DEF ${CLANG_TIDY_COMPILE_DEFS})
+        set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} "-D${COMPILE_DEF}")
+    endforeach()
+endif()
+set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} -x c++ -std=${CLANG_TIDY_CXX_STANDARD} -Wno-pragma-once-outside-header)
+#                                                                                   ^ When running on a plain header.
+
+execute_process(COMMAND ${CLANG_TIDY_COMMAND} RESULT_VARIABLE CLANG_TIDY_EXIT_CODE COMMAND_ECHO STDOUT)
+if (NOT CLANG_TIDY_EXIT_CODE EQUAL 0)
+    message(FATAL_ERROR "Failed to run clang-tidy!")
+endif()
