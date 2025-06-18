@@ -65,7 +65,9 @@ endif()
 target_include_directories(sys.Threading PUBLIC sys sys.Threading ${PLATFORM_SUPPORT_ADDITIONAL_INCLUDE_DIRS})
 target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
 
-clang_tidy_target(sys.Threading "-header-filter=.* -checks=*")
+if (LIBCXXEXT_DEVELOPMENT_MODE)
+    clang_tidy_target(sys.Threading "-header-filter=.* -checks=*")
+endif()
 
 # Examples
 
@@ -82,6 +84,10 @@ if (LIBCXXEXT_EXAMPLES)
         target_link_libraries(${EXAMPLE_NAME} PUBLIC sys sys.Containers sys.Threading)
         if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             target_link_libraries(${EXAMPLE_NAME} PUBLIC stdc++exp)
+        endif()
+
+        if (LIBCXXEXT_DEVELOPMENT_MODE)
+            clang_tidy_target(${EXAMPLE_NAME} "-header-filter=.* -checks=*")
         endif()
     endforeach()
 endif()
@@ -106,5 +112,9 @@ if (LIBCXXEXT_TESTS)
         endif()
 
         add_test(${TEST_NAME} ${TEST_NAME})
+        
+        if (LIBCXXEXT_DEVELOPMENT_MODE)
+            clang_tidy_target(${TEST_NAME} "-header-filter=.* -checks=*")
+        endif()
     endforeach()
 endif()

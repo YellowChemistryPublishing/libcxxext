@@ -1,18 +1,13 @@
-#include "CompilerWarnings.h"
-#include <catch2/catch_all.hpp>
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers.hpp>
-
 #include <cstring>
 #include <new>
 
-_push_nowarn_clang("-Wkeyword-macro");
-#define class struct
-#define private public
+#define EXPOSE_INTERNALS_FOR_TESTING 1
 #include <Allocator.h>
-#undef private
-#undef class
-_pop_nowarn_clang();
+#undef EXPOSE_INTERNALS_FOR_TESTING
+#include <CompilerWarnings.h>
+#include <catch2/catch_all.hpp>
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers.hpp>
 
 TEST_CASE("basic | `sys::allocator<int, 16_i16, true>`")
 {

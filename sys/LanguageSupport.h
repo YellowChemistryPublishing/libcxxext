@@ -14,7 +14,7 @@
 #include <CompilerWarnings.h>
 
 /// @defgroup except_operator_new
-/// @throw `::operator new`: `std::bad_alloc`
+/// @throw `std::bad_alloc` (`::operator new`)
 
 struct unsafe
 { };

@@ -3,8 +3,15 @@
 if (NOT DEFINED CLANG_TIDY_SOURCES OR NOT DEFINED CLANG_TIDY_COMMAND OR NOT DEFINED CLANG_TIDY_ARGS)
     message(FATAL_ERROR "Not enough script parameters provided!")
 endif()
+if (NOT CLANG_TIDY_SOURCES OR CLANG_TIDY_SOURCES STREQUAL "")
+    message(WARNING "No sources provided, clang-tidy won't run!")
+    return()
+endif()
 if (NOT DEFINED CLANG_TIDY_CXX_STANDARD)
     set(CLANG_TIDY_CXX_STANDARD "c++26")
+endif()
+if (NOT DEFINED CLANG_TIDY_CXX_DRIVER_ARGS)
+    set(CLANG_TIDY_CXX_DRIVER_ARGS "")
 endif()
 
 foreach (SOURCE ${CLANG_TIDY_SOURCES})
@@ -21,10 +28,10 @@ if (DEFINED CLANG_TIDY_COMPILE_DEFS AND NOT CLANG_TIDY_COMPILE_DEFS MATCHES "-NO
         set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} "-D${COMPILE_DEF}")
     endforeach()
 endif()
-set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} -x c++ -std=${CLANG_TIDY_CXX_STANDARD} -Wno-pragma-once-outside-header)
+set(CLANG_TIDY_COMMAND ${CLANG_TIDY_COMMAND} ${CLANG_TIDY_CXX_DRIVER_ARGS} -x c++ -std=${CLANG_TIDY_CXX_STANDARD} -Wno-pragma-once-outside-header)
 #                                                                                   ^ When running on a plain header.
 
-execute_process(COMMAND ${CLANG_TIDY_COMMAND} RESULT_VARIABLE CLANG_TIDY_EXIT_CODE COMMAND_ECHO STDOUT)
+execute_process(COMMAND ${CLANG_TIDY_COMMAND} RESULT_VARIABLE CLANG_TIDY_EXIT_CODE) # -> COMMAND_ECHO STDOUT -> For debugging if necessary.
 if (NOT CLANG_TIDY_EXIT_CODE EQUAL 0)
     message(FATAL_ERROR "Failed to run clang-tidy!")
 endif()

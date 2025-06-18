@@ -5,10 +5,15 @@
 
 #include <LanguageSupport.h>
 
+#if EXPOSE_INTERNALS_FOR_TESTING
+#define private public
+#define class struct
+#endif
+
 namespace sys
 {
     /// @defgroup except_allocator
-    /// @throw `sys::allocator<...>::allocate(...)`: `std::bad_alloc`
+    /// @throw `std::bad_alloc` (`sys::allocator<...>::allocate(...)`)
 
     template <typename T, i16 StaticSize = 0_i16, bool DynamicExtents = true>
     requires (StaticSize >= 0)
@@ -57,7 +62,7 @@ namespace sys
                 if (this->inplaceBuffer <= p && p < this->inplaceBuffer + (+StaticSize))
                     std::memset(this->bufferUnavail + (p - this->inplaceBuffer), 0u, n);
                 else
-                    ::operator delete(p);
+                    ::operator delete(p); // NOLINT: We mean to delete `p`.
             }
             else
                 std::memset(this->bufferUnavail + (p - this->inplaceBuffer), 0u, n);
@@ -94,3 +99,8 @@ namespace sys
     template <typename T, i16 StaticSize>
     using inplace_allocator = allocator<T, StaticSize, false>;
 } // namespace sys
+
+#if EXPOSE_INTERNALS_FOR_TESTING
+#undef private
+#undef class
+#endif
