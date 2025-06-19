@@ -73,7 +73,7 @@ endif()
 
 if (LIBCXXEXT_EXAMPLES)
     if (CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        link_libraries(stdc++exp) # For `std::print(...)`.
+        link_libraries(stdc++exp) # For `std::print(ln)(...)`.
     endif()
 
     file(GLOB EXAMPLES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/examples/*.cpp")

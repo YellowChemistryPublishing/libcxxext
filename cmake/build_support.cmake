@@ -1,16 +1,17 @@
 add_library(sys.BuildSupport.CompilerOptions INTERFACE)
 
-if (NOT ((CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang") OR MSVC))
+if (NOT (((NOT DEFINED CMAKE_C_COMPILER_ID OR CMAKE_C_COMPILER_ID MATCHES "GNU|Clang|AppleClang") AND
+    (NOT DEFINED CMAKE_CXX_COMPILER_ID OR CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang")) OR MSVC))
     message(FATAL_ERROR "Unsupported compiler!")
 endif()
 
 if (NOT MSVC)
-    if (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    if (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
             $<$<COMPILE_LANGUAGE:CXX>:-fconcepts-diagnostics-depth=4>
             -fno-signaling-nans -fcx-limited-range
         )
-    elseif (CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    elseif (CMAKE_C_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
             -Wno-extra-semi -Wno-c++98-compat-extra-semi # Let us put semicolons after `_Pragma(...)`.
         )
