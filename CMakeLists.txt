@@ -56,7 +56,7 @@ if (PLATFORM_SUPPORT_THREADING_LIBRARY)
 endif()
 
 add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} ${SYS_THREAD_SRCS})
-target_compile_definitions(sys.Threading PUBLIC PLATFORM_SUPPORT_THREADING_HEADER="\"${PLATFORM_SUPPORT_THREADING_HEADER}\"")
+target_compile_definitions(sys.Threading PUBLIC PLATFORM_SUPPORT_THREADING_HEADER="${PLATFORM_SUPPORT_THREADING_HEADER}")
 target_include_directories(sys.Threading PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/sys" "${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading")
 target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
 
