@@ -1,6 +1,6 @@
 #pragma once
 
-#include PLATFORM_SUPPORT_THREADING_HEADER
+#include <rt_threading.h>
 
 namespace sys
 {

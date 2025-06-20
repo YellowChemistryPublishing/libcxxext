@@ -1,6 +1,5 @@
+#include "rt_threading.h"
 #include "rt.h"
-
-#include PLATFORM_SUPPORT_THREADING_HEADER
 
 #include <atomic>
 #include <coroutine>

@@ -43,21 +43,18 @@ target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.CompilerOptions)
 
 # sys.Threading
 
+if (NOT PLATFORM_SUPPORT_DIR)
+    set(PLATFORM_SUPPORT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/platform")
+endif()
 file(GLOB SYS_THREAD_SRCS CONFIGURE_DEPENDS
     "sys.Threading/*.h"
     "sys.Threading/*.cpp"
+    "${PLATFORM_SUPPORT_DIR}/*.h"
+    "${PLATFORM_SUPPORT_DIR}/*.cpp"
 )
-if (NOT PLATFORM_SUPPORT_THREADING_HEADER)
-    set(PLATFORM_SUPPORT_THREADING_HEADER "\\\"${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/rt_threading_generic.h\\\"")
-endif()
-if (PLATFORM_SUPPORT_THREADING_LIBRARY)
-    list(REMOVE_ITEM SYS_THREAD_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/rt_threading_generic.cpp")
-    list(APPEND SYS_THREAD_SRCS ${PLATFORM_SUPPORT_THREADING_LIBRARY})
-endif()
 
 add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} ${SYS_THREAD_SRCS})
-target_compile_definitions(sys.Threading PUBLIC PLATFORM_SUPPORT_THREADING_HEADER="${PLATFORM_SUPPORT_THREADING_HEADER}")
-target_include_directories(sys.Threading PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/sys" "${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading")
+target_include_directories(sys.Threading PUBLIC "${PLATFORM_SUPPORT_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/sys" "${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading")
 target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
 
 if (LIBCXXEXT_DEVELOPMENT_MODE)

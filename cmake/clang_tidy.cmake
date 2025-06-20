@@ -30,12 +30,13 @@ function(clang_tidy_target TARGET_NAME CLANG_TIDY_ARGS)
         add_custom_target(clang_tidy_${TARGET_NAME}
             ${RUN_CLANG_TIDY} $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,PREPEND,\">,APPEND,\"> ${CLANG_TIDY_ARGS} --
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},INCLUDE_DIRECTORIES>,PREPEND,\-I\">,APPEND,\">
-            $<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},COMPILE_DEFINITIONS>,PREPEND,\-D>
+            $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},COMPILE_DEFINITIONS>,PREPEND,\-D>,APPEND,>
             -x c++ -std=${CLANG_TIDY_CXX_STANDARD} -Wno-pragma-once-outside-header ${CLANG_TIDY_DRIVER_ARGS}
             #                                      ^ When running on a plain header, spurious.
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             COMMAND_EXPAND_LISTS
         )
+        add_dependencies(${TARGET_NAME} clang_tidy_${TARGET_NAME})
         add_dependencies(clang_tidy_all clang_tidy_${TARGET_NAME})
     endif()
 endfunction()
