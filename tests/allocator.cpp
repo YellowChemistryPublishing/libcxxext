@@ -13,14 +13,9 @@ TEST_CASE("basic | `sys::allocator<int, 16_i16, true>`")
 {
     sys::allocator<int, 16_i16, true> alloc;
 
-    int* allocated;
-    try
-    {
-        //          v Can throw `std::bad_alloc`.
-        allocated = alloc.allocate(24u);
-    }
-    catch (const std::bad_alloc&)
-    { }
+    int* allocated = nullptr;
+    REQUIRE_NOTHROW(allocated = alloc.allocate(24u));
+
     CHECK((_as(void*, allocated) < _as(void*, &alloc) || _as(void*, allocated) > _as(void*, &alloc + 1)));
     alloc.deallocate(allocated, 24u);
 

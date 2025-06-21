@@ -9,7 +9,7 @@
 #define _clWarn_clang_terminate "-Wterminate"
 #define _clWarn_clang_use_after_free "-Wblock-capture-autoreleasing"
 #define _clWarn_clang_literal_suffix "-Wuser-defined-literals"
-#define _clWarn_clang_clang_reserved_udl "-Wreserved-user-defined-literal"
+#define _clWarn_clang_reserved_udl "-Wreserved-user-defined-literal"
 #define _clWarn_clang_cast_align "-Wcast-align"
 #define _clWarn_clang_unreachable "-Wunreachable-code-aggressive"
 #define _clWarn_clang_nameless_struct_union "-Wnested-anon-types"

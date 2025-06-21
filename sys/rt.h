@@ -2,9 +2,10 @@
 
 #include <cstddef>
 
-extern "C" void* __task_operator_new(size_t);
-extern "C" void __task_operator_delete(void*);
+namespace sys::platform
+{
+    extern "C" void* _task_operator_new(size_t);
+    extern "C" void _task_operator_delete(void*);
 
-#ifdef __cplusplus
-extern "C" void __launch_async(void*);
-#endif
+    extern "C" void _launch_async(void*);
+} // namespace sys::platform

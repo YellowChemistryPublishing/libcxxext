@@ -1,5 +1,8 @@
 #pragma once
 
+#include <CompilerWarnings.h>
+_push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compiler coroutine codegen.
+
 #include <coroutine>
 
 #include <LanguageSupport.h>
@@ -26,7 +29,7 @@ namespace sys
         _inline_never auto await_suspend(std::coroutine_handle<> parent)
         {
             this->handle.promise().continuation = parent;
-            __task_yield_and_resume();
+            _task_yield_and_resume();
         }
         _inline_always constexpr T await_resume() const noexcept(std::is_same<T, void>::value)
         {
@@ -47,7 +50,7 @@ namespace sys
         }
         _inline_never auto await_suspend(std::coroutine_handle<>) noexcept
         {
-            __task_yield_and_continue();
+            _task_yield_and_continue();
         }
         constexpr void await_resume() const noexcept
         { }
@@ -61,11 +64,11 @@ namespace sys
 
         inline static void* operator new(size_t sz) noexcept
         {
-            return __task_operator_new(sz);
+            return ::sys::platform::_task_operator_new(sz);
         }
         inline static void operator delete(void* ptr) noexcept
         {
-            __task_operator_delete(ptr);
+            ::sys::platform::_task_operator_delete(ptr);
         }
 
         _inline_always constexpr std::suspend_always initial_suspend() const noexcept
@@ -135,7 +138,7 @@ namespace sys
     public:
         using promise_type = task_promise<T>;
 
-        constexpr static i32 max_delay = __task_max_delay;
+        constexpr static i32 max_delay = ::sys::platform::_task_max_delay;
 
         _inline_always ~task()
         {
@@ -148,8 +151,12 @@ namespace sys
             return task_awaiter<T>(this->handle);
         }
 
-        __task_yield() __task_delay() template <typename Pred>
+        // clang-format off: Looks better stacked vertically, we can't put a semicolon after these!
+        _impl_task_yield()
+        _impl_task_delay()
+        template <typename Pred>
         inline static task<void> wait_until(Pred&& func)
+        // clang-format on
         {
             if constexpr (!std::convertible_to<decltype(func()), bool>)
                 while (!co_await func());
@@ -199,7 +206,7 @@ namespace sys
     private:
         _inline_always explicit async(std::coroutine_handle<async_promise> handle)
         {
-            __launch_async(handle.address());
+            ::sys::platform::_launch_async(handle.address());
         }
     };
 
@@ -208,3 +215,5 @@ namespace sys
         return async(std::coroutine_handle<async_promise>::from_promise(*this));
     }
 } // namespace sys
+
+_pop_nowarn_msvc();

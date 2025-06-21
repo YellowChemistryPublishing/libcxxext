@@ -4,10 +4,10 @@
 
 namespace sys
 {
-    using thread_id = __thread_id;
+    using thread_id = ::sys::platform::ThreadID;
 
-    using thread_critical_section_isr = __tcs_isr;
-    using thread_critical_section = __tcs;
+    using thread_critical_section_isr = ::sys::platform::NoOpThreadCriticalSectionISR;
+    using thread_critical_section = ::sys::platform::NoOpThreadCriticalSection;
 
-    using thread = __thread_type;
+    using thread = ::sys::platform::ThreadHandle;
 } // namespace sys
