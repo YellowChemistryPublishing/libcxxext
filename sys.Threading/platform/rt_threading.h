@@ -142,6 +142,9 @@ namespace sys::platform
         }
     };
 
+    constexpr i32 _task_max_delay = std::numeric_limits<i32::underlying_type>::max();
+} // namespace sys::platform
+
 #define _impl_task_yield()                  \
     inline static task<void> yield()        \
     requires (std::is_same<T, void>::value) \
@@ -155,12 +158,9 @@ namespace sys::platform
         auto until = std::chrono::steady_clock::now() + std::chrono::milliseconds(+ms); \
         while (std::chrono::steady_clock::now() < until) co_await task<>::yield();      \
     }
-#define _task_yield_and_resume()                        \
+#define _task_yield_and_resume()                                         \
     if (auto* threadPool = ::sys::platform::ThreadPool::instance.load()) \
     threadPool->queue.enqueue(this->handle)
-#define _task_yield_and_continue()                                 \
-    if (auto* threadPool = ::sys::platform::ThreadPool::instance.load())            \
+#define _task_yield_and_continue()                                       \
+    if (auto* threadPool = ::sys::platform::ThreadPool::instance.load()) \
     threadPool->queue.enqueue(this->handle.promise().continuation)
-
-    constexpr i32 _task_max_delay = std::numeric_limits<i32::underlying_type>::max();
-} // namespace sys::platform

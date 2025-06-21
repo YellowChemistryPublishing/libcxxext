@@ -9,7 +9,7 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
 #include <rt.h>
 #include <rt_threading.h>
 
-namespace sys
+    namespace sys
 {
     template <typename T>
     struct task_promise;
