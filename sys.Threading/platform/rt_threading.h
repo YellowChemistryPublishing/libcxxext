@@ -27,6 +27,9 @@ namespace sys::platform
         { }
     };
 
+    using ThreadCriticalSectionISR = NoOpThreadCriticalSectionISR;
+    using ThreadCriticalSection = NoOpThreadCriticalSection;
+
     using ThreadID = std::thread::id;
 
     class ThreadHandle
