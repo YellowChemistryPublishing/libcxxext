@@ -100,7 +100,7 @@ if (LIBCXXEXT_TESTS)
         set(TEST_NAME "test_${TEST_NAME}")
 
         add_executable(${TEST_NAME} ${TEST_FILE})
-        target_link_libraries(${TEST_NAME} PUBLIC gcc Catch2WithMain sys sys.Containers sys.Threading)
+        target_link_libraries(${TEST_NAME} PUBLIC Catch2WithMain sys sys.Containers sys.Threading)
         if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             target_link_libraries(${TEST_NAME} PUBLIC stdc++exp)
         endif()
