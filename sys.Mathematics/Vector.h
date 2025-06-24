@@ -275,10 +275,14 @@ namespace sys::math
     }
 
     using vector2 = vector2_of<>;
+    using vector2i32 = vector2_of<i32>;
 
     using vector3i8 = vector3_of<i8>;
     using vector3i16 = vector3_of<i16>;
     using vector3 = vector3_of<>;
+    using vector3i32 = vector3_of<i32>;
+
+    using vector4 = vector4_of<>;
 
     struct matrix3x3u8
     {
