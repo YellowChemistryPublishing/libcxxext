@@ -446,6 +446,12 @@ namespace sys
         }
         // todo: diveq, modeq
     };
+
+    template <decltype(sizeof(void)) Size>
+    using unsigned_integer_underlying =
+        std::conditional_t<Size == sizeof(uint8_t), uint8_t,
+                           std::conditional_t<Size == sizeof(uint16_t), uint16_t,
+                                              std::conditional_t<Size == sizeof(uint32_t), uint32_t, std::conditional_t<Size == sizeof(uint64_t), uint64_t, void>>>>;
 } // namespace sys
 
 template <std::integral T, sys::INumberUnderlying U>

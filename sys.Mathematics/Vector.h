@@ -158,6 +158,8 @@ namespace sys::math
 
         using vector_operators<vector2_of<T>, 2, T>::vector_operators;
 
+        constexpr vector2_of(T init) noexcept : x(init), y(init)
+        { }
         constexpr vector2_of(T x, T y) noexcept : x(x), y(y)
         { }
     };
@@ -186,6 +188,8 @@ namespace sys::math
 
         using vector_operators<vector3_of<T>, 3, T>::vector_operators;
 
+        constexpr vector3_of(T init) noexcept : x(init), y(init), z(init)
+        { }
         constexpr vector3_of(T x, T y, T z) noexcept : x(x), y(y), z(z)
         { }
     };
@@ -214,6 +218,8 @@ namespace sys::math
 
         using vector_operators<vector4_of<T>, 4, T>::vector_operators;
 
+        constexpr vector4_of(T init) noexcept : x(init), y(init), z(init), w(init)
+        { }
         constexpr vector4_of(T x, T y, T z, T w) noexcept : x(x), y(y), z(z), w(w)
         { }
     };
@@ -261,11 +267,11 @@ namespace sys::math
     concept IVector = std::same_as<T, vector2_of<typename T::ValueType>> || std::same_as<T, vector3_of<typename T::ValueType>> ||
         std::same_as<T, vector4_of<typename T::ValueType>> || std::same_as<T, vector_of<T::size(), typename T::ValueType>>;
 
-    template <IVector T>
-    T dot(const T& lhs, const T& rhs) noexcept
+    template <template <typename> class Vector, typename T>
+    T dot(const Vector<T>& a, const Vector<T>& b) noexcept
     {
         T ret = 0;
-        for (size_t i = 0; i < T::size(); i++) ret += lhs[i] * rhs[i];
+        for (size_t i = 0; i < Vector<T>::size(); i++) ret += a[i] * b[i];
         return ret;
     }
     template <typename T = float>
