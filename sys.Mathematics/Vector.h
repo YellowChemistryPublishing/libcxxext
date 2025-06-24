@@ -136,6 +136,9 @@ namespace sys::math
     template <typename T = float>
     struct vector2_of : public vector_operators<vector2_of<T>, 2, T>
     {
+        static const vector2_of<T> zero;
+        static const vector2_of<T> one;
+
         _push_nowarn_gcc(_clWarn_gcc_pedantic);
         _push_nowarn_clang(_clWarn_clang_pedantic);
         _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
@@ -161,6 +164,9 @@ namespace sys::math
     template <typename T = float>
     struct vector3_of : public vector_operators<vector3_of<T>, 3, T>
     {
+        static const vector3_of<T> zero;
+        static const vector3_of<T> one;
+
         _push_nowarn_gcc(_clWarn_gcc_pedantic);
         _push_nowarn_clang(_clWarn_clang_pedantic);
         _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
@@ -186,6 +192,9 @@ namespace sys::math
     template <typename T = float>
     struct vector4_of : public vector_operators<vector4_of<T>, 4, T>
     {
+        static const vector4_of<T> zero;
+        static const vector4_of<T> one;
+
         _push_nowarn_gcc(_clWarn_gcc_pedantic);
         _push_nowarn_clang(_clWarn_clang_pedantic);
         _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
@@ -234,6 +243,20 @@ namespace sys::math
         constexpr vector_of(std::initializer_list<T> elements) noexcept : elements { elements }
         { }
     };
+
+    template <typename T>
+    constexpr vector2_of<T> vector2_of<T>::zero = vector2_of<T>(0, 0);
+    template <typename T>
+    constexpr vector2_of<T> vector2_of<T>::one = vector2_of<T>(1, 1);
+    template <typename T>
+    constexpr vector3_of<T> vector3_of<T>::zero = vector3_of<T>(0, 0, 0);
+    template <typename T>
+    constexpr vector3_of<T> vector3_of<T>::one = vector3_of<T>(1, 1, 1);
+    template <typename T>
+    constexpr vector4_of<T> vector4_of<T>::zero = vector4_of<T>(0, 0, 0, 0);
+    template <typename T>
+    constexpr vector4_of<T> vector4_of<T>::one = vector4_of<T>(1, 1, 1, 1);
+
     template <typename T>
     concept IVector = std::same_as<T, vector2_of<typename T::ValueType>> || std::same_as<T, vector3_of<typename T::ValueType>> ||
         std::same_as<T, vector4_of<typename T::ValueType>> || std::same_as<T, vector_of<T::size(), typename T::ValueType>>;
@@ -250,6 +273,8 @@ namespace sys::math
     {
         return vector3_of<T> { lhs.y() * rhs.z() - lhs.z() * rhs.y(), lhs.z() * rhs.x() - lhs.x() * rhs.z(), lhs.x() * rhs.y() - lhs.y() * rhs.x() };
     }
+
+    using vector2 = vector2_of<>;
 
     using vector3i8 = vector3_of<i8>;
     using vector3i16 = vector3_of<i16>;
