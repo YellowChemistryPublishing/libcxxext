@@ -43,6 +43,12 @@ target_include_directories(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}
 target_precompile_headers(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers/module/sys.Containers")
 target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.CompilerOptions)
 
+# sys.Mathematics
+
+add_library(sys.Mathematics INTERFACE)
+target_include_directories(sys.Mathematics INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Mathematics")
+target_precompile_headers(sys.Mathematics INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Mathematics/module/sys.Mathematics")
+
 # sys.Threading
 
 if (NOT PLATFORM_SUPPORT_DIR)
