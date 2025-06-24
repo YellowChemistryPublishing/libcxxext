@@ -48,6 +48,7 @@ target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.CompilerOptions)
 add_library(sys.Mathematics INTERFACE)
 target_include_directories(sys.Mathematics INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Mathematics")
 target_precompile_headers(sys.Mathematics INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Mathematics/module/sys.Mathematics")
+target_link_libraries(sys.Mathematics INTERFACE sys.BuildSupport.CompilerOptions sys)
 
 # sys.Threading
 
