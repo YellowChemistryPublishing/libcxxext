@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdint>
 #include <initializer_list>
+#include <sstream>
 
 #include <LanguageSupport.h>
 
@@ -10,6 +11,9 @@
 
 namespace sys::math
 {
+    template <std::floating_point T>
+    struct quaternion_of;
+
     template <typename VectorData, size_t N, typename T = float>
     struct vector_operators
     {
@@ -36,6 +40,13 @@ namespace sys::math
                 if (lhs[i] != rhs[i])
                     return false;
             return true;
+        }
+
+        constexpr VectorData operator-() const noexcept
+        {
+            VectorData ret = static_cast<const VectorData&>(*this);
+            for (size_t i = 0; i < N; i++) ret[i] = -ret[i];
+            return ret;
         }
 
         constexpr friend VectorData operator+(const VectorData& lhs, const VectorData& rhs) noexcept
@@ -112,7 +123,7 @@ namespace sys::math
             return *static_cast<VectorData*>(this);
         }
 
-        constexpr T magnitude2() const noexcept
+        constexpr T magnitude_sq() const noexcept
         {
             T ret = 0;
             for (size_t i = 0; i < N; i++) ret += static_cast<VectorData*>(this)->elements[i] * static_cast<VectorData*>(this)->elements[i];
@@ -128,6 +139,27 @@ namespace sys::math
                 return std::sqrtl(static_cast<VectorData*>(this)->magnitude2());
             else
                 return T(std::sqrt(static_cast<VectorData*>(this)->magnitude2()));
+        }
+
+        friend inline std::ostream& operator<<(std::ostream& stream, const vector_operators& vec)
+        {
+            stream << '(' << vec[0];
+            for (size_t i = 1u; i < vec.size(); i++) stream << ", " << vec[i];
+            stream << ')';
+            return stream;
+        }
+        friend inline std::wostream& operator<<(std::wostream& stream, const vector_operators& vec)
+        {
+            stream << L'(' << vec[0];
+            for (size_t i = 1u; i < vec.size(); i++) stream << L", " << vec[i];
+            stream << L')';
+            return stream;
+        }
+        friend inline std::string to_string(const vector_operators& vec)
+        {
+            std::ostringstream sstr;
+            sstr << vec;
+            return std::move(sstr).str();
         }
     private:
         T elements[N] {};
@@ -169,6 +201,10 @@ namespace sys::math
         static const vector3_of<T> zero;
         static const vector3_of<T> one;
 
+        static const vector3_of<T> up;
+        static const vector3_of<T> right;
+        static const vector3_of<T> forward;
+
         _push_nowarn_gcc(_clWarn_gcc_pedantic);
         _push_nowarn_clang(_clWarn_clang_pedantic);
         _push_nowarn_clang(_clWarn_clang_nameless_struct_union);
@@ -192,6 +228,8 @@ namespace sys::math
         { }
         constexpr vector3_of(T x, T y, T z) noexcept : x(x), y(y), z(z)
         { }
+
+        constexpr vector3_of rotate(const quaternion_of<T>& rot) const noexcept;
     };
     template <typename T = float>
     struct vector4_of : public vector_operators<vector4_of<T>, 4, T>
@@ -254,10 +292,18 @@ namespace sys::math
     constexpr vector2_of<T> vector2_of<T>::zero = vector2_of<T>(0, 0);
     template <typename T>
     constexpr vector2_of<T> vector2_of<T>::one = vector2_of<T>(1, 1);
+
     template <typename T>
     constexpr vector3_of<T> vector3_of<T>::zero = vector3_of<T>(0, 0, 0);
     template <typename T>
     constexpr vector3_of<T> vector3_of<T>::one = vector3_of<T>(1, 1, 1);
+    template <typename T>
+    constexpr vector3_of<T> vector3_of<T>::up = vector3_of<T>(0, 1, 0);
+    template <typename T>
+    constexpr vector3_of<T> vector3_of<T>::right = vector3_of<T>(1, 0, 0);
+    template <typename T>
+    constexpr vector3_of<T> vector3_of<T>::forward = vector3_of<T>(0, 0, 1);
+
     template <typename T>
     constexpr vector4_of<T> vector4_of<T>::zero = vector4_of<T>(0, 0, 0, 0);
     template <typename T>

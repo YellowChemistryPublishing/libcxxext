@@ -301,6 +301,12 @@ namespace sys
             return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(
                 std::bit_cast<std::make_unsigned_t<WithWidth>>(a) * std::bit_cast<std::make_unsigned_t<Other>>(b)));
         }
+        template <std::integral Other>
+        friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator/(const integer<WithWidth>& a, const integer<Other>& b) noexcept
+        {
+            return std::bit_cast<typename type_largest_of<WithWidth, Other>::Type>(std::make_unsigned_t<typename type_largest_of<WithWidth, Other>::Type>(
+                std::bit_cast<std::make_unsigned_t<WithWidth>>(a) / std::bit_cast<std::make_unsigned_t<Other>>(b)));
+        }
         template <std::floating_point Floating>
         friend constexpr Floating operator+(const integer<WithWidth>& a, Floating b) noexcept
         {
@@ -447,29 +453,29 @@ namespace sys
         // todo: diveq, modeq
     };
 
-    template <decltype(sizeof(void)) Size>
+    template <decltype(sizeof(void*)) Size>
     using unsigned_integer_underlying =
         std::conditional_t<Size == sizeof(uint8_t), uint8_t,
                            std::conditional_t<Size == sizeof(uint16_t), uint16_t,
                                               std::conditional_t<Size == sizeof(uint32_t), uint32_t, std::conditional_t<Size == sizeof(uint64_t), uint64_t, void>>>>;
 } // namespace sys
 
-template <std::integral T, sys::INumberUnderlying U>
+template <std::integral T, std::integral U>
 constexpr bool operator==(const sys::integer<T>& a, U b) noexcept
 {
     return std::cmp_equal(a.underlying, b);
 }
-template <sys::INumberUnderlying T, std::integral U>
+template <std::integral T, std::integral U>
 constexpr bool operator==(U a, const sys::integer<T>& b) noexcept
 {
     return std::cmp_equal(a, b.underlying);
 }
-template <std::integral T, sys::INumberUnderlying U>
+template <std::integral T, std::integral U>
 constexpr int operator<=>(const sys::integer<T>& a, U b) noexcept
 {
     return -int(std::cmp_less(a.underlying, b)) + int(std::cmp_greater(a.underlying, b));
 }
-template <sys::INumberUnderlying T, std::integral U>
+template <std::integral T, std::integral U>
 constexpr int operator<=>(U a, const sys::integer<T>& b) noexcept
 {
     return -int(std::cmp_less(a, b.underlying)) + int(std::cmp_greater(a, b.underlying));

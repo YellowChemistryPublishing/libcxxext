@@ -15,13 +15,13 @@ namespace sys::math
         {
             // Shamelessly "inspired" by the glm source for their Quaternions.
             // Modified, see: https://github.com/g-truc/glm, under MIT.
-            vector3_of<T> c(cosf(r.x * 0.5f), cosf(r.y * 0.5f), cosf(r.z * 0.5f));
-            vector3_of<T> s(sinf(r.x * 0.5f), sinf(r.y * 0.5f), sinf(r.z * 0.5f));
+            vector3_of<T> c(cosf(r.x * 0.5), cosf(r.y * 0.5), cosf(r.z * 0.5));
+            vector3_of<T> s(sinf(r.x * 0.5), sinf(r.y * 0.5), sinf(r.z * 0.5));
 
             return quaternion_of { c.x * s.y * c.z + s.x * c.y * s.z, s.x * c.y * c.z - c.x * s.y * s.z, c.x * c.y * s.z - s.x * s.y * c.z, c.x * c.y * c.z + s.x * s.y * s.z };
         }
 
-        float x = 0.0f, y = 0.0f, z = 0.0f, w = 1.0f;
+        T x = 0.0, y = 0.0, z = 0.0, w = 1.0;
 
         constexpr quaternion_of() noexcept = default;
         constexpr quaternion_of(float x, float y, float z, float w) noexcept : x(x), y(y), z(z), w(w)
@@ -71,13 +71,13 @@ namespace sys::math
             return *this;
         }
 
-        constexpr bool isScalar() const noexcept
+        constexpr bool is_scalar() const noexcept
         {
-            return this->x == 0.0f && this->y == 0.0f && this->z == 0.0f;
+            return this->x == 0.0 && this->y == 0.0 && this->z == 0.0;
         }
-        constexpr bool isVector() const noexcept
+        constexpr bool is_vector() const noexcept
         {
-            return this->w == 0.0f;
+            return this->w == 0.0;
         }
 
         constexpr float scalar() const noexcept
@@ -138,6 +138,13 @@ namespace sys::math
     constexpr quaternion_of<T> quaternion_of<T>::identity(0.0, 0.0, 0.0, 1.0);
 
     using quaternion = quaternion_of<>;
+
+    template <typename T>
+    constexpr vector3_of<T> vector3_of<T>::rotate(const quaternion_of<T>& rot) const noexcept
+    {
+        /// FIXME: Is this a hack? Why do we need operator- in front?
+        return -(rot * quaternion_of<T>(0.0, *this) * rot.conjugate()).vector();
+    }
 } // namespace sys::math
 
 namespace sysm = sys::math;

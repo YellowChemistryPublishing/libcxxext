@@ -33,21 +33,21 @@ include(cmake/clang_tidy.cmake)
 
 add_library(sys INTERFACE)
 target_include_directories(sys INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys")
-target_precompile_headers(sys INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys/module/sys")
+# target_precompile_headers(sys INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys/module/sys")
 target_link_libraries(sys INTERFACE sys.BuildSupport.CompilerOptions)
 
 # sys.Containers
 
 add_library(sys.Containers INTERFACE)
 target_include_directories(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers")
-target_precompile_headers(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers/module/sys.Containers")
+# target_precompile_headers(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers/module/sys.Containers")
 target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.CompilerOptions)
 
 # sys.Mathematics
 
 add_library(sys.Mathematics INTERFACE)
 target_include_directories(sys.Mathematics INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Mathematics")
-target_precompile_headers(sys.Mathematics INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Mathematics/module/sys.Mathematics")
+# target_precompile_headers(sys.Mathematics INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/sys.Mathematics/module/sys.Mathematics")
 target_link_libraries(sys.Mathematics INTERFACE sys.BuildSupport.CompilerOptions sys)
 
 # sys.Threading
@@ -64,7 +64,7 @@ file(GLOB SYS_THREAD_SRCS CONFIGURE_DEPENDS
 
 add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} ${SYS_THREAD_SRCS})
 target_include_directories(sys.Threading PUBLIC "${PLATFORM_SUPPORT_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/sys" "${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading")
-target_precompile_headers(sys.Threading PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/module/sys.Threading")
+# target_precompile_headers(sys.Threading PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/module/sys.Threading")
 target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
 
 if (LIBCXXEXT_DEVELOPMENT_MODE)
