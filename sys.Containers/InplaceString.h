@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstring>
 #include <string_view>
 
 namespace sys
@@ -10,13 +11,13 @@ namespace sys
         CharType buffer[Capacity + 1] {};
         size_t _size;
     public:
-        constexpr InlineString() : size(0)
+        constexpr InplaceString() : _size(0)
         {
             this->buffer[0] = 0;
         }
-        constexpr InlineString(const char* cstr) : size(0)
+        constexpr InplaceString(const char* cstr) : _size(0)
         {
-            size_t len = strlen(cstr);
+            size_t len = std::strlen(cstr);
             if (len > Capacity)
             {
                 this->buffer[0] = 0;
