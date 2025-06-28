@@ -3,7 +3,7 @@ if (NOT RUN_CLANG_TIDY)
     message(WARNING "clang-tidy not found. Required for static analysis.")
 endif()
 
-function(clang_tidy_target TARGET_NAME CLANG_TIDY_ARGS)
+function(target_lint_clang_tidy TARGET_NAME CLANG_TIDY_ARGS)
     if (RUN_CLANG_TIDY)
         if (NOT TARGET clang_tidy_all)
             add_custom_target(clang_tidy_all ALL)
@@ -27,7 +27,7 @@ function(clang_tidy_target TARGET_NAME CLANG_TIDY_ARGS)
             set(CLANG_TIDY_CXX_STANDARD "c++26")
         endif()
 
-        add_custom_target(clang_tidy_${TARGET_NAME}
+        add_custom_target(lint_ct_${TARGET_NAME}
             ${RUN_CLANG_TIDY} $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,PREPEND,\">,APPEND,\"> ${CLANG_TIDY_ARGS} --
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},INCLUDE_DIRECTORIES>,PREPEND,\-I\">,APPEND,\">
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},COMPILE_DEFINITIONS>,PREPEND,\-D>,APPEND,>
@@ -37,7 +37,7 @@ function(clang_tidy_target TARGET_NAME CLANG_TIDY_ARGS)
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             COMMAND_EXPAND_LISTS
         )
-        add_dependencies(${TARGET_NAME} clang_tidy_${TARGET_NAME})
-        add_dependencies(clang_tidy_all clang_tidy_${TARGET_NAME})
+        add_dependencies(${TARGET_NAME} lint_ct_${TARGET_NAME})
+        add_dependencies(clang_tidy_all lint_ct_${TARGET_NAME})
     endif()
 endfunction()

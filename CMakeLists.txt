@@ -28,6 +28,7 @@ endif()
 set(LINT_CPPCHECK ${RUN_CPPCHECK} --suppress=preprocessorErrorDirective --enable=all --inconclusive --inline-suppr --force --max-configs=64 -DconfigUSE_16_BIT_TICKS)
 
 include(cmake/clang_tidy.cmake)
+include(cmake/catch2.cmake)
 
 # sys
 
@@ -68,7 +69,7 @@ target_include_directories(sys.Threading PUBLIC "${PLATFORM_SUPPORT_DIR}" "${CMA
 target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
 
 if (LIBCXXEXT_DEVELOPMENT_MODE)
-    clang_tidy_target(sys.Threading "-header-filter=\"${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/.*\"")
+    target_lint_clang_tidy(sys.Threading "-header-filter=\"${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/.*\"")
 endif()
 
 # Examples
@@ -84,13 +85,13 @@ if (LIBCXXEXT_EXAMPLES)
         set(EXAMPLE_NAME "example_${EXAMPLE_NAME}")
 
         add_executable(${EXAMPLE_NAME} ${EXAMPLE_FILE})
-        target_link_libraries(${EXAMPLE_NAME} PUBLIC sys sys.Containers sys.Threading)
+        target_link_libraries(${EXAMPLE_NAME} PUBLIC sys sys.Mathematics sys.Containers sys.Threading)
         if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
             target_link_libraries(${EXAMPLE_NAME} PUBLIC stdc++exp)
         endif()
 
         if (LIBCXXEXT_DEVELOPMENT_MODE)
-            clang_tidy_target(${EXAMPLE_NAME} "-header-filter=\"${CMAKE_CURRENT_SOURCE_DIR}/examples/.*\"")
+            target_lint_clang_tidy(${EXAMPLE_NAME} "-header-filter=\"${CMAKE_CURRENT_SOURCE_DIR}/examples/.*\"")
         endif()
     endforeach()
 endif()
@@ -107,18 +108,10 @@ if (LIBCXXEXT_TESTS)
     file(GLOB TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp")
     foreach(TEST_FILE ${TESTS})
         get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
-        set(TEST_NAME "test_${TEST_NAME}")
-
-        add_executable(${TEST_NAME} ${TEST_FILE})
-        target_link_libraries(${TEST_NAME} PUBLIC Catch2WithMain sys sys.Containers sys.Threading)
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-            target_link_libraries(${TEST_NAME} PUBLIC stdc++exp)
-        endif()
-
-        add_test(${TEST_NAME} ${TEST_NAME})
+        add_test_with_catch2(${TEST_NAME} ${TEST_FILE})
         
         if (LIBCXXEXT_DEVELOPMENT_MODE)
-            clang_tidy_target(${TEST_NAME} "-header-filter=\"${CMAKE_CURRENT_SOURCE_DIR}/tests/.*\"")
+            target_lint_clang_tidy(test_${TEST_NAME} "-header-filter=\"${CMAKE_CURRENT_SOURCE_DIR}/tests/.*\"")
         endif()
     endforeach()
 endif()
