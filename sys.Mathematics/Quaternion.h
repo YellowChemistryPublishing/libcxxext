@@ -140,10 +140,12 @@ namespace sys::math
     using quaternion = quaternion_of<>;
 
     template <typename T>
-    constexpr vector3_of<T> vector3_of<T>::rotate(const quaternion_of<T>& rot) const noexcept
+    template <std::floating_point Floating>
+    requires std::same_as<T, Floating>
+    constexpr vector3_of<T> vector3_of<T>::rotate(const quaternion_of<Floating>& rot) const noexcept
     {
         /// FIXME: Is this a hack? Why do we need operator- in front?
-        return -(rot * quaternion_of<T>(0.0, *this) * rot.conjugate()).vector();
+        return -(rot * quaternion_of<Floating>(0.0, *this) * rot.conjugate()).vector();
     }
 } // namespace sys::math
 

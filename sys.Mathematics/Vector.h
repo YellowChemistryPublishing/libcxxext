@@ -229,7 +229,9 @@ namespace sys::math
         constexpr vector3_of(T x, T y, T z) noexcept : x(x), y(y), z(z)
         { }
 
-        constexpr vector3_of rotate(const quaternion_of<T>& rot) const noexcept;
+        template <std::floating_point Floating>
+        requires std::same_as<T, Floating>
+        constexpr vector3_of rotate(const quaternion_of<Floating>& rot) const noexcept;
     };
     template <typename T = float>
     struct vector4_of : public vector_operators<vector4_of<T>, 4, T>
