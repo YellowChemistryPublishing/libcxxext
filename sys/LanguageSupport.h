@@ -160,6 +160,15 @@ namespace sys
         requires ((std::same_as<U, void> && requires { *begin(range); }) || std::convertible_to<decltype(*begin(range)), std::add_lvalue_reference_t<std::add_const_t<U>>>);
     };
 
+    template <typename T, typename U = void>
+    concept ISizeable = requires(T range) {
+        requires (!std::same_as<U, void> && (requires {
+                     { range.size() } -> std::same_as<U>;
+                 } || requires {
+                     { std::size(range) } -> std::same_as<U>;
+                 })) || (std::same_as<U, void> && (requires { range.size(); } || requires { std::size(range); }));
+    };
+
     template <typename Functor, typename ReturnType, typename... Args>
     struct type_is_functor : std::is_invocable<ReturnType, Functor, Args...>
     { };
@@ -351,7 +360,7 @@ namespace sys
 
         constexpr integer operator~() const noexcept
         {
-            return std::bit_cast<WithWidth>(~std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying));
+            return std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>(~std::bit_cast<std::make_unsigned_t<WithWidth>>(this->underlying)));
         }
         template <std::integral Other>
         friend constexpr integer<typename type_largest_of<WithWidth, Other>::Type> operator&(const integer<WithWidth>& a, const integer<Other>& b) noexcept
