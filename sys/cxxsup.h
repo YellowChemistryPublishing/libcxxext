@@ -80,4 +80,11 @@ namespace sys
     {
         return u8(+val);
     }
+
+    template <typename T, typename U>
+    constexpr size_t dhc2(const T& t, const U& u)
+    {
+        size_t seed = std::hash<T>()(t);
+        return seed ^ (std::hash<U>()(u) + 0x9e3779b9 + (seed << 6) + (seed >> 2));
+    }
 } // namespace sys
