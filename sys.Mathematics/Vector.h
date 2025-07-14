@@ -141,28 +141,26 @@ namespace sys::math
                 return T(std::sqrt(static_cast<VectorData*>(this)->magnitude2()));
         }
 
-        friend inline std::ostream& operator<<(std::ostream& stream, const vector_operators& vec)
+        friend std::ostream& operator<<(std::ostream& stream, const vector_operators& vec)
         {
             stream << '(' << vec[0];
             for (size_t i = 1u; i < vec.size(); i++) stream << ", " << vec[i];
             stream << ')';
             return stream;
         }
-        friend inline std::wostream& operator<<(std::wostream& stream, const vector_operators& vec)
+        friend std::wostream& operator<<(std::wostream& stream, const vector_operators& vec)
         {
             stream << L'(' << vec[0];
             for (size_t i = 1u; i < vec.size(); i++) stream << L", " << vec[i];
             stream << L')';
             return stream;
         }
-        friend inline std::string to_string(const vector_operators& vec)
+        friend std::string to_string(const vector_operators& vec)
         {
             std::ostringstream sstr;
             sstr << vec;
             return std::move(sstr).str();
         }
-    private:
-        T elements[N] {};
     };
 
     template <typename T = float>
