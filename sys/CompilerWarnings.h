@@ -13,8 +13,18 @@
 #define _clWarn_clang_cast_align "-Wcast-align"
 #define _clWarn_clang_unreachable "-Wunreachable-code-aggressive"
 #define _clWarn_clang_nameless_struct_union "-Wnested-anon-types"
+#define _clWarn_clang_anon_union_struct "-Wgnu-anonymous-struct"
+#define _clWarn_clang_c_cast "-Wold-style-cast"
+#define _clWarn_clang_deprecated "-Wdeprecated-declarations"
+#define _clWarn_clang_zero_as_nullptr "-Wzero-as-null-pointer-constant"
+#define _clWarn_clang_variadic_macro_args "-Wgnu-zero-variadic-macro-arguments"
+#define _clWarn_clang_conversion "-Wimplicit-int-conversion"
+#define _clWarn_clang_sign_conversion "-Wsign-conversion"
+#define _clWarn_clang_float_conversion "-Wimplicit-float-conversion"
+#define _clWarn_clang_double_promotion "-Wdouble-promotion"
+#define _clWarn_clang_sign_compare "-Wsign-compare"
+#define _clWarn_clang_implicit_fallthrough "-Wimplicit-fallthrough"
 
-#define _clWarn_gcc_dummy "-Wunknown-pragmas"
 #define _clWarn_gcc_bad_offsetof "-Winvalid-offsetof"
 #define _clWarn_gcc_nontrivial_memcpy "-Wclass-memaccess"
 #define _clWarn_gcc_unused_param "-Wunused-parameter"
@@ -24,8 +34,14 @@
 #define _clWarn_gcc_literal_suffix "-Wliteral-suffix"
 #define _clWarn_gcc_cast_align "-Wcast-align"
 #define _clWarn_gcc_conversion "-Wconversion"
+#define _clWarn_gcc_sign_conversion "-Wsign-conversion"
+#define _clWarn_gcc_float_conversion "-Wfloat-conversion"
+#define _clWarn_gcc_double_promotion "-Wdouble-promotion"
+#define _clWarn_gcc_sign_compare "-Wsign-compare"
+#define _clWarn_gcc_c_cast "-Wold-style-cast"
+#define _clWarn_gcc_deprecated "-Wdeprecated-declarations"
+#define _clWarn_gcc_zero_as_nullptr "-Wzero-as-null-pointer-constant"
 
-#define _clWarn_msvc_dummy 4001
 #define _clWarn_msvc_literal_suffix 4455
 #define _clWarn_msvc_unreachable 4702
 #define _clWarn_msvc_nameless_struct_union 4201
