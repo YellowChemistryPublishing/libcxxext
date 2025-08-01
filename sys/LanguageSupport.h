@@ -102,7 +102,6 @@ struct unsafe
         const bool __expr = cond;                                                                                          \
         if (!__expr)                                                                                                       \
             _throw(::sys::contract_violation_exception("Contract violated, condition `" #cond "` evaluated to `false`.")); \
-        [[assume(__expr)]];                                                                                                \
     }                                                                                                                      \
     while (false)
 

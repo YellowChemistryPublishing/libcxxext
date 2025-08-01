@@ -45,6 +45,8 @@
 #define _clWarn_msvc_literal_suffix 4455
 #define _clWarn_msvc_unreachable 4702
 #define _clWarn_msvc_nameless_struct_union 4201
+#define _clWarn_msvc_export_interface 4251
+#define _clWarn_msvc_overflow 4756
 
 #define _push_nowarn_clang(compilerWarning)
 #define _push_nowarn_gcc(compilerWarning)
