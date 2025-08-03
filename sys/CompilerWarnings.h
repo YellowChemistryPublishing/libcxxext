@@ -55,29 +55,78 @@
 #define _pop_nowarn_gcc()
 #define _pop_nowarn_msvc()
 
+#define _push_nowarn_conv_comp()
+#define _pop_nowarn_conv_comp()
+
 #define _clPragma_fwd(...) _Pragma(#__VA_ARGS__)
+
 #if _libcxxext_compiler_clang
+
 #undef _push_nowarn_clang
 #define _push_nowarn_clang(compilerWarning)                 \
     _Pragma("clang diagnostic push");                       \
     _Pragma("clang diagnostic ignored \"-Wextra-semi\"");   \
     _clPragma_fwd(clang diagnostic ignored compilerWarning)
+
 #undef _pop_nowarn_clang
 #define _pop_nowarn_clang() _Pragma("clang diagnostic pop")
+
+#undef _push_nowarn_conv_comp
+#define _push_nowarn_conv_comp()                        \
+    _push_nowarn_clang(_clWarn_clang_conversion);       \
+    _push_nowarn_clang(_clWarn_clang_sign_conversion);  \
+    _push_nowarn_clang(_clWarn_clang_float_conversion); \
+    _push_nowarn_clang(_clWarn_clang_double_promotion); \
+    _push_nowarn_clang(_clWarn_clang_sign_compare)
+
+#undef _pop_nowarn_conv_comp
+#define _pop_nowarn_conv_comp() \
+    _pop_nowarn_clang();        \
+    _pop_nowarn_clang();        \
+    _pop_nowarn_clang();        \
+    _pop_nowarn_clang();        \
+    _pop_nowarn_clang()
+
 #elif _libcxxext_compiler_gcc
+
 #undef _push_nowarn_gcc
 #define _push_nowarn_gcc(compilerWarning)                 \
     _Pragma("GCC diagnostic push");                       \
     _clPragma_fwd(GCC diagnostic ignored compilerWarning)
+
 #undef _pop_nowarn_gcc
 #define _pop_nowarn_gcc() _Pragma("GCC diagnostic pop")
+
+#undef _push_nowarn_conv_comp
+#define _push_nowarn_conv_comp()                    \
+    _push_nowarn_gcc(_clWarn_gcc_conversion);       \
+    _push_nowarn_gcc(_clWarn_gcc_sign_conversion);  \
+    _push_nowarn_gcc(_clWarn_gcc_float_conversion); \
+    _push_nowarn_gcc(_clWarn_gcc_double_promotion); \
+    _push_nowarn_gcc(_clWarn_gcc_sign_compare)
+
+#undef _pop_nowarn_conv_comp
+#define _pop_nowarn_conv_comp() \
+    _pop_nowarn_gcc();          \
+    _pop_nowarn_gcc();          \
+    _pop_nowarn_gcc();          \
+    _pop_nowarn_gcc();          \
+    _pop_nowarn_gcc()
+
 #elif _libcxxext_compiler_msvc
+
 #undef _push_nowarn_msvc
 #define _push_nowarn_msvc(compilerWarning)            \
     _Pragma("warning(push)");                         \
     _clPragma_fwd(warning(disable : compilerWarning))
+
 #undef _pop_nowarn_msvc
 #define _pop_nowarn_msvc() _Pragma("warning(pop)")
-#else
-#error "Unsupported compiler!"
+
+#undef _push_nowarn_conv_comp
+#define _push_nowarn_conv_comp() _push_nowarn_msvc(_clWarn_msvc_overflow)
+
+#undef _pop_nowarn_conv_comp
+#define _pop_nowarn_conv_comp() _pop_nowarn_msvc()
+
 #endif
