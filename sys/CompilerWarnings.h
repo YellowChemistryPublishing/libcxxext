@@ -87,6 +87,12 @@
     _pop_nowarn_clang();        \
     _pop_nowarn_clang()
 
+#undef _push_nowarn_c_cast
+#define _push_nowarn_c_cast() _push_nowarn_clang(_clWarn_clang_c_cast)
+
+#undef _pop_nowarn_c_cast
+#define _pop_nowarn_c_cast() _push_nowarn_clang(_clWarn_clang_c_cast)
+
 #elif _libcxxext_compiler_gcc
 
 #undef _push_nowarn_gcc
@@ -113,6 +119,12 @@
     _pop_nowarn_gcc();          \
     _pop_nowarn_gcc()
 
+#undef _push_nowarn_c_cast
+#define _push_nowarn_c_cast() _push_nowarn_gcc(_clWarn_gcc_c_cast)
+
+#undef _pop_nowarn_c_cast
+#define _pop_nowarn_c_cast() _push_nowarn_gcc(_clWarn_gcc_c_cast)
+
 #elif _libcxxext_compiler_msvc
 
 #undef _push_nowarn_msvc
@@ -128,5 +140,11 @@
 
 #undef _pop_nowarn_conv_comp
 #define _pop_nowarn_conv_comp() _pop_nowarn_msvc()
+
+#undef _push_nowarn_c_cast
+#define _push_nowarn_c_cast()
+
+#undef _pop_nowarn_c_cast
+#define _pop_nowarn_c_cast()
 
 #endif
