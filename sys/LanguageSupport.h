@@ -86,14 +86,22 @@ struct unsafe
 /// @brief Return `val` if `retCond` is `true`.
 /// @note Returning must not be the happy path.
 #define _fence_value_return(val, retCond) \
-    if (retCond) [[unlikely]]             \
-        return val;
+    do                                    \
+    {                                     \
+        if (retCond) [[unlikely]]         \
+            return val;                   \
+    }                                     \
+    while (false)
 /// @def _fence_value_co_return(val, retCond)
 /// @brief Coroutine-return `val` if `retCond` is `true`.
 /// @note Returning must not be the happy path.
 #define _fence_value_co_return(val, retCond) \
-    if (retCond) [[unlikely]]                \
-        co_return val;
+    do                                       \
+    {                                        \
+        if (retCond) [[unlikely]]            \
+            co_return val;                   \
+    }                                        \
+    while (false)
 /// @def _fence_contract_enforce(cond)
 /// @brief Enforce a contract, throwing a `contract_violation_exception` if `cond` is false.
 #define _fence_contract_enforce(cond)                                                                                      \
