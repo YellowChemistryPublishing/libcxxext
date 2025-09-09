@@ -17,6 +17,63 @@
 #error "Unsupported compiler!"
 #endif
 
+#define _libcxxext_arch_unknown 0
+#define _libcxxext_arch_x86_64 0
+#define _libcxxext_arch_aarch64 0
+#define _libcxxext_arch_arm 0
+#define _libcxxext_arch_blackfin 0
+#define _libcxxext_arch_x86 0
+#define _libcxxext_arch_ia64 0
+#define _libcxxext_arch_loongarch 0
+#define _libcxxext_arch_mips 0
+#define _libcxxext_arch_powerpc 0
+#define _libcxxext_arch_riscv 0
+#define _libcxxext_arch_sparc 0
+#define _libcxxext_arch_superh 0
+
+#if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
+#undef _libcxxext_arch_x86_64
+#define _libcxxext_arch_x86_64 1
+#elif defined(__aarch64__) || defined(_M_ARM64)
+#undef _libcxxext_arch_aarch64
+#define _libcxxext_arch_aarch64 1
+#elif defined(__arm__) || defined(__thumb__) || defined(__TARGET_ARCH_ARM) || defined(__TARGET_ARCH_THUMB) || defined(_ARM) || defined(_M_ARM) || defined(_M_ARMT) || defined(__arm)
+#undef _libcxxext_arch_arm
+#define _libcxxext_arch_arm 1
+#elif defined(__bfin) || defined(__BFIN__) || defined(__ADSPBLACKFIN__)
+#undef _libcxxext_arch_blackfin
+#define _libcxxext_arch_blackfin 1
+#elif defined(i386) || defined(__i386) || defined(__i386__) || defined(__IA32__) || defined(_M_IX86) || defined(__X86__) || defined(_X86_) || defined(__THW_INTEL__) || \
+    (defined(__I86__) && __I86__) || defined(__INTEL__) || defined(__386)
+#undef _libcxxext_arch_x86
+#define _libcxxext_arch_x86 1
+#elif defined(__ia64__) || defined(_IA64) || defined(__IA64__) || defined(__ia64) || defined(_M_IA64) || defined(__itanium__)
+#undef _libcxxext_arch_ia64
+#define _libcxxext_arch_ia64 1
+#elif defined(__loongarch__)
+#undef _libcxxext_arch_loongarch
+#define _libcxxext_arch_loongarch 1
+#elif defined(__mips__) || defined(mips) || (defined(__mips) && __mips) || defined(__MIPS__)
+#undef _libcxxext_arch_mips
+#define _libcxxext_arch_mips 1
+#elif defined(__powerpc) || defined(__powerpc__) || defined(__powerpc64__) || defined(__POWERPC__) || defined(__ppc__) || defined(__ppc64__) || defined(__PPC__) || \
+    defined(__PPC64__) || defined(_ARCH_PPC) || defined(_ARCH_PPC64) || defined(_M_PPC) || defined(_ARCH_PPC) || defined(_ARCH_PPC64) || defined(__ppc)
+#undef _libcxxext_arch_powerpc
+#define _libcxxext_arch_powerpc 1
+#elif defined(__riscv)
+#undef _libcxxext_arch_riscv
+#define _libcxxext_arch_riscv 1
+#elif defined(__sparc__) || defined(__sparc) || defined(__sparc_v8__) || defined(__sparc_v9__) || defined(__sparcv8) || defined(__sparcv9)
+#undef _libcxxext_arch_sparc
+#define _libcxxext_arch_sparc 1
+#elif defined(__sh__)
+#undef _libcxxext_arch_superh
+#define _libcxxext_arch_superh 1
+#else
+#undef _libcxxext_arch_unknown
+#define _libcxxext_arch_unknown 1
+#endif
+
 #define _libcxxext_os_unknown 0
 #define _libcxxext_os_aix 0
 #define _libcxxext_os_android 0
@@ -105,8 +162,7 @@
 #elif defined(__VXWORKS__) || defined(__vxworks)
 #undef _libcxxext_os_vxworks
 #define _libcxxext_os_vxworks 1
-#elif defined(_WIN16) || defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__TOS_WIN__) || \
-    defined(__WINDOWS__) // I suppose in case we support other compilers in future.
+#elif defined(_WIN16) || defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__TOS_WIN__) || defined(__WINDOWS__)
 #undef _libcxxext_os_windows
 #define _libcxxext_os_windows 1
 #else
