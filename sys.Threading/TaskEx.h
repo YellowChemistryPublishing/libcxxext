@@ -4,6 +4,7 @@
 _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compiler coroutine codegen.
 
 #include <coroutine>
+#include <exception>
 
 #include <LanguageSupport.h>
 #include <rt.h>
@@ -123,6 +124,9 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
     template <>
     struct task_promise<void> final : public task_promise_b<void>
     {
+        std::coroutine_handle<> continuation = nullptr;
+        std::exception_ptr exception = nullptr;
+
         _inline_always task_final_awaiter<void> final_suspend() noexcept
         {
             return task_final_awaiter<void> { std::coroutine_handle<task_promise<void>>::from_promise(*this) };

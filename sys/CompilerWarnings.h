@@ -21,6 +21,7 @@
 #define _clWarn_clang_conversion "-Wimplicit-int-conversion"
 #define _clWarn_clang_sign_conversion "-Wsign-conversion"
 #define _clWarn_clang_float_conversion "-Wimplicit-float-conversion"
+#define _clWarn_clang_int_float_conversion "-Wimplicit-int-float-conversion"
 #define _clWarn_clang_double_promotion "-Wdouble-promotion"
 #define _clWarn_clang_sign_compare "-Wsign-compare"
 #define _clWarn_clang_implicit_fallthrough "-Wimplicit-fallthrough"
@@ -72,15 +73,17 @@
 #define _pop_nowarn_clang() _Pragma("clang diagnostic pop")
 
 #undef _push_nowarn_conv_comp
-#define _push_nowarn_conv_comp()                        \
-    _push_nowarn_clang(_clWarn_clang_conversion);       \
-    _push_nowarn_clang(_clWarn_clang_sign_conversion);  \
-    _push_nowarn_clang(_clWarn_clang_float_conversion); \
-    _push_nowarn_clang(_clWarn_clang_double_promotion); \
-    _push_nowarn_clang(_clWarn_clang_sign_compare)
+#define _push_nowarn_conv_comp()                           \
+    _push_nowarn_clang(_clWarn_clang_conversion);          \
+    _push_nowarn_clang(_clWarn_clang_sign_conversion);     \
+    _push_nowarn_clang(_clWarn_clang_float_conversion);    \
+    _push_nowarn_clang(_clWarn_clang_double_promotion);    \
+    _push_nowarn_clang(_clWarn_clang_sign_compare);        \
+    _push_nowarn_clang(_clWarn_clang_int_float_conversion)
 
 #undef _pop_nowarn_conv_comp
 #define _pop_nowarn_conv_comp() \
+    _pop_nowarn_clang();        \
     _pop_nowarn_clang();        \
     _pop_nowarn_clang();        \
     _pop_nowarn_clang();        \

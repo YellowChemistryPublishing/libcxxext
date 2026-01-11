@@ -19,9 +19,6 @@ set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 include(cmake/build_support.cmake)
-if(LIBCXXEXT_DEVELOPMENT_MODE)
-    link_libraries(sys.BuildSupport.WarningsAsErrors)
-endif()
 
 find_program(RUN_CPPCHECK cppcheck PATHS "C:/Program Files/Cppcheck" "/usr/bin")
 if(NOT RUN_CPPCHECK)
@@ -63,6 +60,10 @@ target_precompile_headers(sys.Threading PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/sys.
 target_link_libraries(sys.Threading INTERFACE sys.BuildSupport.CompilerOptions)
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
+    target_link_libraries(sys INTERFACE sys.BuildSupport.WarningsAsErrors)
+    target_link_libraries(sys.Containers INTERFACE sys.BuildSupport.WarningsAsErrors)
+    target_link_libraries(sys.Threading PRIVATE sys.BuildSupport.WarningsAsErrors)
+
     target_lint_clang_tidy(sys.Threading "-header-filter=\"${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/.*\"")
 endif()
 
@@ -78,6 +79,8 @@ if(LIBCXXEXT_TESTS)
     set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
     set(CATCH_INSTALL_EXTRAS OFF CACHE INTERNAL "" FORCE)
     add_subdirectory(Catch2)
+
+    add_subdirectory(rapidcheck)
 
     add_subdirectory(tests)
 endif()

@@ -3,6 +3,7 @@
 #ifndef _MSC_VER
 #include <cxxabi.h>
 #endif
+#include <exception>
 #include <memory>
 #include <print>
 #include <utility>

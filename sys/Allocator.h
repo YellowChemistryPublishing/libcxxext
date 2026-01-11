@@ -39,7 +39,7 @@ namespace sys
                     beg = end;
                 else if (end - beg >= i16(n))
                 {
-                    std::memset(&this->bufferUnavail[+beg], 1u, n);
+                    std::memset(&this->bufferUnavail[+beg], 1u, n); // NOLINT: Spurious clang-analyzer-security.ArrayBound.
                     return &this->inplaceBuffer[+beg];
                 }
                 else if (bufferUnavail[+end] == 1u)

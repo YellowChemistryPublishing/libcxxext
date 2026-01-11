@@ -7,7 +7,9 @@
 #include <numeric>
 #include <print>
 #include <source_location>
+#if __has_include(<stdfloat>)
 #include <stdfloat>
+#endif
 #include <type_traits>
 #include <utility>
 
