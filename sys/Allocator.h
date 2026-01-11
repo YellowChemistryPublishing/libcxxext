@@ -5,11 +5,6 @@
 
 #include <LanguageSupport.h>
 
-#if EXPOSE_INTERNALS_FOR_TESTING
-#define private public
-#define class struct
-#endif
-
 namespace sys
 {
     /// @defgroup except_allocator
@@ -99,8 +94,3 @@ namespace sys
     template <typename T, i16 StaticSize>
     using inplace_allocator = allocator<T, StaticSize, false>;
 } // namespace sys
-
-#if EXPOSE_INTERNALS_FOR_TESTING
-#undef private
-#undef class
-#endif
