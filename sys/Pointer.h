@@ -12,7 +12,7 @@ namespace sys
     struct sc_ptr_b
     {
         constexpr sc_ptr_b() noexcept = default;
-        constexpr sc_ptr_b(T* ptr) noexcept : _ptr(ptr)
+        constexpr sc_ptr_b(T* ptr) noexcept : _ptr(ptr) // NOLINT(hicpp-explicit-conversions)
         { }
         constexpr sc_ptr_b(const sc_ptr_b&) = delete;
         constexpr sc_ptr_b(sc_ptr_b&& other) noexcept : _ptr(other._ptr)
@@ -24,76 +24,114 @@ namespace sys
             delete this->_ptr;
         }
 
-        inline T& operator*() const noexcept
+        constexpr sc_ptr_b& operator=(const sc_ptr_b&) = delete;
+        constexpr sc_ptr_b& operator=(sc_ptr_b&& other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        T& operator*() const noexcept
         {
             return *this->_ptr;
         }
-        inline T* operator->() const noexcept
+        T* operator->() const noexcept
         {
             return this->_ptr;
         }
-        inline T& operator[](ssz index) const noexcept
+        T& operator[](ssz index) const noexcept
         {
             return *(this->_ptr + index);
         }
 
-        inline T* move() noexcept
+        T* move() noexcept
         {
             T* ret = this->_ptr;
             this->_ptr = nullptr;
             return ret;
         }
 
-        friend inline void swap(sc_ptr_b& a, sc_ptr_b& b) noexcept
+        friend void swap(sc_ptr_b& a, sc_ptr_b& b) noexcept
         {
             using std::swap;
             swap(a._ptr, b._ptr);
         }
     protected:
-        T* _ptr = nullptr;
+        T* _ptr = nullptr; // NOLINT(misc-non-private-member-variables-in-classes)
     };
 
     template <typename T>
     struct sc_ptr : public sc_ptr_b<T>
     {
         using sc_ptr_b<T>::sc_ptr_b;
-        inline ~sc_ptr()
+        sc_ptr(const sc_ptr&) = delete;
+        sc_ptr(sc_ptr&& other) noexcept
+        {
+            swap(_as(sc_ptr_b<T>&, *this), _as(sc_ptr_b<T>&, other));
+        }
+        ~sc_ptr()
         {
             delete this->_ptr;
+        }
+
+        sc_ptr& operator=(const sc_ptr&) = delete;
+        sc_ptr& operator=(sc_ptr&& other) noexcept
+        {
+            swap(_as(sc_ptr_b<T>&, *this), _as(sc_ptr_b<T>&, other));
+            return *this;
         }
     };
     template <typename T>
     struct sc_ptr<T[]> : public sc_ptr_b<T>
     {
         using sc_ptr_b<T>::sc_ptr_b;
-        inline ~sc_ptr()
+        sc_ptr(const sc_ptr&) = delete;
+        sc_ptr(sc_ptr&& other) noexcept
+        {
+            swap(_as(sc_ptr_b<T>&, *this), _as(sc_ptr_b<T>&, other));
+        }
+        ~sc_ptr()
         {
             delete[] this->_ptr;
+        }
+
+        sc_ptr& operator=(const sc_ptr&) = delete;
+        sc_ptr& operator=(sc_ptr&& other) noexcept
+        {
+            swap(_as(sc_ptr_b<T>&, *this), _as(sc_ptr_b<T>&, other));
+            return *this;
         }
     };
 
     template <typename Func>
     struct sc_act
     {
-        constexpr sc_act(Func&& func) noexcept : func(std::forward<Func>(func))
+        constexpr sc_act(Func func) noexcept : func(std::move(func)) // NOLINT(hicpp-explicit-conversions)
         { }
         constexpr sc_act(const sc_act&) = delete;
         constexpr sc_act(sc_act&& other) noexcept
         {
             swap(*this, other);
         }
-        inline ~sc_act()
+        ~sc_act()
         {
             if (!this->released)
                 std::invoke(func);
         }
 
-        inline void release() noexcept
+        sc_act& operator=(const sc_act&) = delete;
+        sc_act& operator=(sc_act&& other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        void release() noexcept
         {
             this->released = true;
         }
 
-        friend inline void swap(sc_act& a, sc_act& b) noexcept(std::is_nothrow_swappable_v<sc_act>)
+        friend void swap(sc_act& a, sc_act& b) noexcept(std::is_nothrow_swappable_v<sc_act>)
         {
             using std::swap;
 
@@ -101,7 +139,7 @@ namespace sys
             swap(a.released, b.released);
         }
     private:
-        [[no_unique_address]] Func func;
+        _no_unique_address Func func;
         bool released = false;
     };
 } // namespace sys
