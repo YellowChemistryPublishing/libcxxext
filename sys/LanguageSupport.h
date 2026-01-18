@@ -2,35 +2,35 @@
 
 #include <bit>
 #include <concepts>
+#include <cstddef>
 #include <cstdint>
+#include <cstdio> // NOLINT(misc-include-cleaner)
 #include <limits>
-#include <numeric>
-#include <print>
-#include <source_location>
+#include <numeric>         // NOLINT(misc-include-cleaner)
+#include <print>           // NOLINT(misc-include-cleaner)
+#include <source_location> // NOLINT(misc-include-cleaner)
 #if __has_include(<stdfloat>)
-#include <stdfloat>
+#include <stdfloat> // NOLINT(misc-include-cleaner)
 #endif
 #include <type_traits>
 #include <utility>
 
 #include <CompilerWarnings.h>
-
-/// @defgroup except_operator_new
-/// @throw `std::bad_alloc` (`::operator new`)
+#include <Platform.h>
 
 struct unsafe
 { };
 
 /// @def _inline_always
 /// @brief Force inline a function.
-#if !_MSC_VER
+#if !_libcxxext_compiler_msvc
 #define _inline_always [[gnu::always_inline]] inline
 #else
 #define _inline_always __forceinline
 #endif
 /// @def _inline_never
 /// @brief Force noinline a function.
-#if !_MSC_VER
+#if !_libcxxext_compiler_msvc
 #define _inline_never [[gnu::noinline]]
 #else
 #define _inline_never [[msvc::noinline]]
@@ -43,7 +43,7 @@ struct unsafe
 #define _pure [[gnu::pure]]
 /// @def _const
 /// @brief Mark a function as const.
-#if !_MSC_VER
+#if !_libcxxext_compiler_msvc
 #define _const [[gnu::const]]
 #else
 #define _const
@@ -56,10 +56,16 @@ struct unsafe
 #define _pack(align) _clPragma_fwd(pack(align))
 /// @def _packed
 /// @brief Pack a structure to the smallest possible alignment.
-#if !_MSC_VER
+#if !_libcxxext_compiler_msvc
 #define _packed [[gnu::packed]]
 #else
 #define _packed __declspec(align(1))
+#endif
+
+#if _libcxxext_compiler_msvc
+#define _no_unique_address [[msvc::no_unique_address]]
+#else
+#define _no_unique_address [[no_unique_address]]
 #endif
 
 #define _as(T, ...) static_cast<T>(__VA_ARGS__)
@@ -73,7 +79,7 @@ struct unsafe
 #define _throw(value)                                                                                                                                                           \
     do                                                                                                                                                                          \
     {                                                                                                                                                                           \
-        std::source_location __srcLoc = std::source_location::current();                                                                                                        \
+        const std::source_location __srcLoc = std::source_location::current();                                                                                                  \
         _push_nowarn_gcc(_clWarn_gcc_use_after_free);                                                                                                                           \
         _push_nowarn_clang(_clWarn_clang_use_after_free);                                                                                                                       \
         std::println(stderr, "In function `{}` at \"{}:{}:{}\" - Throwing `{}`.", __srcLoc.function_name(), __srcLoc.file_name(), int(__srcLoc.line()), int(__srcLoc.column()), \
@@ -101,7 +107,7 @@ struct unsafe
     do                                       \
     {                                        \
         if (retCond) [[unlikely]]            \
-            co_return val;                   \
+            co_return (val);                 \
     }                                        \
     while (false)
 /// @def _fence_contract_enforce(cond)
@@ -205,12 +211,12 @@ namespace sys
     {
         using underlying_type = WithWidth;
 
-        WithWidth underlying;
+        WithWidth underlying; // NOLINT(misc-non-private-member-variables-in-classes): Required for `sys::integer<...>` to be used as template parameters.
 
         constexpr integer() noexcept = default;
         template <std::integral T>
-        constexpr integer(T t) noexcept :
-#if !defined(_MSC_VER) || !_MSC_VER
+        constexpr integer(T t) noexcept : // NOLINT(hicpp-explicit-conversions)
+#ifdef __cpp_lib_saturation_arithmetic
             underlying(std::saturate_cast<WithWidth>(t))
 #else
             underlying(WithWidth(t))
@@ -218,14 +224,14 @@ namespace sys
         { }
         template <std::integral T>
         constexpr explicit integer(integer<T> t) noexcept :
-#if !defined(_MSC_VER) || !_MSC_VER
+#if __cpp_lib_saturation_arithmetic
             underlying(std::saturate_cast<WithWidth>(t.underlying))
 #else
             underlying(WithWidth(t.underlying))
 #endif
         { }
         template <std::floating_point T>
-        constexpr integer(T t) noexcept : underlying(static_cast<WithWidth>(t))
+        constexpr integer(T t) noexcept : underlying(static_cast<WithWidth>(t)) // NOLINT(hicpp-explicit-conversions)
         { }
 
         template <std::integral T>
@@ -394,26 +400,22 @@ namespace sys
         template <std::unsigned_integral Other>
         friend constexpr integer operator<<(const integer<WithWidth>& a, const Other& b) noexcept
         {
-            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) << b) &
-                                                                                    std::numeric_limits<std::make_unsigned_t<WithWidth>>::max())));
+            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) << b)));
         }
         template <std::unsigned_integral Other>
         friend constexpr integer operator>>(const integer<WithWidth>& a, const Other& b) noexcept
         {
-            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) >> b) &
-                                                                                    std::numeric_limits<std::make_unsigned_t<WithWidth>>::max())));
+            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>(std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) >> b)));
         }
         template <std::unsigned_integral Other>
         friend constexpr integer operator<<(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) << b.underlying) &
-                                                                                    std::numeric_limits<std::make_unsigned_t<WithWidth>>::max())));
+            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) << b.underlying))));
         }
         template <std::unsigned_integral Other>
         friend constexpr integer operator>>(const integer<WithWidth>& a, const integer<Other>& b) noexcept
         {
-            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) >> b.underlying) &
-                                                                                    std::numeric_limits<std::make_unsigned_t<WithWidth>>::max())));
+            return integer(std::bit_cast<WithWidth>(std::make_unsigned_t<WithWidth>((std::bit_cast<std::make_unsigned_t<WithWidth>>(a.underlying) >> b.underlying))));
         }
 
         template <std::integral T>
@@ -503,11 +505,11 @@ constexpr int operator<=>(U a, const sys::integer<T>& b) noexcept
 
 using byte = unsigned char;
 using sbyte = signed char;
-using ushort = unsigned short;
+using ushort = unsigned short; // NOLINT(google-runtime-int)
 using uint = unsigned int;
-using ulong = unsigned long;
-using llong = long long;
-using ullong = unsigned long long;
+using ulong = unsigned long;       // NOLINT(google-runtime-int)
+using llong = long long;           // NOLINT(google-runtime-int)
+using ullong = unsigned long long; // NOLINT(google-runtime-int)
 
 using i8 = ::sys::integer<int_least8_t>;
 using i16 = ::sys::integer<int_least16_t>;
@@ -536,42 +538,42 @@ using f64 = double;
 // clang-format off: C++23 -- no space b/w "" and literal suffix.
 constexpr i8 operator""_i8(ullong lit) noexcept
 {
-    return i8(i8::underlying_type(lit));
+    return _as(i8::underlying_type, lit);
 }
 constexpr i16 operator""_i16(ullong lit) noexcept
 {
-    return i16(i16::underlying_type(lit));
+    return _as(i16::underlying_type, lit);
 }
 constexpr i32 operator""_i32(ullong lit) noexcept
 {
-    return i32(i32::underlying_type(lit));
+    return _as(i32::underlying_type, lit);
 }
 constexpr i64 operator""_i64(ullong lit) noexcept
 {
-    return i64(i64::underlying_type(lit));
+    return _as(i64::underlying_type, lit);
 }
 constexpr u8 operator""_u8(ullong lit) noexcept
 {
-    return u8(u8::underlying_type(lit));
+    return _as(u8::underlying_type, lit);
 }
 constexpr u16 operator""_u16(ullong lit) noexcept
 {
-    return u16(u16::underlying_type(lit));
+    return _as(u16::underlying_type, lit);
 }
 constexpr u32 operator""_u32(ullong lit) noexcept
 {
-    return u32(u32::underlying_type(lit));
+    return _as(u32::underlying_type, lit);
 }
 constexpr u64 operator""_u64(ullong lit) noexcept
 {
-    return u64(u64::underlying_type(lit));
+    return _as(u64::underlying_type, lit);
 }
 constexpr ssz operator""_z(ullong lit) noexcept
 {
-    return ssz(ssz::underlying_type(lit));
+    return _as(ssz::underlying_type, lit);
 }
 constexpr sz operator""_uz(ullong lit) noexcept
 {
-    return sz(sz::underlying_type(lit));
+    return _as(sz::underlying_type, lit);
 }
 // clang-format on

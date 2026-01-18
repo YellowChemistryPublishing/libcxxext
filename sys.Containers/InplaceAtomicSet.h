@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <cstddef>
 
 namespace sys
 {
@@ -14,10 +15,10 @@ namespace sys
         std::atomic<T> data[Capacity];
     public:
         /// @brief Default constructor.
-        inline InplaceAtomicSet() = default;
+        InplaceAtomicSet() = default;
         /// @brief Initialize all elements with the same value.
         /// @param init Value to set.
-        inline InplaceAtomicSet(T init)
+        explicit InplaceAtomicSet(T init)
         {
             for (size_t i = 0; i < Capacity; i++) this->data[i].store(init);
         }

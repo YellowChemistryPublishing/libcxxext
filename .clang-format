@@ -1,5 +1,15 @@
 BasedOnStyle: Microsoft
 
+# General
+# v Add this when clang-format-22 becomes more available.
+# NumericLiteralCase:
+#     ExponentLetter: Lower
+#     HexDigit: Upper
+#     Prefix: Lower
+#     Suffix: Lower
+IncludeBlocks: Preserve
+SortIncludes: CaseInsensitive
+
 # Braces
 BreakBeforeBraces: Custom
 BraceWrapping:

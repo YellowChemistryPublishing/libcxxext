@@ -1,7 +1,7 @@
 #pragma once
 
+#include <cstddef>
 #include <cstring>
-#include <string_view>
 
 namespace sys
 {
@@ -15,9 +15,9 @@ namespace sys
         {
             this->buffer[0] = 0;
         }
-        constexpr InplaceString(const char* cstr) : _size(0)
+        constexpr InplaceString(const char* cstr) : _size(0) // NOLINT(hicpp-explicit-conversions)
         {
-            size_t len = std::strlen(cstr);
+            const size_t len = std::strlen(cstr);
             if (len > Capacity)
             {
                 this->buffer[0] = 0;
@@ -27,11 +27,11 @@ namespace sys
             memcpy(this->buffer, cstr, len + 1);
         }
 
-        inline CharType* begin()
+        [[nodiscard]] CharType* begin()
         {
             return this->buffer;
         }
-        inline CharType* end()
+        [[nodiscard]] CharType* end()
         {
             return this->buffer + this->_size;
         }

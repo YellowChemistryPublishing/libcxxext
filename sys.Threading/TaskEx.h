@@ -1,16 +1,20 @@
 #pragma once
 
 #include <CompilerWarnings.h>
-_push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compiler coroutine codegen.
+_push_nowarn_msvc(_clWarn_msvc_unreachable); // Erroneously generated for compiler coroutine codegen.
 
+#include <concepts>
 #include <coroutine>
+#include <cstddef>
 #include <exception>
 
 #include <LanguageSupport.h>
 #include <rt.h>
 #include <rt_threading.h>
 
-    namespace sys
+// NOLINTBEGIN(misc-non-private-member-variables-in-classes)
+
+namespace sys
 {
     template <typename T>
     struct task_promise;
@@ -23,7 +27,7 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
     {
         std::coroutine_handle<task_promise<T>> handle;
 
-        _inline_always constexpr bool await_ready() const noexcept
+        [[nodiscard]] _inline_always constexpr bool await_ready() const noexcept
         {
             return !this->handle || this->handle.done();
         }
@@ -32,11 +36,11 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
             this->handle.promise().continuation = parent;
             _task_yield_and_resume();
         }
-        _inline_always constexpr T await_resume() const noexcept(std::is_same<T, void>::value)
+        _inline_always constexpr T await_resume() const noexcept(std::is_same_v<T, void>)
         {
             if (this->handle.promise().exception) [[unlikely]]
                 std::rethrow_exception(this->handle.promise().exception);
-            if constexpr (!std::is_same<T, void>::value)
+            if constexpr (!std::is_same_v<T, void>)
                 return std::move(*reinterpret_cast<T*>(&this->handle.promise().value));
         }
     };
@@ -45,7 +49,7 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
     {
         std::coroutine_handle<task_promise<T>> handle;
 
-        _inline_always constexpr bool await_ready() const noexcept
+        [[nodiscard]] _inline_always constexpr bool await_ready() const noexcept
         {
             return false;
         }
@@ -63,18 +67,18 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
         std::coroutine_handle<> continuation;
         std::exception_ptr exception = nullptr;
 
-        inline static void* operator new(size_t sz) noexcept
+        static void* operator new(size_t sz) noexcept
         {
             return ::sys::platform::_task_operator_new(sz);
         }
-        inline static void operator delete(void* ptr) noexcept
+        static void operator delete(void* ptr) noexcept
         {
             ::sys::platform::_task_operator_delete(ptr);
         }
 
-        _inline_always constexpr std::suspend_always initial_suspend() const noexcept
+        [[nodiscard]] _inline_always constexpr std::suspend_always initial_suspend() const noexcept
         {
-            return std::suspend_always();
+            return {};
         }
 
         _inline_always task<T> get_return_object()
@@ -82,7 +86,7 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
             return task<T>(std::coroutine_handle<task_promise<T>>::from_promise(*static_cast<task_promise<T>*>(this)));
         }
 
-        [[noreturn]] inline static task<T> get_return_object_on_allocation_failure()
+        [[noreturn]] static task<T> get_return_object_on_allocation_failure()
         {
             _throw(std::bad_alloc());
         }
@@ -92,22 +96,19 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
         }
     };
     template <typename T>
-    struct task_promise final : public task_promise_b<T>
+    struct task_promise final : public task_promise_b<T> // NOLINT(hicpp-member-init)
     {
-        union
-        {
-            byte _;
-            T value;
-        };
-        bool hasValue = false;
-
-        constexpr task_promise() noexcept
-        { }
-        inline ~task_promise() noexcept(noexcept(this->value.~T()))
+        constexpr task_promise() noexcept = default;
+        constexpr task_promise(const task_promise&) = delete;
+        constexpr task_promise(task_promise&&) = delete;
+        ~task_promise() noexcept(noexcept(this->value.~T()))
         {
             if (this->hasValue) [[likely]]
                 this->value.~T();
         }
+
+        constexpr task_promise& operator=(const task_promise&) = delete;
+        constexpr task_promise& operator=(task_promise&&) = delete;
 
         _inline_always task_final_awaiter<T> final_suspend() noexcept
         {
@@ -120,6 +121,13 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
             new(&this->value) T(std::forward<ReturnType>(ret));
             this->hasValue = true;
         }
+    private:
+        union
+        {
+            byte _;
+            T value;
+        };
+        bool hasValue = false;
     };
     template <>
     struct task_promise<void> final : public task_promise_b<void>
@@ -144,11 +152,17 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
 
         constexpr static i32 max_delay = ::sys::platform::_task_max_delay;
 
+        constexpr task() noexcept = default;
+        constexpr task(const task&) = delete;
+        constexpr task(task&&) = delete;
         _inline_always ~task()
         {
             if (this->handle)
                 this->handle.destroy();
         }
+
+        constexpr task& operator=(const task&) = delete;
+        constexpr task& operator=(task&&) = delete;
 
         _inline_always task_awaiter<T> operator co_await()
         {
@@ -159,7 +173,7 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
         _impl_task_yield()
         _impl_task_delay()
         template <typename Pred>
-        inline static task<void> wait_until(Pred&& func)
+        static task<void> wait_until(Pred func)
         // clang-format on
         {
             if constexpr (!std::convertible_to<decltype(func()), bool>)
@@ -181,20 +195,25 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
     struct async_promise
     {
         constexpr async_promise() noexcept = default;
+        async_promise(const async_promise&) = delete;
+        async_promise(async_promise&&) = delete;
         _inline_always constexpr ~async_promise() = default;
+
+        async_promise& operator=(const async_promise&) = delete;
+        async_promise& operator=(async_promise&&) = delete;
 
         _inline_always async get_return_object();
 
-        _inline_always constexpr std::suspend_always initial_suspend() const noexcept
+        [[nodiscard]] _inline_always constexpr static std::suspend_always initial_suspend() noexcept
         {
-            return std::suspend_always();
+            return {};
         }
-        _inline_always constexpr std::suspend_never final_suspend() const noexcept
+        [[nodiscard]] _inline_always constexpr static std::suspend_never final_suspend() noexcept
         {
-            return std::suspend_never();
+            return {};
         }
 
-        inline void unhandled_exception() noexcept
+        static void unhandled_exception() noexcept
         {
             std::rethrow_exception(std::current_exception());
         }
@@ -221,3 +240,5 @@ _push_nowarn_msvc(_clWarn_msvc_unreachable) // Erroneously generated for compile
 } // namespace sys
 
 _pop_nowarn_msvc();
+
+// NOLINTEND(misc-non-private-member-variables-in-classes)

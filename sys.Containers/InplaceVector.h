@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstddef>
+#include <utility>
+
 namespace sys
 {
     template <typename T, size_t Capacity>
@@ -12,59 +15,58 @@ namespace sys
         };
         size_t _size = 0;
     public:
-        inline InplaceVector()
-        { }
+        InplaceVector() = default;
 
-        inline bool empty() const
+        [[nodiscard]] bool empty() const
         {
             return this->_size == 0;
         }
-        inline size_t size() const
+        [[nodiscard]] size_t size() const
         {
             return this->_size;
         }
-        consteval static size_t capacity()
+        [[nodiscard]] consteval static size_t capacity()
         {
             return Capacity;
         }
 
-        inline T& operator[](size_t index)
+        [[nodiscard]] T& operator[](size_t index)
         {
             return this->data[index];
         }
-        inline const T& operator[](size_t index) const
+        [[nodiscard]] const T& operator[](size_t index) const
         {
             return this->data[index];
         }
 
-        inline T* begin()
+        [[nodiscard]] T* begin()
         {
             return this->data;
         }
-        inline T* end()
+        [[nodiscard]] T* end()
         {
             return this->data + this->_size;
         }
 
-        inline bool pushBack(T value)
+        [[nodiscard]] bool pushBack(T value)
         {
             if (this->_size >= Capacity)
-                return false;
+                return false; // NOLINT(readability-simplify-boolean-expr)
             new(&this->data[this->_size++]) T(std::move(value));
             return true;
         }
-        inline void popBack()
+        void popBack()
         {
             if (this->_size > 0) [[likely]]
                 this->data[this->_size--].~T();
         }
-        inline void clear()
+        void clear()
         {
             for (size_t i = 0; i < this->_size; ++i) this->data[i].~T();
             this->_size = 0;
         }
 
-        inline T* find(const T& value)
+        [[nodiscard]] T* find(const T& value)
         {
             for (size_t i = 0; i < this->_size; i++)
             {
