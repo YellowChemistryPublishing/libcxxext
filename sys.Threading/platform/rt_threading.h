@@ -1,127 +1,126 @@
 #pragma once
 
+#include <atomic>
 #include <chrono>
 #include <coroutine>
+#include <cstddef>
+#include <limits>
 #include <mutex>
-#include <print>
 #include <queue>
 #include <stop_token>
 #include <thread>
+#include <utility>
+#include <vector>
 
 #include <LanguageSupport.h>
 
 namespace sys::platform
 {
-    struct NoOpThreadCriticalSectionISR
-    {
-        _inline_always NoOpThreadCriticalSectionISR()
-        { }
-        _inline_always ~NoOpThreadCriticalSectionISR()
-        { }
-    };
-    struct NoOpThreadCriticalSection
-    {
-        _inline_always NoOpThreadCriticalSection()
-        { }
-        _inline_always ~NoOpThreadCriticalSection()
-        { }
-    };
+    struct noop_thread_critical_section_isr
+    { };
+    struct noop_thread_critical_section
+    { };
 
-    using ThreadCriticalSectionISR = NoOpThreadCriticalSectionISR;
-    using ThreadCriticalSection = NoOpThreadCriticalSection;
+    using thread_critical_section_isr = noop_thread_critical_section_isr;
+    using thread_critical_section = noop_thread_critical_section;
 
-    using ThreadID = std::thread::id;
+    using thread_id = std::thread::id;
 
-    class ThreadHandle
+    class thread_handle
     {
         std::thread handle;
 
-        inline ThreadHandle(std::nullptr_t)
+        thread_handle(std::nullptr_t) // NOLINT(hicpp-explicit-conversions)
         { }
     public:
-        inline static const ThreadHandle currentThread()
+        static thread_handle current_thread()
         {
             return nullptr;
         }
-        inline static void yield()
+        static void yield()
         {
             std::this_thread::yield();
         }
-        inline static void sleep(i32 ms)
+        static void sleep(i32 ms)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(+ms));
         }
 
         template <typename Func, typename... Args>
         requires (sys::IFunc<Func, void(Args...)>)
-        constexpr ThreadHandle(Func&& func, Args&&... args)
+        constexpr explicit thread_handle(Func&& func, Args&&... args)
         {
             this->handle = std::thread([](Func func, Args... args) { func(std::forward<Args>(args)...); }, std::forward<Func>(func), std::forward<Args>(args)...);
         }
-        inline ThreadHandle(ThreadHandle&& other) noexcept
+        thread_handle(const thread_handle& other) = delete;
+        thread_handle(thread_handle&& other) noexcept
         {
             swap(*this, other);
         }
-        inline ~ThreadHandle()
+        ~thread_handle()
         {
             this->join();
         }
 
-        inline bool isAlive()
+        thread_handle& operator=(const thread_handle& other) = delete;
+        thread_handle& operator=(thread_handle&& other) noexcept
         {
-            return this->handle.joinable() || this->handle.get_id() == ThreadID();
-        }
-        inline ThreadID id() const noexcept
-        {
-            ThreadID id = this->handle.get_id();
-            return id == ThreadID() ? std::this_thread::get_id() : id;
+            swap(*this, other);
+            return *this;
         }
 
-        inline void join()
+        bool is_alive()
+        {
+            return this->handle.joinable() || this->handle.get_id() == thread_id();
+        }
+        [[nodiscard]] thread_id id() const noexcept
+        {
+            const thread_id id = this->handle.get_id();
+            return id == thread_id() ? std::this_thread::get_id() : id;
+        }
+
+        void join()
         {
             if (this->handle.joinable())
                 this->handle.join();
         }
 
-        friend inline void swap(ThreadHandle& a, ThreadHandle& b)
+        friend void swap(thread_handle& a, thread_handle& b) noexcept
         {
             using std::swap;
             swap(a.handle, b.handle);
         }
     };
 
-    struct ConcurrentQueue
+    struct concurrent_queue
     {
-        std::queue<std::coroutine_handle<>> queue;
-        std::mutex qlock;
-
-        inline void enqueue(std::coroutine_handle<> handle)
+        void enqueue(std::coroutine_handle<> handle)
         {
-            std::lock_guard lock(this->qlock);
+            const std::scoped_lock lock(this->qlock);
             this->queue.push(handle);
         }
-        inline bool try_dequeue(std::coroutine_handle<>& handle)
+        bool try_dequeue(std::coroutine_handle<>& handle)
         {
-            std::lock_guard lock(this->qlock);
+            const std::scoped_lock lock(this->qlock);
             if (this->queue.empty())
                 return false;
             handle = this->queue.front();
             this->queue.pop();
             return true;
         }
+    private:
+        std::queue<std::coroutine_handle<>> queue;
+        std::mutex qlock;
     };
 
-    struct ThreadPool
+    struct thread_pool
     {
-        static std::atomic<ThreadPool*> instance;
+        static std::atomic<thread_pool*> instance;
 
-        std::vector<std::jthread> threads;
-        ConcurrentQueue queue;
-
-        inline ThreadPool()
+        thread_pool()
         {
-            ThreadPool::instance = this;
-            this->threads.emplace_back([this](std::stop_token token)
+            thread_pool::instance = this;
+            this->threads.emplace_back([this](const std::stop_token& token)
             {
                 std::coroutine_handle<> handle;
                 while (!token.stop_requested())
@@ -137,33 +136,55 @@ namespace sys::platform
                 }
             });
         }
-        inline ~ThreadPool()
+        thread_pool(const thread_pool&) = delete;
+        thread_pool(thread_pool&&) = delete;
+        ~thread_pool()
         {
-            for (auto& thread : ThreadPool::threads) thread.request_stop();
-            for (auto& thread : ThreadPool::threads) thread.join();
-            ThreadPool::instance = nullptr;
+            for (auto& thread : this->threads) thread.request_stop();
+            for (auto& thread : this->threads) thread.join();
+            thread_pool::instance = nullptr;
         }
+
+        thread_pool& operator=(const thread_pool&) = delete;
+        thread_pool& operator=(thread_pool&&) = delete;
+
+        void push(std::coroutine_handle<> handle)
+        {
+            this->queue.enqueue(handle);
+        }
+    private:
+        std::vector<std::jthread> threads;
+        concurrent_queue queue;
     };
 
     constexpr i32 _task_max_delay = std::numeric_limits<i32::underlying_type>::max();
 } // namespace sys::platform
 
-#define _impl_task_yield()                  \
-    inline static task<void> yield()        \
-    requires (std::is_same<T, void>::value) \
-    {                                       \
-        co_return;                          \
+#define _impl_task_yield()             \
+    inline static task<void> yield()   \
+    requires (std::is_same_v<T, void>) \
+    {                                  \
+        co_return;                     \
     }
 #define _impl_task_delay()                                                              \
     inline static task<void> delay(i32 ms)                                              \
-    requires (std::is_same<T, void>::value)                                             \
+    requires (std::is_same_v<T, void>)                                                  \
     {                                                                                   \
         auto until = std::chrono::steady_clock::now() + std::chrono::milliseconds(+ms); \
         while (std::chrono::steady_clock::now() < until) co_await task<>::yield();      \
     }
-#define _task_yield_and_resume()                                         \
-    if (auto* threadPool = ::sys::platform::ThreadPool::instance.load()) \
-    threadPool->queue.enqueue(this->handle)
-#define _task_yield_and_continue()                                       \
-    if (auto* threadPool = ::sys::platform::ThreadPool::instance.load()) \
-    threadPool->queue.enqueue(this->handle.promise().continuation)
+#define _task_yield_and_resume()                                          \
+    if (auto* threadPool = ::sys::platform::thread_pool::instance.load()) \
+    threadPool->push(this->handle)
+#define _task_yield_and_continue()                                            \
+    _retry:                                                                   \
+    try                                                                       \
+    {                                                                         \
+        if (auto* threadPool = ::sys::platform::thread_pool::instance.load()) \
+            threadPool->push(this->handle.promise().continuation);            \
+    }                                                                         \
+    catch (const std::bad_alloc&)                                             \
+    {                                                                         \
+        std::this_thread::yield();                                            \
+        goto _retry;                                                          \
+    }

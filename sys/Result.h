@@ -1,15 +1,14 @@
 #pragma once
 
 #include <algorithm>
-#include <coroutine>
+#include <coroutine> // NOLINT(misc-include-cleaner)
 #include <cstddef>
-#include <print>
 #include <type_traits>
 
-#include <CompilerWarnings.h>
 #include <Exception.h>
 #include <LanguageSupport.h>
 
+// NOLINTBEGIN(bugprone-macro-parentheses)
 #define _fence_result_return(rValRef, out) \
     do                                     \
     {                                      \
@@ -28,6 +27,7 @@
         out = __result.move();                \
     }                                         \
     while (false)
+// NOLINTEND(bugprone-macro-parentheses)
 
 namespace sys
 {
@@ -48,7 +48,7 @@ namespace sys
     struct result_b
     {
         /// @brief Whether the result is good.
-        constexpr operator bool() const noexcept
+        constexpr explicit operator bool() const noexcept
         {
             using this_type = type_with_qual_ref_from<result_type, std::remove_pointer_t<decltype(this)>>*;
             return _as(this_type, this)->status == result_status::ok;
@@ -66,7 +66,6 @@ namespace sys
             using this_type = type_with_qual_ref_from<result_type, std::remove_pointer_t<decltype(this)>>*;
 
             _fence_contract_enforce(_as(this_type, this)->status == result_status::ok && "Taking value for a bad result!");
-            _as(this_type, this)->status = result_status::empty;
             if constexpr (std::is_reference_v<T>)
                 return *_as(this_type, this)->value;
             else
@@ -78,7 +77,6 @@ namespace sys
 
             if (_as(this_type, this)->status == result_status::ok)
             {
-                _as(this_type, this)->status = result_status::empty;
                 if constexpr (std::is_reference_v<T>)
                     return *_as(this_type, this)->value;
                 else
@@ -100,24 +98,25 @@ namespace sys
     {
         /// @brief Constructs a result with a value.
         /// @param value Value to move into the result.
-        constexpr result(T&& value)
+        constexpr result(T&& value) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         {
             if constexpr (std::is_reference_v<T>)
                 this->value = &value;
             else
-                new(&this->value) result_storage_type<T>(std::forward<T>(value));
+                new(&this->value) result_storage_type<T>(std::move(value));
             this->status = result_status::ok;
         }
         /// @brief Constructs a result with an error.
         /// @param error Error to move into the result.
-        constexpr result(Err&& error) : status(result_status::error)
+        constexpr result(Err&& error) : status(result_status::error) // NOLINT(hicpp-explicit-conversions)
         {
             if constexpr (std::is_reference_v<T>)
                 this->error = &error;
             else
-                new(&this->error) result_storage_type<Err>(std::forward<Err>(error));
+                new(&this->error) result_storage_type<Err>(std::move(error));
         }
-        constexpr result(result&& other)
+        constexpr result(const result&) = delete;
+        constexpr result(result&& other) noexcept : status(result_status::empty)
         {
             swap(*this, other);
         }
@@ -134,16 +133,20 @@ namespace sys
                     this->error.~result_storage_type<Err>();
                 break;
             case result_status::empty:
-            default:
-                {
-                } // Do nothing.s
+            default:; // Do nothing.
             }
         }
 
-        constexpr Err err()
+        result& operator=(const result&) = delete;
+        result& operator=(result&& other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        constexpr Err err() const
         {
             _fence_contract_enforce(this->status == result_status::error && "Taking error for a good or empty result!");
-            this->status = result_status::empty;
             return this->error;
         }
 
@@ -151,9 +154,11 @@ namespace sys
         {
             using std::swap;
 
+            // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
             if (&a != &b && (a.status == result_status::ok || a.status == result_status::error || b.status == result_status::ok || b.status == result_status::error))
                 std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + std::max(sizeof(result_storage_type<T>), sizeof(result_storage_type<Err>)), _asr(byte*, &b.value));
             swap(a.status, b.status);
+            // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         }
 
         friend struct sys::result_b<result, T, Err>;
@@ -163,7 +168,7 @@ namespace sys
             result_storage_type<T> value;
             result_storage_type<Err> error;
         };
-        result_status status = result_status::empty;
+        result_status status;
     };
 
     template <typename T>
@@ -171,34 +176,44 @@ namespace sys
     {
         /// @brief Constructs a result with a value.
         /// @param value Value to move into the result.
-        constexpr result(T&& value)
+        constexpr result(T&& value) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         {
             if constexpr (std::is_reference_v<T>)
                 this->value = &value;
             else
-                new(&this->value) result_storage_type<T>(std::forward<T>(value));
+                new(&this->value) result_storage_type<T>(std::move(value));
             this->status = result_status::ok;
         }
-        constexpr result(std::nullptr_t) : status(result_status::error)
+        constexpr result(std::nullptr_t) : status(result_status::error) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         { }
-        constexpr result(result&& other)
+        constexpr result(const result&) = delete;
+        constexpr result(result&& other) noexcept : status(result_status::empty) // NOLINT(hicpp-member-init)
         {
             swap(*this, other);
         }
-        constexpr ~result()
+        ~result()
         {
             if constexpr (!std::is_reference_v<T>)
                 if (this->status == result_status::ok)
                     this->value.~T();
         }
 
-        constexpr void swap(result& a, result& b)
+        result& operator=(const result&) = delete;
+        result& operator=(result&& other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        friend constexpr void swap(result& a, result& b) noexcept
         {
             using std::swap;
 
+            // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
             if (&a != &b && (a.status == result_status::ok || b.status == result_status::ok))
                 std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + sizeof(result_storage_type<T>), _asr(byte*, &b.value));
             swap(a.status, b.status);
+            // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         }
 
         friend struct sys::result_b<result, T, void>;
@@ -208,23 +223,23 @@ namespace sys
             byte _;
             result_storage_type<T> value;
         };
-        result_status status = result_status::empty;
+        result_status status;
     };
 
-    /// @brief Awaiter to enable short-circuiting, à la rustlang `operator?`.
+    /// @brief Awaiter to enable short-circuiting, akin to rustlang's `operator?`.
     /// @tparam T The type of the value to hold.
     /// @tparam Err The type of the error to hold.
     template <typename T, typename Err>
     struct result_awaiter
     {
-        _inline_always constexpr bool await_ready() const noexcept
+        [[nodiscard]] _inline_always constexpr bool await_ready() const noexcept
         {
             return res;
         }
         template <typename Promise>
         _inline_always constexpr void await_suspend(std::coroutine_handle<Promise> parent)
         {
-            if constexpr (!std::is_same<Err, void>::value)
+            if constexpr (!std::is_same_v<Err, void>)
                 parent.promise().return_value(res.takeError());
             else
                 []<bool _false = false>
@@ -235,13 +250,13 @@ namespace sys
             if constexpr (requires { parent.promise().continuation.resume(); })
                 parent.promise().continuation.resume();
         }
-        _inline_always constexpr T await_resume() const noexcept(std::is_same<T, void>::value)
+        _inline_always constexpr T await_resume() const noexcept(std::is_same_v<T, void>)
         {
             return res.takeValue();
         }
 
         friend struct sys::result<T, Err>;
     private:
-        result<T, Err>& res;
+        result<T, Err>& res; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
     };
 } // namespace sys

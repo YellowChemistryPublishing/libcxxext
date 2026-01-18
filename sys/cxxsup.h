@@ -1,7 +1,9 @@
 #pragma once
 
+#include <cstddef>
+#include <cstdint>
+#include <functional>
 #include <limits>
-#include <numeric>
 #include <utility>
 
 #include <LanguageSupport.h>
@@ -9,12 +11,14 @@
 
 #define _assert_ctor_can_fail() static_assert(false, "This constructor may fail, use `...::ctor` instead.")
 
+// NOLINTBEGIN(readability-magic-numbers)
+
 namespace sys
 {
     template <INumberUnderlying T, INumberUnderlying ValueType>
     constexpr T numeric_cast(ValueType value, unsafe)
     {
-#if !defined(_MSC_VER) || !_MSC_VER
+#ifdef __cpp_lib_saturation_arithmetic
         return std::saturate_cast<T>(value);
 #else
         if (std::cmp_less_equal(std::numeric_limits<T>::lowest(), value) && std::cmp_less_equal(value, std::numeric_limits<T>::max())) [[likely]]
@@ -71,20 +75,22 @@ namespace sys
     /// @return The high byte.
     constexpr u8 hbfs16(i16 val)
     {
-        return u8(+(val >> 8u));
+        return +(val >> 8u);
     }
     /// @brief Obtain the low byte from a signed 16-bit integer.
     /// @param val The signed 16-bit integer.
     /// @return The low byte.
     constexpr u8 lbfs16(i16 val)
     {
-        return u8(+val);
+        return _as(uint16_t, +val) & 0xFFu;
     }
 
     template <typename T, typename U>
     constexpr size_t dhc2(const T& t, const U& u)
     {
         size_t seed = std::hash<T>()(t);
-        return seed ^ (std::hash<U>()(u) + 0x9e3779b9 + (seed << 6) + (seed >> 2));
+        return seed ^ (std::hash<U>()(u) + 0x9e3779b9 + (seed << 6u) + (seed >> 2u));
     }
 } // namespace sys
+
+// NOLINTEND(readability-magic-numbers)

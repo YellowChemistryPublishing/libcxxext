@@ -11,9 +11,9 @@ namespace sys
     requires (sizeof...(Ts) > 0)
     struct aligned_storage
     {
-        alignas(Ts...) byte mem[std::max({ sizeof(Ts)... })];
+        alignas(Ts...) byte mem[std::max({ sizeof(Ts)... })] {};
 
-        template <typename T = std::tuple_element<0, std::tuple<Ts...>>::type>
+        template <typename T = std::tuple_element_t<0, std::tuple<Ts...>>>
         T* data()
         {
             return _asr(T*, std::addressof(this->mem));

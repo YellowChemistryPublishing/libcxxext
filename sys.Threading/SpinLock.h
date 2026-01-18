@@ -8,40 +8,38 @@ namespace sys
 
     class spin_lock
     {
-        std::atomic_flag locked = ATOMIC_FLAG_INIT;
+        std::atomic_flag locked;
     public:
-        inline void lock()
+        void lock()
         {
             while (locked.test_and_set(std::memory_order_acquire));
         }
-        inline bool tryLock()
+        bool tryLock()
         {
             return !locked.test_and_set(std::memory_order_acquire);
         }
-        inline void unlock()
+        void unlock()
         {
             locked.clear(std::memory_order_release);
         }
-
-        inline lock_guard guard();
     };
 
     struct lock_guard
     {
-        inline lock_guard(spin_lock& lock) : lock(lock)
+        explicit lock_guard(spin_lock& lock) : lock(lock)
         {
             this->lock.lock();
         }
-        inline ~lock_guard()
+        lock_guard(const lock_guard& other) = delete;
+        lock_guard(lock_guard&& other) = delete;
+        ~lock_guard()
         {
             this->lock.unlock();
         }
-    private:
-        spin_lock& lock;
-    };
 
-    lock_guard spin_lock::guard()
-    {
-        return lock_guard(*this);
-    }
+        lock_guard& operator=(const lock_guard& other) = delete;
+        lock_guard& operator=(lock_guard&& other) = delete;
+    private:
+        spin_lock& lock; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+    };
 } // namespace sys
