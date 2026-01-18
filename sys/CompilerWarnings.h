@@ -2,6 +2,8 @@
 
 #include <Platform.h>
 
+// NOLINTBEGIN(modernize-macro-to-enum)
+
 #define _clWarn_clang_bad_offsetof "-Winvalid-offsetof"
 #define _clWarn_clang_nontrivial_memcpy "-Wsuspicious-memaccess"
 #define _clWarn_clang_unused_param "-Wunused-parameter"
@@ -48,6 +50,7 @@
 #define _clWarn_msvc_nameless_struct_union 4201
 #define _clWarn_msvc_export_interface 4251
 #define _clWarn_msvc_overflow 4756
+#define _clWarn_msvc_deprecated 4996
 
 #define _push_nowarn_clang(compilerWarning)
 #define _push_nowarn_gcc(compilerWarning)
@@ -55,9 +58,6 @@
 #define _pop_nowarn_clang()
 #define _pop_nowarn_gcc()
 #define _pop_nowarn_msvc()
-
-#define _push_nowarn_conv_comp()
-#define _pop_nowarn_conv_comp()
 
 #define _clPragma_fwd(...) _Pragma(#__VA_ARGS__)
 
@@ -72,7 +72,6 @@
 #undef _pop_nowarn_clang
 #define _pop_nowarn_clang() _Pragma("clang diagnostic pop")
 
-#undef _push_nowarn_conv_comp
 #define _push_nowarn_conv_comp()                           \
     _push_nowarn_clang(_clWarn_clang_conversion);          \
     _push_nowarn_clang(_clWarn_clang_sign_conversion);     \
@@ -80,8 +79,6 @@
     _push_nowarn_clang(_clWarn_clang_double_promotion);    \
     _push_nowarn_clang(_clWarn_clang_sign_compare);        \
     _push_nowarn_clang(_clWarn_clang_int_float_conversion)
-
-#undef _pop_nowarn_conv_comp
 #define _pop_nowarn_conv_comp() \
     _pop_nowarn_clang();        \
     _pop_nowarn_clang();        \
@@ -90,10 +87,10 @@
     _pop_nowarn_clang();        \
     _pop_nowarn_clang()
 
-#undef _push_nowarn_c_cast
-#define _push_nowarn_c_cast() _push_nowarn_clang(_clWarn_clang_c_cast)
+#define _push_nowarn_deprecated() _push_nowarn_clang(_clWarn_clang_deprecated)
+#define _pop_nowarn_deprecated() _pop_nowarn_clang()
 
-#undef _pop_nowarn_c_cast
+#define _push_nowarn_c_cast() _push_nowarn_clang(_clWarn_clang_c_cast)
 #define _pop_nowarn_c_cast() _push_nowarn_clang(_clWarn_clang_c_cast)
 
 #elif _libcxxext_compiler_gcc
@@ -106,15 +103,12 @@
 #undef _pop_nowarn_gcc
 #define _pop_nowarn_gcc() _Pragma("GCC diagnostic pop")
 
-#undef _push_nowarn_conv_comp
 #define _push_nowarn_conv_comp()                    \
     _push_nowarn_gcc(_clWarn_gcc_conversion);       \
     _push_nowarn_gcc(_clWarn_gcc_sign_conversion);  \
     _push_nowarn_gcc(_clWarn_gcc_float_conversion); \
     _push_nowarn_gcc(_clWarn_gcc_double_promotion); \
     _push_nowarn_gcc(_clWarn_gcc_sign_compare)
-
-#undef _pop_nowarn_conv_comp
 #define _pop_nowarn_conv_comp() \
     _pop_nowarn_gcc();          \
     _pop_nowarn_gcc();          \
@@ -122,10 +116,10 @@
     _pop_nowarn_gcc();          \
     _pop_nowarn_gcc()
 
-#undef _push_nowarn_c_cast
-#define _push_nowarn_c_cast() _push_nowarn_gcc(_clWarn_gcc_c_cast)
+#define _push_nowarn_deprecated() _push_nowarn_gcc(_clWarn_gcc_deprecated)
+#define _pop_nowarn_deprecated() _pop_nowarn_gcc()
 
-#undef _pop_nowarn_c_cast
+#define _push_nowarn_c_cast() _push_nowarn_gcc(_clWarn_gcc_c_cast)
 #define _pop_nowarn_c_cast() _push_nowarn_gcc(_clWarn_gcc_c_cast)
 
 #elif _libcxxext_compiler_msvc
@@ -138,16 +132,15 @@
 #undef _pop_nowarn_msvc
 #define _pop_nowarn_msvc() _Pragma("warning(pop)")
 
-#undef _push_nowarn_conv_comp
 #define _push_nowarn_conv_comp() _push_nowarn_msvc(_clWarn_msvc_overflow)
-
-#undef _pop_nowarn_conv_comp
 #define _pop_nowarn_conv_comp() _pop_nowarn_msvc()
 
-#undef _push_nowarn_c_cast
-#define _push_nowarn_c_cast()
+#define _push_nowarn_deprecated() _push_nowarn_msvc(_clWarn_msvc_deprecated)
+#define _pop_nowarn_deprecated() _pop_nowarn_msvc()
 
-#undef _pop_nowarn_c_cast
+#define _push_nowarn_c_cast()
 #define _pop_nowarn_c_cast()
 
 #endif
+
+// NOLINTEND(modernize-macro-to-enum)

@@ -1,0 +1,102 @@
+{
+    "checks": [
+        {
+            "name": "check:conf",
+            "script": "workflows/conf.py",
+            "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
+        },
+        {
+            "name": "check:build",
+            "script": "workflows/build.py",
+            "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
+        },
+        {
+            "name": "check:test",
+            "script": "workflows/test.py",
+            "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
+        },
+        {
+            "name": "check:tidy",
+            "script": "workflows/tidy.py",
+            "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
+        },
+        {
+            "name": "check:coverage",
+            "script": "workflows/coverage.py",
+            "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|sys|sys\\.Containers|sys\\.Threading)/"]
+        },
+        {
+            "name": "check:format",
+            "script": "workflows/format.py",
+            "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/)).*\\.(h|cpp)$"]
+        },
+        {
+            "name": "check:docgen",
+            "script": "workflows/docgen.py",
+            "with": ["-p=${run_on}"]
+        }
+    ],
+    "on_push": [
+        {
+            "checkset": "x86_64-linux-clang",
+            "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
+            "stages": [["check:conf"], ["check:build", "check:tidy"], ["check:test"], ["check:coverage"]]
+        },
+        {
+            "checkset": "x86_64-linux-gcc",
+            "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "gen": "Unix Makefiles" },
+            "stages": [["check:conf"], ["check:build", "check:tidy"], ["check:test"], ["check:coverage"]]
+        },
+        {
+            "checkset": "i686-linux-clang",
+            "with": { "run_on": "linux", "target_arch": "i686", "compiler_name": "clang", "gen": "Ninja" },
+            "stages": [["check:conf"], ["check:build", "check:tidy"]]
+        },
+        {
+            "checkset": "i686-linux-gcc",
+            "with": { "run_on": "linux", "target_arch": "i686", "compiler_name": "gcc", "gen": "Unix Makefiles" },
+            "stages": [["check:conf"], ["check:build", "check:tidy"]]
+        },
+        {
+            "checkset": "x86_64-msysclang64-clang",
+            "with": { "run_on": "msysclang64", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
+            "stages": [["check:conf"], ["check:build", "check:tidy"], ["check:test"], ["check:coverage"]]
+        },
+        {
+            "checkset": "x86_64-msys64-gcc",
+            "with": {
+                "run_on": "msys64",
+                "target_arch": "x86_64",
+                "compiler_name": "gcc",
+                "gen": "MinGW Makefiles"
+            },
+            "stages": [["check:conf"], ["check:build", "check:tidy"], ["check:test"], ["check:coverage"]]
+        },
+        {
+            "checkset": "x86_64-win32-msvc",
+            "with": {
+                "run_on": "win32",
+                "target_arch": "x86_64",
+                "compiler_name": "msvc",
+                "gen": "Visual Studio 17 2022"
+            },
+            "stages": [["check:conf"], ["check:build"], ["check:test", "check:tidy"]]
+        },
+        {
+            "checkset": "i686-win32-msvc",
+            "with": {
+                "run_on": "win32",
+                "target_arch": "i686",
+                "compiler_name": "msvc",
+                "gen": "Visual Studio 17 2022"
+            },
+            "stages": [["check:conf"], ["check:build"], ["check:test", "check:tidy"]]
+        },
+        {
+            "checkset": "generic-tools",
+            "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
+            "stages": [["check:format"], ["check:docgen"]]
+        }
+    ],
+    "on_commit": []
+}

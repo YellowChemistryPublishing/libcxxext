@@ -98,6 +98,8 @@
 #define _libcxxext_os_vxworks 0
 #define _libcxxext_os_windows 0
 
+// NOLINTBEGIN(readability-use-concise-preprocessor-directives)
+
 #if defined(_AIX)
 #undef _libcxxext_os_aix
 #define _libcxxext_os_aix 1
@@ -169,3 +171,5 @@
 #undef _libcxxext_os_unknown
 #define _libcxxext_os_unknown 1
 #endif
+
+// NOLINTEND(readability-use-concise-preprocessor-directives)

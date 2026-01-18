@@ -1,6 +1,10 @@
 #pragma once
 
-#ifndef _MSC_VER
+#include <Platform.h>
+
+#include <cstddef>
+#include <cstdio>
+#if _libcxxext_compiler_gcc
 #include <cxxabi.h>
 #endif
 #include <exception>
@@ -8,7 +12,6 @@
 #include <print>
 #include <utility>
 
-#include <CompilerWarnings.h>
 #include <LanguageSupport.h>
 
 namespace sys
@@ -21,7 +24,7 @@ namespace sys
     {
         /// @brief What went wrong.
         /// @return The reason for the exception.
-        constexpr virtual const char* what() const noexcept override = 0;
+        [[nodiscard]] constexpr const char* what() const noexcept override = 0;
     };
     /// @brief Thrown when an `fenced_pointer<T>` is dereferenced, addition-assigned, subtraction-assigned, incremented, or decremented when `nullptr`.
     /// @note Pass `byref`.
@@ -29,7 +32,7 @@ namespace sys
     {
         /// @brief What went wrong.
         /// @return Literal string.
-        constexpr const char* what() const noexcept override
+        [[nodiscard]] constexpr const char* what() const noexcept override
         {
             return "Attempted to access, increment, or decrement a null pointer.";
         }
@@ -42,20 +45,23 @@ namespace sys
     struct fenced_pointer
     {
         /// @brief Construct `fenced_pointer<T>` with the value `nullptr`.
-        inline fenced_pointer() noexcept = default;
+        fenced_pointer() noexcept = default;
         /// @brief Construct `fenced_pointer<T>` with a value.
         /// @param value The value to assign to the pointer.
-        inline fenced_pointer(T* value) noexcept : value(value)
+        fenced_pointer(T* value) noexcept : value(value) // NOLINT(hicpp-explicit-conversions)
         { }
         /// @brief Copy constructor.
         /// @param other The other `fenced_pointer<T>` to copy.
-        inline fenced_pointer(const fenced_pointer& other) noexcept : value(other.value)
+        fenced_pointer(const fenced_pointer& other) noexcept : value(other.value)
         { }
+        fenced_pointer(fenced_pointer&& other) noexcept : value(other.value)
+        { }
+        ~fenced_pointer() = default;
 
         /// @brief Assignment operator.
         /// @param value The value to assign to the pointer.
         /// @return Reference to `*this`.
-        inline fenced_pointer& operator=(T* value) noexcept
+        fenced_pointer& operator=(T* value) noexcept
         {
             this->value = value;
             return *this;
@@ -63,35 +69,32 @@ namespace sys
         /// @brief Copy assignment operator.
         /// @param other The other `fenced_pointer<T>` to copy.
         /// @return Reference to `*this`.
-        inline fenced_pointer& operator=(const fenced_pointer& other) noexcept
-        {
-            this->value = other.value;
-            return *this;
-        }
+        fenced_pointer& operator=(const fenced_pointer&) noexcept = default;
+        fenced_pointer& operator=(fenced_pointer&& other) noexcept = default;
 
         /// @brief Obtain the pointer value, without fencing it against `nullptr`.
         /// @return The underlying pointer value.
         /// @note This function is marked unchecked because it will not throw if `this->value == nullptr`.
-        inline T* unchecked() const noexcept
+        T* unchecked() const noexcept
         {
             return this->value;
         }
         /// @brief Obtain the pointer value, throwing if `nullptr`.
         /// @return The underlying pointer value.
-        [[nodiscard]] inline T& operator*() const
+        [[nodiscard]] T& operator*() const
         {
             return *this->obtain_or_throw();
         }
         /// @brief Obtain the pointer value, throwing if `nullptr`.
         /// @return The underlying pointer value.
-        [[nodiscard]] inline T* operator->() const
+        [[nodiscard]] T* operator->() const
         {
             return this->obtain_or_throw();
         }
         /// @brief Obtain value at index, throwing if `nullptr`.
         /// @param index The index to access.
         /// @return The value at the index.
-        [[nodiscard]] inline T& operator[](std::size_t index) const
+        [[nodiscard]] T& operator[](std::size_t index) const
         {
             return this->obtain_or_throw()[index];
         }
@@ -99,71 +102,71 @@ namespace sys
         /// @brief Spaceship operator.
         /// @param other The other `fenced_pointer<T>` to compare against.
         /// @return The comparison result.
-        inline auto operator<=>(const fenced_pointer& other) const noexcept = default;
+        auto operator<=>(const fenced_pointer& other) const noexcept = default;
 
         /// @brief Prefix increment operator.
         /// @return Reference to `*this`.
-        inline fenced_pointer& operator++() noexcept
+        fenced_pointer& operator++()
         {
             if (!this->value) [[unlikely]]
                 _throw(null_pointer_exception());
-            ++this->value;
+            ++this->value; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
             return *this;
         }
         /// @brief Prefix decrement operator.
         /// @return Reference to `*this`.
-        inline fenced_pointer& operator--() noexcept
+        fenced_pointer& operator--()
         {
             if (!this->value) [[unlikely]]
                 _throw(null_pointer_exception());
-            --this->value;
+            --this->value; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
             return *this;
         }
         /// @brief Postfix increment operator.
         /// @return The value before incrementing.
-        inline fenced_pointer operator++(int) noexcept
+        fenced_pointer operator++(int)
         {
             if (!this->value) [[unlikely]]
                 _throw(null_pointer_exception());
             fenced_pointer ret = *this;
-            ++this->value;
+            ++this->value; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
             return ret;
         }
         /// @brief Postfix decrement operator.
         /// @return The value before decrementing.
-        inline fenced_pointer operator--(int) noexcept
+        fenced_pointer operator--(int)
         {
             if (!this->value) [[unlikely]]
                 _throw(null_pointer_exception());
             fenced_pointer ret = *this;
-            --this->value;
+            --this->value; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
             return ret;
         }
         /// @brief Addition operator.
         /// @param offset The offset to add.
         /// @return The pointer with the offset added.
-        inline fenced_pointer operator+(ptrdiff_t offset) const noexcept
+        fenced_pointer operator+(ptrdiff_t offset) const noexcept
         {
             return fenced_pointer { this->value + offset };
         }
         /// @brief Subtraction operator.
         /// @param offset The offset to subtract.
         /// @return The pointer with the offset subtracted.
-        inline fenced_pointer operator-(ptrdiff_t offset) const noexcept
+        fenced_pointer operator-(ptrdiff_t offset) const noexcept
         {
             return fenced_pointer { this->value - offset };
         }
         /// @brief Addition operator.
         /// @param offset The offset to add.
         /// @return The pointer with the offset added.
-        inline ptrdiff_t operator-(const fenced_pointer& other) const noexcept
+        ptrdiff_t operator-(const fenced_pointer& other) const noexcept
         {
             return this->value - other.value;
         }
         /// @brief Addition assignment operator.
         /// @param offset The offset to add.
         /// @return Reference to `*this`.
-        inline fenced_pointer& operator+=(ptrdiff_t offset) noexcept
+        fenced_pointer& operator+=(ptrdiff_t offset)
         {
             if (!this->value) [[unlikely]]
                 _throw(null_pointer_exception());
@@ -173,7 +176,7 @@ namespace sys
         /// @brief Subtraction assignment operator.
         /// @param offset The offset to subtract.
         /// @return Reference to `*this`.
-        inline fenced_pointer& operator-=(ptrdiff_t offset) noexcept
+        fenced_pointer& operator-=(ptrdiff_t offset)
         {
             if (!this->value) [[unlikely]]
                 _throw(null_pointer_exception());
@@ -185,7 +188,7 @@ namespace sys
 
         /// @brief Obtain the pointer value, throwing if `nullptr`.
         /// @return The underlying pointer value.
-        [[nodiscard]] inline T* obtain_or_throw() const
+        [[nodiscard]] T* obtain_or_throw() const
         {
             if (!this->value) [[unlikely]]
                 _throw(null_pointer_exception());
@@ -193,16 +196,15 @@ namespace sys
         }
     };
 
-#if !defined(__clang__) && defined(__GNUC__)
+#if _libcxxext_compiler_gcc
     inline std::unique_ptr<char, void (*)(void*)> exception_type_name(std::exception_ptr ex)
     {
-        return std::unique_ptr<char, void (*)(void*)>(abi::__cxa_demangle(ex.__cxa_exception_type()->name() /* Contract implied: `name != nullptr`. */, NULL, NULL, NULL),
-                                                      std::free);
+        return { abi::__cxa_demangle(ex.__cxa_exception_type()->name() /* Contract implied: `name != nullptr`. */, NULL, NULL, NULL), std::free };
     }
 #else
     inline std::unique_ptr<const char, void (*)(const void*)> exception_type_name([[maybe_unused]] std::exception_ptr ex)
     {
-        return std::unique_ptr<const char, void (*)(const void* const)>("<unknown>", [](const void* const) { });
+        return { "<unknown>", [](const void* const) { } };
     }
 #endif
 
@@ -211,14 +213,14 @@ namespace sys
     struct terminate_exception : public managed_exception
     {
         /// @brief On construction, terminate the program.
-        inline terminate_exception() noexcept
+        terminate_exception() noexcept
         {
             std::terminate();
         }
 
         /// @brief Never called.
-        /// @return [[noreturn]]
-        [[noreturn]] inline const char* what() const noexcept override
+        /// @return `[[noreturn]]`
+        [[noreturn]] const char* what() const noexcept override
         {
             std::unreachable();
         }
@@ -232,14 +234,14 @@ namespace sys
         /// @brief Construct the exception with a reason, which is logged on construction.
         /// @param why The reason the contract was violated.
         template <size_t N>
-        inline contract_violation_exception(const char (&why)[N]) noexcept : why(why)
+        contract_violation_exception(const char (&why)[N]) noexcept : why(why) // NOLINT(hicpp-explicit-conversions)
         {
             std::println(stderr, "Note: {}", why);
         }
 
         /// @brief What went wrong.
         /// @return The reason a contract was violated.
-        inline const char* what() const noexcept override
+        [[nodiscard]] const char* what() const noexcept override
         {
             return this->why;
         }

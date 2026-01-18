@@ -1,6 +1,6 @@
 include(${CMAKE_SOURCE_DIR}/cmake/catch2.cmake)
 
-file(GLOB TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/**/*.cpp")
+file(GLOB_RECURSE TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 foreach(TEST_FILE ${TESTS})
     get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
@@ -8,6 +8,6 @@ foreach(TEST_FILE ${TESTS})
     target_link_libraries(test_${TEST_NAME} PRIVATE rapidcheck)
 
     if(LIBCXXEXT_DEVELOPMENT_MODE)
-        target_lint_clang_tidy(test_${TEST_NAME} "-header-filter=\"${CMAKE_CURRENT_SOURCE_DIR}/.*\"")
+        target_lint_clang_tidy(test_${TEST_NAME} "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/.*\"")
     endif()
 endforeach()

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cstddef>
+#include <utility>
+
 namespace sys
 {
     template <typename T, size_t Capacity>
@@ -9,18 +12,18 @@ namespace sys
         T data[Capacity];
         size_t _size = 0;
     public:
-        inline InplaceSet() = default;
+        InplaceSet() = default;
 
-        inline size_t size() const
+        [[nodiscard]] size_t size() const
         {
             return this->_size;
         }
-        consteval static size_t capacity()
+        [[nodiscard]] consteval static size_t capacity()
         {
             return Capacity;
         }
 
-        inline bool tryInsert(T value)
+        bool tryInsert(T value)
         {
             if (this->_size == Capacity) [[unlikely]]
                 return false;
@@ -28,7 +31,7 @@ namespace sys
             this->data[this->_size++] = std::move(value);
             return true;
         }
-        inline bool tryErase(T value)
+        bool tryErase(T value)
         {
             for (size_t i = 0; i < this->_size; i++)
             {
@@ -40,7 +43,7 @@ namespace sys
             }
             return false;
         }
-        inline bool contains(T value)
+        bool contains(T value)
         {
             for (size_t i = 0; i < this->_size; i++)
             {
