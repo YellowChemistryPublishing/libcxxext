@@ -63,14 +63,14 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
                         "install",
                         "-y",
                         "libc6-dev-i386",
-                        "libstdc++-13-dev",
-                        "gcc-13-multilib",
-                        "g++-13-multilib",
+                        "libstdc++-14-dev",
+                        "gcc-14-multilib",
+                        "g++-14-multilib",
                     ]
                 )
 
-                exec_or_fail(["gcc-13", "--version"])
-                exec_or_fail(["g++-13", "--version"])
+                exec_or_fail(["gcc-14", "--version"])
+                exec_or_fail(["g++-14", "--version"])
 
         elif cl_name == "gcc":
             exec_or_fail(
@@ -81,13 +81,13 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
                     "DPkg::Lock::Timeout=60",
                     "install",
                     "-y",
-                    "gcc-13-multilib",
-                    "g++-13-multilib",
+                    "gcc-14-multilib",
+                    "g++-14-multilib",
                 ]
             )
 
-            exec_or_fail(["gcc-13", "--version"])
-            exec_or_fail(["g++-13", "--version"])
+            exec_or_fail(["gcc-14", "--version"])
+            exec_or_fail(["g++-14", "--version"])
 
         else:
             lassert_unsupported_bconf()
@@ -135,7 +135,7 @@ def cmd_cc(host_platform: str, cl_name: str) -> List[str]:
         if cl_name == "clang":
             return ["clang-19"]
         elif cl_name == "gcc":
-            return ["gcc-13"]
+            return ["gcc-14"]
     elif "msys" in host_platform:
         if cl_name == "clang":
             return ["clang"]
@@ -150,7 +150,7 @@ def cmd_cxx(host_platform: str, cl_name: str) -> List[str]:
         if cl_name == "clang":
             return ["clang++-19"]
         elif cl_name == "gcc":
-            return ["g++-13"]
+            return ["g++-14"]
     elif "msys" in host_platform:
         if cl_name == "clang":
             return ["clang++"]
