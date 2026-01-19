@@ -1,29 +1,28 @@
-import os
-import sys
 import urllib.request
 from typing import List
 
-if len(sys.path) < 2 or not sys.path[1].endswith(".."):
-    sys.path.insert(1, os.path.join(sys.path[0], ".."))
-
+import lib.config as config
 from lib.exec import (
     exec_or_fail,
     find_command,
     has_stamp,
     stamp_id,
 )
-from lib.log import lcheck_failed, lprint
+from lib.log import lassert_unsupported_bconf, lcheck_failed, lprint
 
 
-def install(host_platform: str) -> None:
+def install(*, host_platform: str) -> None:
     if has_stamp("tool_clang_format"):
         return
 
-    urllib.request.urlretrieve(
-        "https://apt.llvm.org/llvm.sh", "./tooling-build/llvm.sh"
-    )
-    exec_or_fail(["chmod", "+x", "./tooling-build/llvm.sh"])
-    exec_or_fail(["sudo", "./tooling-build/llvm.sh", "19"])
+    if host_platform != "linux":
+        lassert_unsupported_bconf()
+
+    llvm_sh_url = "https://apt.llvm.org/llvm.sh"
+    llvm_sh_relp = f"./{config.tools_reldir}/llvm.sh"
+    urllib.request.urlretrieve(llvm_sh_url, llvm_sh_relp)
+    exec_or_fail(["chmod", "+x", llvm_sh_relp])
+    exec_or_fail(["sudo", llvm_sh_relp, "19"])
     exec_or_fail(
         [
             "sudo",

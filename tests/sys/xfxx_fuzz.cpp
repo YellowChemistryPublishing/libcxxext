@@ -10,11 +10,11 @@ _push_nowarn_conv_comp();
 _pop_nowarn_conv_comp();
 _pop_nowarn_deprecated();
 
-#include <cxxsup.h>
+#include <module/sys>
 
 TEST_CASE("`i16` => lsb + msb => `i16` is an invariant. | `sys::s16fb2(...)`, `sys::hbfs16(...)`, `sys::lbfs16(...)`")
 {
-    rc::check("Validate recombination of high and low bytes.", [](const int16_t val) { CHECK(sys::s16fb2(sys::hbfs16(val), sys::lbfs16(val)) == val); });
+    rc::check("Validate recombination of high and low bytes.", [](const int16_t val) { CHECK(sys::s16fb2(sys::hbfs16(i16(val)), sys::lbfs16(i16(val))) == i16(val)); });
 }
 
 // NOLINTEND(misc-include-cleaner)

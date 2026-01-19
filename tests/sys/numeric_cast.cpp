@@ -4,7 +4,7 @@
 
 #include <catch2/catch_all.hpp>
 
-#include <cxxsup.h>
+#include <module/sys>
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Saturating casts work as expected. | `sys::numeric_cast(..., unsafe())`")

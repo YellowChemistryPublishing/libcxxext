@@ -7,23 +7,17 @@ namespace sys
 {
     template <typename T, size_t Capacity>
     requires (Capacity > 0)
-    class InplaceSet
+    class inplace_set
     {
         T data[Capacity];
         size_t _size = 0;
     public:
-        InplaceSet() = default;
+        inplace_set() = default;
 
-        [[nodiscard]] size_t size() const
-        {
-            return this->_size;
-        }
-        [[nodiscard]] consteval static size_t capacity()
-        {
-            return Capacity;
-        }
+        [[nodiscard]] size_t size() const { return this->_size; }
+        [[nodiscard]] consteval static size_t capacity() { return Capacity; }
 
-        bool tryInsert(T value)
+        bool try_insert(T value)
         {
             if (this->_size == Capacity) [[unlikely]]
                 return false;
@@ -31,7 +25,7 @@ namespace sys
             this->data[this->_size++] = std::move(value);
             return true;
         }
-        bool tryErase(T value)
+        bool try_erase(T value)
         {
             for (size_t i = 0; i < this->_size; i++)
             {

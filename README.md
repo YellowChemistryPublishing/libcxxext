@@ -15,11 +15,11 @@ This project provides some universal tooling for C++, for upstream consumption.
 
 CMake includes are under `cmake/`.
 
-| Script                |                                                                                       |
-| --------------------- | ------------------------------------------------------------------------------------- |
-| `build_support.cmake` | Linkable CMake utility targets.                                                       |
-| `catch2.cmake`        | Create unit and property-based / fuzz tests.                                          |
-| `clang_tidy.cmake`    | Check target sources with clang-tidy. Make sure your sources include headers as well! |
+| Script                |                                                                            |
+| --------------------- | -------------------------------------------------------------------------- |
+| `build_support.cmake` | Linkable CMake utility targets.                                            |
+| `catch2.cmake`        | Create unit and property-based / fuzz tests.                               |
+| `clang_tidy.cmake`    | Check target sources with clang-tidy. Don't forget to pass in headers too! |
 
 ### `libcxxext` Targets
 

@@ -2,9 +2,9 @@ name: Presubmit
 
 on:
     push:
-        branches: [main]
+        branches: ["**"]
     pull_request:
-        branches: [main]
+        branches: ["**"]
     workflow_dispatch:
 
 jobs:
@@ -23,6 +23,9 @@ jobs:
             fail-fast: false
             matrix:
                 include:
+                    - name: Tools
+                      os: ubuntu-latest
+                      checkset: generic-tools
                     - name: Linux [x86_64] (x86_64-gcc)
                       os: ubuntu-latest
                       checkset: x86_64-linux-gcc
@@ -51,9 +54,6 @@ jobs:
                     - name: Win32 [x86_64] (i686-msvc)
                       os: windows-latest
                       checkset: i686-win32-msvc
-                    - name: Tools
-                      os: ubuntu-latest
-                      checkset: generic-tools
         defaults:
             run:
                 shell: ${{ matrix.msystem && 'msys2 {0}' || 'bash' }}

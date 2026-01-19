@@ -1,66 +1,81 @@
 {
     "checks": [
         {
-            "name": "check:conf",
-            "script": "workflows/conf.py",
+            "name": "check:cppconf",
+            "script": "workflows/cppconf.py",
             "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
         },
         {
-            "name": "check:build",
-            "script": "workflows/build.py",
+            "name": "check:cppbuild",
+            "script": "workflows/cppbuild.py",
             "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
         },
         {
-            "name": "check:test",
-            "script": "workflows/test.py",
+            "name": "check:cpptest",
+            "script": "workflows/cpptest.py",
             "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
         },
         {
-            "name": "check:tidy",
-            "script": "workflows/tidy.py",
+            "name": "check:cpplint",
+            "script": "workflows/cpplint.py",
             "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
         },
         {
-            "name": "check:coverage",
-            "script": "workflows/coverage.py",
+            "name": "check:cppcov",
+            "script": "workflows/cppcov.py",
             "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|sys|sys\\.Containers|sys\\.Threading)/"]
         },
         {
-            "name": "check:format",
-            "script": "workflows/format.py",
+            "name": "check:cppfmt",
+            "script": "workflows/cppfmt.py",
             "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/)).*\\.(h|cpp)$"]
         },
-        {
-            "name": "check:docgen",
-            "script": "workflows/docgen.py",
-            "with": ["-p=${run_on}"]
-        }
+        { "name": "check:docgen", "script": "workflows/docgen.py", "with": ["-p=${run_on}"] },
+        { "name": "check:pylint", "script": "workflows/pylint.py", "with": ["-p=${run_on}", "-d=./workflows"] }
     ],
     "on_push": [
         {
             "checkset": "x86_64-linux-clang",
             "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
-            "stages": [["check:conf"], ["check:build", "check:tidy"], ["check:test"], ["check:coverage"]]
+            "chains": {
+                "check:cppconf": [],
+                "check:cppbuild": ["check:cppconf"],
+                "check:cpplint": ["check:cppconf"],
+                "check:cpptest": ["check:cppbuild"],
+                "check:cppcov": ["check:cpptest"]
+            }
         },
         {
             "checkset": "x86_64-linux-gcc",
             "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "gen": "Unix Makefiles" },
-            "stages": [["check:conf"], ["check:build", "check:tidy"], ["check:test"], ["check:coverage"]]
+            "chains": {
+                "check:cppconf": [],
+                "check:cppbuild": ["check:cppconf"],
+                "check:cpplint": ["check:cppconf"],
+                "check:cpptest": ["check:cppbuild"],
+                "check:cppcov": ["check:cpptest"]
+            }
         },
         {
             "checkset": "i686-linux-clang",
             "with": { "run_on": "linux", "target_arch": "i686", "compiler_name": "clang", "gen": "Ninja" },
-            "stages": [["check:conf"], ["check:build", "check:tidy"]]
+            "chains": { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"] }
         },
         {
             "checkset": "i686-linux-gcc",
             "with": { "run_on": "linux", "target_arch": "i686", "compiler_name": "gcc", "gen": "Unix Makefiles" },
-            "stages": [["check:conf"], ["check:build", "check:tidy"]]
+            "chains": { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"] }
         },
         {
             "checkset": "x86_64-msysclang64-clang",
             "with": { "run_on": "msysclang64", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
-            "stages": [["check:conf"], ["check:build", "check:tidy"], ["check:test"], ["check:coverage"]]
+            "chains": {
+                "check:cppconf": [],
+                "check:cppbuild": ["check:cppconf"],
+                "check:cpplint": ["check:cppconf"],
+                "check:cpptest": ["check:cppbuild"],
+                "check:cppcov": ["check:cpptest"]
+            }
         },
         {
             "checkset": "x86_64-msys64-gcc",
@@ -70,7 +85,13 @@
                 "compiler_name": "gcc",
                 "gen": "MinGW Makefiles"
             },
-            "stages": [["check:conf"], ["check:build", "check:tidy"], ["check:test"], ["check:coverage"]]
+            "chains": {
+                "check:cppconf": [],
+                "check:cppbuild": ["check:cppconf"],
+                "check:cpplint": ["check:cppconf"],
+                "check:cpptest": ["check:cppbuild"],
+                "check:cppcov": ["check:cpptest"]
+            }
         },
         {
             "checkset": "x86_64-win32-msvc",
@@ -80,7 +101,12 @@
                 "compiler_name": "msvc",
                 "gen": "Visual Studio 17 2022"
             },
-            "stages": [["check:conf"], ["check:build"], ["check:test", "check:tidy"]]
+            "chains": {
+                "check:cppconf": [],
+                "check:cppbuild": ["check:cppconf"],
+                "check:cpptest": ["check:cppbuild"],
+                "check:cpplint": ["check:cppbuild"]
+            }
         },
         {
             "checkset": "i686-win32-msvc",
@@ -90,12 +116,17 @@
                 "compiler_name": "msvc",
                 "gen": "Visual Studio 17 2022"
             },
-            "stages": [["check:conf"], ["check:build"], ["check:test", "check:tidy"]]
+            "chains": {
+                "check:cppconf": [],
+                "check:cppbuild": ["check:cppconf"],
+                "check:cpptest": ["check:cppbuild"],
+                "check:cpplint": ["check:cppbuild"]
+            }
         },
         {
             "checkset": "generic-tools",
             "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
-            "stages": [["check:format"], ["check:docgen"]]
+            "chains": { "check:cppfmt": [], "check:docgen": ["check:cppfmt"], "check:pylint": [] }
         }
     ],
     "on_commit": []

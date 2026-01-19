@@ -10,24 +10,25 @@ namespace sys
     /// @tparam Capacity Maximum number of values that can be stored.
     template <typename T, size_t Capacity>
     requires (Capacity > 0)
-    class InplaceAtomicSet
+    class inplace_atomic_set
     {
         std::atomic<T> data[Capacity];
     public:
         /// @brief Default constructor.
-        InplaceAtomicSet() = default;
+        inplace_atomic_set() = default;
         /// @brief Initialize all elements with the same value.
         /// @param init Value to set.
-        explicit InplaceAtomicSet(T init)
+        explicit inplace_atomic_set(T init)
         {
-            for (size_t i = 0; i < Capacity; i++) this->data[i].store(init);
+            for (size_t i = 0; i < Capacity; i++)
+                this->data[i].store(init);
         }
 
         /// @brief Exchange the value of the first element that matches the expected value.
         /// @param from Value to exchange with.
         /// @param to Value to exchange to.
         /// @return Whether an element was exchanged.
-        bool exchangeWeak(T from, T to)
+        bool exchange_weak(T from, T to)
         {
             for (size_t i = 0; i < Capacity; i++)
             {

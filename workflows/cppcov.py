@@ -1,21 +1,20 @@
-"""This is the primary workflow script for check:coverage."""
+"""This is the primary workflow script for check:cppcov."""
 
 desc = "Coverage reporter and report builder check for ctest'd CMake projects that produce gcov-style coverage data."
 
 import argparse
 import os
-import subprocess
 import sys
 from typing import List
 
 import lib.config as config
 import tools.gcovr as gcovr
-from lib.exec import mark_finding_ok
-from lib.log import lcheck_failed, lcheck_passed, lprint
+from lib.exec import exec_or_fail, mark_finding_ok
+from lib.log import lcheck_passed
 
 
 def main(argv: List[str]) -> None:
-    config.check_name = "check:coverage"
+    config.check_name = "check:cppcov"
 
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog=config.check_name,
@@ -95,17 +94,8 @@ def main(argv: List[str]) -> None:
         "--gcov-object-directory",
         args.build_dir_name,
     ]
-    result: subprocess.CompletedProcess = subprocess.run(
-        md_report_cmd,
-        capture_output=True,
-    )
-    if result.returncode != 0:
-        lprint(
-            f"Command `{' '.join([(f"'{c}'" if " " in c else c) for c in md_report_cmd])}` failed with exit code {result.returncode}."
-        )
-        lcheck_failed()
 
-    content: str = result.stdout.decode(encoding="utf-8", errors="ignore")
+    content, _ = exec_or_fail(md_report_cmd, capture_output=True)
     content = content.replace("# GCC Code Coverage Report\n\n", "").replace("##", "###")
     content = (
         f"Detailed coverage report uploaded at `{args.build_dir_name}/coverage/coverage_report.html`.\n\n"

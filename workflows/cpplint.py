@@ -1,7 +1,7 @@
-"""This is the primary workflow script for check:build."""
+"""This is the primary workflow script for check:cpplint."""
 
 desc = (
-    "Build check for CMake projects."
+    "Static analyzer check for CMake projects using `cmake/clang_tidy.cmake`."
     "@warning This check will `chdir` to the supplied src dir."
 )
 
@@ -12,44 +12,18 @@ from typing import List
 
 import lib.config as config
 import tools.cmake as cmake
-from lib.log import lassert_unsupported_bconf, lcheck_passed
-
-
-def additional_build_flags(gen: str, cl_name: str) -> List[str]:
-    if cl_name == "msvc" and "Visual Studio" in gen:
-        return [
-            "--target",
-            "ALL_BUILD",
-            "--config",
-            "Debug",
-            "--",
-            "/p:CL_MPCount=8",
-        ]
-    elif cl_name == "clang" or cl_name == "gcc":
-        return [
-            "--target",
-            "all",
-        ]
-    else:
-        lassert_unsupported_bconf()
+from lib.exec import exec_or_fail, mark_finding_ok
+from lib.log import lcheck_passed
 
 
 def main(argv: List[str]) -> None:
-    config.check_name = "check:build"
+    config.check_name = "check:cpplint"
 
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog=config.check_name,
         usage=f"python3 {os.path.basename(__file__)} [args]...",
         description=desc,
         epilog="We don't know what we're doing™.",
-    )
-    parser.add_argument(
-        "-m",
-        "--arch",
-        help="Target architecture.",
-        choices=config.support_archs,
-        metavar="",
-        required=True,
     )
     parser.add_argument(
         "-p",
@@ -66,9 +40,6 @@ def main(argv: List[str]) -> None:
         choices=config.support_compilers,
         metavar="",
         required=True,
-    )
-    parser.add_argument(
-        "-gen", "--use-generator", help="CMake generator name.", required=True
     )
     parser.add_argument(
         "-d", "--src-dir", help="Full src dir path.", metavar="", required=True
@@ -101,17 +72,22 @@ def main(argv: List[str]) -> None:
 
     os.chdir(args.src_dir)
 
-    cmake.run(
-        [
+    content, _ = exec_or_fail(
+        cmake.cmd()
+        + [
             "--build",
-            args.build_dir_name,
+            str(args.build_dir_name),
             "--parallel",
+            "--target",
+            "clang_tidy_all",
         ]
-        + additional_build_flags(gen=args.use_generator, cl_name=args.compiler)
         + (["--verbose"] if args.cmake_verbose else []),
-        host_platform=args.platform,
-        cl_name=args.compiler,
+        capture_output=True,
     )
+    log_path = f"{config.findings_reldir}/CppLint.log"
+    with open(log_path, "w") as f:
+        f.write(content)
+    mark_finding_ok(log_path)
 
     lcheck_passed()
 

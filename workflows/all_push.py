@@ -10,20 +10,49 @@ import json
 import os
 import shutil
 import sys
-import threading
-import time
-from typing import Any, List
-from pathlib import Path
+from concurrent.futures import Future, ThreadPoolExecutor, as_completed
+from typing import Any
 
 import lib.config as config
 from lib.exec import exec_or_fail, mark_finding_ok, str_key_replace
 from lib.log import lcheck_failed, lcheck_passed, lprint
 
 
-def main(argv: List[str]) -> None:
+def run_check(
+    check_name: str,
+    check: dict[str, Any],
+    key_replace_dict: dict[str, str],
+    workdir: str,
+    verbose: bool,
+    suppress: bool,
+) -> None:
+    check_script = str_key_replace(
+        check.get("script", "[Missing script, this will fail!]"), key_replace_dict
+    )
+    check_args = [
+        str_key_replace(arg, key_replace_dict) for arg in check.get("with", [])
+    ]
+    lprint(f"Running {check_name}.")
+
+    def on_fail() -> None:
+        raise Exception(f"Note: \x1b[31;3mFailed\x1b[0m \x1b[1;3m{check_name}.\x1b[0m")
+
+    exec_or_fail(
+        [
+            sys.executable,
+            f"{workdir}/{check_script}",
+            *(((["-v"] if verbose else []))),
+            *(((["-s"] if suppress else []))),
+            *check_args,
+        ],
+        on_fail=on_fail,
+    )
+
+
+def main(argv: list[str]) -> None:
     config.check_name = "job:all_push"
 
-    parser: argparse.ArgumentParser = argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(
         prog=config.check_name,
         usage=f"python3 {os.path.basename(__file__)} [args]...",
         description=desc,
@@ -47,10 +76,7 @@ def main(argv: List[str]) -> None:
         default="./checks.json",
     )
     parser.add_argument(
-        "-v",
-        "--verbose",
-        help="Extra logging messages to stdout.",
-        action="store_true",
+        "-v", "--verbose", help="Extra logging messages to stdout.", action="store_true"
     )
     parser.add_argument(
         "-s",
@@ -58,28 +84,22 @@ def main(argv: List[str]) -> None:
         help="Silence tool invocation output except on failure.",
         action="store_true",
     )
-    args: argparse.Namespace = parser.parse_args()
+    args = parser.parse_args()
 
     config.is_verbose = args.verbose
-
     os.chdir(args.workdir)
+    os.makedirs(config.findings_reldir, exist_ok=True)
 
     os.makedirs(os.path.dirname(config.lprint_templog_relp), exist_ok=True)
     with open(config.lprint_templog_relp, "w", encoding="utf-8"):
         pass
 
-    has_failing_check: bool = False
-
     with open(f"{args.workdir}/{args.config_path}", "r", encoding="utf-8") as f:
-        checks_config: dict[str, Any] = json.load(f)
+        checks_config = json.load(f)
+        checks = {check["name"]: check for check in checks_config.get("checks", [])}
 
-        checks: dict[str, dict[str, Any]] = {}
-        for check in checks_config.get("checks", []):
-            checks[check.get("name")] = check
-
-        stage_index: int = 0
         for workflow in checks_config.get("on_push", []):
-            key_replace_dict: dict[str, str] = workflow.get("with", {})
+            key_replace_dict = workflow.get("with", {})
 
             if (
                 str_key_replace(workflow.get("checkset"), key_replace_dict)
@@ -87,93 +107,87 @@ def main(argv: List[str]) -> None:
             ):
                 continue
 
-            for stage in workflow.get("stages", []):
-                lprint(f"\x1b[47;30mRunning stage {stage_index}...\x1b[0m")
+            chains = workflow.get("chains", {})
+            checks_and_deps = {
+                str_key_replace(name, key_replace_dict): [
+                    str_key_replace(dep, key_replace_dict) for dep in deps
+                ]
+                for name, deps in chains.items()
+            }
 
-                def check_runner(
-                    check: dict[str, Any], exec_results: List[Any], index: int
-                ) -> Any:
-                    try:
-                        check_script: str = str_key_replace(
-                            check.get("script", "[Missing script, this will fail!]"),
-                            key_replace_dict,
-                        )
-                        check_with: List[str] = list(
-                            map(
-                                lambda s: str_key_replace(s, key_replace_dict),
-                                check.get("with", []),
+            completed: set[str] = set()
+            failed: set[str] = set()
+
+            def is_ready(check_name: str) -> bool:
+                if check_name in completed | failed:
+                    return False
+                deps = checks_and_deps[check_name]
+                return all(dep in completed for dep in deps) and not any(
+                    dep in failed for dep in deps
+                )
+
+            pending_futures: dict[str, Future[None]] = {}
+
+            with ThreadPoolExecutor() as executor:
+                while len(completed) + len(failed) < len(checks_and_deps):
+                    for check_name in checks_and_deps:
+                        if is_ready(check_name) and check_name not in pending_futures:
+                            future = executor.submit(
+                                run_check,
+                                check_name,
+                                checks[check_name],
+                                key_replace_dict,
+                                args.workdir,
+                                args.verbose,
+                                args.suppress,
                             )
+                            pending_futures[check_name] = future
+
+                    if not pending_futures:
+                        break
+
+                    done_futures = set()
+                    for future in as_completed(pending_futures.values()):
+                        done_futures.add(future)
+                        break
+
+                    for future in done_futures:
+                        check_name = next(
+                            name for name, f in pending_futures.items() if f == future
                         )
+                        del pending_futures[check_name]
 
-                        lprint(f"Running check:{Path(check_script).stem}.")
+                        try:
+                            future.result()
+                            completed.add(check_name)
+                        except Exception as e:
+                            failed.add(check_name)
+                            lprint(str(e))
 
-                        def on_fail() -> None:
-                            raise Exception(
-                                f"Note: \x1b[31;3mFailed\x1b[0m \x1b[1;3mcheck:{Path(check_script).stem}.\x1b[0m"
-                            )
+            skipped = set(checks_and_deps.keys()) - completed - failed
+            if skipped:
+                lprint(
+                    f"\x1b[33;1mSkipped {len(skipped)} check(s) due to failed dependencies.\x1b[0m"
+                )
+                for check_name in sorted(skipped):
+                    lprint(f"  - {check_name}")
 
-                        exec_or_fail(
-                            [
-                                "python3",
-                                f"{args.workdir}/{check_script}",
-                            ]
-                            + (["-v"] if args.verbose else [])
-                            + (["-s"] if args.suppress else [])
-                            + check_with,
-                            on_fail,
-                        )
-                    except Exception as e:
-                        exec_results[index] = e
+            has_failures = len(failed) > 0
+            break
 
-                exec_results: List[Any] = [None] * len(stage)
-
-                thread_pool: List[threading.Thread] = []
-                for i, check_name in enumerate(stage):
-                    check_name = str_key_replace(check_name, key_replace_dict)
-                    thread_pool.append(
-                        threading.Thread(
-                            target=check_runner,
-                            args=(checks[check_name], exec_results, i),
-                        )
-                    )
-                    thread_pool[-1].start()
-
-                while len(thread_pool) > 0:
-                    for thread in thread_pool:
-                        if not thread.is_alive():
-                            thread_pool.remove(thread)
-                    time.sleep(0.1)
-
-                is_failed: bool = False
-                for result in exec_results:
-                    if result is not None:
-                        is_failed = True
-                        lprint(str(result))
-                if is_failed:
-                    lprint(
-                        f"\x1b[33;1mSome checks in stage {stage_index} failed.\x1b[0m"
-                    )
-                    has_failing_check = True
-
-                stage_index += 1
-
-        if stage_index == 0:
+        else:
             lprint(
                 "No `on_push` workflows. It would be unproductive for this to be intentional."
             )
             lcheck_failed()
 
-    os.makedirs(config.findings_reldir, exist_ok=True)
-    shutil.move(
-        config.lprint_templog_relp,
-        f"{config.findings_reldir}/ChecksetWorkflowOutput.log",
-    )
+    log_path = f"{config.findings_reldir}/ChecksetWorkflowOutput.log"
+    shutil.move(config.lprint_templog_relp, log_path)
 
-    if not has_failing_check:
-        mark_finding_ok(f"{config.findings_reldir}/ChecksetWorkflowOutput.log")
-    else:
+    if has_failures:
         lcheck_failed()
 
+    mark_finding_ok(log_path)
     lcheck_passed()
 
 
