@@ -69,7 +69,7 @@ def install(host_platform: str, cl_name: str) -> None:
 def cmd() -> List[str]:
     return [
         find_command(
-            ["clang-tidy"] + [f"clang-tidy-{ver}" for ver in range(25, 19, -1)]
+            ["clang-tidy"] + [f"clang-tidy-{ver}" for ver in range(25, 18, -1)]
         )
     ]
 

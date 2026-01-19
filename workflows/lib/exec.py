@@ -23,13 +23,13 @@ def find_command(candidates: List[str]) -> str:
 
     for cmd in candidates:
         try:
-            subprocess.run([cmd], capture_output=True, timeout=5)
+            subprocess.run([cmd], capture_output=True, timeout=1)
             return cmd
         except subprocess.TimeoutExpired:
             return cmd
         except FileNotFoundError:
             pass
-    return None
+    return "[`find_command` couldn't find any candidates!]"
 
 
 def stamp_id(id: str) -> None:

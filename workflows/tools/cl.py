@@ -1,4 +1,3 @@
-from lib.log import lcheck_failed
 import os
 import sys
 import urllib.request
@@ -8,7 +7,13 @@ from typing import List
 if len(sys.path) < 2 or not sys.path[1].endswith(".."):
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-from lib.exec import exec_or_fail, exec_pkgmgr_cache_update, has_stamp, stamp_id
+from lib.exec import (
+    exec_or_fail,
+    exec_pkgmgr_cache_update,
+    find_command,
+    has_stamp,
+    stamp_id,
+)
 from lib.log import lassert_unsupported_bconf, lcheck_failed
 
 
@@ -32,7 +37,7 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
                     if i == 9:
                         lcheck_failed()
 
-                exec_or_fail(["sudo", "./tooling-build/llvm.sh", "21"], on_fail=on_fail)
+                exec_or_fail(["sudo", "./tooling-build/llvm.sh", "19"], on_fail=on_fail)
                 time.sleep(1)
 
             exec_or_fail(
@@ -43,12 +48,12 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
                     "DPkg::Lock::Timeout=60",
                     "install",
                     "-y",
-                    "clang-21",
+                    "clang-19",
                 ]
             )
 
-            exec_or_fail(["clang-21", "--version"])
-            exec_or_fail(["clang++-21", "--version"])
+            exec_or_fail(["clang-19", "--version"])
+            exec_or_fail(["clang++-19", "--version"])
 
             if target_arch == "i686":
                 exec_or_fail(
@@ -58,14 +63,14 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
                         "install",
                         "-y",
                         "libc6-dev-i386",
-                        "libstdc++-13-dev",
-                        "gcc-13-multilib",
-                        "g++-13-multilib",
+                        "libstdc++-14-dev",
+                        "gcc-14-multilib",
+                        "g++-14-multilib",
                     ]
                 )
 
-                exec_or_fail(["gcc-13", "--version"])
-                exec_or_fail(["g++-13", "--version"])
+                exec_or_fail(["gcc-14", "--version"])
+                exec_or_fail(["g++-14", "--version"])
 
         elif cl_name == "gcc":
             exec_or_fail(
@@ -76,13 +81,13 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
                     "DPkg::Lock::Timeout=60",
                     "install",
                     "-y",
-                    "gcc-13-multilib",
-                    "g++-13-multilib",
+                    "gcc-14-multilib",
+                    "g++-14-multilib",
                 ]
             )
 
-            exec_or_fail(["gcc-13", "--version"])
-            exec_or_fail(["g++-13", "--version"])
+            exec_or_fail(["gcc-14", "--version"])
+            exec_or_fail(["g++-14", "--version"])
 
         else:
             lassert_unsupported_bconf()
@@ -128,9 +133,9 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
 def cmd_cc(host_platform: str, cl_name: str) -> List[str]:
     if host_platform == "linux":
         if cl_name == "clang":
-            return ["clang-21"]
+            return ["clang-19"]
         elif cl_name == "gcc":
-            return ["gcc-13"]
+            return ["gcc-14"]
     elif "msys" in host_platform:
         if cl_name == "clang":
             return ["clang"]
@@ -143,13 +148,27 @@ def cmd_cc(host_platform: str, cl_name: str) -> List[str]:
 def cmd_cxx(host_platform: str, cl_name: str) -> List[str]:
     if host_platform == "linux":
         if cl_name == "clang":
-            return ["clang++-21"]
+            return ["clang++-19"]
         elif cl_name == "gcc":
-            return ["g++-13"]
+            return ["g++-14"]
     elif "msys" in host_platform:
         if cl_name == "clang":
             return ["clang++"]
         elif cl_name == "gcc":
             return ["x86_64-w64-mingw32-g++"]
+    else:
+        lassert_unsupported_bconf()
+
+
+def cmd_gcov(cl_name: str) -> List[str]:
+    if cl_name == "clang":
+        return [
+            find_command(
+                [f"llvm-cov-{ver}" for ver in range(25, 18, -1)] + ["llvm-cov"]
+            ),
+            "gcov",
+        ]
+    elif cl_name == "gcc":
+        return [find_command([f"gcov-{ver}" for ver in range(18, 12, -1)] + ["gcov"])]
     else:
         lassert_unsupported_bconf()

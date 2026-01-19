@@ -6,7 +6,6 @@ from typing import List
 if len(sys.path) < 2 or not sys.path[1].endswith(".."):
     sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
-import tools.cl as cl
 from lib.exec import (
     exec_or_fail,
     find_command,
@@ -24,7 +23,7 @@ def install(host_platform: str) -> None:
         "https://apt.llvm.org/llvm.sh", "./tooling-build/llvm.sh"
     )
     exec_or_fail(["chmod", "+x", "./tooling-build/llvm.sh"])
-    exec_or_fail(["sudo", "./tooling-build/llvm.sh", "21"])
+    exec_or_fail(["sudo", "./tooling-build/llvm.sh", "19"])
     exec_or_fail(
         [
             "sudo",
@@ -33,12 +32,12 @@ def install(host_platform: str) -> None:
             "DPkg::Lock::Timeout=60",
             "install",
             "-y",
-            "clang-format-21",
+            "clang-format-19",
         ]
     )
 
     clang_fmt_cmd = find_command(
-        [f"clang-format-{ver}" for ver in range(25, 19, -1)] + ["clang-format"]
+        [f"clang-format-{ver}" for ver in range(25, 18, -1)] + ["clang-format"]
     )
     if not clang_fmt_cmd:
         lprint("Couldn't find `clang-format`.")
@@ -51,6 +50,6 @@ def install(host_platform: str) -> None:
 def cmd() -> List[str]:
     return [
         find_command(
-            [f"clang-format-{ver}" for ver in range(25, 19, -1)] + ["clang-format"]
+            [f"clang-format-{ver}" for ver in range(25, 18, -1)] + ["clang-format"]
         )
     ]
