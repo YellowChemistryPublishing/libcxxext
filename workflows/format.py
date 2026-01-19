@@ -60,7 +60,7 @@ def main(argv: List[str]) -> None:
     config.is_verbose = args.verbose
     config.is_silent = args.suppress
 
-    clang_format.install(args.platform)
+    clang_format.install(host_platform=args.platform)
 
     pathlib.Path(f"{config.findings_reldir}/ClangFormat.md").unlink(missing_ok=True)
 

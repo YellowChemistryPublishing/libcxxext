@@ -4,9 +4,6 @@ import urllib.request
 import time
 from typing import List
 
-if len(sys.path) < 2 or not sys.path[1].endswith(".."):
-    sys.path.insert(1, os.path.join(sys.path[0], ".."))
-
 from lib.exec import (
     exec_or_fail,
     exec_pkgmgr_cache_update,
@@ -17,7 +14,7 @@ from lib.exec import (
 from lib.log import lassert_unsupported_bconf, lcheck_failed
 
 
-def install(target_arch: str, host_platform: str, cl_name: str) -> None:
+def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
     if has_stamp("tool_cl"):
         return
 
@@ -33,7 +30,7 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
             # Locks apt repository, try a few times in case another process is using it.
             for i in range(10):
 
-                def on_fail():
+                def on_fail() -> None:
                     if i == 9:
                         lcheck_failed()
 
@@ -130,7 +127,7 @@ def install(target_arch: str, host_platform: str, cl_name: str) -> None:
     stamp_id("tool_cl")
 
 
-def cmd_cc(host_platform: str, cl_name: str) -> List[str]:
+def cmd_cc(*, host_platform: str, cl_name: str) -> List[str]:
     if host_platform == "linux":
         if cl_name == "clang":
             return ["clang-19"]
@@ -144,8 +141,10 @@ def cmd_cc(host_platform: str, cl_name: str) -> List[str]:
     else:
         lassert_unsupported_bconf()
 
+    return []  # Appease mypy.
 
-def cmd_cxx(host_platform: str, cl_name: str) -> List[str]:
+
+def cmd_cxx(*, host_platform: str, cl_name: str) -> List[str]:
     if host_platform == "linux":
         if cl_name == "clang":
             return ["clang++-19"]
@@ -159,8 +158,10 @@ def cmd_cxx(host_platform: str, cl_name: str) -> List[str]:
     else:
         lassert_unsupported_bconf()
 
+    return []  # Appease mypy.
 
-def cmd_gcov(cl_name: str) -> List[str]:
+
+def cmd_gcov(*, cl_name: str) -> List[str]:
     if cl_name == "clang":
         return [
             find_command(
@@ -172,3 +173,5 @@ def cmd_gcov(cl_name: str) -> List[str]:
         return [find_command([f"gcov-{ver}" for ver in range(18, 12, -1)] + ["gcov"])]
     else:
         lassert_unsupported_bconf()
+
+    return []  # Appease mypy.

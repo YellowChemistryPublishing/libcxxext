@@ -73,7 +73,7 @@ def main(argv: List[str]) -> None:
 
     os.chdir(args.src_dir)
 
-    result: subprocess.CompletedProcess = subprocess.run(
+    result: subprocess.CompletedProcess[bytes] = subprocess.run(
         cmake.cmd()
         + [
             "--build",
