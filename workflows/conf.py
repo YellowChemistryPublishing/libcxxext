@@ -33,8 +33,8 @@ def additional_configure_flags(
     elif cl_name == "clang" or cl_name == "gcc":
         return [
             f"-G{gen}",
-            f"-DCMAKE_C_COMPILER={" ".join(cl.cmd_cc(host_platform, cl_name))}",
-            f"-DCMAKE_CXX_COMPILER={" ".join(cl.cmd_cxx(host_platform, cl_name))}",
+            f"-DCMAKE_C_COMPILER={" ".join(cl.cmd_cc(host_platform=host_platform, cl_name=cl_name))}",
+            f"-DCMAKE_CXX_COMPILER={" ".join(cl.cmd_cxx(host_platform=host_platform, cl_name=cl_name))}",
             "-DCMAKE_BUILD_TYPE=Debug",
         ] + (
             [
@@ -47,6 +47,8 @@ def additional_configure_flags(
         )
     else:
         lassert_unsupported_bconf()
+
+    raise AssertionError
 
 
 def main(argv: List[str]) -> None:

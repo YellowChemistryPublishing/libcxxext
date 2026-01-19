@@ -29,7 +29,7 @@ def find_command(candidates: List[str]) -> str:
             return cmd
         except FileNotFoundError:
             pass
-    return "[`find_command` couldn't find any candidates!]"
+    return ""
 
 
 def stamp_id(id: str) -> None:

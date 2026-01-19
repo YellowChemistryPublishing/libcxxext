@@ -10,7 +10,7 @@ from lib.exec import exec_or_fail, exec_pkgmgr_cache_update, has_stamp, stamp_id
 from lib.log import lassert_unsupported_bconf
 
 
-def install(host_platform: str, cl_name: str) -> None:
+def install(*, host_platform: str, cl_name: str) -> None:
     if has_stamp("tool_cmake"):
         return
 
@@ -61,7 +61,7 @@ def cmd() -> List[str]:
 
 def run(args: List[str], *, host_platform: str, cl_name: str) -> None:
     if host_platform in config.support_platforms:
-        install(host_platform, cl_name)
+        install(host_platform=host_platform, cl_name=cl_name)
         exec_or_fail(cmd() + args)
     else:
         lassert_unsupported_bconf()

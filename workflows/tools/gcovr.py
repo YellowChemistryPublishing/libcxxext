@@ -3,16 +3,13 @@ import sys
 import urllib.request
 from typing import List
 
-if len(sys.path) < 2 or not sys.path[1].endswith(".."):
-    sys.path.insert(1, os.path.join(sys.path[0], ".."))
-
 import lib.config as config
 import tools.cl as cl
 from lib.exec import exec_or_fail, find_command, has_stamp, stamp_id
 from lib.log import lassert_unsupported_bconf, lcheck_failed, lprint
 
 
-def install(host_platform: str) -> None:
+def install(*, host_platform: str) -> None:
     if has_stamp("tool_gcovr"):
         return
 
@@ -46,7 +43,7 @@ def install(host_platform: str) -> None:
     stamp_id("tool_gcovr")
 
 
-def cmd(cl_name: str) -> List[str]:
+def cmd(*, cl_name: str) -> List[str]:
     extra_args = []
     if cl_name == "clang" or cl_name == "gcc":
         extra_args += [

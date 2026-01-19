@@ -33,6 +33,8 @@ def additional_build_flags(gen: str, cl_name: str) -> List[str]:
     else:
         lassert_unsupported_bconf()
 
+    raise AssertionError
+
 
 def main(argv: List[str]) -> None:
     config.check_name = "check:build"

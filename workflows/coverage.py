@@ -95,7 +95,7 @@ def main(argv: List[str]) -> None:
         "--gcov-object-directory",
         args.build_dir_name,
     ]
-    result: subprocess.CompletedProcess = subprocess.run(
+    result: subprocess.CompletedProcess[bytes] = subprocess.run(
         md_report_cmd,
         capture_output=True,
     )

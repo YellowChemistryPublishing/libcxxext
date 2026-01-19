@@ -1,10 +1,5 @@
-import os
-import sys
 import urllib.request
 from typing import List
-
-if len(sys.path) < 2 or not sys.path[1].endswith(".."):
-    sys.path.insert(1, os.path.join(sys.path[0], ".."))
 
 from lib.exec import (
     exec_or_fail,
@@ -12,12 +7,15 @@ from lib.exec import (
     has_stamp,
     stamp_id,
 )
-from lib.log import lcheck_failed, lprint
+from lib.log import lassert_unsupported_bconf, lcheck_failed, lprint
 
 
-def install(host_platform: str) -> None:
+def install(*, host_platform: str) -> None:
     if has_stamp("tool_clang_format"):
         return
+
+    if host_platform != "linux":
+        lassert_unsupported_bconf()
 
     urllib.request.urlretrieve(
         "https://apt.llvm.org/llvm.sh", "./tooling-build/llvm.sh"
