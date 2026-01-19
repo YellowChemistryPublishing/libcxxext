@@ -48,9 +48,9 @@ def main(argv: List[str]) -> None:
     config.is_verbose = args.verbose
     config.is_silent = args.suppress
 
-    doxygen.install(args.platform)
+    doxygen.install(host_platform=args.platform)
 
-    result: subprocess.CompletedProcess = subprocess.run(
+    result: subprocess.CompletedProcess[bytes] = subprocess.run(
         doxygen.cmd(), capture_output=True
     )
     if result.returncode != 0:
