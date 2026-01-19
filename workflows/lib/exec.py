@@ -29,13 +29,13 @@ def find_command(candidates: List[str]) -> str:
             return cmd
         except FileNotFoundError:
             pass
-    return "[`find_command` couldn't find any candidates!]"
+    return ""
 
 
 def stamp_id(id: str) -> None:
     """Record a stamp with the given ID."""
 
-    cache_stamp_path: str = f"{config.tools_reldir}/{id}_stamp"
+    cache_stamp_path: str = f"./{config.tools_reldir}/{id}_stamp"
     cache_update_interval_secs: int = 6 * 60 * 60  # 6 hours.
 
     if not os.path.exists(cache_stamp_path) or (
@@ -49,7 +49,7 @@ def stamp_id(id: str) -> None:
 def has_stamp(id: str) -> bool:
     """Check if an in-date stamp with the given ID exists."""
 
-    cache_stamp_path: str = f"{config.tools_reldir}/{id}_stamp"
+    cache_stamp_path: str = f"./{config.tools_reldir}/{id}_stamp"
     return os.path.exists(cache_stamp_path) and (
         time.time() - os.path.getmtime(cache_stamp_path) <= 6 * 60 * 60  # 6 hours.
     )
@@ -68,8 +68,11 @@ def is_finding_ok(finding_file_name: str) -> bool:
 
 
 def exec_or_fail(
-    cmd: List[str], on_fail: Callable[[], None] = lambda: lcheck_failed(upstack=3)
-) -> None:
+    cmd: List[str],
+    *,
+    capture_output: bool = False,
+    on_fail: Callable[[], None] = lambda: lcheck_failed(upstack=3),
+) -> tuple[str, str]:
     """Execute a command and exit if it fails."""
 
     if config.is_verbose:
@@ -78,7 +81,7 @@ def exec_or_fail(
             upstack=2,
         )
     result: subprocess.CompletedProcess[bytes] = subprocess.run(
-        cmd, capture_output=config.is_silent
+        cmd, capture_output=config.is_silent or capture_output
     )
     if result.returncode != 0:
         log_invoc_failed(result.stdout, result.stderr)
@@ -87,6 +90,14 @@ def exec_or_fail(
             upstack=2,
         )
         on_fail()
+
+    stdout: str = ""
+    stderr: str = ""
+    if capture_output and result.stdout:
+        stdout = result.stdout.decode(encoding="utf-8", errors="ignore")
+    if capture_output and result.stderr:
+        stderr = result.stderr.decode(encoding="utf-8", errors="ignore")
+    return stdout, stderr
 
 
 def exec_pkgmgr_cache_update(platform: str) -> None:
@@ -108,5 +119,5 @@ def exec_pkgmgr_cache_update(platform: str) -> None:
 
     else:
         lprint(
-            f"Skipping package manager cache update--ran recently. (Delete {config.tools_reldir}/pkgmgr_cache_update_stamp to force an update.)"
+            f"Skipping package manager cache update--ran recently. (Delete ./{config.tools_reldir}/pkgmgr_cache_update_stamp to force an update.)"
         )

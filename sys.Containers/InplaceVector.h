@@ -7,7 +7,7 @@ namespace sys
 {
     template <typename T, size_t Capacity>
     requires (Capacity > 0)
-    class InplaceVector
+    class inplace_vector
     {
         union
         {
@@ -15,54 +15,34 @@ namespace sys
         };
         size_t _size = 0;
     public:
-        InplaceVector() = default;
+        inplace_vector() = default;
 
-        [[nodiscard]] bool empty() const
-        {
-            return this->_size == 0;
-        }
-        [[nodiscard]] size_t size() const
-        {
-            return this->_size;
-        }
-        [[nodiscard]] consteval static size_t capacity()
-        {
-            return Capacity;
-        }
+        [[nodiscard]] bool empty() const { return this->_size == 0; }
+        [[nodiscard]] size_t size() const { return this->_size; }
+        [[nodiscard]] consteval static size_t capacity() { return Capacity; }
 
-        [[nodiscard]] T& operator[](size_t index)
-        {
-            return this->data[index];
-        }
-        [[nodiscard]] const T& operator[](size_t index) const
-        {
-            return this->data[index];
-        }
+        [[nodiscard]] T& operator[](size_t index) { return this->data[index]; }
+        [[nodiscard]] const T& operator[](size_t index) const { return this->data[index]; }
 
-        [[nodiscard]] T* begin()
-        {
-            return this->data;
-        }
-        [[nodiscard]] T* end()
-        {
-            return this->data + this->_size;
-        }
+        [[nodiscard]] T* begin() { return this->data; }
+        [[nodiscard]] T* end() { return this->data + this->_size; }
 
-        [[nodiscard]] bool pushBack(T value)
+        [[nodiscard]] bool push_back(T value)
         {
             if (this->_size >= Capacity)
                 return false; // NOLINT(readability-simplify-boolean-expr)
             new(&this->data[this->_size++]) T(std::move(value));
             return true;
         }
-        void popBack()
+        void pop_back()
         {
             if (this->_size > 0) [[likely]]
                 this->data[this->_size--].~T();
         }
         void clear()
         {
-            for (size_t i = 0; i < this->_size; ++i) this->data[i].~T();
+            for (size_t i = 0; i < this->_size; ++i)
+                this->data[i].~T();
             this->_size = 0;
         }
 

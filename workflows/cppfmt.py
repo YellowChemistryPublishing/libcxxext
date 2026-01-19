@@ -1,4 +1,4 @@
-"""This is the primary workflow script for check:format."""
+"""This is the primary workflow script for check:cppfmt."""
 
 desc = "`clang-format` check for C++ projects."
 
@@ -8,18 +8,17 @@ import io
 import os
 import pathlib
 import re
-import subprocess
 import sys
 from typing import List
 
 import lib.config as config
 import tools.clang_format as clang_format
 from lib.exec import exec_or_fail, mark_finding_ok
-from lib.log import lcheck_failed, lcheck_passed, log_invoc_failed, lprint
+from lib.log import lcheck_passed, lprint
 
 
 def main(argv: List[str]) -> None:
-    config.check_name = "check:format"
+    config.check_name = "check:cppfmt"
 
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog=config.check_name,
@@ -60,9 +59,10 @@ def main(argv: List[str]) -> None:
     config.is_verbose = args.verbose
     config.is_silent = args.suppress
 
-    clang_format.install(args.platform)
+    clang_format.install(host_platform=args.platform)
 
-    pathlib.Path(f"{config.findings_reldir}/ClangFormat.md").unlink(missing_ok=True)
+    log_path = f"{config.findings_reldir}/CppFormat.md"
+    pathlib.Path(log_path).unlink(missing_ok=True)
 
     unformatted_count: int = 0
     regex = re.compile(args.regex_path_filter)
@@ -72,22 +72,16 @@ def main(argv: List[str]) -> None:
                 "\\", "/"
             )
             if regex.match(file_relpath):
-                clang_fmt_result: subprocess.CompletedProcess[bytes] = subprocess.run(
-                    clang_format.cmd() + [file_relpath], capture_output=True
-                )
-                if clang_fmt_result.returncode != 0:
-                    log_invoc_failed(clang_fmt_result.stdout, clang_fmt_result.stderr)
-                    lcheck_failed()
-
                 unformatted: str = (
                     io.open(file_relpath, "rb")
                     .read()
                     .decode(encoding="utf-8", errors="ignore")
                     .replace("\r", "\\r")
                 )
-                formatted: str = clang_fmt_result.stdout.decode(
-                    encoding="utf-8", errors="ignore"
-                ).replace("\r", "")
+                formatted, _ = exec_or_fail(
+                    clang_format.cmd() + [file_relpath], capture_output=True
+                )
+                formatted = formatted.replace("\r", "")
 
                 diff: str = "".join(
                     difflib.unified_diff(
@@ -98,7 +92,7 @@ def main(argv: List[str]) -> None:
                     )
                 )
                 if len(diff) > 0:
-                    with open(f"{config.findings_reldir}/ClangFormat.md", "a") as f:
+                    with open(log_path, "a") as f:
                         f.write(f"### `{file_relpath}`\n\n")
                         f.write("```diff\n")
                         f.write(diff)
@@ -109,10 +103,10 @@ def main(argv: List[str]) -> None:
     if unformatted_count > 0:
         lprint(f"Found {unformatted_count} unformatted files.")
     else:
-        with open(f"{config.findings_reldir}/ClangFormat.md", "a") as f:
+        with open(log_path, "a") as f:
             pass
         lprint("Found no unformatted files.")
-        mark_finding_ok(f"{config.findings_reldir}/ClangFormat.md")
+        mark_finding_ok(log_path)
 
     lcheck_passed()
 

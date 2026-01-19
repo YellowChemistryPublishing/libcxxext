@@ -1,8 +1,16 @@
 #pragma once
 
+/// @defgroup Compilers Compiler Detection Constants
+/// @details `#ifdef`able constants for compiler detection.
+
+/// @addtogroup Compilers
+/// @{
+
 #define _libcxxext_compiler_gcc 0
 #define _libcxxext_compiler_clang 0
 #define _libcxxext_compiler_msvc 0
+
+/// @}
 
 #if defined(__clang__) && __clang__
 #undef _libcxxext_compiler_clang
@@ -17,6 +25,12 @@
 #error "Unsupported compiler!"
 #endif
 
+/// @defgroup Architectures Architecture Detection Constants
+/// @details `#ifdef`able constants for architecture detection.
+
+/// @addtogroup Architectures
+/// @{
+
 #define _libcxxext_arch_unknown 0
 #define _libcxxext_arch_x86_64 0
 #define _libcxxext_arch_aarch64 0
@@ -30,6 +44,8 @@
 #define _libcxxext_arch_riscv 0
 #define _libcxxext_arch_sparc 0
 #define _libcxxext_arch_superh 0
+
+/// @}
 
 #if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
 #undef _libcxxext_arch_x86_64
@@ -74,6 +90,12 @@
 #define _libcxxext_arch_unknown 1
 #endif
 
+/// @defgroup OperatingSystems Operating System Detection Constants
+/// @details `#ifdef`able constants for operating system detection.
+
+/// @addtogroup OperatingSystems
+/// @{
+
 #define _libcxxext_os_unknown 0
 #define _libcxxext_os_aix 0
 #define _libcxxext_os_android 0
@@ -97,6 +119,8 @@
 #define _libcxxext_os_syllable 0
 #define _libcxxext_os_vxworks 0
 #define _libcxxext_os_windows 0
+
+/// @}
 
 // NOLINTBEGIN(readability-use-concise-preprocessor-directives)
 

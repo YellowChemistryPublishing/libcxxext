@@ -1,6 +1,6 @@
-"""This is the primary workflow script for check:docgen."""
+"""This is the primary workflow script for check:pylint."""
 
-desc = "Documentation generator check for projects using Doxygen."
+desc = "Static analyzer check for Python projects using `mypy`."
 
 import argparse
 import os
@@ -8,13 +8,13 @@ import sys
 from typing import List
 
 import lib.config as config
-import tools.doxygen as doxygen
+import tools.mypy as mypy
 from lib.exec import exec_or_fail, mark_finding_ok
 from lib.log import lcheck_passed
 
 
 def main(argv: List[str]) -> None:
-    config.check_name = "check:docgen"
+    config.check_name = "check:pylint"
 
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog=config.check_name,
@@ -26,9 +26,12 @@ def main(argv: List[str]) -> None:
         "-p",
         "--platform",
         help="Host platform.",
-        choices=config.support_platforms,
+        choices=["win32", "linux", "macos"],
         metavar="",
         required=True,
+    )
+    parser.add_argument(
+        "-d", "--src-dir", help="Full src dir path.", metavar="", required=True
     )
     parser.add_argument(
         "-v",
@@ -47,11 +50,15 @@ def main(argv: List[str]) -> None:
     config.is_verbose = args.verbose
     config.is_silent = args.suppress
 
-    doxygen.install(host_platform=args.platform)
+    mypy.install(host_platform=args.platform)
 
-    content, _ = exec_or_fail(doxygen.cmd(), capture_output=True)
-    log_path = f"{config.findings_reldir}/Docgen.log"
-    with open(log_path, "w") as f:
+    content, _ = exec_or_fail(
+        mypy.cmd(host_platform=args.platform) + ["--strict", args.src_dir],
+        capture_output=True,
+    )
+    os.makedirs(config.findings_reldir, exist_ok=True)
+    log_path = f"{config.findings_reldir}/PythonLint.log"
+    with open(log_path, "w", encoding="utf-8") as f:
         f.write(content)
     mark_finding_ok(log_path)
 

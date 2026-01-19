@@ -38,15 +38,13 @@ def lprint(string: str, upstack: int = 1) -> None:
         caller_filename = os.path.basename(caller_frame.filename)
 
         pstr: str = (
-            f"\x1b[36;1m{f"[{caller_filename}:{caller_frame.lineno}]\x1b[0m ".ljust(24)}\x1b[38;5;208;1m{f"[shard-{"main" if shard_id == 0 else f"{shard_id}"}]\x1b[0m ".ljust(18)} {string}"
+            f"\x1b[36;1m{f"[{caller_filename}:{caller_frame.lineno}]\x1b[0m ".ljust(28)}\x1b[38;5;208;1m{f"[shard-{"main" if shard_id == 0 else f"{shard_id}"}]\x1b[0m ".ljust(18)} {string}"
         )
 
         print(pstr)
 
-        os.makedirs(config.findings_reldir, exist_ok=True)
-
         start_time = time.time()
-        while time.time() - start_time < 4:
+        while time.time() - start_time < 1:
             try:
                 with open(
                     config.lprint_templog_relp,

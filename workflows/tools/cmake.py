@@ -10,45 +10,21 @@ from lib.exec import exec_or_fail, exec_pkgmgr_cache_update, has_stamp, stamp_id
 from lib.log import lassert_unsupported_bconf
 
 
-def install(host_platform: str, cl_name: str) -> None:
+def install(*, host_platform: str, cl_name: str) -> None:
     if has_stamp("tool_cmake"):
         return
 
     if host_platform == "linux":
         exec_pkgmgr_cache_update(host_platform)
-        exec_or_fail(
-            [
-                "sudo",
-                "apt-get",
-                "-o",
-                "DPkg::Lock::Timeout=60",
-                "install",
-                "-y",
-                "cmake",
-            ]
-        )
+        apt_cmd = ["sudo", "apt-get", "-o", "DPkg::Lock::Timeout=60"]
+        exec_or_fail(apt_cmd + ["install", "-y", "cmake"])
     elif "msys" in host_platform:
         exec_pkgmgr_cache_update(host_platform)
+        pacman_cmd = ["pacman", "-S", "--needed", "--noconfirm"]
         if cl_name == "clang":
-            exec_or_fail(
-                [
-                    "pacman",
-                    "-S",
-                    "--needed",
-                    "--noconfirm",
-                    f"mingw-w64-clang-x86_64-cmake",
-                ]
-            )
+            exec_or_fail(pacman_cmd + ["mingw-w64-clang-x86_64-cmake"])
         elif cl_name == "gcc":
-            exec_or_fail(
-                [
-                    "pacman",
-                    "-S",
-                    "--needed",
-                    "--noconfirm",
-                    f"mingw-w64-x86_64-cmake",
-                ]
-            )
+            exec_or_fail(pacman_cmd + ["mingw-w64-x86_64-cmake"])
 
     exec_or_fail(["cmake", "--version"])
     exec_or_fail(["ctest", "--version"])
@@ -61,7 +37,7 @@ def cmd() -> List[str]:
 
 def run(args: List[str], *, host_platform: str, cl_name: str) -> None:
     if host_platform in config.support_platforms:
-        install(host_platform, cl_name)
+        install(host_platform=host_platform, cl_name=cl_name)
         exec_or_fail(cmd() + args)
     else:
         lassert_unsupported_bconf()
