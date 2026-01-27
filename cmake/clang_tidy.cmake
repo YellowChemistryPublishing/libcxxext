@@ -11,7 +11,7 @@ else()
     set(CLANG_TIDY_ENVDIR "${CMAKE_CURRENT_LIST_DIR}/../workflows")
 endif()
 
-function(target_lint_clang_tidy TARGET_NAME CLANG_TIDY_ARGS)
+function(target_lint_clang_tidy TARGET_NAME)
     if(RUN_CLANG_TIDY)
         if(NOT TARGET clang_tidy_all)
             add_custom_target(clang_tidy_all)
@@ -23,15 +23,29 @@ function(target_lint_clang_tidy TARGET_NAME CLANG_TIDY_ARGS)
             return()
         endif()
 
+        set(CLANG_TIDY_EXTRA_TOOL_ARGS)
+        set(CLANG_TIDY_EXTRA_COMPILER_ARGS)
+
+        set(FOUND_DASHDASH FALSE)
+        foreach(ARG IN LISTS ARGN)
+            if(ARG STREQUAL "--")
+                set(FOUND_DASHDASH TRUE)
+            elseif(NOT FOUND_DASHDASH)
+                list(APPEND CLANG_TIDY_EXTRA_TOOL_ARGS ${ARG})
+            else()
+                list(APPEND CLANG_TIDY_EXTRA_COMPILER_ARGS ${ARG})
+            endif()
+        endforeach()
+
         add_custom_target(lint_ct_${TARGET_NAME}
             COMMAND
             ${CMAKE_COMMAND} -E env "PYTHONPATH=${CLANG_TIDY_ENVDIR}"
-            ${Python3_EXECUTABLE} "${CLANG_TIDY_ENVDIR}/scripts/wrap_clang_tidy.py" ${RUN_CLANG_TIDY} $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<LIST:FILTER,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,EXCLUDE,.*cmake_pch\.hxx.*>,PREPEND,\">,APPEND,\"> ${ARGN} ${CLANG_TIDY_ARGS} --
+            ${Python3_EXECUTABLE} "${CLANG_TIDY_ENVDIR}/scripts/wrap_clang_tidy.py" ${RUN_CLANG_TIDY} $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<LIST:FILTER,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,EXCLUDE,.*cmake_pch\.hxx.*>,PREPEND,\">,APPEND,\"> ${CLANG_TIDY_EXTRA_TOOL_ARGS} --
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},INCLUDE_DIRECTORIES>,PREPEND,\-I\">,APPEND,\">
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},INTERFACE_INCLUDE_DIRECTORIES>,PREPEND,\-I\">,APPEND,\">
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},COMPILE_DEFINITIONS>,PREPEND,\-D>,APPEND,>
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},INTERFACE_COMPILE_DEFINITIONS>,PREPEND,\-D>,APPEND,>
-            -x c++ -std=c++26 -Wno-pragma-once-outside-header -Wno-pragma-system-header-outside-header
+            -x c++ -std=c++26 -Wno-pragma-once-outside-header -Wno-pragma-system-header-outside-header ${CLANG_TIDY_EXTRA_COMPILER_ARGS}
             #                                                 ^ When using `#pragma GCC system_header` with CMake precompiled headers.
             #                 ^ When running on a plain header, spurious.
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
