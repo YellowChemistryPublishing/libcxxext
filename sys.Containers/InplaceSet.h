@@ -9,7 +9,7 @@ namespace sys
     requires (Capacity > 0)
     class inplace_set
     {
-        T data[Capacity];
+        T data[Capacity] {};
         size_t _size = 0;
     public:
         inplace_set() = default;
@@ -22,16 +22,16 @@ namespace sys
             if (this->_size == Capacity) [[unlikely]]
                 return false;
 
-            this->data[this->_size++] = std::move(value);
+            this->data[this->_size++] = std::move(value); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
             return true;
         }
         bool try_erase(T value)
         {
             for (size_t i = 0; i < this->_size; i++)
             {
-                if (this->data[i] == value)
+                if (this->data[i] == value) // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                 {
-                    this->data[i] = std::move(this->data[--this->_size]);
+                    this->data[i] = std::move(this->data[--this->_size]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                     return true;
                 }
             }

@@ -1,10 +1,14 @@
-if(NOT DEFINED Python3_EXECUTABLE)
+if(NOT Python3_EXECUTABLE)
     find_package(Python3 REQUIRED COMPONENTS Interpreter)
 endif()
 
-find_program(RUN_CLANG_TIDY NAMES "clang-tidy-25" "clang-tidy-24" "clang-tidy-23" "clang-tidy-22" "clang-tidy-21" "clang-tidy-20" "clang-tidy-19" "clang-tidy" PATHS "C:/Program Files/LLVM/bin" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/bin" "/usr/bin")
+if(NOT RUN_CLANG_TIDY)
+    find_program(RUN_CLANG_TIDY NAMES "clang-tidy-25" "clang-tidy-24" "clang-tidy-23" "clang-tidy-22" "clang-tidy-21" "clang-tidy-20" "clang-tidy-19" "clang-tidy" PATHS "C:/Program Files/LLVM/bin" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/bin" "/usr/bin")
+endif()
 if(NOT RUN_CLANG_TIDY)
     message(WARNING "clang-tidy not found. Required for static analysis.")
+else()
+    set(CLANG_TIDY_ENVDIR "${CMAKE_CURRENT_LIST_DIR}/../workflows")
 endif()
 
 function(target_lint_clang_tidy TARGET_NAME CLANG_TIDY_ARGS)
@@ -21,8 +25,8 @@ function(target_lint_clang_tidy TARGET_NAME CLANG_TIDY_ARGS)
 
         add_custom_target(lint_ct_${TARGET_NAME}
             COMMAND
-            ${CMAKE_COMMAND} -E env "PYTHONPATH=${CMAKE_CURRENT_LIST_DIR}/../workflows"
-            ${Python3_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/../workflows/scripts/wrap_clang_tidy.py" ${RUN_CLANG_TIDY} $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<LIST:FILTER,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,EXCLUDE,.*cmake_pch\.hxx.*>,PREPEND,\">,APPEND,\"> ${ARGN} ${CLANG_TIDY_ARGS} --
+            ${CMAKE_COMMAND} -E env "PYTHONPATH=${CLANG_TIDY_ENVDIR}"
+            ${Python3_EXECUTABLE} "${CLANG_TIDY_ENVDIR}/scripts/wrap_clang_tidy.py" ${RUN_CLANG_TIDY} $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<LIST:FILTER,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,EXCLUDE,.*cmake_pch\.hxx.*>,PREPEND,\">,APPEND,\"> ${ARGN} ${CLANG_TIDY_ARGS} --
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},INCLUDE_DIRECTORIES>,PREPEND,\-I\">,APPEND,\">
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},INTERFACE_INCLUDE_DIRECTORIES>,PREPEND,\-I\">,APPEND,\">
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<TARGET_PROPERTY:${TARGET_NAME},COMPILE_DEFINITIONS>,PREPEND,\-D>,APPEND,>

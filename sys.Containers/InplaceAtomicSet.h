@@ -21,7 +21,7 @@ namespace sys
         explicit inplace_atomic_set(T init)
         {
             for (size_t i = 0; i < Capacity; i++)
-                this->data[i].store(init);
+                this->data[i].store(init); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
         }
 
         /// @brief Exchange the value of the first element that matches the expected value.
@@ -47,7 +47,7 @@ namespace sys
             for (size_t i = 0; i < Capacity; i++)
             {
                 T expected = from;
-                if (this->data[i].compare_exchange_strong(expected, to))
+                if (this->data[i].compare_exchange_strong(expected, to)) // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
                     return true;
             }
             return false;
