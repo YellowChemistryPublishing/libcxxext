@@ -34,6 +34,13 @@ moving its result value into `out` via `Result<...>::move()`. When inside a coro
 
 Runtime domain/input validation may be achieved through contracts, with `_contract_assert(cond)`.
 
+For C++ initialization:
+
+- Use aggregate initialization (`T t {...}`) where the intention is to initialize a container with values.
+- Use direct initialization (`T t(...)`) where construction implies some side-effect or workload.
+- (Commonly) Use copy-initialization (`T t = ...`) where the intention is to initialize a variable with some value.
+- Use list-initialization (`T t {...}`) in any other case, where none of the above would compile.
+
 Parameters of type array-as-pointer must be passed by the array notation `... func(T arr[])`, rather than `... func(T* arr)`.
 
 Where applicable and valid, `_restrict` must apply to pointers.
@@ -45,7 +52,7 @@ too!
 
 Where template parameters have restricted domain or constraints, they must be specified with a `requires` clause.
 
-## What Integer to Use (`libcxxext`)
+## What Integer to Use
 
 - `ixx` or `uxx` in most cases.
 - `ssz` when referring to sizes and lengths.

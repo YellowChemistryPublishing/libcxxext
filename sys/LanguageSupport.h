@@ -7,6 +7,9 @@
 #include <CompilerWarnings.h>
 #include <Platform.h>
 
+#define _catcat(a, b) a##b
+#define _ppcat(a, b) _catcat(a, b)
+
 #define _assert_ctor_can_fail() static_assert(false, "This constructor may fail, use `...::ctor` instead.")
 
 /// @brief Tag type for function variants marked unsafe.

@@ -12,8 +12,9 @@
 
 #include <LanguageSupport.h>
 #include <Platform.h>
+#include <Traits.h>
 
-/// @defgroup BuiltinInteger Built-in integer types.
+/// @defgroup BuiltinInteger Built-in Integer Types
 /// @details Abbreviated built-in integer types.
 /// @note Pass `byval`.
 
@@ -78,7 +79,7 @@ namespace sys
 
         For underlying = 0;
 
-        [[nodiscard]] _pure_const constexpr unsigned_t u() const noexcept { return std::bit_cast<unsigned_t>(**this); }
+        [[nodiscard]] constexpr unsigned_t u() const noexcept { return std::bit_cast<unsigned_t>(**this); }
     public:
         using underlying_type = For;
 
@@ -87,6 +88,9 @@ namespace sys
         [[nodiscard]] _pure_const static consteval bool is_signed() { return std::is_signed_v<For>; }
 
         constexpr integer() noexcept = default;
+        template <IBuiltinIntegerCanHold<For> T>
+        constexpr integer(T v) noexcept : underlying(_as(For, v)) // NOLINT(hicpp-explicit-conversions)
+        { }
         template <typename T>
         requires std::integral<T> || std::floating_point<T>
         constexpr explicit integer(T v) noexcept : underlying(numeric_cast<For>(v, unsafe()))
@@ -94,20 +98,20 @@ namespace sys
         template <std::integral T>
         constexpr explicit integer(T v, unsafe) noexcept : underlying(v & ~_as(For, 0))
         { }
-        constexpr explicit integer(For v) noexcept : underlying(v) { }
         template <std::integral T>
-        constexpr explicit integer(integer<T> v) noexcept : underlying(numeric_cast<For>(*v, unsafe()))
+        constexpr explicit integer(integer<T> v) noexcept : integer(*v)
         { }
         template <std::integral T>
-        constexpr explicit integer(integer<T> v, unsafe) noexcept : underlying(*v & ~_as(For, 0))
+        constexpr explicit integer(integer<T> v, unsafe) noexcept : integer(*v, unsafe())
         { }
         constexpr integer(const integer& v) noexcept = default;
         constexpr integer(integer&& v) noexcept = default;
         constexpr ~integer() noexcept = default;
 
-        constexpr integer& operator=(For v) noexcept
+        template <IBuiltinIntegerCanHold<For> T>
+        constexpr integer& operator=(T v) noexcept
         {
-            this->underlying = v;
+            this->underlying = _as(For, v);
             return *this;
         }
         constexpr integer& operator=(const integer& other) noexcept = default;
@@ -240,7 +244,7 @@ namespace sys
     };
 } // namespace sys
 
-/// @defgroup Integer Safe(r) integer types.
+/// @defgroup Integer Safe(r) Integer Types
 /// @details Convenience aliases for `sys::integer<...>`.
 /// @note Pass `byval`.
 
@@ -262,7 +266,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
 
 /// @}
 
-/// @defgroup IntegerLiterals Integer literals.
+/// @defgroup IntegerLiterals Integer Literals
 /// @details Literal suffixes for `sys::integer<...>`.
 /// @note Pass `byval`.
 

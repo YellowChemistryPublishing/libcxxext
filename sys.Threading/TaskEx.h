@@ -108,7 +108,7 @@ namespace sys::internal
     template <typename T>
     struct task_promise final : public task_promise_b<T> // NOLINT(hicpp-member-init)
     {
-        constexpr task_promise() noexcept = default;
+        constexpr task_promise() noexcept { };
         constexpr task_promise(const task_promise&) = delete;
         constexpr task_promise(task_promise&&) = delete;
         ~task_promise() noexcept(noexcept(this->value.~T()))
@@ -128,6 +128,8 @@ namespace sys::internal
             new(&this->value) T(std::forward<ReturnType>(ret));
             this->has_value = true;
         }
+
+        friend struct sys::internal::task_awaiter<T>;
     private:
         union
         {
@@ -165,7 +167,7 @@ namespace sys
 
         constexpr task() noexcept = default;
         constexpr task(const task&) = delete;
-        constexpr task(task&&) = delete;
+        constexpr task(task&& other) noexcept { swap(*this, other); }
         _inline_always ~task()
         {
             if (this->handle)
@@ -173,7 +175,11 @@ namespace sys
         }
 
         constexpr task& operator=(const task&) = delete;
-        constexpr task& operator=(task&&) = delete;
+        constexpr task& operator=(task&& other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
 
         _inline_always internal::task_awaiter<T> operator co_await() { return internal::task_awaiter<T>(this->handle); }
 
@@ -202,9 +208,15 @@ namespace sys
                     co_await task<>::yield();
         }
 
+        friend void swap(task& a, task& b) noexcept
+        {
+            using std::swap;
+            swap(a.handle, b.handle);
+        }
+
         friend struct sys::internal::task_promise_b<T>;
     private:
-        std::coroutine_handle<internal::task_promise<T>> handle;
+        std::coroutine_handle<internal::task_promise<T>> handle = nullptr;
 
         _inline_always explicit task(std::coroutine_handle<internal::task_promise<T>> handle) : handle(handle) { }
     };
