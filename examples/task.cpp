@@ -11,16 +11,14 @@
 
 _push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compiler coroutine codegen.
 
-using namespace sys;
-
-static task<> do_some_work(char taskID, i32 delayTime)
+static sys::task<> do_some_work(char taskID, i32 delayTime)
 {
     std::println("(In {}.) Doing some work...", taskID);
-    co_await task<>::delay(delayTime);
+    co_await sys::task<>::delay(delayTime);
     std::println("(In {}.) Work done!", taskID);
 }
 // NOLINTNEXTLINE(readability-static-accessed-through-instance)
-static async parallel_routine(char taskID, i32 delayTime)
+static sys::async parallel_routine(char taskID, i32 delayTime)
 {
     // NOLINTNEXTLINE(readability-magic-numbers)
     for (int i = 0; i < 8; i++)
@@ -31,7 +29,7 @@ int main()
 {
     try
     {
-        const ::platform::thread_pool pool;
+        const sys::platform::thread_pool pool;
         parallel_routine('a', 1000_i32); // NOLINT(readability-magic-numbers)
         parallel_routine('b', 10_i32);   // NOLINT(readability-magic-numbers)
     }

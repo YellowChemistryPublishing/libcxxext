@@ -96,7 +96,8 @@ namespace sys
         constexpr explicit integer(T v) noexcept : underlying(numeric_cast<For>(v, unsafe()))
         { }
         template <std::integral T>
-        constexpr explicit integer(T v, unsafe) noexcept : underlying(v & ~_as(For, 0))
+        constexpr explicit integer(T v, unsafe) noexcept :
+            underlying(std::bit_cast<For>(_as(unsigned_t, std::bit_cast<std::make_unsigned_t<T>>(v) & _as(unsigned_t, ~_as(unsigned_t, 0)))))
         { }
         template <std::integral T>
         constexpr explicit integer(integer<T> v) noexcept : integer(*v)

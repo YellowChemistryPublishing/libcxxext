@@ -119,12 +119,12 @@ struct unsafe
 /// @def _coretif(val, cond)
 /// @brief Coroutine-return `val` if `cond` is `true`.
 /// @note Returning must not be the happy path.
-#define _coretif(val, cond)    \
-    do                         \
-    {                          \
-        if (cond) [[unlikely]] \
-            co_return (val);   \
-    }                          \
+#define _coretif(val, cond)                                         \
+    do                                                              \
+    {                                                               \
+        if (cond) [[unlikely]]                                      \
+            co_return val; /* NOLINT(bugprone-macro-parentheses) */ \
+    }                                                               \
     while (false)
 
 /// @}

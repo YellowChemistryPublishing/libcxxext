@@ -27,7 +27,7 @@ Checks: >
 
     -portability-avoid-pragma-once,
 
-    -readability-braces-around-statements, -readability-identifier-length, -readability-implicit-bool-conversion, -readability-named-parameter,
+    -readability-braces-around-statements, -readability-identifier-length, -readability-implicit-bool-conversion, -readability-isolate-declaration, -readability-named-parameter,
     -readability-uppercase-literal-suffix, readability-identifier-naming
 
 CheckOptions:

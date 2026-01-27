@@ -9,6 +9,7 @@ _push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compil
 #include <exception>
 #include <utility>
 
+#include <AlignedStorage.h>
 #include <Integer.h>
 #include <LanguageSupport.h>
 #include <rt.h>
@@ -42,8 +43,8 @@ namespace sys::internal
 
         _inline_always async get_return_object();
 
-        [[nodiscard]] _inline_always constexpr static std::suspend_always initial_suspend() noexcept { return {}; }
-        [[nodiscard]] _inline_always constexpr static std::suspend_never final_suspend() noexcept { return {}; }
+        [[nodiscard]] _inline_always static constexpr std::suspend_always initial_suspend() noexcept { return {}; }
+        [[nodiscard]] _inline_always static constexpr std::suspend_never final_suspend() noexcept { return {}; }
 
         static void unhandled_exception() noexcept { std::rethrow_exception(std::current_exception()); }
         _inline_always constexpr void return_void() const noexcept { }
@@ -64,7 +65,7 @@ namespace sys::internal
             this->handle.promise().continuation = parent;
             _task_yield_and_resume();
         }
-        _inline_always constexpr T await_resume() const noexcept(std::is_same_v<T, void>)
+        [[nodiscard]] _inline_always constexpr T await_resume() const noexcept(std::is_same_v<T, void>)
         {
             if (this->handle.promise().exception) [[unlikely]]
                 std::rethrow_exception(this->handle.promise().exception);
@@ -112,10 +113,10 @@ namespace sys::internal
         constexpr task_promise() noexcept = default;
         constexpr task_promise(const task_promise&) = delete;
         constexpr task_promise(task_promise&&) = delete;
-        ~task_promise() noexcept(noexcept(this->value.~T()))
+        ~task_promise() noexcept(noexcept(this->value.data()->~T()))
         {
             if (this->has_value) [[likely]]
-                this->value.~T();
+                this->value.data()->~T();
         }
 
         constexpr task_promise& operator=(const task_promise&) = delete;
@@ -132,11 +133,7 @@ namespace sys::internal
 
         friend struct sys::internal::task_awaiter<T>;
     private:
-        union
-        {
-            byte _ = 0;
-            T value;
-        };
+        sys::aligned_storage<T> value;
         bool has_value = false;
     };
     template <>
@@ -164,7 +161,7 @@ namespace sys
         using promise_type = internal::task_promise<T>;
 
         /// @brief The longest possible delay in milliseconds, supported by `sys::task<>::delay(...)`.
-        constexpr static i32 max_delay = ::sys::platform::task_max_delay;
+        static constexpr i32 max_delay = ::sys::platform::task_max_delay;
 
         constexpr task() noexcept = default;
         constexpr task(const task&) = delete;

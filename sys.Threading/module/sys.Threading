@@ -1,4 +1,4 @@
 #pragma once
 
-#include <TaskEx.h>
-#include <Thread.h>
+#include <TaskEx.h> // IWYU pragma: export
+#include <Thread.h> // IWYU pragma: export

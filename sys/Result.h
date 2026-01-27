@@ -133,7 +133,7 @@ namespace sys
             return *this;
         }
 
-        constexpr Err err() const
+        [[nodiscard]] constexpr Err err() const
         {
             _contract_assert(this->status == result_status::error && "Taking error for a good or empty result!");
             return this->error;

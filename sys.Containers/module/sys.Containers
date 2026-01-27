@@ -1,7 +1,7 @@
 #pragma once
 
-#include <InplaceAtomicSet.h>
-#include <InplaceQueue.h>
-#include <InplaceSet.h>
-#include <InplaceString.h>
-#include <InplaceVector.h>
+#include <InplaceAtomicSet.h> // IWYU pragma: export
+#include <InplaceQueue.h> // IWYU pragma: export
+#include <InplaceSet.h> // IWYU pragma: export
+#include <InplaceString.h> // IWYU pragma: export
+#include <InplaceVector.h> // IWYU pragma: export
