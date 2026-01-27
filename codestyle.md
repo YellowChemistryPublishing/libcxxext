@@ -36,10 +36,11 @@ Runtime domain/input validation may be achieved through contracts, with `_contra
 
 For C++ initialization:
 
-- Use aggregate initialization (`T t {...}`) where the intention is to initialize a container with values.
-- Use direct initialization (`T t(...)`) where construction implies some side-effect or workload.
-- (Commonly) Use copy-initialization (`T t = ...`) where the intention is to initialize a variable with some value.
-- Use list-initialization (`T t {...}`) in any other case, where none of the above would compile.
+- Use list-initialization with a braced-init-list (`T t { v1, v2, ... }`) for aggregate initialization or to initialize a container with a list of values.
+    - Don't forget to prefer designated initializers where applicable! (`T t { .m = ..., ... }`)
+- Use direct initialization (`T t(...)`) where construction implies a specific workload or side-effect, and you want to call a specific constructor.
+- (Most frequently) Use copy-initialization (`T t = ...`) for simple initialization from a single value.
+- Use list-initialization with braces (`T t {...}`) in any other case, where none of the above would compile (i.e. member variables).
 
 Parameters of type array-as-pointer must be passed by the array notation `... func(T arr[])`, rather than `... func(T* arr)`.
 

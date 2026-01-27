@@ -108,7 +108,7 @@ namespace sys::internal
     template <typename T>
     struct task_promise final : public task_promise_b<T> // NOLINT(hicpp-member-init)
     {
-        constexpr task_promise() noexcept { };
+        constexpr task_promise() noexcept = default;
         constexpr task_promise(const task_promise&) = delete;
         constexpr task_promise(task_promise&&) = delete;
         ~task_promise() noexcept(noexcept(this->value.~T()))
@@ -133,7 +133,7 @@ namespace sys::internal
     private:
         union
         {
-            byte _;
+            byte _ = 0;
             T value;
         };
         bool has_value = false;
@@ -167,7 +167,7 @@ namespace sys
 
         constexpr task() noexcept = default;
         constexpr task(const task&) = delete;
-        constexpr task(task&& other) noexcept { swap(*this, other); }
+        constexpr task(task&& other) noexcept : handle(std::exchange(other.handle, nullptr)) { }
         _inline_always ~task()
         {
             if (this->handle)
@@ -177,7 +177,12 @@ namespace sys
         constexpr task& operator=(const task&) = delete;
         constexpr task& operator=(task&& other) noexcept
         {
-            swap(*this, other);
+            if (this != &other) [[likely]]
+            {
+                if (this->handle)
+                    this->handle.destroy();
+                this->handle = std::exchange(other.handle, nullptr);
+            }
             return *this;
         }
 
