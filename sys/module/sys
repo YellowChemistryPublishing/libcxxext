@@ -1,10 +1,10 @@
 #pragma once
 
-#include <cxxsup.h>
-
 #include <AlignedStorage.h>
+#include <BitTwiddling.h>
 #include <CompilerWarnings.h>
 #include <Exception.h>
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Pointer.h>
+#include <Numeric.h>
 #include <Result.h>

@@ -1,4 +1,4 @@
-"""This is the primary workflow script for check:conf."""
+"""This is the primary workflow script for check:cppconf."""
 
 from lib.exec import find_command
 
@@ -33,8 +33,8 @@ def additional_configure_flags(
     elif cl_name == "clang" or cl_name == "gcc":
         return [
             f"-G{gen}",
-            f"-DCMAKE_C_COMPILER={" ".join(cl.cmd_cc(host_platform, cl_name))}",
-            f"-DCMAKE_CXX_COMPILER={" ".join(cl.cmd_cxx(host_platform, cl_name))}",
+            f"-DCMAKE_C_COMPILER={" ".join(cl.cmd_cc(host_platform=host_platform, cl_name=cl_name))}",
+            f"-DCMAKE_CXX_COMPILER={" ".join(cl.cmd_cxx(host_platform=host_platform, cl_name=cl_name))}",
             "-DCMAKE_BUILD_TYPE=Debug",
         ] + (
             [
@@ -48,9 +48,11 @@ def additional_configure_flags(
     else:
         lassert_unsupported_bconf()
 
+    raise AssertionError
+
 
 def main(argv: List[str]) -> None:
-    config.check_name = "check:conf"
+    config.check_name = "check:cppconf"
 
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog=config.check_name,
@@ -143,32 +145,17 @@ def main(argv: List[str]) -> None:
 
     elif "msys" in args.platform:
         exec_pkgmgr_cache_update(args.platform)
+        pacman_cmd = ["pacman", "-S", "--needed", "--noconfirm"]
 
         if args.use_generator == "Ninja":
-            exec_or_fail(["pacman", "-S", "--needed", "--noconfirm", "ninja"])
+            exec_or_fail(pacman_cmd + ["ninja"])
             exec_or_fail(["ninja", "--version"])
 
         elif args.use_generator == "MinGW Makefiles":
             if args.compiler == "clang":
-                exec_or_fail(
-                    [
-                        "pacman",
-                        "-S",
-                        "--needed",
-                        "--noconfirm",
-                        f"mingw-w64-clang-{args.arch}-make",
-                    ]
-                )
+                exec_or_fail(pacman_cmd + [f"mingw-w64-clang-{args.arch}-make"])
             elif args.compiler == "gcc":
-                exec_or_fail(
-                    [
-                        "pacman",
-                        "-S",
-                        "--needed",
-                        "--noconfirm",
-                        f"mingw-w64-{args.arch}-make",
-                    ]
-                )
+                exec_or_fail(pacman_cmd + [f"mingw-w64-{args.arch}-make"])
             else:
                 lassert_unsupported_bconf()
 

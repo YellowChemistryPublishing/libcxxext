@@ -24,18 +24,15 @@ Please don't let constructors silently fail! Instead, include the static member 
 ## Informed Annotations
 
 Documenting functions using the doxygen syntax in comments is highly recommended for production code. (Non-Enum) Types must be additionally annotated with
-`` /// @note Pass `byval`. ``, `` /// @note Pass `byref`. ``, or `` /// @note Pass `byptr`. `` indicating whether a type is best passed as `T`, `(const) T&`, or
-`(const) T (const)*`. Any `FencedPointer<T>` accesses that look like `&*ptr` must be accompanied by a comment on the right of the expression
-`` /* Contract implied: `ptr != nullptr`. */ ``. Types that act as static classes must be annotated with `/// @note Static class.`. The only mandatory field for production code is
-an `@attention Lifetime assumptions!` clause on functions, with a `cpp` block highlighting the lifetime requirements of non-trivial parameters.
+``/// @note Pass `byval`.``, ``/// @note Pass `byref`.``, or ``/// @note Pass `byptr`.`` indicating whether a type is best passed as `T`, `(const) T&`, or `(const) T (const)*`.
+Types that act as static classes must be annotated with `/// @note Static class.`. The only mandatory field for production code is an `@attention Lifetime assumptions!` clause on
+functions, with a `cpp` block highlighting the lifetime requirements of non-trivial parameters.
 
-Any error checking passed up to a caller must be administered with short-circuiting "fences". `_fence_value_(co_)return(val, cond)` will return `val` iff. `cond` evaluates to
-`true`. `_fence_result_(co_)return(rValRef, out)` will use in assignment the `Result<...>` object from `rValRef`, returning its error via `Result<...>::takeError()` in the error
-case, or otherwise, moving its result value into `out` via `Result<...>::takeValue()`. When inside a coroutine, `co_await result` is semantically identical to
-`_fence_result_co_return(rValRef, out)`.
+Any error checking passed up to a caller must be administered with short-circuiting guards. `_(co)retif(val, cond)` will return `val` iff. `cond` evaluates to `true`.
+`_res_mov(co)ret(out, res_xval)` will use in assignment the `Result<...>` object from `res_xval`, returning its error via `Result<...>::err()` in the error case, or otherwise,
+moving its result value into `out` via `Result<...>::move()`. When inside a coroutine, `co_await result` is semantically identical to `_res_mov_co_return(out, res_xval)`.
 
-Runtime domain/input validation may be achieved through contracts. Since C++ has no standard implemented contracts yet, you must use `_fence_contract_enforce(cond)`. Note that
-contract conditions are passed to `const bool __expr = cond; [[assume(__expr)]];`, so you must ensure those statements will not be ill-formed.
+Runtime domain/input validation may be achieved through contracts, with `_contract_assert(cond)`.
 
 Parameters of type array-as-pointer must be passed by the array notation `... func(T arr[])`, rather than `... func(T* arr)`.
 
@@ -43,32 +40,33 @@ Where applicable and valid, `_restrict` must apply to pointers.
 
 Overriden virtual member functions must be annotated with the `override` specifier.
 
-All functions, where correct to, must be annotated with `_const` (`[[gnu::const]]`), or, where otherwise correct to, `_pure` (`[[gnu::pure]]`). Don't forget `[[nodiscard]]` too!
+All functions, where correct to, must be annotated with `_pure_const` (`[[gnu::const]]`), or, where otherwise correct to, `_pure` (`[[gnu::pure]]`). Don't forget `[[nodiscard]]`
+too!
 
 Where template parameters have restricted domain or constraints, they must be specified with a `requires` clause.
 
 ## What Integer to Use (`libcxxext`)
 
--   `ixx` or `uxx` in most cases.
--   `ssz` when referring to sizes and lengths.
--   `(u)int_leastxx_t`, `size_t`, `ptrdiff_t` if you specifically need the underlying integer type at least as wide.
--   `int` if you legitimately don't need to care.
+- `ixx` or `uxx` in most cases.
+- `ssz` when referring to sizes and lengths.
+- `(u)int_leastxx_t`, `size_t`, `ptrdiff_t` if you specifically need the underlying integer type at least as wide.
+- `int` if you legitimately don't need to care.
 
 ## Naming
 
 ### `C++`
 
--   For macros, `_leading_underscore_snake_case`.
--   For concepts and template parameters, `PascalCase`.
--   For functions, member variables, global variables, enum types, and types, `snake_case`.
--   For _everything_ else, `camelCase`.
+- For macros, `_leading_underscore_snake_case`.
+- For concepts and template parameters, `PascalCase`.
+- For functions, member variables, global variables, enum types, and types, `snake_case`.
+- For _everything_ else, `camelCase`.
 
 ### Files and Directories
 
--   Scripts, test files, and directories are named in `snake_case`.
--   Prefer `.h` / `.cpp` / (occasionally) `.inl` for C++ files.
--   C++ headers and corresponding implementations are named in `PascalCase`.
--   The entrypoint to a C++ program is enclosed in `main.cpp`.
+- Scripts, test files, and directories are named in `snake_case`.
+- Prefer `.h` / `.cpp` / (occasionally) `.inl` for C++ files.
+- C++ headers and corresponding implementations are named in `PascalCase`.
+- The entrypoint to a C++ program is enclosed in `main.cpp`.
 
 ## Formatting
 
@@ -78,24 +76,26 @@ The standard formatter expected for configuration and markup languages is `prett
 
 When deciding what casing to use:
 
--   For macros, `_leading_underscore_snake_case`.
--   For concepts and template parameters, `PascalCase`.
--   For functions, member variables, global variables, enum types, and types, `snake_case`.
--   For _everything_ else, `camelCase`.
+- For macros, `_leading_underscore_snake_case`.
+- For concepts and template parameters, `PascalCase`.
+- For functions, member variables, global variables, enum types, and types, `snake_case`.
+- For _everything_ else, `camelCase`.
 
 Single statement bodies of control flow (i.e. after an `if`, `else`, `for`, etc.) must omit curly braces.
+
+In addition, boolean checks must be as concise as possible, i.e. prefer `if (res)` over `if (_as(bool, res) == true)`.
 
 ## Library Checklist
 
 If you check all these boxes, your code is probably sufficiently well thought out.
 
--   Functions and variables marked with `noexcept`, `const`, `_pure`, `_const`, `_restrict`, `[[nodiscard]]` where applicable.
--   `constexpr` anything that moves.
--   You are using `Result<...>` for error handling.
--   An exception thrown at any point in my code would not cause a memory leak (or, it is sufficiently justified that one must not occur).
--   For custom types, a function named `swap` is implemented in the same scope, and used in the type's move constructor.
-    -   (Please do the `friend constexpr void swap(T& a, T& b) { using std::swap; ... }` trick please.)
--   When applicable, a type has a member function with declaration `sz hashCode()` is provided.
+- Functions and variables marked with `noexcept`, `const`, `_pure`, `_pure_const`, `_restrict`, `[[nodiscard]]` where applicable.
+- `constexpr` anything that moves.
+- You are using `result<...>` for error handling.
+- An exception thrown at any point in my code would not cause a memory leak (or, it is sufficiently justified that one must not occur).
+- For custom types, a function named `swap` is implemented in the same scope, and used in the type's move constructor.
+    - (Please do the `friend constexpr void swap(T& a, T& b) { using std::swap; ... }` trick please.)
+- When applicable, a type has a member function with declaration `sz hashCode()` is provided.
 
 ## Testing
 

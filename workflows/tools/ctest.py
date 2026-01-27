@@ -2,9 +2,6 @@ import os
 import sys
 from typing import List
 
-if len(sys.path) < 2 or not sys.path[1].endswith(".."):
-    sys.path.insert(1, os.path.join(sys.path[0], ".."))
-
 import tools.cmake as cmake
 import lib.config as config
 from lib.exec import exec_or_fail

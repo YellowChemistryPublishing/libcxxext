@@ -1,7 +1,7 @@
-"""This is the primary workflow script for check:test."""
+"""This is the primary workflow script for check:cppbuild."""
 
 desc = (
-    "Test check for CMake projects."
+    "Build check for CMake projects."
     "@warning This check will `chdir` to the supplied src dir."
 )
 
@@ -11,18 +11,47 @@ import sys
 from typing import List
 
 import lib.config as config
-import tools.ctest as ctest
-from lib.log import lcheck_passed
+import tools.cmake as cmake
+from lib.log import lassert_unsupported_bconf, lcheck_passed
+
+
+def additional_build_flags(gen: str, cl_name: str) -> List[str]:
+    if cl_name == "msvc" and "Visual Studio" in gen:
+        return [
+            "--target",
+            "ALL_BUILD",
+            "--config",
+            "Debug",
+            "--",
+            "/p:CL_MPCount=8",
+        ]
+    elif cl_name == "clang" or cl_name == "gcc":
+        return [
+            "--target",
+            "all",
+        ]
+    else:
+        lassert_unsupported_bconf()
+
+    raise AssertionError
 
 
 def main(argv: List[str]) -> None:
-    config.check_name = "check:test"
+    config.check_name = "check:cppbuild"
 
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog=config.check_name,
         usage=f"python3 {os.path.basename(__file__)} [args]...",
         description=desc,
         epilog="We don't know what we're doing™.",
+    )
+    parser.add_argument(
+        "-m",
+        "--arch",
+        help="Target architecture.",
+        choices=config.support_archs,
+        metavar="",
+        required=True,
     )
     parser.add_argument(
         "-p",
@@ -39,6 +68,9 @@ def main(argv: List[str]) -> None:
         choices=config.support_compilers,
         metavar="",
         required=True,
+    )
+    parser.add_argument(
+        "-gen", "--use-generator", help="CMake generator name.", required=True
     )
     parser.add_argument(
         "-d", "--src-dir", help="Full src dir path.", metavar="", required=True
@@ -71,13 +103,14 @@ def main(argv: List[str]) -> None:
 
     os.chdir(args.src_dir)
 
-    ctest.run(
+    cmake.run(
         [
-            "--test-dir",
-            str(args.build_dir_name),
-            "--output-on-failure",
+            "--build",
+            args.build_dir_name,
+            "--parallel",
         ]
-        + (["--debug", "--extra-verbose"] if args.cmake_verbose else []),
+        + additional_build_flags(gen=args.use_generator, cl_name=args.compiler)
+        + (["--verbose"] if args.cmake_verbose else []),
         host_platform=args.platform,
         cl_name=args.compiler,
     )

@@ -72,10 +72,10 @@ Cpp11BracedListStyle: false
 # Control Flow
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: true
-AllowShortBlocksOnASingleLine: false
-AllowShortLambdasOnASingleLine: Inline
-AllowShortFunctionsOnASingleLine: None
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortLambdasOnASingleLine: All
+AllowShortFunctionsOnASingleLine: All
 
 # Types
 IndentRequiresClause: false

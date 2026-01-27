@@ -1,24 +1,22 @@
-"""This is the primary workflow script for check:tidy."""
+"""This is the primary workflow script for check:cpptest."""
 
 desc = (
-    "Static analyzer check for CMake projects using `cmake/clang_tidy.cmake`."
+    "Test check for CMake projects."
     "@warning This check will `chdir` to the supplied src dir."
 )
 
 import argparse
 import os
-import subprocess
 import sys
 from typing import List
 
 import lib.config as config
-import tools.cmake as cmake
-from lib.exec import mark_finding_ok
-from lib.log import lcheck_failed, lcheck_passed, log_invoc_failed
+import tools.ctest as ctest
+from lib.log import lcheck_passed
 
 
 def main(argv: List[str]) -> None:
-    config.check_name = "check:tidy"
+    config.check_name = "check:cpptest"
 
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog=config.check_name,
@@ -73,26 +71,16 @@ def main(argv: List[str]) -> None:
 
     os.chdir(args.src_dir)
 
-    result: subprocess.CompletedProcess = subprocess.run(
-        cmake.cmd()
-        + [
-            "--build",
+    ctest.run(
+        [
+            "--test-dir",
             str(args.build_dir_name),
-            "--parallel",
-            "--target",
-            "clang_tidy_all",
+            "--output-on-failure",
         ]
-        + (["--verbose"] if args.cmake_verbose else []),
-        capture_output=True,
+        + (["--debug", "--extra-verbose"] if args.cmake_verbose else []),
+        host_platform=args.platform,
+        cl_name=args.compiler,
     )
-    if result.returncode != 0 and result.returncode != 1:
-        log_invoc_failed(result.stdout, result.stderr)
-        lcheck_failed()
-
-    with open(f"{config.findings_reldir}/ClangTidy.log", "w") as f:
-        f.write(result.stdout.decode(encoding="utf-8", errors="ignore"))
-
-    mark_finding_ok(f"{config.findings_reldir}/ClangTidy.log")
 
     lcheck_passed()
 

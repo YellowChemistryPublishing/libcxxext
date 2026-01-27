@@ -1,5 +1,7 @@
 // NOLINTBEGIN(misc-include-cleaner)
 
+#include <cstring>
+
 #include <CompilerWarnings.h>
 _push_nowarn_deprecated();
 _push_nowarn_conv_comp();
@@ -10,8 +12,7 @@ _push_nowarn_conv_comp();
 _pop_nowarn_conv_comp();
 _pop_nowarn_deprecated();
 
-#include <AlignedStorage.h>
-#include <cstring>
+#include <module/sys>
 
 TEST_CASE("Aligned storage writes match input data. | `sys::aligned_storage`")
 {
