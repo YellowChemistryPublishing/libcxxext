@@ -1,13 +1,10 @@
 #include <new>
 #include <print>
 
-// NOLINTBEGIN(misc-include-cleaner)
-// NOLINTBEGIN(llvm-include-order): Alas clang-format and clang-tidy disagree.
-
-#include <module/sys.Threading>
+// clang-format off
 #include <module/sys>
-
-// NOLINTEND(llvm-include-order)
+#include <module/sys.Threading>
+// clang-format on
 
 _push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compiler coroutine codegen.
 
@@ -38,5 +35,3 @@ int main()
         return _as(int, 0xDEADBEEF);
     }
 }
-
-// NOLINTEND(misc-include-cleaner)

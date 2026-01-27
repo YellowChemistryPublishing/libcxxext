@@ -8,6 +8,7 @@
 
 using namespace std::string_view_literals;
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Basic result with error type works as expected. | `sys::result<T, Err>`")
 {
     SECTION("Constructing with a value works.")

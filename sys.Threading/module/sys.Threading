@@ -1,4 +1,6 @@
 #pragma once
 
+#include <rt_threading.h> // IWYU pragma: export
+
 #include <TaskEx.h> // IWYU pragma: export
 #include <Thread.h> // IWYU pragma: export
