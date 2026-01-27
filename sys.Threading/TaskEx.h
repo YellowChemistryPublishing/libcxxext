@@ -7,6 +7,7 @@ _push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compil
 #include <coroutine>
 #include <cstddef>
 #include <exception>
+#include <utility>
 
 #include <Integer.h>
 #include <LanguageSupport.h>

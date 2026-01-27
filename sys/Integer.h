@@ -279,70 +279,70 @@ consteval i8 operator""_i8(ullong lit)
     if (std::cmp_greater(lit, std::numeric_limits<int_least8_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least8_t>::min())) [[unlikely]]
         throw std::overflow_error("Literal too large for `i8`.");
 
-    return i8(_as(int_least8_t, lit));
+    return { _as(int_least8_t, lit) };
 }
 consteval i16 operator""_i16(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least16_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least16_t>::min())) [[unlikely]]
         throw std::overflow_error("Literal too large for `i16`.");
 
-    return i16(_as(int_least16_t, lit));
+    return { _as(int_least16_t, lit) };
 }
 consteval i32 operator""_i32(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least32_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least32_t>::min())) [[unlikely]]
         throw std::overflow_error("Literal too large for `i32`.");
 
-    return i32(_as(int_least32_t, lit));
+    return { _as(int_least32_t, lit) };
 }
 consteval i64 operator""_i64(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least64_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least64_t>::min())) [[unlikely]]
         throw std::overflow_error("Literal too large for `i64`.");
 
-    return i64(_as(int_least64_t, lit));
+    return { _as(int_least64_t, lit) };
 }
 consteval u8 operator""_u8(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least8_t>::max())) [[unlikely]]
         throw std::overflow_error("Literal too large for `u8`.");
 
-    return u8(_as(uint_least8_t, lit));
+    return { _as(uint_least8_t, lit) };
 }
 consteval u16 operator""_u16(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least16_t>::max())) [[unlikely]]
         throw std::overflow_error("Literal too large for `u16`.");
 
-    return u16(_as(uint_least16_t, lit));
+    return { _as(uint_least16_t, lit) };
 }
 consteval u32 operator""_u32(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least32_t>::max())) [[unlikely]]
         throw std::overflow_error("Literal too large for `u32`.");
 
-    return u32(_as(uint_least32_t, lit));
+    return { _as(uint_least32_t, lit) };
 }
 consteval u64 operator""_u64(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least64_t>::max())) [[unlikely]]
         throw std::overflow_error("Literal too large for `u64`.");
 
-    return u64(_as(uint_least64_t, lit));
+    return { _as(uint_least64_t, lit) };
 }
 consteval ssz operator""_z(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<ptrdiff_t>::max()) || std::cmp_less(lit, std::numeric_limits<ptrdiff_t>::min())) [[unlikely]]
         throw std::overflow_error("Literal too large for `ssz`.");
 
-    return ssz(_as(ptrdiff_t, lit));
+    return { _as(ptrdiff_t, lit) };
 }
 consteval sz operator""_uz(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<size_t>::max())) [[unlikely]]
         throw std::overflow_error("Literal too large for `sz`.");
 
-    return sz(_as(size_t, lit));
+    return { _as(size_t, lit) };
 }
 // clang-format on
 
