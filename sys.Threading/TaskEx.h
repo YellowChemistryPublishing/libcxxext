@@ -7,6 +7,7 @@ _push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compil
 #include <coroutine>
 #include <cstddef>
 #include <exception>
+#include <utility>
 
 #include <Integer.h>
 #include <LanguageSupport.h>
@@ -128,10 +129,12 @@ namespace sys::internal
             new(&this->value) T(std::forward<ReturnType>(ret));
             this->has_value = true;
         }
+
+        friend struct sys::internal::task_awaiter<T>;
     private:
         union
         {
-            byte _;
+            byte _ = 0;
             T value;
         };
         bool has_value = false;
@@ -165,7 +168,7 @@ namespace sys
 
         constexpr task() noexcept = default;
         constexpr task(const task&) = delete;
-        constexpr task(task&&) = delete;
+        constexpr task(task&& other) noexcept : handle(std::exchange(other.handle, nullptr)) { }
         _inline_always ~task()
         {
             if (this->handle)
@@ -173,7 +176,16 @@ namespace sys
         }
 
         constexpr task& operator=(const task&) = delete;
-        constexpr task& operator=(task&&) = delete;
+        constexpr task& operator=(task&& other) noexcept
+        {
+            if (this != &other) [[likely]]
+            {
+                if (this->handle)
+                    this->handle.destroy();
+                this->handle = std::exchange(other.handle, nullptr);
+            }
+            return *this;
+        }
 
         _inline_always internal::task_awaiter<T> operator co_await() { return internal::task_awaiter<T>(this->handle); }
 
@@ -202,9 +214,15 @@ namespace sys
                     co_await task<>::yield();
         }
 
+        friend void swap(task& a, task& b) noexcept
+        {
+            using std::swap;
+            swap(a.handle, b.handle);
+        }
+
         friend struct sys::internal::task_promise_b<T>;
     private:
-        std::coroutine_handle<internal::task_promise<T>> handle;
+        std::coroutine_handle<internal::task_promise<T>> handle = nullptr;
 
         _inline_always explicit task(std::coroutine_handle<internal::task_promise<T>> handle) : handle(handle) { }
     };
