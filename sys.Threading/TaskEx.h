@@ -109,7 +109,7 @@ namespace sys::internal
     template <typename T>
     struct task_promise final : public task_promise_b<T> // NOLINT(hicpp-member-init)
     {
-        constexpr task_promise() noexcept { };
+        constexpr task_promise() noexcept = default;
         constexpr task_promise(const task_promise&) = delete;
         constexpr task_promise(task_promise&&) = delete;
         ~task_promise() noexcept(noexcept(this->value.~T()))
