@@ -1,10 +1,10 @@
-// NOLINTBEGIN(misc-include-cleaner)
-
 #include <cstring>
 
 #include <CompilerWarnings.h>
 _push_nowarn_deprecated();
 _push_nowarn_conv_comp();
+
+// NOLINTBEGIN(misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>

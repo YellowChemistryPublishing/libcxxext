@@ -123,7 +123,7 @@ struct unsafe
     do                                                              \
     {                                                               \
         if (cond) [[unlikely]]                                      \
-            co_return val; /* NOLINT(bugprone-macro-parentheses) */ \
+            co_return val /* NOLINT(bugprone-macro-parentheses) */; \
     }                                                               \
     while (false)
 

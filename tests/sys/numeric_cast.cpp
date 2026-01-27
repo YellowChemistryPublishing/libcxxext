@@ -1,6 +1,6 @@
-// NOLINTBEGIN(misc-include-cleaner)
-
 #include <cstdint>
+
+// NOLINTBEGIN(misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
