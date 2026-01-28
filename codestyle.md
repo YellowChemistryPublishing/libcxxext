@@ -46,6 +46,8 @@ Parameters of type array-as-pointer must be passed by the array notation `... fu
 
 Where applicable and valid, `_restrict` must apply to pointers.
 
+If you are accessing members, you _must_ use `this->...`!
+
 Overriden virtual member functions must be annotated with the `override` specifier.
 
 All functions, where correct to, must be annotated with `_pure_const` (`[[gnu::const]]`), or, where otherwise correct to, `_pure` (`[[gnu::pure]]`). Don't forget `[[nodiscard]]`
