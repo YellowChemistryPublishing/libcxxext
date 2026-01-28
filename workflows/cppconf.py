@@ -94,6 +94,12 @@ def main(argv: List[str]) -> None:
         "-b", "--build-dir-name", help="Build dir name.", metavar="", required=True
     )
     parser.add_argument(
+        "--extra-args",
+        help="Extra args to pass to CMake.",
+        metavar="",
+        required=False,
+    )
+    parser.add_argument(
         "-r",
         "--rimraf",
         default=False,
@@ -183,6 +189,7 @@ def main(argv: List[str]) -> None:
         + additional_configure_flags(
             args.use_generator, args.arch, args.platform, args.compiler
         )
+        + (args.extra_args.split(";") if args.extra_args else [])
         + (["--trace-expand", "--log-level=VERBOSE"] if args.cmake_verbose else []),
         host_platform=args.platform,
         cl_name=args.compiler,
