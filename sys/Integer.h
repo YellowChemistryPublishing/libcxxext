@@ -71,7 +71,7 @@ namespace sys
     /// All shifts are logical, with shift-by-negative as opposite-direction shift.
     /// @note Pass `byval`.
     template <std::integral For>
-    struct _packed alignas(For) integer
+    struct alignas(For) integer
     {
     private:
         using signed_t = std::make_signed_t<For>;
@@ -119,6 +119,7 @@ namespace sys
         constexpr integer& operator=(integer&& other) noexcept = default;
 
         [[nodiscard]] constexpr For operator*() const noexcept { return this->underlying; }
+        [[nodiscard]] constexpr For& operator*() noexcept { return this->underlying; }
         template <std::integral T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
         {
@@ -243,6 +244,9 @@ namespace sys
         constexpr integer& operator<<=(const integer& other) noexcept { return (*this = *this << other); }
         constexpr integer& operator>>=(const integer& other) noexcept { return (*this = *this >> other); }
     };
+    // Just to be sure.
+    static_assert(sizeof(integer<uint_least8_t>) == sizeof(uint_least8_t));
+    static_assert(alignof(integer<uint_least8_t>) == alignof(uint_least8_t));
 } // namespace sys
 
 /// @defgroup Integer Safe(r) Integer Types
