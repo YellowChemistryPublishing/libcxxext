@@ -1,10 +1,8 @@
 #include <new>
 #include <print>
 
-// clang-format off
 #include <module/sys>
 #include <module/sys.Threading>
-// clang-format on
 
 _push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compiler coroutine codegen.
 
