@@ -126,6 +126,7 @@ namespace sys
         {
             return numeric_cast<T>(**this, unsafe());
         }
+        // NOLINTNEXTLINE(hicpp-explicit-conversions)
         [[nodiscard]] constexpr operator For() const noexcept { return **this; }
         template <std::floating_point T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
