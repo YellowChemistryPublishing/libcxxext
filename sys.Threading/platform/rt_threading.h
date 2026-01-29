@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <coroutine>
 #include <cstddef>
 #include <mutex>
@@ -78,21 +79,35 @@ namespace sys::platform
     {
         void enqueue(std::coroutine_handle<> handle)
         {
-            const std::scoped_lock lock(this->qlock);
+            const std::unique_lock lock(this->qlock);
             this->queue.push(handle);
+            this->cv.notify_one();
         }
-        bool try_dequeue(std::coroutine_handle<>& handle)
+        bool try_dequeue(std::coroutine_handle<>& handle, unsafe)
         {
-            const std::scoped_lock lock(this->qlock);
             if (this->queue.empty())
                 return false;
+
             handle = this->queue.front();
             this->queue.pop();
             return true;
         }
+        bool try_dequeue(std::coroutine_handle<>& handle)
+        {
+            const std::unique_lock lock(this->qlock);
+            return this->try_dequeue(handle, unsafe());
+        }
+        template <typename Func>
+        bool wait_dequeue(std::coroutine_handle<>& handle, const Func& stopCond)
+        {
+            std::unique_lock lock(this->qlock);
+            this->cv.wait(lock, [this, &stopCond]() { return !this->queue.empty() || stopCond(); });
+            return this->try_dequeue(handle, unsafe());
+        }
     private:
         std::queue<std::coroutine_handle<>> queue;
         std::mutex qlock;
+        std::condition_variable cv;
     };
 
     struct thread_pool
@@ -107,15 +122,11 @@ namespace sys::platform
                 std::coroutine_handle<> handle;
                 while (!token.stop_requested())
                 {
-                    if (this->queue.try_dequeue(handle))
+                    while (this->queue.wait_dequeue(handle, [&token]() { return token.stop_requested(); }))
                         handle.resume();
-                    std::this_thread::yield();
                 }
                 while (this->queue.try_dequeue(handle))
-                {
                     handle.resume();
-                    std::this_thread::yield();
-                }
             });
         }
         thread_pool(const thread_pool&) = delete;

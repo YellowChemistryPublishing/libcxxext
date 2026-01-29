@@ -5,6 +5,7 @@
 #include <CompilerWarnings.h> // IWYU pragma: export
 #include <Destructor.h>       // IWYU pragma: export
 #include <Exception.h>        // IWYU pragma: export
+#include <FloatingPoint.h>    // IWYU pragma: export
 #include <Integer.h>          // IWYU pragma: export
 #include <LanguageSupport.h>  // IWYU pragma: export
 #include <Numeric.h>          // IWYU pragma: export
