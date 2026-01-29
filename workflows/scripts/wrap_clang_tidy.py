@@ -29,7 +29,7 @@ def main(argv: List[str]) -> None:
         else:
             other_args.append(arg)
 
-    if not srcs or len(argv) < 2:
+    if not srcs:
         return
 
     clang_tidy_cmd = argv[1]

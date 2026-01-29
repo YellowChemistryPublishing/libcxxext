@@ -85,6 +85,7 @@ namespace sys
 
         [[nodiscard]] _pure_const static consteval integer highest() { return integer(std::numeric_limits<For>::max()); }
         [[nodiscard]] _pure_const static consteval integer lowest() { return integer(std::numeric_limits<For>::lowest()); }
+        [[nodiscard]] _pure_const static consteval integer ones() { return integer(_as(For, ~_as(For, 0))); }
         [[nodiscard]] _pure_const static consteval bool is_signed() { return std::is_signed_v<For>; }
 
         constexpr integer() noexcept = default;
@@ -125,7 +126,7 @@ namespace sys
         {
             return numeric_cast<T>(**this, unsafe());
         }
-        [[nodiscard]] constexpr explicit operator For() const noexcept { return **this; }
+        [[nodiscard]] constexpr operator For() const noexcept { return **this; }
         template <std::floating_point T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
         {
@@ -141,9 +142,29 @@ namespace sys
             return std::cmp_equal(*a, *b);
         }
         template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator==(integer<For> a, T b) noexcept
+        {
+            return std::cmp_equal(*a, b);
+        }
+        template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator==(For a, integer<T> b) noexcept
+        {
+            return std::cmp_equal(a, *b);
+        }
+        template <std::integral T>
         [[nodiscard]] friend constexpr bool operator<(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_less(*a, *b);
+        }
+        template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator<(integer<For> a, T b) noexcept
+        {
+            return std::cmp_less(*a, b);
+        }
+        template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator<(For a, integer<T> b) noexcept
+        {
+            return std::cmp_less(a, *b);
         }
         template <std::integral T>
         [[nodiscard]] friend constexpr bool operator<=(integer<For> a, integer<T> b) noexcept
@@ -151,14 +172,44 @@ namespace sys
             return std::cmp_less_equal(*a, *b);
         }
         template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator<=(integer<For> a, T b) noexcept
+        {
+            return std::cmp_less_equal(*a, b);
+        }
+        template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator<=(For a, integer<T> b) noexcept
+        {
+            return std::cmp_less_equal(a, *b);
+        }
+        template <std::integral T>
         [[nodiscard]] friend constexpr bool operator>(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_greater(*a, *b);
         }
         template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator>(integer<For> a, T b) noexcept
+        {
+            return std::cmp_greater(*a, b);
+        }
+        template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator>(For a, integer<T> b) noexcept
+        {
+            return std::cmp_greater(a, *b);
+        }
+        template <std::integral T>
         [[nodiscard]] friend constexpr bool operator>=(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_greater_equal(*a, *b);
+        }
+        template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator>=(integer<For> a, T b) noexcept
+        {
+            return std::cmp_greater_equal(*a, b);
+        }
+        template <std::integral T>
+        [[nodiscard]] friend constexpr bool operator>=(For a, integer<T> b) noexcept
+        {
+            return std::cmp_greater_equal(a, *b);
         }
 
         constexpr integer& operator++() noexcept { return (*this = integer(this->u() + _as(unsigned_t, 1), unsafe())); }
