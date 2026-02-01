@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <Integer.h>
+#include <LanguageSupport.h>
 #include <Traits.h>
 
 namespace sys::platform

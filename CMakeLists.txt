@@ -17,6 +17,7 @@ cmake_dependent_option(LIBCXXEXT_COVERAGE "Enable coverage instrumentation (gcc/
 set(LIBCXXEXT_LIBRARY_TYPE "STATIC" CACHE STRING "Build type of libraries.")
 
 set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD_REQUIRED OFF)
 set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
 
 include(cmake/stdc.cmake)

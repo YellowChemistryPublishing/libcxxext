@@ -31,6 +31,8 @@ if(NOT MSVC)
     )
 else()
     target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
+        /utf-8 /Zc:preprocessor
+
         /W4
 
         /EHa

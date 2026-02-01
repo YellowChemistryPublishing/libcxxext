@@ -60,8 +60,8 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     # Containers
     <array>
     <deque>
-    $<$<COMPILE_FEATURES:cxx_std_23>:<flat_map>>
-    $<$<COMPILE_FEATURES:cxx_std_23>:<flat_set>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<flat_map>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<flat_set>>
     <forward_list>
     # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<hive>>
     # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<inplace_vector>>
