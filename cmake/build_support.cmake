@@ -19,6 +19,8 @@ if(NOT MSVC)
     target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
         $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override> $<$<COMPILE_LANGUAGE:CXX>:-Wold-style-cast> $<$<COMPILE_LANGUAGE:CXX>:-Woverloaded-virtual> $<$<COMPILE_LANGUAGE:CXX>:-Wzero-as-null-pointer-constant>
 
+        -finput-charset=UTF-8 -fexec-charset=UTF-8
+
         -Wall -Wextra -pedantic -Wconversion -Wsign-conversion -Wdouble-promotion -Wunused-result -Wuninitialized -Wimplicit-fallthrough -Wcast-align -Wnull-dereference -Wformat=2 -Werror=format-security -Wno-psabi
 
         -fexceptions -fnon-call-exceptions -fasynchronous-unwind-tables
