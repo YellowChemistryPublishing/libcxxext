@@ -102,7 +102,7 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     $<$<COMPILE_FEATURES:cxx_std_20>:<format>>
     <locale>
     <regex>
-    $<$<COMPILE_FEATURES:cxx_std_26>:<text_encoding>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<text_encoding>>
 
     # Numerics
     <cfenv>
