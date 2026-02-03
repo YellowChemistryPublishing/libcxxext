@@ -3,6 +3,7 @@
 
 /build/
 /*-build/
+/install/
 CMakeFiles/
 
 __pycache__/
