@@ -17,7 +17,7 @@ Checks: >
     -hicpp-avoid-c-arrays, -hicpp-avoid-goto, -hicpp-braces-around-statements, -hicpp-named-parameter, -hicpp-non-private-member-variables-in-classes,
     -hicpp-uppercase-literal-suffix, -hicpp-use-auto,
 
-    -llvm-header-guard,
+    -llvm-header-guard, -llvm-qualified-auto,
 
     -misc-use-anonymous-namespace,
 
