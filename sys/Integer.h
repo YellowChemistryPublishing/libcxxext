@@ -34,8 +34,8 @@ using ullong = unsigned long long; // NOLINT(google-runtime-int)
 namespace sys
 {
     /// @brief Saturating integer-to-integer cast.
-    template <std::integral To, std::integral From>
-    constexpr To numeric_cast(const From value, unsafe)
+    template <sys::IBuiltinInteger To, sys::IBuiltinInteger From>
+    constexpr To bnumeric_cast(const From value, unsafe)
     {
 #if !_libcxxext_compiler_clang && defined(__cpp_lib_saturation_arithmetic) && __cpp_lib_saturation_arithmetic >= 202311l
         return std::saturate_cast<To>(value);
@@ -49,8 +49,8 @@ namespace sys
 #endif
     }
     /// @brief Saturating floating-point-to-integer cast.
-    template <std::integral To, std::floating_point From>
-    constexpr To numeric_cast(const From value, unsafe)
+    template <sys::IBuiltinInteger To, sys::IBuiltinFloatingPoint From>
+    constexpr To bnumeric_cast(const From value, unsafe)
     {
         if (!std::isfinite(value) || value <= _as(From, std::numeric_limits<To>::lowest())) [[unlikely]]
             return std::numeric_limits<To>::lowest();
@@ -58,6 +58,17 @@ namespace sys
             return std::numeric_limits<To>::max();
         else [[likely]]
             return To(value);
+    }
+
+    template <sys::IBuiltinIntegerSigned T>
+    consteval T bsentinel()
+    {
+        return std::numeric_limits<T>::lowest();
+    }
+    template <sys::IBuiltinIntegerUnsigned T>
+    consteval T bsentinel()
+    {
+        return std::numeric_limits<T>::max();
     }
 
     /// @brief Safe(r) high-level integer wrapper.
@@ -70,7 +81,7 @@ namespace sys
     /// All arithmetic is wrapping otherwise.
     /// All shifts are logical, with shift-by-negative as opposite-direction shift.
     /// @note Pass `byval`.
-    template <std::integral For>
+    template <sys::IBuiltinInteger For>
     struct alignas(For) integer
     {
     private:
@@ -83,27 +94,29 @@ namespace sys
     public:
         using underlying_type = For;
 
-        [[nodiscard]] _pure_const static consteval integer highest() { return integer(std::numeric_limits<For>::max()); }
-        [[nodiscard]] _pure_const static consteval integer lowest() { return integer(std::numeric_limits<For>::lowest()); }
-        [[nodiscard]] _pure_const static consteval integer ones() { return integer(_as(For, ~_as(For, 0))); }
-        [[nodiscard]] _pure_const static consteval bool is_signed() { return std::is_signed_v<For>; }
+        [[nodiscard]] static consteval bool is_signed() { return std::is_signed_v<For>; }
+
+        [[nodiscard]] static consteval integer highest() { return integer(std::numeric_limits<For>::max()); }
+        [[nodiscard]] static consteval integer lowest() { return integer(std::numeric_limits<For>::lowest()); }
+        [[nodiscard]] static consteval integer ones() { return integer(_as(For, ~_as(For, 0))); }
+        [[nodiscard]] static consteval integer sentinel() { return sys::bsentinel<For>(); }
 
         constexpr integer() noexcept = default;
         template <IBuiltinIntegerCanHold<For> T>
         constexpr integer(T v) noexcept : underlying(_as(For, v)) // NOLINT(hicpp-explicit-conversions)
         { }
         template <typename T>
-        requires std::integral<T> || std::floating_point<T>
-        constexpr explicit integer(T v) noexcept : underlying(numeric_cast<For>(v, unsafe()))
+        requires (!IBuiltinIntegerCanHold<T, For> && (sys::IBuiltinInteger<T> || sys::IBuiltinFloatingPoint<T>))
+        constexpr explicit integer(T v) noexcept : underlying(bnumeric_cast<For>(v, unsafe()))
         { }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         constexpr explicit integer(T v, unsafe) noexcept :
             underlying(std::bit_cast<For>(_as(unsigned_t, std::bit_cast<std::make_unsigned_t<T>>(v) & _as(unsigned_t, ~_as(unsigned_t, 0)))))
         { }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         constexpr explicit integer(integer<T> v) noexcept : integer(*v)
         { }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         constexpr explicit integer(integer<T> v, unsafe) noexcept : integer(*v, unsafe())
         { }
         constexpr integer(const integer& v) noexcept = default;
@@ -121,14 +134,14 @@ namespace sys
 
         [[nodiscard]] constexpr For operator*() const noexcept { return this->underlying; }
         [[nodiscard]] constexpr For& operator*() noexcept { return this->underlying; }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
         {
-            return numeric_cast<T>(**this, unsafe());
+            return bnumeric_cast<T>(**this, unsafe());
         }
         // NOLINTNEXTLINE(hicpp-explicit-conversions)
         [[nodiscard]] constexpr operator For() const noexcept { return **this; }
-        template <std::floating_point T>
+        template <sys::IBuiltinFloatingPoint T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
         {
             return _as(T, **this);
@@ -137,77 +150,77 @@ namespace sys
         [[nodiscard]] constexpr explicit operator bool() const noexcept { return **this; }
         [[nodiscard]] constexpr bool operator!() const noexcept { return !**this; }
 
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator==(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_equal(*a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator==(integer<For> a, T b) noexcept
         {
             return std::cmp_equal(*a, b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator==(For a, integer<T> b) noexcept
         {
             return std::cmp_equal(a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_less(*a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<(integer<For> a, T b) noexcept
         {
             return std::cmp_less(*a, b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<(For a, integer<T> b) noexcept
         {
             return std::cmp_less(a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<=(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_less_equal(*a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<=(integer<For> a, T b) noexcept
         {
             return std::cmp_less_equal(*a, b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<=(For a, integer<T> b) noexcept
         {
             return std::cmp_less_equal(a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_greater(*a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>(integer<For> a, T b) noexcept
         {
             return std::cmp_greater(*a, b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>(For a, integer<T> b) noexcept
         {
             return std::cmp_greater(a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>=(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_greater_equal(*a, *b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>=(integer<For> a, T b) noexcept
         {
             return std::cmp_greater_equal(*a, b);
         }
-        template <std::integral T>
+        template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>=(For a, integer<T> b) noexcept
         {
             return std::cmp_greater_equal(a, *b);
@@ -238,7 +251,7 @@ namespace sys
             if (**this == std::numeric_limits<For>::lowest()) [[unlikely]]
                 return integer(std::numeric_limits<For>::max());
             else [[likely]]
-                return integer(-**this);
+                return integer(_as(For, -**this));
         }
         [[nodiscard]] friend constexpr integer operator+(integer a, integer b) noexcept { return integer(a.u() + b.u(), unsafe()); }
         [[nodiscard]] friend constexpr integer operator-(integer a, integer b) noexcept { return integer(a.u() - b.u(), unsafe()); }
@@ -254,14 +267,14 @@ namespace sys
                 return integer(std::numeric_limits<For>::max());
             }
             else [[likely]]
-                return integer(*a / *b);
+                return integer(_as(For, *a / *b));
         }
         [[nodiscard]] friend constexpr integer operator%(integer a, integer b) noexcept
         {
             if (*b == 0) [[unlikely]]
                 return a;
             else [[likely]]
-                return integer(*a % *b);
+                return integer(_as(For, *a % *b));
         }
 
         [[nodiscard]] constexpr integer operator~() const noexcept { return integer(~this->u(), unsafe()); }
