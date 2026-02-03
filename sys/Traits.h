@@ -28,17 +28,17 @@ namespace sys::meta
     template <typename T, typename... Args>
     struct function_signature<T(Args...)> : function_signature<T, Args...>
     {
-        consteval bool is_member_func() { return false; }
+        static consteval bool is_member_func() { return false; }
     };
     template <typename T, typename... Args>
     struct function_signature<T (*)(Args...)> : function_signature<T, Args...>
     {
-        consteval bool is_member_func() { return false; }
+        static consteval bool is_member_func() { return false; }
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...)> : function_signature<T, Args...>
     {
-        consteval bool is_member_func() { return true; }
+        static consteval bool is_member_func() { return true; }
     };
 
     template <typename... Pack>
@@ -86,7 +86,8 @@ namespace sys
 
     /// @brief Whether `T` can hold the entire range of `CanHold`.
     template <typename T, typename CanHold>
-    concept IBuiltinIntegerCanHold = std::integral<T> && std::integral<CanHold> && std::cmp_less_equal(std::numeric_limits<T>::lowest(), std::numeric_limits<CanHold>::lowest()) &&
+    concept IBuiltinIntegerCanHold =
+        IBuiltinInteger<T> && IBuiltinInteger<CanHold> && std::cmp_less_equal(std::numeric_limits<T>::lowest(), std::numeric_limits<CanHold>::lowest()) &&
         std::cmp_greater_equal(std::numeric_limits<T>::max(), std::numeric_limits<CanHold>::max());
 
     /// @brief Whether `T` is a character type.

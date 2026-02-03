@@ -2,7 +2,6 @@
 
 #include <bit>
 #include <cmath>
-#include <concepts>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
@@ -110,8 +109,7 @@ namespace sys
         constexpr explicit integer(T v) noexcept : underlying(bnumeric_cast<For>(v, unsafe()))
         { }
         template <sys::IBuiltinInteger T>
-        constexpr explicit integer(T v, unsafe) noexcept :
-            underlying(std::bit_cast<For>(_as(unsigned_t, std::bit_cast<std::make_unsigned_t<T>>(v) & _as(unsigned_t, ~_as(unsigned_t, 0)))))
+        constexpr explicit integer(T v, unsafe) noexcept : underlying(std::bit_cast<For>(_as(unsigned_t, std::bit_cast<std::make_unsigned_t<T>>(v))))
         { }
         template <sys::IBuiltinInteger T>
         constexpr explicit integer(integer<T> v) noexcept : integer(*v)
