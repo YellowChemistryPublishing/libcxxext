@@ -33,6 +33,7 @@
 #define _clwarn_clang_double_promotion "-Wdouble-promotion"
 #define _clwarn_clang_sign_compare "-Wsign-compare"
 #define _clwarn_clang_implicit_fallthrough "-Wimplicit-fallthrough"
+#define _clwarn_clang_unused_symbol "-Wunneeded-internal-declaration"
 
 #define _clwarn_gcc_bad_offsetof "-Winvalid-offsetof"
 #define _clwarn_gcc_nontrivial_memcpy "-Wclass-memaccess"

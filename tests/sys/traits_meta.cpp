@@ -1,5 +1,7 @@
 // NOLINTBEGIN(misc-include-cleaner)
 
+#include <catch2/catch_all.hpp>
+
 #include <module/sys>
 
 #include <concepts>
@@ -10,6 +12,8 @@
 #include <type_traits>
 #include <vector>
 
+TEST_CASE("Invariably passes. | `sys::meta`") { CHECK(true); }
+
 struct test_class
 {
     // NOLINTBEGIN(readability-convert-member-functions-to-static)
@@ -19,9 +23,6 @@ struct test_class
 
     static int static_func(int) { return 0; }
 };
-
-static int free_function(int, float) { return 0; }
-static void void_function() { }
 
 // ================================================================================
 // Regular function types. | `sys::meta::function_signature<T(Args...)>`

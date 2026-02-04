@@ -1,5 +1,7 @@
 // NOLINTBEGIN(misc-include-cleaner)
 
+#include <catch2/catch_all.hpp>
+
 #include <module/sys>
 
 #include <concepts>
@@ -10,8 +12,12 @@
 #include <type_traits>
 #include <vector>
 
+TEST_CASE("Invariably passes. | `sys::I*`") { CHECK(true); }
+
+_push_nowarn_clang(_clwarn_clang_unused_symbol);
 static int free_function(int, float) { return 0; }
 static void void_function() { }
+_pop_nowarn_clang();
 
 // NOLINTBEGIN(google-runtime-int)
 

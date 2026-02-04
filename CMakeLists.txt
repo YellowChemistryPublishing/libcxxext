@@ -4,14 +4,14 @@ project(libcxxext)
 
 include(CMakeDependentOption)
 
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "Install path prefix." FORCE)
-endif()
-
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(LIBCXXEXT_DEVELOPMENT_MODE ON CACHE STRING "Build libcxxext in development mode.")
 else()
     set(LIBCXXEXT_DEVELOPMENT_MODE OFF CACHE STRING "Build libcxxext in development mode.")
+endif()
+
+if(LIBCXXEXT_DEVELOPMENT_MODE AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "Install path prefix." FORCE)
 endif()
 
 # Config
