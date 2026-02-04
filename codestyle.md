@@ -54,16 +54,11 @@ All functions, where correct to, must be annotated with `_pure_const` (`[[gnu::c
 too!
 
 Please use the following specifier order:
-`static`|`thread_local`|`extern`&nbsp;&nbsp;
-`constexpr`|`consteval`|`constinit`|`inline`&nbsp;&nbsp;
-`explicit`&nbsp;&nbsp;
-`virtual`&nbsp;&nbsp;
-`cv-pre`&nbsp;&nbsp;
-`T`|`auto`&nbsp;&nbsp;
-`decl...`&nbsp;&nbsp;
-`cvref-post`&nbsp;&nbsp;
-`noexcept`&nbsp;&nbsp;
-`override`|`final`
+`static`|`thread_local`|`extern`&emsp;
+`constexpr`|`consteval`|`constinit`|`inline`&emsp;
+`explicit`&emsp;`virtual`&emsp;`cv-pre`&emsp;
+`T`|`auto`&emsp;`decl...`&emsp;`cvref-post`&emsp;
+`noexcept`&emsp;`override`|`final`
 
 Where template parameters have restricted domain or constraints, they must be specified with a `requires` clause.
 
