@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdio>
+#include <cstdio>          // NOLINT(misc-include-cleaner)
 #include <print>           // NOLINT(misc-include-cleaner)
 #include <source_location> // NOLINT(misc-include-cleaner)
 

@@ -10,8 +10,10 @@
 #include <type_traits>
 #include <vector>
 
-int free_function(int, float) { return 0; }
-void void_function() { }
+static int free_function(int, float) { return 0; }
+static void void_function() { }
+
+// NOLINTBEGIN(google-runtime-int)
 
 // ================================================================================
 // Signed integer types. | `sys::IBuiltinIntegerSigned`
@@ -188,8 +190,8 @@ static_assert(!sys::IFunc<decltype(&free_function), int(int)>);
 // ================================================================================
 
 // Accepts arrays.
-static_assert(sys::IEnumerable<int[5]>);
-static_assert(sys::IEnumerable<char[10]>);
+static_assert(sys::IEnumerable<int[5]>);   // NOLINT(readability-magic-numbers)
+static_assert(sys::IEnumerable<char[10]>); // NOLINT(readability-magic-numbers)
 
 // Accepts standard containers.
 static_assert(sys::IEnumerable<std::vector<int>>);
@@ -227,4 +229,5 @@ static_assert(!sys::ISizeable<std::vector<int>, int>);
 static_assert(!sys::ISizeable<int>);
 static_assert(!sys::ISizeable<float>);
 
+// NOLINTEND(google-runtime-int)
 // NOLINTEND(misc-include-cleaner)

@@ -9,7 +9,7 @@
 
 #include <Exception.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
+#include <inline/Integer.inl>
 
 // NOLINTBEGIN(bugprone-macro-parentheses)
 #define _res_movret(out, res_xval)          \

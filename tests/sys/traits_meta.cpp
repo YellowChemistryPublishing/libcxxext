@@ -12,13 +12,16 @@
 
 struct test_class
 {
-    int member_func(float, double) { return 0; }
-    int const_member_func(float) const { return 0; }
+    // NOLINTBEGIN(readability-convert-member-functions-to-static)
+    [[nodiscard]] int member_func(float, double) { return 0; }
+    [[nodiscard]] int const_member_func(float) const { return 0; }
+    // NOLINTEND(readability-convert-member-functions-to-static)
+
     static int static_func(int) { return 0; }
 };
 
-int free_function(int, float) { return 0; }
-void void_function() { }
+static int free_function(int, float) { return 0; }
+static void void_function() { }
 
 // ================================================================================
 // Regular function types. | `sys::meta::function_signature<T(Args...)>`
@@ -108,7 +111,7 @@ static_assert(test_pack_meta::contains<double>());
 static_assert(test_pack_meta::contains<char>());
 
 // `contains<T>()` returns `false` for types not in pack.
-static_assert(!test_pack_meta::contains<long>());
+static_assert(!test_pack_meta::contains<long>()); // NOLINT(google-runtime-int)
 static_assert(!test_pack_meta::contains<std::string>());
 static_assert(!test_pack_meta::contains<void>());
 
