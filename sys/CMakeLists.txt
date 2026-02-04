@@ -6,9 +6,10 @@ target_sources(sys INTERFACE
     FILES ${SYS_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys"
 )
 target_include_directories(sys INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-target_precompile_headers(sys INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/module/sys")
+if(LIBCXXEXT_EXPORT_PCH)
+    target_precompile_headers(sys INTERFACE ${SYS_HEADERS})
+endif()
 target_link_libraries(sys INTERFACE
-    sys.BuildSupport.CompilerOptions
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
     $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
 )
