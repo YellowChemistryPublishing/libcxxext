@@ -53,17 +53,13 @@ Overriden virtual member functions must be annotated with the `override` specifi
 All functions, where correct to, must be annotated with `_pure_const` (`[[gnu::const]]`), or, where otherwise correct to, `_pure` (`[[gnu::pure]]`). Don't forget `[[nodiscard]]`
 too!
 
-Please use the following specifier order:
-`static`|`thread_local`|`extern`&emsp;
-`constexpr`|`consteval`|`constinit`|`inline`&emsp;
-`explicit`&emsp;`virtual`&emsp;`cv-pre`&emsp;
-`T`|`auto`&emsp;`decl...`&emsp;`cvref-post`&emsp;
-`noexcept`&emsp;`override`|`final`
+Please use the following specifier order: `static`|`thread_local`|`extern`&emsp; `constexpr`|`consteval`|`constinit`|`inline`&emsp; `explicit`&emsp;`virtual`&emsp;`cv-pre`&emsp;
+`T`|`auto`&emsp;`decl...`&emsp;`cvref-post`&emsp; `noexcept`&emsp;`override`|`final`
 
 Where template parameters have restricted domain or constraints, they must be specified with a `requires` clause.
 
-When using features from the C standard library, you must include the equivalent `<cheader>` and qualify relevant identifiers with `std::`.
-The only exception is for fixed width integer types and standard integer aliases, i.e. `uint_least32_t`, `size_t`.
+When using features from the C standard library, you must include the equivalent `<cheader>` and qualify relevant identifiers with `std::`. The only exception is for fixed width
+integer types and standard integer aliases, i.e. `uint_least32_t`, `size_t`.
 
 ## What Integer to Use
 
