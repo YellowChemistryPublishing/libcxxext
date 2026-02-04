@@ -12,8 +12,8 @@
 #include <utility>
 #include <vector>
 
-#include <Integer.h>
 #include <LanguageSupport.h>
+#include <Numeric.h>
 #include <Traits.h>
 
 namespace sys::platform

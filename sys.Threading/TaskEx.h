@@ -10,8 +10,8 @@ _push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compil
 #include <utility>
 
 #include <AlignedStorage.h>
-#include <Integer.h>
 #include <LanguageSupport.h>
+#include <Numeric.h>
 #include <rt.h>
 #include <rt_threading.h>
 

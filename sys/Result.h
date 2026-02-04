@@ -8,8 +8,8 @@
 #include <utility>
 
 #include <Exception.h>
-#include <Integer.h>
 #include <LanguageSupport.h>
+#include <Numeric.h>
 
 // NOLINTBEGIN(bugprone-macro-parentheses)
 #define _res_movret(out, res_xval)          \

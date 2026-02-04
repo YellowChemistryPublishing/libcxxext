@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <tuple>
 
-#include <Integer.h>
 #include <LanguageSupport.h>
+#include <Numeric.h>
 
 namespace sys
 {

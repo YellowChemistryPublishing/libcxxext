@@ -44,7 +44,7 @@ if(LIBCXXEXT_TESTS)
 
     set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
     set(CATCH_INSTALL_EXTRAS OFF CACHE INTERNAL "" FORCE)
-    add_subdirectory(Catch2)
+    add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
 
     add_subdirectory(rapidcheck EXCLUDE_FROM_ALL)
 
