@@ -53,7 +53,17 @@ Overriden virtual member functions must be annotated with the `override` specifi
 All functions, where correct to, must be annotated with `_pure_const` (`[[gnu::const]]`), or, where otherwise correct to, `_pure` (`[[gnu::pure]]`). Don't forget `[[nodiscard]]`
 too!
 
+Please use the following specifier order:
+`static`|`thread_local`|`extern`&emsp;
+`constexpr`|`consteval`|`constinit`|`inline`&emsp;
+`explicit`&emsp;`virtual`&emsp;`cv-pre`&emsp;
+`T`|`auto`&emsp;`decl...`&emsp;`cvref-post`&emsp;
+`noexcept`&emsp;`override`|`final`
+
 Where template parameters have restricted domain or constraints, they must be specified with a `requires` clause.
+
+When using features from the C standard library, you must include the equivalent `<cheader>` and qualify relevant identifiers with `std::`.
+The only exception is for fixed width integer types and standard integer aliases, i.e. `uint_least32_t`, `size_t`.
 
 ## What Integer to Use
 
@@ -102,10 +112,10 @@ If you check all these boxes, your code is probably sufficiently well thought ou
 - Functions and variables marked with `noexcept`, `const`, `_pure`, `_pure_const`, `_restrict`, `[[nodiscard]]` where applicable.
 - `constexpr` anything that moves.
 - You are using `result<...>` for error handling.
-- An exception thrown at any point in my code would not cause a memory leak (or, it is sufficiently justified that one must not occur).
+- An exception thrown at any point in my code would not cause a memory or resource leak (or, it is sufficiently justified that one must not occur).
 - For custom types, a function named `swap` is implemented in the same scope, and used in the type's move constructor.
     - (Please do the `friend constexpr void swap(T& a, T& b) { using std::swap; ... }` trick please.)
-- When applicable, a type has a member function with declaration `sz hashCode()` is provided.
+- When applicable, a type has a member function with declaration `sz hash_code()` is provided.
 
 ## Testing
 

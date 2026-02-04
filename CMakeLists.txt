@@ -10,6 +10,10 @@ else()
     set(LIBCXXEXT_DEVELOPMENT_MODE OFF CACHE STRING "Build libcxxext in development mode.")
 endif()
 
+if(LIBCXXEXT_DEVELOPMENT_MODE AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "Install path prefix." FORCE)
+endif()
+
 # Config
 cmake_dependent_option(LIBCXXEXT_EXAMPLES "Build examples." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
 cmake_dependent_option(LIBCXXEXT_TESTS "Build tests." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
@@ -40,9 +44,9 @@ if(LIBCXXEXT_TESTS)
 
     set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
     set(CATCH_INSTALL_EXTRAS OFF CACHE INTERNAL "" FORCE)
-    add_subdirectory(Catch2)
+    add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
 
-    add_subdirectory(rapidcheck)
+    add_subdirectory(rapidcheck EXCLUDE_FROM_ALL)
 
     add_subdirectory(tests)
 endif()

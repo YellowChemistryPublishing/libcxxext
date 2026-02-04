@@ -2,7 +2,7 @@
 
 #include <Platform.h>
 
-#include <cstdio>
+#include <cstdio> // NOLINT(misc-include-cleaner)
 #if _libcxxext_compiler_gcc
 #include <cxxabi.h>
 #endif

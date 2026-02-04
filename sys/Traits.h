@@ -10,35 +10,66 @@
 
 namespace sys::meta
 {
-    template <typename T, typename... Args>
+    template <typename MetaMeta, typename T = void, typename... Args>
     struct function_signature
     {
         using return_type = T;
         using arguments = std::tuple<Args...>;
 
+        template <typename = void>
+        static consteval bool is_valid()
+        {
+            if constexpr (requires {
+                              { MetaMeta::override_is_valid() } -> std::convertible_to<bool>;
+                          })
+                return MetaMeta::override_is_valid();
+            else
+                return false;
+        }
+
+        template <typename = void>
+        static consteval bool is_member_func()
+        {
+            if constexpr (requires {
+                              { MetaMeta::override_is_member_func() } -> std::convertible_to<bool>;
+                          })
+                return MetaMeta::override_is_member_func();
+            else
+                return false;
+        }
+
         template <typename Func>
         static consteval bool is_signature_of()
         {
-            return std::is_invocable_r_v<T, std::remove_cvref_t<Func>, Args...>;
+            if constexpr (requires {
+                              { MetaMeta::template override_is_signature_of<Func>() } -> std::convertible_to<bool>;
+                          })
+                return MetaMeta::template override_is_signature_of<Func>();
+            else if constexpr (function_signature::is_valid())
+                return std::is_invocable_r_v<T, std::remove_cvref_t<Func>, Args...>;
+            else
+                return false;
         }
 
         function_signature() = delete;
     };
 
     template <typename T, typename... Args>
-    struct function_signature<T(Args...)> : function_signature<T, Args...>
+    struct function_signature<T(Args...)> : function_signature<function_signature<T(Args...)>, T, Args...>
     {
-        static consteval bool is_member_func() { return false; }
+        static consteval bool override_is_valid() { return true; }
     };
     template <typename T, typename... Args>
-    struct function_signature<T (*)(Args...)> : function_signature<T, Args...>
+    struct function_signature<T (*)(Args...)> : function_signature<function_signature<T (*)(Args...)>, T, Args...>
     {
-        static consteval bool is_member_func() { return false; }
+        static consteval bool override_is_valid() { return true; }
     };
     template <typename For, typename T, typename... Args>
-    struct function_signature<T (For::*)(Args...)> : function_signature<T, Args...>
+    struct function_signature<T (For::*)(Args...)> : function_signature<function_signature<T (For::*)(Args...)>, T, Args...>
     {
-        static consteval bool is_member_func() { return true; }
+        static consteval bool override_is_valid() { return true; }
+
+        static consteval bool override_is_member_func() { return true; }
     };
 
     template <typename... Pack>
@@ -96,26 +127,26 @@ namespace sys
 
     /// @brief Whether `Functor` represents a function with signature `Signature`.
     template <typename Functor, typename Signature> // i.e. void(int, int)
-    concept IFunc = meta::function_signature<Signature>::template is_signature_of<Functor>;
+    concept IFunc = meta::function_signature<Signature>::template is_signature_of<Functor>();
 
     /// @brief Whether `T` is iterable.
     template <typename T, typename U = void>
-    concept IEnumerable = std::is_array_v<T> || requires(T range, std::remove_cvref_t<decltype(range.begin())> it) {
-        range.begin();
-        range.end();
+    concept IEnumerable = (!std::is_array_v<T> && requires(T& range, std::remove_cvref_t<decltype(range.begin())> it) {
+                              range.begin();
+                              range.end();
 
-        range.begin() != range.end();
+                              range.begin() != range.end();
+                              ++it;
+
+                              requires ((std::same_as<U, void> && requires { *range.begin(); }) || std::same_as<std::remove_cvref_t<decltype(*range.begin())>, U>);
+                          }) || requires(T& range, std::remove_cvref_t<decltype(std::begin(range))> it) {
+        std::begin(range);
+        std::end(range);
+
+        std::begin(range) != std::end(range);
         ++it;
 
-        requires ((std::same_as<U, void> && requires { *range.begin(); }) || std::convertible_to<decltype(*range.begin()), std::add_lvalue_reference_t<std::add_const_t<U>>>);
-    } || requires(T range, std::remove_cvref_t<decltype(begin(range))> it) {
-        begin(range);
-        end(range);
-
-        begin(range) != end(range);
-        ++it;
-
-        requires ((std::same_as<U, void> && requires { *begin(range); }) || std::convertible_to<decltype(*begin(range)), std::add_lvalue_reference_t<std::add_const_t<U>>>);
+        requires ((std::same_as<U, void> && requires { *std::begin(range); }) || std::same_as<std::remove_cvref_t<decltype(*std::begin(range))>, U>);
     };
 
     /// @brief Whether `T` is sizeable.
