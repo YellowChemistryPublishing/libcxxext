@@ -30,6 +30,7 @@ target_link_libraries(sys.Threading
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
     $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
 )
+set_target_properties(sys.Threading PROPERTIES PREFIX "")
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
     target_lint_clang_tidy(sys.Threading "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/.*\"" ${SYS_THREAD_HEADERS})

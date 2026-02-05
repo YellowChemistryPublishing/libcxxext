@@ -13,6 +13,7 @@ target_link_libraries(sys.Containers INTERFACE
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
     $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
 )
+set_target_properties(sys.Containers PROPERTIES PREFIX "")
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
     target_lint_clang_tidy(sys.Containers "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers/.*\"" ${SYS_CTRS_HEADERS})

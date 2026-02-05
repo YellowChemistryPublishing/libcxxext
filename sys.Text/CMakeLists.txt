@@ -14,6 +14,7 @@ target_link_libraries(sys.Text INTERFACE
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
     $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
 )
+set_target_properties(sys.Text PROPERTIES PREFIX "")
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
     target_lint_clang_tidy(sys.Text "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/sys/.*\"" ${SYS_TEXT_HEADERS})

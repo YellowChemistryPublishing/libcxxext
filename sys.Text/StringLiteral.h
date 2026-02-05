@@ -23,7 +23,7 @@ namespace sys
             using value_type = T;
             using difference_type = ptrdiff_t;
             using pointer = const T*;
-            using reference = T;
+            using reference = const T&;
 
             _inline_always constexpr iter() noexcept = default;
             _inline_always constexpr iter(const iter& it) noexcept = default;
@@ -48,17 +48,6 @@ namespace sys
             {
                 iter ret = *this;
                 ++this->ptr; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-                return ret;
-            }
-            _inline_always constexpr iter& operator--() noexcept
-            {
-                --this->ptr; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-                return *this;
-            }
-            _inline_always constexpr iter operator--(int) noexcept
-            {
-                iter ret = *this;
-                --this->ptr; // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
                 return ret;
             }
 
