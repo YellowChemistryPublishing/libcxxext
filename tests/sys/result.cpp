@@ -9,7 +9,7 @@
 using namespace std::string_view_literals;
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("Basic result with error type works as expected. | `sys::result<T, Err>`")
+TEST_CASE("Basic result with error type works as expected.", "[sys][result]")
 {
     SECTION("Constructing with a value works.")
     {
@@ -49,7 +49,7 @@ TEST_CASE("Basic result with error type works as expected. | `sys::result<T, Err
     }
 }
 
-TEST_CASE("Result with void error type works as expected. | `sys::result<T, void>`")
+TEST_CASE("Result with void error type works as expected.", "[sys][result][unit]")
 {
     SECTION("Constructing with a value works.")
     {
@@ -65,7 +65,7 @@ TEST_CASE("Result with void error type works as expected. | `sys::result<T, void
     }
 }
 
-TEST_CASE("Macros work as expected. | `_res_movret`")
+TEST_CASE("Macros work as expected.", "[sys][result][macros]")
 {
     auto testFunc = [](bool success) -> sys::result<i16, i32>
     {

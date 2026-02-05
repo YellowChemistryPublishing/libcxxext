@@ -1,3 +1,7 @@
 CompileFlags:
-    Add: [-std=c++26]
-    Remove: [-fconcepts-diagnostics-depth=4]
+    Add:
+        - -std=c++26
+        - -Wno-c2y-extensions
+    Remove:
+        - -fconcepts-diagnostics-depth=4
+        - -Wc2y-extensions

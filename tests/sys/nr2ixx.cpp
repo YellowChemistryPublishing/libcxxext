@@ -5,7 +5,7 @@
 #include <module/sys>
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("Rounding up to a power-of-two works as expected. | `sys::nr2i32(...)`")
+TEST_CASE("Rounding up to a power-of-two works as expected.", "[sys][nr2ixx][i32]")
 {
     SECTION("Powers-of-two return themselves.")
     {
@@ -33,7 +33,7 @@ TEST_CASE("Rounding up to a power-of-two works as expected. | `sys::nr2i32(...)`
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("Rounding up to a power-of-two works as expected. | `sys::nr2i64(...)`")
+TEST_CASE("Rounding up to a power-of-two works as expected.", "[sys][nr2ixx][i64]")
 {
     SECTION("Powers-of-two return themselves.")
     {

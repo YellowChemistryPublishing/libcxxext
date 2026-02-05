@@ -7,7 +7,7 @@
 #include <module/sys>
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("Saturating casts work as expected. | `sys::bnumeric_cast(..., unsafe())`")
+TEST_CASE("Saturating casts work as expected.", "[sys][numeric_cast][unsafe]")
 {
     SECTION("Casting within range preserves value.")
     {
@@ -32,7 +32,7 @@ TEST_CASE("Saturating casts work as expected. | `sys::bnumeric_cast(..., unsafe(
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("Checking casts work as expected. | `sys::bnumeric_cast(...)`")
+TEST_CASE("Checking casts work as expected.", "[sys][numeric_cast]")
 {
     SECTION("Casting within range returns valid result.")
     {

@@ -307,6 +307,7 @@ namespace sys
         constexpr integer& operator<<=(const integer& other) noexcept { return (*this = *this << other); }
         constexpr integer& operator>>=(const integer& other) noexcept { return (*this = *this >> other); }
     };
+
     // Just to be sure.
     static_assert(sizeof(integer<uint_least8_t>) == sizeof(uint_least8_t));
     static_assert(alignof(integer<uint_least8_t>) == alignof(uint_least8_t));

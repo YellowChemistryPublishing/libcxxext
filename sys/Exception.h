@@ -26,7 +26,7 @@ namespace sys
 #if _libcxxext_compiler_gcc
     inline std::unique_ptr<char, void (*)(void*)> exception_type_name(std::exception_ptr ex)
     {
-        return { abi::__cxa_demangle(ex.__cxa_exception_type()->name() /* Contract implied: `name != nullptr`. */, NULL, NULL, NULL), std::free };
+        return { abi::__cxa_demangle(ex.__cxa_exception_type()->name(), nullptr, nullptr, nullptr), std::free };
     }
 #else
     /// @brief If platform support exists, obtain a human-readable name of the exception type.
@@ -38,7 +38,7 @@ namespace sys
 
     /// @brief Terminate the program.
     /// @note Pass `byref`.
-    struct terminate_exception : public managed_exception
+    struct terminate_exception final : public managed_exception
     {
         /// @brief On construction, terminate the program.
         terminate_exception() noexcept { std::terminate(); }
@@ -51,7 +51,7 @@ namespace sys
     /// @note
     /// Prefer using the `_contract_assert` macro instead. Don't catch this exception.
     /// Pass `byref`.
-    struct contract_violation_exception : public managed_exception
+    struct contract_violation_exception final : public managed_exception
     {
         /// @brief Construct the exception with a reason, which is logged on construction.
         /// @param why The reason the contract was violated.

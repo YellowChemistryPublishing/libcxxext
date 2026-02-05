@@ -73,7 +73,7 @@ namespace sys::meta
     };
 
     template <typename... Pack>
-    struct parameter_pack
+    struct parameter_pack final
     {
         using tuple = std::tuple<Pack...>;
 

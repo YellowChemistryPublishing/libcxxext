@@ -1,10 +1,9 @@
-add_library(sys.BuildSupport.CompilerOptions INTERFACE)
-
 if(NOT (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang" OR MSVC))
     message(FATAL_ERROR "Unsupported compiler!")
 endif()
 
-if(NOT MSVC)
+add_library(sys.BuildSupport.CompilerOptions INTERFACE)
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
     if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
             $<$<COMPILE_LANGUAGE:CXX>:-fconcepts-diagnostics-depth=4>
@@ -46,7 +45,7 @@ else()
 endif()
 
 add_library(sys.BuildSupport.WarningsAsErrors INTERFACE)
-if(NOT MSVC)
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
     target_compile_options(sys.BuildSupport.WarningsAsErrors INTERFACE -Werror)
     if(CMAKE_C_COMPILER_ID MATCHES "Clang")
         target_compile_options(sys.BuildSupport.WarningsAsErrors INTERFACE -Wno-c99-extensions)
@@ -56,12 +55,27 @@ else()
 endif()
 
 add_library(sys.BuildSupport.Hardening INTERFACE)
-if(NOT MSVC)
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
     target_compile_options(sys.BuildSupport.Hardening INTERFACE -fstack-protector-strong)
 endif()
 
 add_library(sys.BuildSupport.EnableCoverage INTERFACE)
-if(NOT MSVC)
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
     target_compile_options(sys.BuildSupport.EnableCoverage INTERFACE -O0 -g -fprofile-arcs -ftest-coverage)
     target_link_options(sys.BuildSupport.EnableCoverage INTERFACE -fprofile-arcs)
+endif()
+
+add_library(sys.BuildSupport.MemorySanitizer INTERFACE)
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
+    target_compile_options(sys.BuildSupport.MemorySanitizer INTERFACE -fsanitize=address -fsanitize-address-use-after-scope)
+    target_link_options(sys.BuildSupport.MemorySanitizer INTERFACE -fsanitize=address -fsanitize-address-use-after-scope)
+elseif(MSVC)
+    target_compile_options(sys.BuildSupport.MemorySanitizer INTERFACE /fsanitize=address)
+    target_link_options(sys.BuildSupport.MemorySanitizer INTERFACE /fsanitize=address)
+endif()
+
+add_library(sys.BuildSupport.UndefinedSanitizer INTERFACE)
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
+    target_compile_options(sys.BuildSupport.UndefinedSanitizer INTERFACE -fsanitize=undefined -fsanitize-recover=undefined,float-cast-overflow,float-divide-by-zero)
+    target_link_options(sys.BuildSupport.UndefinedSanitizer INTERFACE -fsanitize=undefined -fsanitize-recover=undefined,float-cast-overflow,float-divide-by-zero)
 endif()

@@ -20,6 +20,8 @@ cmake_dependent_option(LIBCXXEXT_TESTS "Build tests." ON "LIBCXXEXT_DEVELOPMENT_
 cmake_dependent_option(LIBCXXEXT_COVERAGE "Enable coverage instrumentation (gcc/clang)." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
 set(LIBCXXEXT_LIBRARY_TYPE "STATIC" CACHE STRING "Build type of libraries.")
 set(LIBCXXEXT_EXPORT_PCH ON CACHE BOOL "Use and produce precompiled headers.")
+set(LIBCXXEXT_TEST_ASAN OFF CACHE BOOL "Enable AddressSanitizer for tests.")
+set(LIBCXXEXT_TEST_UBSAN OFF CACHE BOOL "Enable UndefinedBehaviorSanitizer for tests.")
 
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED OFF)
@@ -39,6 +41,7 @@ endif()
 
 add_subdirectory(sys)
 add_subdirectory(sys.Containers)
+add_subdirectory(sys.Text)
 add_subdirectory(sys.Threading)
 
 # Examples

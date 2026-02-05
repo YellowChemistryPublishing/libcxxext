@@ -5,8 +5,8 @@
 CMake settings have configured compilation under gcc to use `-Wall -Wextra -Wpedantic -Werror`. To suppress false positives, see the useful macros in the `CompilerWarnings.h`
 header.
 
-You may not `throw` anything for the purpose of error checking. An exception is granted for fatal program conditions, such as that of a contract violation. In the case that a throw
-expression is required, you are forbidden from using the `throw` keyword directly, please see `_throw(expr)`. Correctly written production code is banned from executing a
+You may not `throw` anything for the purpose of error checking. An exception is granted for fatal program conditions, such as that of a contract violation. In the case that a
+`throw` expression is required, you are forbidden from using the `throw` keyword directly, please see `_throw(expr)`. Correctly written production code is banned from executing a
 `_throw(expr)` expression, except for, once again, fatal error handling.
 
 You _should_ not `catch(...)` anything, with the possible exception of hardware/system related exceptions, for example `std::bad_alloc`, for producing debugging information.
@@ -49,6 +49,8 @@ Where applicable and valid, `_restrict` must apply to pointers.
 If you are accessing members, you _must_ use `this->...`!
 
 Overriden virtual member functions must be annotated with the `override` specifier.
+
+Stick `final` on any types that aren't designed for inheritance, as well as leaf implementations that aren't intended to be overridden further.
 
 All functions, where correct to, must be annotated with `_pure_const` (`[[gnu::const]]`), or, where otherwise correct to, `_pure` (`[[gnu::pure]]`). Don't forget `[[nodiscard]]`
 too!

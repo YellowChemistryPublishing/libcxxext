@@ -14,7 +14,7 @@ namespace sys
     /// @note Pass `byref`.
     template <typename... Ts>
     requires (sizeof...(Ts) > 0)
-    struct aligned_storage
+    struct aligned_storage final
     {
         alignas(Ts...) byte mem[std::max({ sizeof(Ts)... })] {};
 

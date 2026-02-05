@@ -14,7 +14,7 @@ _pop_nowarn_deprecated();
 
 #include <module/sys>
 
-TEST_CASE("Aligned storage writes match input data. | `sys::aligned_storage`")
+TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_storage]")
 {
     rc::check("Fuzz primitives", [](const int64_t& val)
     {
