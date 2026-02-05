@@ -18,13 +18,19 @@ target_include_directories(sys.Threading PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
     $<BUILD_INTERFACE:${PLATFORM_SUPPORT_DIR}>
 )
-target_precompile_headers(sys.Threading PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Threading")
-target_link_libraries(sys.Threading PUBLIC
-    sys
+if(LIBCXXEXT_EXPORT_PCH)
+    target_precompile_headers(sys.Threading INTERFACE ${SYS_THREAD_HEADERS})
+    target_link_libraries(sys.Threading PRIVATE sys.BuildSupport.stdc++inc)
+endif()
+target_link_libraries(sys.Threading
+    PRIVATE
     sys.BuildSupport.CompilerOptions
+    PUBLIC
+    sys
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
     $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
 )
+set_target_properties(sys.Threading PROPERTIES PREFIX "")
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
     target_lint_clang_tidy(sys.Threading "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/.*\"" ${SYS_THREAD_HEADERS})

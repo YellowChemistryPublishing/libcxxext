@@ -7,13 +7,19 @@
 #include <CompilerWarnings.h>
 #include <Platform.h>
 
+/// @def _catcat(a, b)
+/// @brief Concatenates two tokens; used to avoid macro expansion.
 #define _catcat(a, b) a##b
+/// @def _ppcat(a, b)
+/// @brief Concatenates two tokens.
 #define _ppcat(a, b) _catcat(a, b)
 
+/// @def _assert_ctor_can_fail()
+/// @brief Reminder to use `...::ctor` instead of a constructor when the constructor may fail.
 #define _assert_ctor_can_fail() static_assert(false, "This constructor may fail, use `...::ctor` instead.")
 
-/// @brief Tag type for function variants marked unsafe.
-struct unsafe
+/// @brief Tag type for function variants marked `unsafe`.
+struct unsafe final
 { };
 
 /// @def _inline_always
@@ -44,7 +50,7 @@ struct unsafe
 #define _pure_const
 #endif
 /// @def _restrict
-/// @brief Mark a parameter (or this) as non-aliasing.
+/// @brief Mark a parameter (or `this`) as non-aliasing.
 #define _restrict __restrict__
 /// @def _pack(align)
 /// @brief Pack a structure to `align` bytes.
@@ -130,7 +136,7 @@ struct unsafe
 /// @}
 
 /// @def _contract_assert(cond)
-/// @brief Enforce a contract, throwing a `contract_violation_exception` if `cond` is false.
+/// @brief Enforce a contract, throwing a `contract_violation_exception` if `cond` is `false`.
 #define _contract_assert(cond)                                                                                             \
     do                                                                                                                     \
     {                                                                                                                      \

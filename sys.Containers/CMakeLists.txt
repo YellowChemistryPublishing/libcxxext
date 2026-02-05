@@ -6,12 +6,14 @@ target_sources(sys.Containers INTERFACE
     FILES ${SYS_CTRS_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Containers"
 )
 target_include_directories(sys.Containers INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-target_precompile_headers(sys.Containers INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Containers")
+if(LIBCXXEXT_EXPORT_PCH)
+    target_precompile_headers(sys.Containers INTERFACE ${SYS_CTRS_HEADERS})
+endif()
 target_link_libraries(sys.Containers INTERFACE
-    sys.BuildSupport.CompilerOptions
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
     $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
 )
+set_target_properties(sys.Containers PROPERTIES PREFIX "")
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
     target_lint_clang_tidy(sys.Containers "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers/.*\"" ${SYS_CTRS_HEADERS})

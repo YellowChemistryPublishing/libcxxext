@@ -6,7 +6,7 @@ namespace sys
 {
     template <typename Func>
     requires (noexcept(std::declval<Func&>()()))
-    struct destructor
+    struct destructor final
     {
         // NOLINTNEXTLINE(hicpp-explicit-conversions)
         destructor(Func&& func) : func(std::move(func)) { }
@@ -22,7 +22,7 @@ namespace sys
 
     template <typename Func>
     requires (noexcept(std::declval<Func&>()()))
-    struct optional_destructor
+    struct optional_destructor final
     {
         // NOLINTNEXTLINE(hicpp-explicit-conversions)
         optional_destructor(Func&& func) : func(std::move(func)) { }

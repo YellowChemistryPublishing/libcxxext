@@ -1,18 +1,14 @@
+#include <functional>
+#include <string>
+#include <vector>
+
 // NOLINTBEGIN(misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
 #include <module/sys>
 
-#include <concepts>
-#include <functional>
-#include <iterator>
-#include <string>
-#include <tuple>
-#include <type_traits>
-#include <vector>
-
-TEST_CASE("Invariably passes. | `sys::I*`") { CHECK(true); }
+TEST_CASE("Invariably passes.", "[sys][traits][concepts]") { CHECK(true); }
 
 _push_nowarn_clang(_clwarn_clang_unused_symbol);
 static int free_function(int, float) { return 0; }

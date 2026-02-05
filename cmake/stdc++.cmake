@@ -21,7 +21,7 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     <limits>
     <new>
     $<$<COMPILE_FEATURES:cxx_std_20>:<source_location>>
-    $<$<COMPILE_FEATURES:cxx_std_23>:<stdfloat>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<stdfloat>>
     <typeindex>
     <typeinfo>
     $<$<COMPILE_FEATURES:cxx_std_20>:<version>>
@@ -33,7 +33,7 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     <cassert>
     <cerrno>
     # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<debugging>>
-    $<$<COMPILE_FEATURES:cxx_std_23>:<stacktrace>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<stacktrace>>
     <stdexcept>
     <system_error>
 
@@ -80,7 +80,7 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     <iterator>
 
     # Ranges
-    $<$<COMPILE_FEATURES:cxx_std_23>:<generator>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<generator>>
     $<$<COMPILE_FEATURES:cxx_std_20>:<ranges>>
 
     # Algorithms
@@ -130,7 +130,7 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     <istream>
     <ostream>
     $<$<COMPILE_FEATURES:cxx_std_23>:<print>>
-    $<$<COMPILE_FEATURES:cxx_std_23>:<spanstream>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<spanstream>>
     <sstream>
     <streambuf>
     $<$<COMPILE_FEATURES:cxx_std_20>:<syncstream>>

@@ -5,7 +5,7 @@
 #include <module/sys>
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("Byte manipulation works as expected. | `sys::s16fb2(...)`, `sys::hbfs16(...)`, `sys::lbfs16(...)`")
+TEST_CASE("Byte manipulation works as expected.", "[sys][xfxx]")
 {
     SECTION("Correctly construct `i16` from two bytes.")
     {

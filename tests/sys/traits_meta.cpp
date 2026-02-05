@@ -1,18 +1,14 @@
+#include <concepts>
+#include <string>
+#include <tuple>
+
 // NOLINTBEGIN(misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
 #include <module/sys>
 
-#include <concepts>
-#include <functional>
-#include <iterator>
-#include <string>
-#include <tuple>
-#include <type_traits>
-#include <vector>
-
-TEST_CASE("Invariably passes. | `sys::meta`") { CHECK(true); }
+TEST_CASE("Invariably passes.", "[sys][traits][meta]") { CHECK(true); }
 
 struct test_class
 {

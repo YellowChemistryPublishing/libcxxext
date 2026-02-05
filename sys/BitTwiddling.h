@@ -43,7 +43,7 @@ namespace sys
     /// @brief Obtain the low byte from a signed 16-bit integer.
     constexpr u8 lbfs16(i16 val) { return u8(val, unsafe()); }
 
-    /// @brief Hash combiner for `std::hash<T>(t)` and `std::hash<U>(u)`.
+    /// @brief Hash combiner for ``std::hash<T>(t)`` and ``std::hash<U>(u)``.
     template <typename T, typename U>
     constexpr size_t dhc2(const T& t, const U& u)
     {

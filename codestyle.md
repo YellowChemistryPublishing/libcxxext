@@ -5,8 +5,8 @@
 CMake settings have configured compilation under gcc to use `-Wall -Wextra -Wpedantic -Werror`. To suppress false positives, see the useful macros in the `CompilerWarnings.h`
 header.
 
-You may not `throw` anything for the purpose of error checking. An exception is granted for fatal program conditions, such as that of a contract violation. In the case that a throw
-expression is required, you are forbidden from using the `throw` keyword directly, please see `_throw(expr)`. Correctly written production code is banned from executing a
+You may not `throw` anything for the purpose of error checking. An exception is granted for fatal program conditions, such as that of a contract violation. In the case that a
+`throw` expression is required, you are forbidden from using the `throw` keyword directly, please see `_throw(expr)`. Correctly written production code is banned from executing a
 `_throw(expr)` expression, except for, once again, fatal error handling.
 
 You _should_ not `catch(...)` anything, with the possible exception of hardware/system related exceptions, for example `std::bad_alloc`, for producing debugging information.
@@ -50,20 +50,18 @@ If you are accessing members, you _must_ use `this->...`!
 
 Overriden virtual member functions must be annotated with the `override` specifier.
 
+Stick `final` on any types that aren't designed for inheritance, as well as leaf implementations that aren't intended to be overridden further.
+
 All functions, where correct to, must be annotated with `_pure_const` (`[[gnu::const]]`), or, where otherwise correct to, `_pure` (`[[gnu::pure]]`). Don't forget `[[nodiscard]]`
 too!
 
-Please use the following specifier order:
-`static`|`thread_local`|`extern`&emsp;
-`constexpr`|`consteval`|`constinit`|`inline`&emsp;
-`explicit`&emsp;`virtual`&emsp;`cv-pre`&emsp;
-`T`|`auto`&emsp;`decl...`&emsp;`cvref-post`&emsp;
-`noexcept`&emsp;`override`|`final`
+Please use the following specifier order: `static`|`thread_local`|`extern`&emsp; `constexpr`|`consteval`|`constinit`|`inline`&emsp; `explicit`&emsp;`virtual`&emsp;`cv-pre`&emsp;
+`T`|`auto`&emsp;`decl...`&emsp;`cvref-post`&emsp; `noexcept`&emsp;`override`|`final`
 
 Where template parameters have restricted domain or constraints, they must be specified with a `requires` clause.
 
-When using features from the C standard library, you must include the equivalent `<cheader>` and qualify relevant identifiers with `std::`.
-The only exception is for fixed width integer types and standard integer aliases, i.e. `uint_least32_t`, `size_t`.
+When using features from the C standard library, you must include the equivalent `<cheader>` and qualify relevant identifiers with `std::`. The only exception is for fixed width
+integer types and standard integer aliases, i.e. `uint_least32_t`, `size_t`.
 
 ## What Integer to Use
 

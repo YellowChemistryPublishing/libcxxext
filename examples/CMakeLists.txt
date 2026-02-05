@@ -5,9 +5,14 @@ foreach(EXAMPLE_FILE ${EXAMPLES})
     set(EXAMPLE_NAME "example_${EXAMPLE_NAME}")
 
     add_executable(${EXAMPLE_NAME} ${EXAMPLE_FILE})
-    target_link_libraries(${EXAMPLE_NAME} PUBLIC sys sys.Containers sys.Threading sys.BuildSupport.CompilerOptions $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>)
+    target_link_libraries(${EXAMPLE_NAME}
+        PRIVATE
+        sys.BuildSupport.CompilerOptions
+        sys sys.Containers sys.Threading
+        $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
+    )
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_link_libraries(${EXAMPLE_NAME} PUBLIC stdc++exp)
+        target_link_libraries(${EXAMPLE_NAME} PRIVATE stdc++exp)
     endif()
 
     if(LIBCXXEXT_DEVELOPMENT_MODE)

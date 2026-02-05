@@ -55,6 +55,8 @@ namespace sys::internal
     {
     private:
         using result_type = Result<T, Err>;
+    protected:
+        result_b() = default;
     public:
         /// @brief Whether the result is good.
         constexpr explicit operator bool() const noexcept { return _as(const result_type*, this)->status == result_status::ok; }
@@ -93,7 +95,7 @@ namespace sys
     /// @note Pass `byref`.
     template <typename T, typename Err = void>
     requires (!std::same_as<T, Err> && std::same_as<T, std::remove_cvref_t<T>> && std::same_as<Err, std::remove_cvref_t<Err>>)
-    struct result : internal::result_b<result, T, Err>
+    struct result final : internal::result_b<result, T, Err>
     {
         /// @brief Constructs a result with a value.
         constexpr result(T&& value) : status(result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
@@ -162,7 +164,7 @@ namespace sys
     };
 
     template <typename T>
-    struct result<T, void> : internal::result_b<result, T, void>
+    struct result<T, void> final : internal::result_b<result, T, void>
     {
         /// @brief Constructs a result with a value.
         /// @param value Value to move into the result.
@@ -213,7 +215,7 @@ namespace sys
 
     /// @brief Awaiter to enable short-circuiting, akin to rustlang's `operator?`.
     template <typename T, typename Err>
-    struct result_awaiter
+    struct result_awaiter final
     {
         [[nodiscard]] _inline_always constexpr bool await_ready() const noexcept { return res; }
         template <typename Promise>
