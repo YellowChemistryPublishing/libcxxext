@@ -131,15 +131,15 @@ namespace sys
 
     /// @brief Whether `T` is iterable.
     template <typename T, typename U = void>
-    concept IEnumerable = (!std::is_array_v<T> && requires(T& range, std::remove_cvref_t<decltype(range.begin())> it) {
-                              range.begin();
-                              range.end();
+    concept IEnumerable = requires(T& range, std::remove_cvref_t<decltype(range.begin())> it) {
+        range.begin();
+        range.end();
 
-                              range.begin() != range.end();
-                              ++it;
+        range.begin() != range.end();
+        ++it;
 
-                              requires ((std::same_as<U, void> && requires { *range.begin(); }) || std::same_as<std::remove_cvref_t<decltype(*range.begin())>, U>);
-                          }) || requires(T& range, std::remove_cvref_t<decltype(std::begin(range))> it) {
+        requires ((std::same_as<U, void> && requires { *range.begin(); }) || std::same_as<std::remove_cvref_t<decltype(*range.begin())>, U>);
+    } || requires(T& range, std::remove_cvref_t<decltype(std::begin(range))> it) {
         std::begin(range);
         std::end(range);
 
