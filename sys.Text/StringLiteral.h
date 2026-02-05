@@ -1,8 +1,7 @@
 #pragma once
 
-#include <compare>
+#include <cstddef>
 #include <iterator>
-#include <ranges>
 #include <string>
 
 #include <LanguageSupport.h>
