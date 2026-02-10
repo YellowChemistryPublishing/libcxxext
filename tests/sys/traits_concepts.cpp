@@ -213,23 +213,99 @@ static_assert(!sys::IEnumerable<float>);
 static_assert(!sys::IEnumerable<void*>);
 
 // ================================================================================
-// Types with `size()`. | `sys::ISizeable`
+// Types with `.size()`. | `sys::ISizeable`
 // ================================================================================
 
-// Accepts containers with `size()`.
+// Accepts containers with `.size()`.
 static_assert(sys::ISizeable<std::vector<int>>);
 static_assert(sys::ISizeable<std::string>);
 
 // Accepts with specific size type.
-static_assert(sys::ISizeable<std::vector<int>, std::size_t>);
-static_assert(sys::ISizeable<std::string, std::size_t>);
+static_assert(sys::ISizeable<std::vector<int>, size_t>);
+static_assert(sys::ISizeable<std::string, size_t>);
 
 // Rejects with wrong size type.
 static_assert(!sys::ISizeable<std::vector<int>, int>);
 
-// Rejects types without `size()`.
+// Rejects types without `.size()`.
 static_assert(!sys::ISizeable<int>);
 static_assert(!sys::ISizeable<float>);
+
+// ================================================================================
+// Appendable types. | `sys::IAppendable`
+// ================================================================================
+
+// Accepts standard containers.
+static_assert(sys::IAppendable<std::vector<int>>);
+static_assert(sys::IAppendable<std::string>);
+static_assert(sys::IAppendable<std::vector<int>, int>);
+static_assert(sys::IAppendable<std::string, char>);
+
+namespace
+{
+    struct push_backable
+    {
+        void push_back(int) { }
+    };
+
+    struct pushable
+    {
+        void push(int) { }
+    };
+
+    struct emplaceable
+    {
+        void emplace_back(int) { }
+    };
+
+    struct appendable
+    {
+        void append(int) { }
+    };
+} // namespace
+
+// Accepts custom types with matching methods.
+static_assert(sys::IAppendable<push_backable>);
+static_assert(sys::IAppendable<pushable>);
+static_assert(sys::IAppendable<emplaceable>);
+static_assert(sys::IAppendable<appendable>);
+static_assert(sys::IAppendable<push_backable, int>);
+static_assert(sys::IAppendable<pushable, int>);
+static_assert(sys::IAppendable<emplaceable, int>);
+static_assert(sys::IAppendable<appendable, int>);
+
+// Rejects non-appendable types.
+static_assert(!sys::IAppendable<int>);
+static_assert(!sys::IAppendable<float>);
+
+// ================================================================================
+// Lambda and Functor matching. | `sys::IFunc`
+// ================================================================================
+
+// Matches stateless lambdas.
+static_assert(sys::IFunc<decltype([](int x) { return x; }), int(int)>);
+
+// Matches stateful lambdas.
+static_assert([]
+{
+    const int magicValue = 5;
+    const int y = magicValue;
+    auto l = [](int x) { return x + y; };
+    return sys::IFunc<decltype(l), int(int)>;
+}());
+
+// Matches custom functors.
+namespace
+{
+    struct test_functor
+    {
+        int operator()(int x, float y) const { return _as(int, _as(float, x) + y); }
+    };
+} // namespace
+static_assert(sys::IFunc<test_functor, int(int, float)>);
+
+// Rejects incompatible functors.
+static_assert(!sys::IFunc<test_functor, void()>);
 
 // NOLINTEND(google-runtime-int)
 // NOLINTEND(misc-include-cleaner)

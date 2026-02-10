@@ -98,7 +98,7 @@ namespace sys::internal
 
         [[nodiscard]] _inline_always constexpr std::suspend_always initial_suspend() const noexcept { return {}; }
 
-        _inline_always task<T> get_return_object() { return task<T>(std::coroutine_handle<task_promise<T>>::from_promise(*static_cast<task_promise<T>*>(this))); }
+        _inline_always task<T> get_return_object() { return task<T>(std::coroutine_handle<task_promise<T>>::from_promise(*_as(task_promise<T>*, this))); }
 
         [[noreturn]] static task<T> get_return_object_on_allocation_failure() { _throw(std::bad_alloc()); }
         _inline_always void unhandled_exception() { this->exception = std::current_exception(); }

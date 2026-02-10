@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <concepts>
 #include <coroutine>
 #include <cstddef>
@@ -56,7 +57,7 @@ namespace sys::internal
     private:
         using result_type = Result<T, Err>;
     protected:
-        result_b() = default;
+        result_b() noexcept = default;
     public:
         /// @brief Whether the result is good.
         constexpr explicit operator bool() const noexcept { return _as(const result_type*, this)->status == result_status::ok; }
@@ -66,9 +67,11 @@ namespace sys::internal
 
         /// @brief Takes the value if the result is good.
         /// @return The value held by the result.
-        constexpr T move()
+        constexpr T move() noexcept
         {
-            _contract_assert(_as(result_type*, this)->status == result_status::ok && "Taking value for a bad result!");
+            // We use regular assert here as we expect this to be called in a noexcept context.
+            // Only a flagrant violation of result semantics would cause this to fail.
+            assert(_as(result_type*, this)->status == result_status::ok && "Taking value for a bad result!");
             if constexpr (std::is_reference_v<T>)
                 return *_as(result_type*, this)->value;
             else
@@ -98,12 +101,12 @@ namespace sys
     struct result final : internal::result_b<result, T, Err>
     {
         /// @brief Constructs a result with a value.
-        constexpr result(T&& value) : status(result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
+        constexpr result(T&& value) noexcept(noexcept(T(std::declval<T&&>()))) : status(result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         {
             new(&this->value) internal::result_storage_type<T>(std::move(value));
         }
         /// @brief Constructs a result with an error.
-        constexpr result(Err&& error) : status(result_status::error) // NOLINT(hicpp-explicit-conversions)
+        constexpr result(Err&& error) noexcept(noexcept(Err(std::declval<Err&&>()))) : status(result_status::error) // NOLINT(hicpp-explicit-conversions)
         {
             new(&this->error) internal::result_storage_type<Err>(std::move(error));
         }
@@ -168,11 +171,11 @@ namespace sys
     {
         /// @brief Constructs a result with a value.
         /// @param value Value to move into the result.
-        constexpr result(T&& value) : status(result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
+        constexpr result(T&& value) noexcept(noexcept(T(std::declval<T&&>()))) : status(result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         {
             new(&this->value) internal::result_storage_type<T>(std::move(value));
         }
-        constexpr result(std::nullptr_t) : status(result_status::error) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
+        constexpr result(std::nullptr_t) noexcept : status(result_status::error) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         { }
         constexpr result(const result&) = delete;
         constexpr result(result&& other) noexcept : status(result_status::empty) // NOLINT(hicpp-member-init)

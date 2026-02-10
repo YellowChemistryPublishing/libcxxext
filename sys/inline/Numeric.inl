@@ -11,7 +11,7 @@ namespace sys
 {
     /// @brief Exact-value cast `From` to `To`, or error if the value is out of range.
     template <std::integral To, std::integral From>
-    constexpr result<To> bnumeric_cast(From value)
+    constexpr result<To> bnumeric_cast(From value) noexcept
     {
         if (std::cmp_less(value, std::numeric_limits<To>::lowest()) || std::cmp_greater(value, std::numeric_limits<To>::max())) [[unlikely]]
             return nullptr;
@@ -20,23 +20,14 @@ namespace sys
     }
 
     template <sys::IBuiltinFloatingPoint T>
-    consteval T bsentinel()
+    consteval T bsentinel() noexcept
     {
         return std::numeric_limits<T>::quiet_NaN();
     }
     template <sys::ICharacter T>
-    consteval T bsentinel()
+    consteval T bsentinel() noexcept
     {
         return 0;
     }
 
 } // namespace sys
-
-namespace sys::internal
-{
-    template <typename T>
-    consteval meta::function_signature<T>::return_type sentinel_for()
-    {
-        return sys::bsentinel<meta::function_signature<T>::return_type>();
-    }
-} // namespace sys::internal

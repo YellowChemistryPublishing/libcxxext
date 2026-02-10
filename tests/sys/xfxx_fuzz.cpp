@@ -4,6 +4,8 @@ _push_nowarn_conv_comp();
 
 // NOLINTBEGIN(misc-include-cleaner)
 
+#include <cstdint>
+
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
 

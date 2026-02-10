@@ -10,70 +10,227 @@
 
 namespace sys::meta
 {
-    template <typename MetaMeta, typename T = void, typename... Args>
-    struct function_signature
+    struct meta_type
+    {
+        meta_type() = delete;
+    };
+
+    template <bool Value>
+    struct is_valid_prop : meta_type
+    {
+        static consteval bool is_valid() { return Value; }
+    };
+
+    template <bool Value>
+    struct is_const_prop : meta_type
+    {
+        static consteval bool is_const() { return Value; }
+    };
+    template <bool Value>
+    struct is_volatile_prop : meta_type
+    {
+        static consteval bool is_volatile() { return Value; }
+    };
+    template <bool Value>
+    struct is_lvalue_ref_prop : meta_type
+    {
+        static consteval bool is_lvalue_ref() { return Value; }
+    };
+    template <bool Value>
+    struct is_rvalue_ref_prop : meta_type
+    {
+        static consteval bool is_rvalue_ref() { return Value; }
+    };
+    template <bool Value>
+    struct is_noexcept_prop : meta_type
+    {
+        static consteval bool is_noexcept() { return Value; }
+    };
+
+    template <bool Value>
+    struct is_member_func_prop : meta_type
+    {
+        static consteval bool is_member_func() { return Value; }
+    };
+
+    template <typename T = void, typename... Args>
+    struct function_signature : is_valid_prop<false>,
+                                is_const_prop<false>,
+                                is_volatile_prop<false>,
+                                is_lvalue_ref_prop<false>,
+                                is_rvalue_ref_prop<false>,
+                                is_noexcept_prop<false>,
+                                is_member_func_prop<false>
     {
         using return_type = T;
         using arguments = std::tuple<Args...>;
 
-        template <typename = void>
-        static consteval bool is_valid()
-        {
-            if constexpr (requires {
-                              { MetaMeta::override_is_valid() } -> std::convertible_to<bool>;
-                          })
-                return MetaMeta::override_is_valid();
-            else
-                return false;
-        }
+        using is_valid_prop<false>::is_valid;
+        using is_const_prop<false>::is_const;
+        using is_volatile_prop<false>::is_volatile;
+        using is_lvalue_ref_prop<false>::is_lvalue_ref;
+        using is_rvalue_ref_prop<false>::is_rvalue_ref;
+        using is_noexcept_prop<false>::is_noexcept;
+        using is_member_func_prop<false>::is_member_func;
 
-        template <typename = void>
-        static consteval bool is_member_func()
+        template <typename>
+        static consteval bool is_signature_of()
         {
-            if constexpr (requires {
-                              { MetaMeta::override_is_member_func() } -> std::convertible_to<bool>;
-                          })
-                return MetaMeta::override_is_member_func();
-            else
-                return false;
+            return false;
         }
+    };
+
+    template <typename T, typename... Args>
+    struct function_signature<T(Args...)> : function_signature<T, Args...>, is_valid_prop<true>
+    {
+        using is_valid_prop<true>::is_valid;
 
         template <typename Func>
         static consteval bool is_signature_of()
         {
-            if constexpr (requires {
-                              { MetaMeta::template override_is_signature_of<Func>() } -> std::convertible_to<bool>;
-                          })
-                return MetaMeta::template override_is_signature_of<Func>();
-            else if constexpr (function_signature::is_valid())
-                return std::is_invocable_r_v<T, std::remove_cvref_t<Func>, Args...>;
-            else
-                return false;
+            return requires {
+                { std::declval<Func>()(std::declval<Args>()...) } -> std::same_as<T>;
+            };
         }
-
-        function_signature() = delete;
-    };
-
-    template <typename T, typename... Args>
-    struct function_signature<T(Args...)> : function_signature<function_signature<T(Args...)>, T, Args...>
-    {
-        static consteval bool override_is_valid() { return true; }
     };
     template <typename T, typename... Args>
-    struct function_signature<T (*)(Args...)> : function_signature<function_signature<T (*)(Args...)>, T, Args...>
+    struct function_signature<T (&)(Args...)> : function_signature<T(Args...)>
+    { };
+    template <typename T, typename... Args>
+    struct function_signature<T (*)(Args...)> : function_signature<T(Args...)>
+    { };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...)> : function_signature<T, Args...>, is_valid_prop<true>, is_member_func_prop<true>
     {
-        static consteval bool override_is_valid() { return true; }
+        using is_valid_prop<true>::is_valid;
+        using is_member_func_prop<true>::is_member_func;
+
+        template <typename Func>
+        static consteval bool is_signature_of()
+        {
+            return requires {
+                { std::declval<Func>()(std::declval<For*>(), std::declval<Args>()...) } -> std::same_as<T>;
+            };
+        }
     };
     template <typename For, typename T, typename... Args>
-    struct function_signature<T (For::*)(Args...)> : function_signature<function_signature<T (For::*)(Args...)>, T, Args...>
+    struct function_signature<T (For::*)(Args...) const> : function_signature<T (For::*)(Args...)>, is_const_prop<true>
     {
-        static consteval bool override_is_valid() { return true; }
-
-        static consteval bool override_is_member_func() { return true; }
+        using is_const_prop<true>::is_const;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) volatile> : function_signature<T (For::*)(Args...)>, is_volatile_prop<true>
+    {
+        using is_volatile_prop<true>::is_volatile;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const volatile> : function_signature<T (For::*)(Args...) const>, is_volatile_prop<true>
+    {
+        using is_volatile_prop<true>::is_volatile;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) noexcept> : function_signature<T (For::*)(Args...)>, is_noexcept_prop<true>
+    {
+        using is_noexcept_prop<true>::is_noexcept;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const noexcept> : function_signature<T (For::*)(Args...) const>, is_noexcept_prop<true>
+    {
+        using is_noexcept_prop<true>::is_noexcept;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) volatile noexcept> : function_signature<T (For::*)(Args...) volatile>, is_noexcept_prop<true>
+    {
+        using is_noexcept_prop<true>::is_noexcept;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const volatile noexcept> : function_signature<T (For::*)(Args...) const volatile>, is_noexcept_prop<true>
+    {
+        using is_noexcept_prop<true>::is_noexcept;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) /* Appease `clang-tidy`. */&> : function_signature<T (For::*)(Args...)>, is_lvalue_ref_prop<true>
+    {
+        using is_lvalue_ref_prop<true>::is_lvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) &&> : function_signature<T (For::*)(Args...)>, is_rvalue_ref_prop<true>
+    {
+        using is_rvalue_ref_prop<true>::is_rvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const&> : function_signature<T (For::*)(Args...) const>, is_lvalue_ref_prop<true>
+    {
+        using is_lvalue_ref_prop<true>::is_lvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const&&> : function_signature<T (For::*)(Args...) const>, is_rvalue_ref_prop<true>
+    {
+        using is_rvalue_ref_prop<true>::is_rvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) volatile&> : function_signature<T (For::*)(Args...) volatile>, is_lvalue_ref_prop<true>
+    {
+        using is_lvalue_ref_prop<true>::is_lvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) volatile&&> : function_signature<T (For::*)(Args...) volatile>, is_rvalue_ref_prop<true>
+    {
+        using is_rvalue_ref_prop<true>::is_rvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const volatile&> : function_signature<T (For::*)(Args...) const volatile>, is_lvalue_ref_prop<true>
+    {
+        using is_lvalue_ref_prop<true>::is_lvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const volatile&&> : function_signature<T (For::*)(Args...) const volatile>, is_rvalue_ref_prop<true>
+    {
+        using is_rvalue_ref_prop<true>::is_rvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) & noexcept> : function_signature<T (For::*)(Args...) noexcept>, is_lvalue_ref_prop<true>
+    {
+        using is_lvalue_ref_prop<true>::is_lvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) && noexcept> : function_signature<T (For::*)(Args...) noexcept>, is_rvalue_ref_prop<true>
+    {
+        using is_rvalue_ref_prop<true>::is_rvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const & noexcept> : function_signature<T (For::*)(Args...) const noexcept>, is_lvalue_ref_prop<true>
+    {
+        using is_lvalue_ref_prop<true>::is_lvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const && noexcept> : function_signature<T (For::*)(Args...) const noexcept>, is_rvalue_ref_prop<true>
+    {
+        using is_rvalue_ref_prop<true>::is_rvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) volatile & noexcept> : function_signature<T (For::*)(Args...) volatile noexcept>, is_lvalue_ref_prop<true>
+    {
+        using is_lvalue_ref_prop<true>::is_lvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) volatile && noexcept> : function_signature<T (For::*)(Args...) volatile noexcept>, is_rvalue_ref_prop<true>
+    {
+        using is_rvalue_ref_prop<true>::is_rvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const volatile & noexcept> : function_signature<T (For::*)(Args...) const volatile noexcept>, is_lvalue_ref_prop<true>
+    {
+        using is_lvalue_ref_prop<true>::is_lvalue_ref;
+    };
+    template <typename For, typename T, typename... Args>
+    struct function_signature<T (For::*)(Args...) const volatile && noexcept> : function_signature<T (For::*)(Args...) const volatile noexcept>, is_rvalue_ref_prop<true>
+    {
+        using is_rvalue_ref_prop<true>::is_rvalue_ref;
     };
 
     template <typename... Pack>
-    struct parameter_pack final
+    struct parameter_pack final : meta_type
     {
         using tuple = std::tuple<Pack...>;
 
@@ -83,11 +240,45 @@ namespace sys::meta
         template <typename T>
         static consteval bool contains()
         {
-            return (std::is_same_v<T, Pack> || ...);
+            return (std::same_as<T, Pack> || ...);
         }
-
-        parameter_pack() = delete;
     };
+
+    template <bool Condition, typename T>
+    struct type_case final : meta_type
+    {
+        using type = T;
+
+        static consteval bool is_early_return() { return Condition; }
+    };
+    template <typename... Cases>
+    struct type_switch_cases final : meta_type
+    {
+        using cases = std::tuple<Cases...>;
+        using return_cases = decltype(std::tuple_cat(std::declval<std::conditional_t<Cases::is_early_return(), std::tuple<Cases>, std::tuple<>>>()...));
+
+        template <size_t Index>
+        using at = std::tuple_element_t<Index, cases>;
+
+        static consteval size_t count_returns() { return (Cases::is_early_return() + ...); }
+    };
+    template <typename... Cases>
+    using type_switch = std::tuple_element_t<0, typename type_switch_cases<Cases...>::return_cases>::type;
+
+    template <typename T, typename... Args>
+    constexpr decltype(auto) append_to(T& range, Args&&... args)
+    {
+        if constexpr (requires { range.emplace_back(std::forward<Args>(args)...); })
+            return range.emplace_back(std::forward<Args>(args)...);
+        else if constexpr (requires { range.push_back(std::forward<Args>(args)...); })
+            return range.push_back(std::forward<Args>(args)...);
+        else if constexpr (requires { range.push(std::forward<Args>(args)...); })
+            return range.push(std::forward<Args>(args)...);
+        else if constexpr (requires { range.append(std::forward<Args>(args)...); })
+            return range.append(std::forward<Args>(args)...);
+        else if constexpr (requires { requires false; })
+        { }
+    }
 } // namespace sys::meta
 
 namespace sys
@@ -121,41 +312,51 @@ namespace sys
         IBuiltinInteger<T> && IBuiltinInteger<CanHold> && std::cmp_less_equal(std::numeric_limits<T>::lowest(), std::numeric_limits<CanHold>::lowest()) &&
         std::cmp_greater_equal(std::numeric_limits<T>::max(), std::numeric_limits<CanHold>::max());
 
+    /// @brief Whether `T` represents a unicode character.
+    template <typename T>
+    concept IUnicodeCharacter = std::same_as<T, char8_t> || std::same_as<T, char16_t> || std::same_as<T, char32_t>;
     /// @brief Whether `T` is a character type.
     template <typename T>
-    concept ICharacter = std::same_as<T, char> || std::same_as<T, wchar_t> || std::same_as<T, char8_t> || std::same_as<T, char16_t> || std::same_as<T, char32_t>;
+    concept ICharacter = std::same_as<T, char> || std::same_as<T, wchar_t> || IUnicodeCharacter<T>;
 
     /// @brief Whether `Functor` represents a function with signature `Signature`.
     template <typename Functor, typename Signature> // i.e. void(int, int)
     concept IFunc = meta::function_signature<Signature>::template is_signature_of<Functor>();
 
+    /// @brief Whether `T` is sizeable.
+    template <typename T, typename U = size_t>
+    concept ISizeable = requires(T range) {
+        requires !std::same_as<U, void>;
+        { std::size(range) } -> std::same_as<U>;
+    } || requires(T range) {
+        requires std::same_as<U, void>;
+        std::size(range);
+    };
+
     /// @brief Whether `T` is iterable.
     template <typename T, typename U = void>
-    concept IEnumerable = requires(T& range, std::remove_cvref_t<decltype(range.begin())> it) {
-        range.begin();
-        range.end();
-
-        range.begin() != range.end();
-        ++it;
-
-        requires ((std::same_as<U, void> && requires { *range.begin(); }) || std::same_as<std::remove_cvref_t<decltype(*range.begin())>, U>);
-    } || requires(T& range, std::remove_cvref_t<decltype(std::begin(range))> it) {
+    concept IEnumerable = requires(T& range, std::remove_cvref_t<decltype(std::begin(range))> it) {
         std::begin(range);
         std::end(range);
 
         std::begin(range) != std::end(range);
         ++it;
 
-        requires ((std::same_as<U, void> && requires { *std::begin(range); }) || std::same_as<std::remove_cvref_t<decltype(*std::begin(range))>, U>);
+        requires (requires {
+            requires std::same_as<U, void>;
+            *std::begin(range);
+        } || std::same_as<std::remove_cvref_t<decltype(*std::begin(range))>, U>);
     };
 
-    /// @brief Whether `T` is sizeable.
-    template <typename T, typename U = void>
-    concept ISizeable = requires(T range) {
-        requires (!std::same_as<U, void> && (requires {
-                     { range.size() } -> std::same_as<U>;
-                 } || requires {
-                     { std::size(range) } -> std::same_as<U>;
-                 })) || (std::same_as<U, void> && (requires { range.size(); } || requires { std::size(range); }));
+    /// @brief Whether `T` can be pushed back into.
+    template <typename T, typename... U>
+    concept IAppendable = requires(T range) {
+        requires (sizeof...(U) > 0);
+        meta::append_to(range, std::declval<U>()...);
+    } || requires {
+        requires (sizeof...(U) == 0);
+        requires (requires { &T::emplace_back; } || requires { &T::push_back; } || requires { &T::push; } || requires { &T::append; } || requires {
+            std::declval<T>().emplace_back();
+        } || requires { std::declval<T>().push_back(); } || requires { std::declval<T>().push(); } || requires { std::declval<T>().append(); });
     };
 } // namespace sys

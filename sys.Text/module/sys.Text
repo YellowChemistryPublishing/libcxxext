@@ -1,3 +1,5 @@
 #pragma once
 
-#include <StringLiteral.h>
+#include <Char.h>              // IWYU pragma: export
+#include <CodepointIterator.h> // IWYU pragma: export
+#include <StringEx.h>          // IWYU pragma: export

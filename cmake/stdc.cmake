@@ -17,9 +17,9 @@ target_precompile_headers(sys.BuildSupport.stdcinc INTERFACE
     <signal.h>
     <stdarg.h>
     <stdatomic.h>
-    $<$<COMPILE_FEATURES:c_std_23>:<stdbit.h>>
+    $<$<COMPILE_FEATURES:c_std_23>:$<1:<stdbit.h>>>
     <stdbool.h>
-    $<$<COMPILE_FEATURES:c_std_23>:<stdckdint.h>>
+    $<$<COMPILE_FEATURES:c_std_23>:$<1:<stdckdint.h>>>
     <stddef.h>
     <stdint.h>
     <stdio.h>

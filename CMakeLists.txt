@@ -3,18 +3,15 @@ cmake_minimum_required(VERSION 3.30)
 project(libcxxext)
 
 include(CMakeDependentOption)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+# Config
+if(NOT DEFINED LIBCXXEXT_DEVELOPMENT_MODE AND CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(LIBCXXEXT_DEVELOPMENT_MODE ON CACHE STRING "Build libcxxext in development mode.")
-else()
-    set(LIBCXXEXT_DEVELOPMENT_MODE OFF CACHE STRING "Build libcxxext in development mode.")
 endif()
-
 if(LIBCXXEXT_DEVELOPMENT_MODE AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "Install path prefix." FORCE)
 endif()
-
-# Config
 cmake_dependent_option(LIBCXXEXT_EXAMPLES "Build examples." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
 cmake_dependent_option(LIBCXXEXT_TESTS "Build tests." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
 cmake_dependent_option(LIBCXXEXT_COVERAGE "Enable coverage instrumentation (gcc/clang)." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
@@ -23,12 +20,9 @@ set(LIBCXXEXT_EXPORT_PCH ON CACHE BOOL "Use and produce precompiled headers.")
 set(LIBCXXEXT_TEST_ASAN OFF CACHE BOOL "Enable AddressSanitizer for tests.")
 set(LIBCXXEXT_TEST_UBSAN OFF CACHE BOOL "Enable UndefinedBehaviorSanitizer for tests.")
 
-set(CMAKE_CXX_STANDARD 26)
-set(CMAKE_CXX_STANDARD_REQUIRED OFF)
-set(CMAKE_CXX_SCAN_FOR_MODULES OFF)
-
 include(cmake/build_support.cmake)
 include(cmake/clang_tidy.cmake)
+include(cmake/target_common.cmake)
 
 if(LIBCXXEXT_EXPORT_PCH)
     include(cmake/stdc.cmake)
@@ -52,7 +46,14 @@ if(LIBCXXEXT_TESTS)
     set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
     set(CATCH_INSTALL_EXTRAS OFF CACHE INTERNAL "" FORCE)
     add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
+    target_compile_features(Catch2 PUBLIC cxx_std_20)
+    target_compile_features(Catch2WithMain PUBLIC cxx_std_20)
     add_subdirectory(rapidcheck EXCLUDE_FROM_ALL)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
+        target_compile_options(rapidcheck PRIVATE -include cstdint)
+    elseif(MSVC)
+        target_compile_options(rapidcheck PRIVATE /FI cstdint)
+    endif()
 
     add_subdirectory(tests)
 endif()
