@@ -21,7 +21,7 @@ TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_stora
     {
         sys::aligned_storage<int64_t> storage;
         std::memcpy(storage.data(), &val, sizeof(val));
-        CHECK(std::memcmp(storage.data(), &val, sizeof(val)) == 0);
+        RC_ASSERT(std::memcmp(storage.data(), &val, sizeof(val)) == 0);
     });
 }
 

@@ -167,21 +167,22 @@ namespace sys
         static constexpr sz write_codepoint(char32_t c, char16_t out[], unsafe) noexcept
         {
             const u32 ret = _as(u32::underlying_type, c);
-            if (ret <= 0xFFFF_u32 && !ch::is_surrogate(_as(char32_t, ret)))
+            if (!ch::is_scalar(_as(char32_t, ret))) [[unlikely]]
+            {
+                std::ranges::copy(ch::replacement<char16_t>(), out);
+                return ch::replacement<char16_t>().size();
+            }
+
+            if (ret <= 0xFFFF_u32)
             {
                 out[0] = _as(char16_t, ret);
                 return 1_uz;
             }
-            if (ret <= 0x10FFFF_u32)
-            {
-                const u32 val = ret - 0x10000_u32;
-                out[0] = _as(char16_t, 0xD800_u32 + (val >> 10_u32));
-                out[1] = _as(char16_t, 0xDC00_u32 + (val & 0x3FF_u32));
-                return 2_uz;
-            }
 
-            std::ranges::copy(ch::replacement<char16_t>(), out);
-            return ch::replacement<char16_t>().size();
+            const u32 val = ret - 0x10000_u32;
+            out[0] = _as(char16_t, 0xD800_u32 + (val >> 10_u32));
+            out[1] = _as(char16_t, 0xDC00_u32 + (val & 0x3FF_u32));
+            return 2_uz;
         }
         /// @see `sys::ch::write_codepoint(char32_t c, char32_t out[], unsafe)`
         static constexpr sz write_codepoint(char32_t c, char8_t out[], unsafe) noexcept // NOLINT(readability-function-cognitive-complexity)

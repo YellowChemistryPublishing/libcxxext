@@ -29,9 +29,9 @@ TEST_CASE("`sys::str32_iter<...>` Fuzzing", "[fuzz][sys.Text][str32_iter]")
                 (void)*it;
             doDeref = !doDeref;
             ++it;
-            CHECK(++count <= sz(bytes.size()));
+            RC_ASSERT(++count <= sz(bytes.size()));
         }
-        CHECK(it == end);
+        RC_ASSERT(it == end);
     });
 }
 
