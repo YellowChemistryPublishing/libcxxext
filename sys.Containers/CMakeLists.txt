@@ -16,7 +16,7 @@ target_link_libraries(sys.Containers INTERFACE
 )
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
-    target_lint_clang_tidy(sys.Containers "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/sys.Containers/.*\"" ${SYS_CTRS_HEADERS})
+    target_lint_clang_tidy(sys.Containers "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/.*\"" ${SYS_CTRS_HEADERS})
 endif()
 
 install(TARGETS sys.Containers FILE_SET HEADERS)

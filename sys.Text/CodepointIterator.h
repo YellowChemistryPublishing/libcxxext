@@ -10,7 +10,7 @@ namespace sys
 {
     /// @brief UTF-32 codepoint view iterator for a string of unicode characters.
     template <IUnicodeCharacter T>
-    struct str32_iter
+    struct str32_iter final
     {
     private:
         const T *cur = nullptr, *end = nullptr;
@@ -52,7 +52,7 @@ namespace sys
     };
 
     template <IUnicodeCharacter T>
-    struct str32_view
+    struct str32_view final
     {
     private:
         str32_iter<T> _beg {}, _end {};

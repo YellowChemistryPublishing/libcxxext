@@ -19,7 +19,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
-    target_lint_clang_tidy(sys "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/sys/.*\"" ${SYS_HEADERS})
+    target_lint_clang_tidy(sys "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/.*\"" ${SYS_HEADERS})
 endif()
 
 install(TARGETS sys FILE_SET HEADERS)
