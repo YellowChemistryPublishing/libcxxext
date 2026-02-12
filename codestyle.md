@@ -48,7 +48,7 @@ Where applicable and valid, `_restrict` must apply to pointers.
 
 If you are accessing members, you _must_ use `this->...`!
 
-Overriden virtual member functions must be annotated with the `override` specifier.
+Overridden virtual member functions must be annotated with the `override` specifier.
 
 Stick `final` on any types that aren't designed for inheritance, as well as leaf implementations that aren't intended to be overridden further.
 
@@ -117,7 +117,13 @@ If you check all these boxes, your code is probably sufficiently well thought ou
 
 ## Testing
 
-When naming a test, describe in a _gramatically correct_ sentence what the test does, and the specific function, functions, or type that it tests. For example,
-`` Byte manipulation works as expected. | `sys::s16fb2(...)`, `sys::hbfs16(...)`, `sys::lbfs16(...)` ``.
+When naming a test, describe in a _grammatically correct_ sentence what the test does, tag them with the specific function, functions, or type that it tests. For example,
+``"Byte manipulation works as expected.", "`sys::s16fb2(...)`, `sys::hbfs16(...)`, `sys::lbfs16(...)`"``, or for compile-time tests:
+
+```cpp
+// ================================================================================
+// Reference overloads and cv-qualifiers. | `sys::meta::function_signature<...>`
+// ================================================================================
+```
 
 Use sections where appropriate. Name them as only a short description.

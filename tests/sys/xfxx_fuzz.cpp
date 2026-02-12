@@ -4,6 +4,8 @@ _push_nowarn_conv_comp();
 
 // NOLINTBEGIN(misc-include-cleaner)
 
+#include <cstdint>
+
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
 
@@ -14,7 +16,7 @@ _pop_nowarn_deprecated();
 
 TEST_CASE("`i16` => `lsb` + `msb` => `i16` is an invariant.", "[fuzz][sys][xfxx]")
 {
-    rc::check("Validate recombination of high and low bytes.", [](const int16_t val) { CHECK(sys::s16fb2(sys::hbfs16(i16(val)), sys::lbfs16(i16(val))) == i16(val)); });
+    rc::check("Validate recombination of high and low bytes.", [](const int16_t val) { RC_ASSERT(sys::s16fb2(sys::hbfs16(i16(val)), sys::lbfs16(i16(val))) == i16(val)); });
 }
 
 // NOLINTEND(misc-include-cleaner)

@@ -3,6 +3,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
+sys.path.append(os.path.abspath(f"{os.path.dirname(__file__)}/.."))
+
 import lib.config as config
 from lib.exec import exec_or_fail
 from lib.log import lcheck_failed, lcheck_passed, lprint

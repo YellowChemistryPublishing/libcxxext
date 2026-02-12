@@ -9,8 +9,8 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     # Language Support
     <cfloat>
     <climits>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<compare>>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<coroutine>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<compare>>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<coroutine>>>
     <csetjmp>
     <csignal>
     <cstdarg>
@@ -20,20 +20,20 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     <initializer_list>
     <limits>
     <new>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<source_location>>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<stdfloat>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<source_location>>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<stdfloat>>>
     <typeindex>
     <typeinfo>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<version>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<version>>>
 
     # Concepts
-    $<$<COMPILE_FEATURES:cxx_std_20>:<concepts>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<concepts>>>
 
     # Diagnostics
     <cassert>
     <cerrno>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<debugging>>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<stacktrace>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:$<1:<debugging>>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<stacktrace>>>
     <stdexcept>
     <system_error>
 
@@ -48,9 +48,9 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
 
     # General Utilities
     <any>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<bit>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<bit>>>
     <bitset>
-    $<$<COMPILE_FEATURES:cxx_std_23>:<expected>>
+    $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<expected>>>
     <functional>
     <optional>
     <tuple>
@@ -60,17 +60,17 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     # Containers
     <array>
     <deque>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<flat_map>>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<flat_set>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<flat_map>>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<flat_set>>>
     <forward_list>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<hive>>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<inplace_vector>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:$<1:<hive>>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:$<1:<inplace_vector>>>
     <list>
     <map>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<mdspan>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<mdspan>>>
     <queue>
     <set>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<span>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<span>>>
     <stack>
     <unordered_map>
     <unordered_set>
@@ -80,8 +80,8 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     <iterator>
 
     # Ranges
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<generator>>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<ranges>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<generator>>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<ranges>>>
 
     # Algorithms
     <algorithm>
@@ -96,22 +96,22 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     <cctype>
     <charconv>
     <clocale>
-    <cuchar>
+    # Broken on MSVC: <cuchar>
     <cwchar>
     <cwctype>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<format>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<format>>>
     <locale>
     <regex>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<text_encoding>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:$<1:<text_encoding>>>
 
     # Numerics
     <cfenv>
     <cmath>
     <complex>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<linalg>>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<numbers>>
-    <random>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<simd>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:$<1:<linalg>>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<numbers>>>
+    # random
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:$<1:<simd>>>
     <valarray>
 
     # Time
@@ -129,23 +129,23 @@ target_precompile_headers(sys.BuildSupport.stdc++inc INTERFACE
     <iostream>
     <istream>
     <ostream>
-    $<$<COMPILE_FEATURES:cxx_std_23>:<print>>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:<spanstream>>
+    $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<print>>>
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_23>:$<1:<spanstream>>>
     <sstream>
     <streambuf>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<syncstream>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<syncstream>>>
 
     # Concurrency
     <atomic>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<barrier>>
-    <condition_variable>
-    <future>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<hazard_pointer>>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<latch>>
-    <mutex>
-    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:<rcu>>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<semaphore>>
-    <shared_mutex>
-    $<$<COMPILE_FEATURES:cxx_std_20>:<stop_token>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<barrier>>>
+    # condition_variable
+    # future
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:$<1:<hazard_pointer>>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<latch>>>
+    # mutex
+    # TODO: Once more available, add $<$<COMPILE_FEATURES:cxx_std_26>:$<1:<rcu>>>
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<semaphore>>>
+    # shared_mutex
+    $<$<COMPILE_FEATURES:cxx_std_20>:$<1:<stop_token>>>
     <thread>
 )

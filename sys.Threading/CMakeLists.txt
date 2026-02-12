@@ -10,7 +10,8 @@ if(NOT PLATFORM_SUPPORT_DIR STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/platform")
 endif()
 
 add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} ${SYS_THREAD_SRCS})
-target_sources(sys.Threading PUBLIC
+target_libcxxext_common_config(sys.Threading)
+target_sources(sys.Threading PRIVATE
     FILE_SET HEADERS
     FILES ${SYS_THREAD_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Threading"
 )
@@ -30,10 +31,9 @@ target_link_libraries(sys.Threading
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
     $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
 )
-set_target_properties(sys.Threading PROPERTIES PREFIX "")
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
-    target_lint_clang_tidy(sys.Threading "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/sys.Threading/.*\"" ${SYS_THREAD_HEADERS})
+    target_lint_clang_tidy(sys.Threading "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/.*\"" ${SYS_THREAD_HEADERS})
 endif()
 
 install(TARGETS sys.Threading
