@@ -1,6 +1,8 @@
 /.cache/
 /.vscode/
 
+/sys.Text/data_unicode/
+
 /build/
 /*-build/
 /install/
