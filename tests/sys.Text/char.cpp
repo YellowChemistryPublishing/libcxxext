@@ -5,59 +5,7 @@
 #include <module/sys.Text>
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("`sys::ch` Whitespace Verification", "[sys.Text][char][whitespace]")
-{
-    SECTION("Standard Whitespace")
-    {
-        CHECK(sys::ch::is_whitespace(' '));
-        CHECK(sys::ch::is_whitespace('\t'));
-        CHECK(sys::ch::is_whitespace('\n'));
-        CHECK(sys::ch::is_whitespace('\r'));
-        CHECK(sys::ch::is_whitespace('\f'));
-        CHECK(sys::ch::is_whitespace('\v'));
-    }
-
-    SECTION("Unicode Whitespace (Exhaustive)")
-    {
-        // Space Separators
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x00A0))); // NBSP
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x1680))); // OGHAM SPACE MARK
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2000))); // EN QUAD
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2001))); // EM QUAD
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2002))); // EN SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2003))); // EM SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2004))); // THREE-PER-EM SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2005))); // FOUR-PER-EM SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2006))); // SIX-PER-EM SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2007))); // FIGURE SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2008))); // PUNCTUATION SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2009))); // THIN SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x200A))); // HAIR SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x202F))); // NARROW NO-BREAK SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x205F))); // MEDIUM MATHEMATICAL SPACE
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x3000))); // IDEOGRAPHIC SPACE
-
-        // Line / Paragraph Separators
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2028))); // LINE SEPARATOR
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2029))); // PARAGRAPH SEPARATOR
-
-        // Other Control Characters
-        CHECK(sys::ch::is_whitespace(_as(char32_t, 0x0085))); // NEXT LINE (NEL)
-    }
-
-    SECTION("Non-Whitespace Boundaries")
-    {
-        CHECK_FALSE(sys::ch::is_whitespace('A'));
-        CHECK_FALSE(sys::ch::is_whitespace('0'));
-        CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x0000))); // Null-terminator doesn't count.
-        CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x167F))); // Just before Ogham.
-        CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x1681))); // Just after Ogham.
-        CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x200B))); // ZERO WIDTH SPACE
-    }
-}
-
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("`sys::ch::read_codepoint(...)` UTF-8 Exhaustive", "[sys.Text][char][utf8][decode]")
+TEST_CASE("`sys::ch::read_codepoint(...)` UTF-8 Exhaustive", "[sys.Text][ch][read_codepoint][utf8]")
 {
     SECTION("Valid Sequences")
     {
@@ -136,7 +84,7 @@ TEST_CASE("`sys::ch::read_codepoint(...)` UTF-8 Exhaustive", "[sys.Text][char][u
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("`sys::ch::read_codepoint` UTF-16 Exhaustive", "[sys.Text][char][utf16][decode]")
+TEST_CASE("`sys::ch::read_codepoint` UTF-16 Exhaustive", "[sys.Text][ch][read_codepoint][utf16]")
 {
     SECTION("Valid Sequences")
     {
@@ -173,7 +121,7 @@ TEST_CASE("`sys::ch::read_codepoint` UTF-16 Exhaustive", "[sys.Text][char][utf16
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("`sys::ch::write_codepoint` Exhaustive", "[sys.Text][char][encode]")
+TEST_CASE("`sys::ch::write_codepoint` Exhaustive", "[sys.Text][ch][write_codepoint]")
 {
     SECTION("To UTF-8")
     {

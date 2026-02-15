@@ -11,7 +11,7 @@ _pop_nowarn_conv_comp();
 #include <module/sys.Text>
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("`sys::ch` Fuzzing", "[fuzz][sys.Text][char]")
+TEST_CASE("`sys::ch` Fuzzing", "[fuzz][sys.Text][ch]")
 {
     rc::check("`is_whitespace` is not random.", [](const uint_least32_t genInt)
     {

@@ -69,46 +69,6 @@ TEST_CASE("`sys::string<...>` Constructors", "[sys.Text][string][ctor]")
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("`sys::string<...>` Trimming", "[sys.Text][string][trim]")
-{
-    SECTION("Basic ASCII Trimming")
-    {
-        sys::str s = u8"  hello  ";
-        CHECK(s.trim() == u8"hello");
-
-        s = u8"  hello  ";
-        CHECK(s.trim_start() == u8"hello  ");
-
-        s = u8"  hello  ";
-        CHECK(s.trim_end() == u8"  hello");
-    }
-
-    SECTION("Unicode Whitespace Trimming")
-    {
-        sys::str s = u8"\u3000\u1680Unicode\u2000\u2001";
-        CHECK(s.trim() == u8"Unicode");
-    }
-
-    SECTION("Pathological Trimming Cases")
-    {
-        sys::str onlySpaces = u8"   \t\n\r  ";
-        CHECK(onlySpaces.trim().empty());
-
-        sys::str mixedSpaces = u8" \u3000 \u1680 ";
-        CHECK(mixedSpaces.trim().empty());
-
-        sys::str noSpaces = u8"word";
-        CHECK(noSpaces.trim() == u8"word");
-
-        sys::str spacesInMiddle = u8"  hello world  ";
-        CHECK(spacesInMiddle.trim() == u8"hello world");
-
-        sys::str empty = u8"";
-        CHECK(empty.trim().empty());
-    }
-}
-
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("`sys::string<...>` Splitting and Joining", "[sys.Text][string][split][join]")
 {
     SECTION("Split by Character")

@@ -4,12 +4,45 @@
 
 #pragma once
 
+// NOLINTBEGIN(bugprone-branch-clone)
+
 namespace sys::internal
 {
     /// @brief Check if a character is a Unicode whitespace character.
-    constexpr bool dchar_is_ws(char32_t c) noexcept
+    constexpr bool dchar_is_ws(const char32_t c) noexcept
     {
-        return (c >= U'\u0009' && c <= U'\u000D') || c == U'\u0020' || c == U'\u0085' || c == U'\u00A0' || c == U'\u1680' || (c >= U'\u2000' && c <= U'\u200A') || c == U'\u2028' ||
-            c == U'\u2029' || c == U'\u202F' || c == U'\u205F' || c == U'\u3000';
+        switch (c)
+        {
+        case U'\u0009': return true;
+        case U'\u000A': return true;
+        case U'\u000B': return true;
+        case U'\u000C': return true;
+        case U'\u000D': return true;
+        case U'\u0020': return true;
+        case U'\u0085': return true;
+        case U'\u00A0': return true;
+        case U'\u1680': return true;
+        case U'\u2000': return true;
+        case U'\u2001': return true;
+        case U'\u2002': return true;
+        case U'\u2003': return true;
+        case U'\u2004': return true;
+        case U'\u2005': return true;
+        case U'\u2006': return true;
+        case U'\u2007': return true;
+        case U'\u2008': return true;
+        case U'\u2009': return true;
+        case U'\u200A': return true;
+        case U'\u200E': return true;
+        case U'\u200F': return true;
+        case U'\u2028': return true;
+        case U'\u2029': return true;
+        case U'\u202F': return true;
+        case U'\u205F': return true;
+        case U'\u3000': return true;
+        default: return false;
+        }
     }
 } // namespace sys::internal
+
+// NOLINTEND(bugprone-branch-clone)

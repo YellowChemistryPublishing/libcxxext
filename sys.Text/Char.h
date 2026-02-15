@@ -10,6 +10,8 @@
 #include <LanguageSupport.h>
 #include <Numeric.h>
 #include <Traits.h>
+#include <data/UnicodeCCC.h>
+#include <data/UnicodeCasing.h>
 #include <data/UnicodeWhitespace.h>
 
 namespace sys
@@ -79,6 +81,19 @@ namespace sys
         static constexpr bool is_whitespace(const T c) noexcept
         {
             return internal::dchar_is_ws(_as(char32_t, c));
+        }
+
+        /// @brief Converts a codepoint to lowercase (simple mapping).
+        template <ICharacter T>
+        static constexpr char32_t to_lower(const T c) noexcept
+        {
+            return internal::dchar_to_lower_simple(_as(char32_t, c));
+        }
+        /// @brief Converts a codepoint to uppercase (simple mapping).
+        template <ICharacter T>
+        static constexpr char32_t to_upper(const T c) noexcept
+        {
+            return internal::dchar_to_upper_simple(_as(char32_t, c));
         }
 
         /// @brief The number of buffer elements in a null-terminated string.

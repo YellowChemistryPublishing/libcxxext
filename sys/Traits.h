@@ -149,7 +149,7 @@ namespace sys::meta
         using is_noexcept_prop<true>::is_noexcept;
     };
     template <typename For, typename T, typename... Args>
-    struct function_signature<T (For::*)(Args...) /* Appease `clang-tidy`. */&> : function_signature<T (For::*)(Args...)>, is_lvalue_ref_prop<true>
+    struct function_signature<T (For::*)(Args...) /* Appease `clang-format`. */&> : function_signature<T (For::*)(Args...)>, is_lvalue_ref_prop<true>
     {
         using is_lvalue_ref_prop<true>::is_lvalue_ref;
     };
