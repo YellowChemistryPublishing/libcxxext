@@ -23,7 +23,13 @@
         {
             "name": "check:cppcov",
             "script": "workflows/cppcov.py",
-            "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|sys|sys\\.Containers|sys\\.Threading)/"]
+            "with": [
+                "-p=${run_on}",
+                "-cl=${compiler_name}",
+                "-d=.",
+                "-b=${target_arch}-${run_on}-${compiler_name}-build",
+                "-f=^(build|sys|sys\\.Containers|sys\\.Threading|sys\\.Text)/"
+            ]
         },
         {
             "name": "check:cppfmt",
