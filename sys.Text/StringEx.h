@@ -17,13 +17,6 @@
 #include <Numeric.h>
 #include <Traits.h>
 
-#define _internal_str_mod_xv_ovr(mod_name, ...) \
-    &&                                          \
-    {                                           \
-        this->mod_name(__VA_ARGS__);            \
-        return std::move(*this);                \
-    }
-
 namespace sys
 {
     template <ICharacter T>
@@ -238,25 +231,25 @@ namespace sys
             this->str.push_back(c);
             return *this;
         }
-        constexpr string append(const T c) _internal_str_mod_xv_ovr(append, c);
+        constexpr string append(const T c) && { return this->append(c), std::move(*this); };
         constexpr string& append(const T c, const sz count) &
         {
             this->str.append(count, c);
             return *this;
         }
-        constexpr string append(const T c, const sz count) _internal_str_mod_xv_ovr(append, c, count);
+        constexpr string append(const T c, const sz count) && { return this->append(c, count), std::move(*this); };
         constexpr string& append(const std::basic_string_view<T> str) &
         {
             this->str.append(str);
             return *this;
         }
-        constexpr string append(const std::basic_string_view<T> str) _internal_str_mod_xv_ovr(append, str);
+        constexpr string append(const std::basic_string_view<T> str) && { return this->append(str), std::move(*this); };
         constexpr string& append(const std::span<const T> data) &
         {
             this->str.append(data.data(), data.size());
             return *this;
         }
-        constexpr string append(const std::span<const T> data) _internal_str_mod_xv_ovr(append, data);
+        constexpr string append(const std::span<const T> data) && { return this->append(data), std::move(*this); };
 
         constexpr string& replace_invalid() & { return (*this = std::move(*this).replace_invalid()); }
         constexpr string replace_invalid() &&
@@ -276,7 +269,7 @@ namespace sys
             this->trim_end();
             return this->trim_start();
         }
-        constexpr string trim() _internal_str_mod_xv_ovr(trim);
+        constexpr string trim() && { return this->trim(), std::move(*this); };
         constexpr string& trim_start() &
         {
             const T* const endPtr = std::to_address(this->cend());
@@ -291,7 +284,7 @@ namespace sys
 
             return *this;
         }
-        constexpr string trim_start() _internal_str_mod_xv_ovr(trim_start);
+        constexpr string trim_start() && { return this->trim_start(), std::move(*this); };
         constexpr string& trim_end() &
         {
             const T* const endPtr = std::to_address(this->cend());
@@ -312,7 +305,7 @@ namespace sys
 
             return *this;
         }
-        constexpr string trim_end() _internal_str_mod_xv_ovr(trim_end);
+        constexpr string trim_end() && { return this->trim_end(), std::move(*this); };
 
         constexpr string& to_lower(std::u8string_view lang = u8"") & { return (*this = std::move(*this).to_lower(lang)); }
         constexpr string to_lower(std::u8string_view lang = u8"") && { return this->as_cased<false>(lang); }
@@ -323,7 +316,7 @@ namespace sys
         [[nodiscard]] Container split(const T delimiter) const
         {
             if (this->empty())
-                return { *this };
+                return {};
 
             Container ret;
             auto from = this->begin();
@@ -343,7 +336,7 @@ namespace sys
         [[nodiscard]] Container split(const std::basic_string_view<T> delimiter) const
         {
             if (this->size() < delimiter.size())
-                return { *this };
+                return {};
 
             Container ret;
             auto from = this->begin();
@@ -372,7 +365,7 @@ namespace sys
             if (container.size() > 1)
                 totalSize += sz(sep.size()) * (sz(container.size()) - 1_uz);
 
-            std::basic_string<T> ret;
+            string ret;
             ret.reserve(totalSize + 1);
 
             bool needPrependSep = false;
@@ -384,7 +377,7 @@ namespace sys
                 needPrependSep = true;
             }
 
-            return string(std::move(ret));
+            return ret;
         }
 
         friend void swap(string& a, string& b) noexcept
