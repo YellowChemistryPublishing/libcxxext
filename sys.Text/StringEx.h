@@ -119,8 +119,8 @@ namespace sys
                     convSize = internal::dchar_to_lower_special(conv, c, lang, fctx, lctx, unsafe()); // NOLINT(hicpp-no-array-decay)
 
                 T buf[sizeof(char32_t) / sizeof(T)];
-                for (sz i = 0_uz; i < convSize; i++)
-                    ret.append(std::span(buf, ch::write_codepoint(conv[i], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                for (sz j = 0_uz; j < convSize; j++)
+                    ret.append(std::span(buf, ch::write_codepoint(conv[j], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
 
                 string::update_fcontext_for_char(fctx, c);
             }
