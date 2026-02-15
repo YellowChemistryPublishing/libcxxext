@@ -1,3 +1,4 @@
+#include "StringEx.h"
 #include <CompilerWarnings.h>
 
 _push_nowarn_conv_comp();
@@ -121,6 +122,47 @@ TEST_CASE("Iterator Boundaries", "[sys.Text][string][iter]")
     CHECK(s.begin() != s.end());
     CHECK(*s.begin() == u8'a');
     CHECK(*(s.end() - 1z) == u8'c');
+}
+
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
+TEST_CASE("ASCII String Format", "[sys.Text][string][format]")
+{
+    CHECK(std::format("{}", sys::str(u8"beans")) == "beans");
+    CHECK(std::format("{}", sys::str16(u"beans")) == "beans");
+    CHECK(std::format("{}", sys::str32(U"beans")) == "beans");
+    CHECK(std::format("{}", sys::cstr("beans")) == "beans");
+    CHECK(std::format("{}", sys::wstr(L"beans")) == "beans");
+
+    CHECK(std::format(L"{}", sys::str(u8"beans")) == L"beans");
+    CHECK(std::format(L"{}", sys::str16(u"beans")) == L"beans");
+    CHECK(std::format(L"{}", sys::str32(U"beans")) == L"beans");
+    CHECK(std::format(L"{}", sys::cstr("beans")) == L"beans");
+    CHECK(std::format(L"{}", sys::wstr(L"beans")) == L"beans");
+}
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
+TEST_CASE("Multibyte Unicode String Format", "[sys.Text][string][format]")
+{
+    CHECK(std::format("{}", sys::cstr("A\u00A2\u20AC\U00010348")) == "A\u00A2\u20AC\U00010348");
+    CHECK(std::format("{}", sys::str16(u"A\u00A2\u20AC\U00010348")) == "A\u00A2\u20AC\U00010348");
+    CHECK(std::format("{}", sys::str32(U"A\u00A2\u20AC\U00010348")) == "A\u00A2\u20AC\U00010348");
+    CHECK(std::format(L"{}", sys::cstr("A\u00A2\u20AC\U00010348")) == L"A\u00A2\u20AC\U00010348");
+    CHECK(std::format(L"{}", sys::str16(u"A\u00A2\u20AC\U00010348")) == L"A\u00A2\u20AC\U00010348");
+    CHECK(std::format(L"{}", sys::str32(U"A\u00A2\u20AC\U00010348")) == L"A\u00A2\u20AC\U00010348");
+
+    CHECK(std::format("{}", sys::str(u8"\u00A2\u20AC")) == "\u00A2\u20AC");
+    CHECK(std::format("{}", sys::str16(u"\u00A2\u20AC")) == "\u00A2\u20AC");
+    CHECK(std::format("{}", sys::str32(U"\u00A2\u20AC")) == "\u00A2\u20AC");
+    CHECK(std::format(L"{}", sys::str(u8"\u00A2\u20AC")) == L"\u00A2\u20AC");
+    CHECK(std::format(L"{}", sys::str16(u"\u00A2\u20AC")) == L"\u00A2\u20AC");
+    CHECK(std::format(L"{}", sys::str32(U"\u00A2\u20AC")) == L"\u00A2\u20AC");
+}
+TEST_CASE("String Format Specifiers", "[sys.Text][string][format]")
+{
+    CHECK(std::format("{:>10}", sys::str(u8"hi")) == "        hi");
+    CHECK(std::format("{:<10}", sys::str(u8"hi")) == "hi        ");
+    CHECK(std::format(L"{:^8}", sys::str16(u"hi")) == L"   hi   ");
+
+    CHECK(std::format("{:.3}", sys::str(u8"pumpkin")) == "pum");
 }
 
 // NOLINTEND(misc-include-cleaner)

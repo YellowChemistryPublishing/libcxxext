@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <concepts>
 #include <cstddef>
+#include <format>
 #include <initializer_list>
 #include <iterator>
 #include <memory>
@@ -422,3 +423,16 @@ namespace sys
     using str16 = string<char16_t>;
     using str32 = string<char32_t>;
 } // namespace sys
+
+template <sys::ICharacter T, sys::ICharacter U>
+struct std::formatter<sys::string<T>, U> : std::formatter<std::basic_string_view<U>, U>
+{
+    template <typename FormatContext>
+    auto format(const sys::string<T>& str, FormatContext& context) const
+    {
+        if constexpr (std::same_as<T, U>)
+            return std::formatter<std::basic_string_view<U>, U>::format(std::basic_string_view<T>(str), context);
+        else
+            return std::formatter<std::basic_string_view<U>, U>::format(_as(std::basic_string_view<U>, sys::string<U>(str)), context);
+    }
+};
