@@ -1,3 +1,4 @@
+#include "StringEx.h"
 #include <CompilerWarnings.h>
 
 _push_nowarn_conv_comp();
@@ -141,13 +142,12 @@ TEST_CASE("ASCII String Format", "[sys.Text][string][format]")
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Multibyte Unicode String Format", "[sys.Text][string][format]")
 {
-    const sys::str multibyteStr = u8"A\u00A2\u20AC\U00010348";
-    CHECK(std::format("{}", multibyteStr) == "A\u00A2\u20AC\U00010348");
-    CHECK(std::format("{}", sys::str16(multibyteStr)) == "A\u00A2\u20AC\U00010348");
-    CHECK(std::format("{}", sys::str32(multibyteStr)) == "A\u00A2\u20AC\U00010348");
-    CHECK(std::format(L"{}", multibyteStr) == L"A\u00A2\u20AC\U00010348");
-    CHECK(std::format(L"{}", sys::str16(multibyteStr)) == L"A\u00A2\u20AC\U00010348");
-    CHECK(std::format(L"{}", sys::str32(multibyteStr)) == L"A\u00A2\u20AC\U00010348");
+    CHECK(std::format("{}", sys::cstr("A\u00A2\u20AC\U00010348")) == "A\u00A2\u20AC\U00010348");
+    CHECK(std::format("{}", sys::str16(u"A\u00A2\u20AC\U00010348")) == "A\u00A2\u20AC\U00010348");
+    CHECK(std::format("{}", sys::str32(U"A\u00A2\u20AC\U00010348")) == "A\u00A2\u20AC\U00010348");
+    CHECK(std::format(L"{}", sys::cstr("A\u00A2\u20AC\U00010348")) == L"A\u00A2\u20AC\U00010348");
+    CHECK(std::format(L"{}", sys::str16(u"A\u00A2\u20AC\U00010348")) == L"A\u00A2\u20AC\U00010348");
+    CHECK(std::format(L"{}", sys::str32(U"A\u00A2\u20AC\U00010348")) == L"A\u00A2\u20AC\U00010348");
 
     CHECK(std::format("{}", sys::str(u8"\u00A2\u20AC")) == "\u00A2\u20AC");
     CHECK(std::format("{}", sys::str16(u"\u00A2\u20AC")) == "\u00A2\u20AC");
@@ -160,7 +160,7 @@ TEST_CASE("String Format Specifiers", "[sys.Text][string][format]")
 {
     CHECK(std::format("{:>10}", sys::str(u8"hi")) == "        hi");
     CHECK(std::format("{:<10}", sys::str(u8"hi")) == "hi        ");
-    CHECK(std::format(L"{:^8}", sys::str16(u"hi")) == L"  hi    ");
+    CHECK(std::format(L"{:^8}", sys::str16(u"hi")) == L"   hi   ");
 
     CHECK(std::format("{:.3}", sys::str(u8"pumpkin")) == "pum");
 }
