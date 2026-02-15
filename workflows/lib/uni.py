@@ -1,6 +1,7 @@
 """Unicode-related script helpers."""
 
 import os
+from io import TextIOWrapper
 from typing import Set, List
 
 
@@ -16,7 +17,7 @@ def to_cxx_u32_literal(hex_str: str) -> str:
         return f"U'\\U{hex_str.zfill(8)}'"
 
 
-def write_header(f, filename: str, pyfile: str) -> None:
+def write_header(f: TextIOWrapper, filename: str, pyfile: str) -> None:
     """Write standard header comments to a generated file."""
 
     f.write(f"/// @file {filename}\n")

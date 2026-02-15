@@ -1,7 +1,7 @@
 import os
 import sys
 from textwrap import dedent, indent
-from typing import List, Dict, Set
+from typing import Any, Dict, List, Set
 
 sys.path.append(os.path.abspath(f"{os.path.dirname(__file__)}/.."))
 
@@ -71,7 +71,7 @@ def main(argv: List[str]) -> None:
     # Aggregate case folding mappings.
     simple_fold_mappings: Dict[int, int] = {}
     unconditional_special_fold: Dict[int, List[int]] = {}
-    conditional_special_fold: List[Dict] = []
+    conditional_special_fold: List[Dict[str, Any]] = []
     with open(case_folding_path, "r", encoding="utf-8") as f:
         for line in f:
             cf_clean_line: str = line.split("#")[0].strip()
@@ -112,8 +112,8 @@ def main(argv: List[str]) -> None:
     # Aggregate special casing rules.
     unconditional_special_lower: Dict[int, List[int]] = {}
     unconditional_special_upper: Dict[int, List[int]] = {}
-    conditional_special_lower: List[Dict] = []
-    conditional_special_upper: List[Dict] = []
+    conditional_special_lower: List[Dict[str, object]] = []
+    conditional_special_upper: List[Dict[str, object]] = []
     with open(special_casing_path, "r", encoding="utf-8") as f:
         for line in f:
             clean_line: str = line.split("#")[0].strip()
@@ -309,7 +309,7 @@ def main(argv: List[str]) -> None:
         def write_special_mapping(
             name: str,
             entry_direction: str,
-            entries: List[Dict],
+            entries: List[Dict[str, Any]],
             unconditional: Dict[int, List[int]],
             simple_func: str,
             is_fold: bool = False,
