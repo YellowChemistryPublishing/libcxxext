@@ -1,6 +1,5 @@
 #pragma once
 
-#include "data/UnicodeCCC.h"
 #include <algorithm>
 #include <concepts>
 #include <cstddef>
@@ -17,9 +16,13 @@
 #include <LanguageSupport.h>
 #include <Numeric.h>
 #include <Traits.h>
+#include <data/UnicodeCCC.h>
 
 namespace sys
 {
+    template <ICharacter T>
+    struct str32_view;
+
     template <ICharacter T>
     class string final
     {
@@ -115,8 +118,8 @@ namespace sys
                     convSize = internal::dchar_to_lower_special(conv, c, lang, fctx, lctx, unsafe()); // NOLINT(hicpp-no-array-decay)
 
                 T buf[sizeof(char32_t) / sizeof(T)];
-                for (sz j = 0_uz; j < convSize; j++)
-                    ret.append(std::span(buf, ch::write_codepoint(conv[j], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                for (sz i = 0_uz; i < convSize; i++)
+                    ret.append(std::span(buf, ch::write_codepoint(conv[i], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
 
                 string::update_fcontext_for_char(fctx, c);
             }
@@ -306,6 +309,23 @@ namespace sys
         constexpr string to_lower(std::u8string_view lang = u8"") && { return this->as_cased<false>(lang); }
         constexpr string& to_upper(std::u8string_view lang = u8"") & { return (*this = std::move(*this).to_upper(lang)); }
         constexpr string to_upper(std::u8string_view lang = u8"") && { return this->as_cased<true>(lang); }
+
+        constexpr string& fold(std::u8string_view lang = u8"") & { return (*this = std::move(*this).fold(lang)); }
+        constexpr string fold(std::u8string_view lang = u8"") &&
+        {
+            string ret;
+            ret.reserve(this->capacity());
+            for (const char32_t c : str32_view(*this))
+            {
+                char32_t conv[3];
+                const sz convSize = internal::dchar_fold_special(conv, c, lang, unsafe()); // NOLINT(hicpp-no-array-decay)
+
+                T buf[sizeof(char32_t) / sizeof(T)];
+                for (sz i = 0_uz; i < convSize; i++)
+                    ret.append(std::span(buf, ch::write_codepoint(conv[i], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+            }
+            return ret;
+        }
 
         template <IAppendable Container = std::vector<string>>
         [[nodiscard]] Container split(const T delimiter) const

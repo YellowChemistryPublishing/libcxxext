@@ -24,9 +24,7 @@ TEST_CASE("`sys::str<...>` Fuzzing", "[fuzz][sys.Text][string]")
             if (v)
                 s.append(_as(char8_t, v));
 
-        const std::vector<sys::str> parts = s.split(u8',');
-        const sys::str joined = sys::str::join(parts, u8",");
-        RC_ASSERT(joined == s);
+        RC_ASSERT(sys::str::join(s.split(u8','), u8",") == s);
     });
 
     rc::check("UTF-8 -> UTF-32 -> UTF-8 is invariant.", [](const std::string& input)
@@ -73,8 +71,7 @@ TEST_CASE("`sys::str<...>` Fuzzing", "[fuzz][sys.Text][string]")
         RC_ASSERT(trimmed.size() <= s.size());
         RC_ASSERT(s.contains(trimmed));
 
-        const sys::str doubleTrimmed = sys::str(trimmed).trim();
-        RC_ASSERT(trimmed == doubleTrimmed);
+        RC_ASSERT(trimmed == sys::str(trimmed).trim());
     });
 }
 

@@ -9,7 +9,7 @@
 namespace sys
 {
     /// @brief UTF-32 codepoint view iterator for a string of unicode characters.
-    template <IUnicodeCharacter T>
+    template <ICharacter T>
     struct str32_iter final
     {
     private:
@@ -51,7 +51,7 @@ namespace sys
         }
     };
 
-    template <IUnicodeCharacter T>
+    template <ICharacter T>
     struct str32_view final
     {
     private:

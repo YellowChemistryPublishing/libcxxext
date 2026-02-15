@@ -95,6 +95,12 @@ namespace sys
         {
             return internal::dchar_to_upper_simple(_as(char32_t, c));
         }
+        /// @brief Folds a codepoint (simple folding).
+        template <ICharacter T>
+        static constexpr char32_t fold(const T c) noexcept
+        {
+            return internal::dchar_fold_simple(_as(char32_t, c));
+        }
 
         /// @brief The number of buffer elements in a null-terminated string.
         /// @warning `cstr` needs to be non-null and null-terminated.

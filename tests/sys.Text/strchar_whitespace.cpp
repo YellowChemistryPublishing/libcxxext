@@ -10,11 +10,11 @@ TEST_CASE("`sys::ch` Whitespace Verification", "[sys.Text][ch][is_whitespace]")
     SECTION("Standard Whitespace")
     {
         CHECK(sys::ch::is_whitespace(' '));
-        CHECK(sys::ch::is_whitespace('\t'));
-        CHECK(sys::ch::is_whitespace('\n'));
-        CHECK(sys::ch::is_whitespace('\r'));
-        CHECK(sys::ch::is_whitespace('\f'));
-        CHECK(sys::ch::is_whitespace('\v'));
+        CHECK(sys::ch::is_whitespace(u8'\t'));
+        CHECK(sys::ch::is_whitespace(u'\n'));
+        CHECK(sys::ch::is_whitespace(U'\r'));
+        CHECK(sys::ch::is_whitespace(L'\f'));
+        CHECK(sys::ch::is_whitespace(u8'\v'));
     }
 
     SECTION("Unicode Whitespace (Exhaustive)")
@@ -48,7 +48,7 @@ TEST_CASE("`sys::ch` Whitespace Verification", "[sys.Text][ch][is_whitespace]")
     SECTION("Non-Whitespace Boundaries")
     {
         CHECK_FALSE(sys::ch::is_whitespace('A'));
-        CHECK_FALSE(sys::ch::is_whitespace('0'));
+        CHECK_FALSE(sys::ch::is_whitespace(U'0'));
         CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x0000))); // Null-terminator doesn't count.
         CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x167F))); // Just before Ogham.
         CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x1681))); // Just after Ogham.
@@ -61,38 +61,20 @@ TEST_CASE("`sys::string<...>` Trimming", "[sys.Text][string][trim]")
 {
     SECTION("Basic ASCII Trimming")
     {
-        sys::str s = u8"  hello  ";
-        CHECK(s.trim() == u8"hello");
-
-        s = u8"  hello  ";
-        CHECK(s.trim_start() == u8"hello  ");
-
-        s = u8"  hello  ";
-        CHECK(s.trim_end() == u8"  hello");
+        CHECK(sys::str(u8"  hello  ").trim() == u8"hello");
+        CHECK(sys::str(u8"  hello  ").trim_start() == u8"hello  ");
+        CHECK(sys::str(u8"  hello  ").trim_end() == u8"  hello");
     }
 
-    SECTION("Unicode Whitespace Trimming")
-    {
-        sys::str s = u8"\u3000\u1680Unicode\u2000\u2001";
-        CHECK(s.trim() == u8"Unicode");
-    }
+    SECTION("Unicode Whitespace Trimming") { CHECK(sys::str(u8"\u3000\u1680Unicode\u2000\u2001").trim() == u8"Unicode"); }
 
     SECTION("Pathological Trimming Cases")
     {
-        sys::str onlySpaces = u8"   \t\n\r  ";
-        CHECK(onlySpaces.trim().empty());
-
-        sys::str mixedSpaces = u8" \u3000 \u1680 ";
-        CHECK(mixedSpaces.trim().empty());
-
-        sys::str noSpaces = u8"word";
-        CHECK(noSpaces.trim() == u8"word");
-
-        sys::str spacesInMiddle = u8"  hello world  ";
-        CHECK(spacesInMiddle.trim() == u8"hello world");
-
-        sys::str empty = u8"";
-        CHECK(empty.trim().empty());
+        CHECK(sys::str(u8"   \t\n\r  ").trim().empty());
+        CHECK(sys::str(u8" \u3000 \u1680 ").trim().empty());
+        CHECK(sys::str(u8"word").trim() == u8"word");
+        CHECK(sys::str(u8"  hello world  ").trim() == u8"hello world");
+        CHECK(sys::str(u8"").trim().empty());
     }
 }
 

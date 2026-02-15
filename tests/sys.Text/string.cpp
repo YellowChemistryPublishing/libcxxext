@@ -26,8 +26,8 @@ TEST_CASE("`sys::string<...>` Constructors", "[sys.Text][string][ctor]")
 
     SECTION("Literal Constructors")
     {
-        sys::str s = u8"hello";
-        CHECK(s == u8"hello");
+        sys::cstr s = "hello";
+        CHECK(s == "hello");
         CHECK(s.size() == _as(sz, 5_uz));
 
         sys::str16 s16 = u"world";
@@ -37,7 +37,7 @@ TEST_CASE("`sys::string<...>` Constructors", "[sys.Text][string][ctor]")
 
     SECTION("Initializer List")
     {
-        sys::str s = { u8'a', u8'b', u8'c' };
+        sys::str s { u8'a', u8'b', u8'c' };
         CHECK(s == u8"abc");
     }
 
@@ -53,8 +53,7 @@ TEST_CASE("`sys::string<...>` Constructors", "[sys.Text][string][ctor]")
     SECTION("Span Constructor")
     {
         char8_t data[] = { u8'h', u8'i' };
-        sys::str s { std::span<char8_t> { data } };
-        CHECK(s == u8"hi");
+        CHECK(sys::str(std::span<char8_t>(data)) == u8"hi");
     }
 
     SECTION("Copy and Move")
@@ -73,38 +72,29 @@ TEST_CASE("`sys::string<...>` Splitting and Joining", "[sys.Text][string][split]
 {
     SECTION("Split by Character")
     {
-        const sys::str s = u8"a,b,c";
-        auto parts = s.split(u8',');
-
+        auto parts = sys::str(u8"a,b,c").split(u8',');
         REQUIRE(parts.size() == 3_uz);
         CHECK(parts[0] == u8"a");
     }
 
     SECTION("Split with Adjacent Delimiters")
     {
-        const sys::str s = u8"a,,b";
-        auto parts = s.split(u8',');
-
+        auto parts = sys::str(u8"a,,b").split(u8',');
         REQUIRE(parts.size() == 3_uz);
         CHECK(parts[1] == u8"");
     }
 
     SECTION("Split by String Delimiter")
     {
-        const sys::str s = u8"one--two--three";
-        auto parts = s.split(std::basic_string_view<char8_t>(u8"--"));
-
+        auto parts = sys::str(u8"one--two--three").split(std::basic_string_view<char8_t>(u8"--"));
         REQUIRE(parts.size() == 3_uz);
         CHECK(parts[1] == u8"two");
     }
 
     SECTION("Join Strings")
     {
-        const std::vector<sys::str> parts = { u8"a", u8"b", u8"c" };
-        CHECK(sys::str::join(parts, u8", ") == u8"a, b, c");
-
-        const std::vector<sys::str> empties = { u8"", u8"" };
-        CHECK(sys::str::join(empties, u8",") == u8",");
+        CHECK(sys::str::join(std::vector<sys::str> { u8"a", u8"b", u8"c" }, u8", ") == u8"a, b, c");
+        CHECK(sys::str::join({ u8"", u8"" }, u8",") == u8",");
     }
 }
 
@@ -112,13 +102,11 @@ TEST_CASE("`sys::string<...>` Transcoding", "[sys.Text][string][conv]")
 {
     SECTION("UTF-8 -> UTF-(16|32)")
     {
-        const sys::str s8 = u8"A\u00A2\u20AC\U00010348";
-
-        sys::str16 s16(s8);
-        CHECK(s16 == u"A\u00A2\u20AC\U00010348");
-
-        sys::str32 s32(s8);
-        CHECK(s32 == U"A\u00A2\u20AC\U00010348");
+        const sys::str s = u8"A\u00A2\u20AC\U00010348";
+        CHECK(sys::str16(s) == u"A\u00A2\u20AC\U00010348");
+        CHECK(sys::str32(s) == U"A\u00A2\u20AC\U00010348");
+        CHECK(sys::cstr(s) == "A\u00A2\u20AC\U00010348");
+        CHECK(sys::wstr(s) == L"A\u00A2\u20AC\U00010348");
     }
 }
 
