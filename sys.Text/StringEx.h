@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <concepts>
 #include <cstddef>
+#include <format>
 #include <initializer_list>
 #include <iterator>
 #include <memory>
@@ -422,3 +423,46 @@ namespace sys
     using str16 = string<char16_t>;
     using str32 = string<char32_t>;
 } // namespace sys
+
+namespace sys::internal
+{
+    template <ICharacter T>
+    constexpr const T* format_braces()
+    {
+        if constexpr (std::same_as<T, char32_t>)
+            return U"{}";
+        else if constexpr (std::same_as<T, char16_t>)
+            return u"{}";
+        else if constexpr (std::same_as<T, char8_t>)
+            return u8"{}";
+        else if constexpr (std::same_as<T, char>)
+            return "{}";
+        else if constexpr (std::same_as<T, wchar_t>)
+            return L"{}";
+        else if constexpr (requires { requires false; })
+        { }
+    }
+} // namespace sys::internal
+
+template <sys::ICharacter T, sys::ICharacter U>
+requires std::same_as<T, U>
+struct std::formatter<sys::string<T>, U>
+{
+    constexpr auto parse(std::basic_format_parse_context<U>& context) { return context.begin(); }
+    template <typename FormatContext>
+    auto format(const sys::string<T>& str, FormatContext& context) const
+    {
+        return std::format_to(context.out(), sys::internal::format_braces<U>(), std::basic_string_view<T>(str));
+    }
+};
+template <sys::ICharacter T, sys::ICharacter U>
+requires (!std::same_as<T, U>)
+struct std::formatter<sys::string<T>, U>
+{
+    constexpr auto parse(std::basic_format_parse_context<U>& context) { return context.begin(); }
+    template <typename FormatContext>
+    auto format(const sys::string<T>& str, FormatContext& context) const
+    {
+        return std::format_to(context.out(), sys::internal::format_braces<U>(), _as(std::basic_string_view<U>, sys::string<U>(str)));
+    }
+};

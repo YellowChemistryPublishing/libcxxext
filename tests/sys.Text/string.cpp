@@ -123,4 +123,19 @@ TEST_CASE("Iterator Boundaries", "[sys.Text][string][iter]")
     CHECK(*(s.end() - 1z) == u8'c');
 }
 
+TEST_CASE("Format", "[sys.Text][string][format]")
+{
+    CHECK(std::format("{}", sys::str(u8"beans")) == "beans");
+    CHECK(std::format("{}", sys::str16(u"beans")) == "beans");
+    CHECK(std::format("{}", sys::str32(U"beans")) == "beans");
+    CHECK(std::format("{}", sys::cstr("beans")) == "beans");
+    CHECK(std::format("{}", sys::wstr(L"beans")) == "beans");
+
+    CHECK(std::format(L"{}", sys::str(u8"beans")) == L"beans");
+    CHECK(std::format(L"{}", sys::str16(u"beans")) == L"beans");
+    CHECK(std::format(L"{}", sys::str32(U"beans")) == L"beans");
+    CHECK(std::format(L"{}", sys::cstr("beans")) == L"beans");
+    CHECK(std::format(L"{}", sys::wstr(L"beans")) == L"beans");
+}
+
 // NOLINTEND(misc-include-cleaner)
