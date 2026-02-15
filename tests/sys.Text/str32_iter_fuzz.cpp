@@ -11,7 +11,7 @@ _push_nowarn_conv_comp();
 
 _pop_nowarn_conv_comp();
 
-TEST_CASE("`sys::str32_iter<...>` Fuzzing", "[fuzz][sys.Text][str32_iter]")
+TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fuzz][sys.Text][str32_iter]")
 {
     rc::check("Iterating over random bytes never crashes and exhausts buffer.", [](const std::vector<uint8_t>& bytes)
     {

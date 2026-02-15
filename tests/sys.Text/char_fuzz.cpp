@@ -10,8 +10,7 @@ _pop_nowarn_conv_comp();
 
 #include <module/sys.Text>
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("`sys::ch` Fuzzing", "[fuzz][sys.Text][char]")
+TEST_CASE("`is_whitespace` is not random.", "[fuzz][sys.Text][ch]")
 {
     rc::check("`is_whitespace` is not random.", [](const uint_least32_t genInt)
     {
@@ -19,7 +18,10 @@ TEST_CASE("`sys::ch` Fuzzing", "[fuzz][sys.Text][char]")
         const char32_t cp = _as(char32_t, u32(genInt) % 0x110000_u32);
         RC_ASSERT((sys::ch::is_whitespace(cp) || cp == 'A' || cp == 0 || cp != U' ' || cp != U'\t' || cp != U'\n' || cp != U'\r'));
     });
+}
 
+TEST_CASE("UTF-32 -> UTF-8 -> UTF-32 is invariant.", "[fuzz][sys.Text][ch]")
+{
     rc::check("UTF-32 -> UTF-8 -> UTF-32 is invariant.", [](const uint_least32_t genInt)
     {
         const char32_t cp = _as(char32_t, u32(genInt) % 0x110000_u32);
@@ -33,6 +35,9 @@ TEST_CASE("`sys::ch` Fuzzing", "[fuzz][sys.Text][char]")
         RC_ASSERT(readCp == cp);
         RC_ASSERT(readSz == written);
     });
+}
+TEST_CASE("UTF-32 -> UTF-16 -> UTF-32 is invariant.", "[fuzz][sys.Text][ch]")
+{
     rc::check("UTF-32 -> UTF-16 -> UTF-32 is invariant.", [](const uint_least32_t genInt)
     {
         const char32_t cp = _as(char32_t, u32(genInt) % 0x110000_u32);
@@ -46,7 +51,10 @@ TEST_CASE("`sys::ch` Fuzzing", "[fuzz][sys.Text][char]")
         RC_ASSERT(readCp == cp);
         RC_ASSERT(readSz == written);
     });
+}
 
+TEST_CASE("Arbitary UTF-8 sequence decode never crashes.", "[fuzz][sys.Text][ch]")
+{
     rc::check("Arbitary UTF-8 sequence decode never crashes.", [](const std::vector<uint_least8_t>& bytes)
     {
         const char8_t* ptr = _asr(const char8_t*, bytes.data()); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
@@ -61,6 +69,9 @@ TEST_CASE("`sys::ch` Fuzzing", "[fuzz][sys.Text][char]")
             current += sz;
         }
     });
+}
+TEST_CASE("Arbitary UTF-16 sequence decode never crashes.", "[fuzz][sys.Text][ch]")
+{
     rc::check("Arbitary UTF-16 sequence decode never crashes.", [](const std::vector<uint_least16_t>& bytes)
     {
         const char16_t* ptr = _asr(const char16_t*, bytes.data()); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
