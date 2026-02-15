@@ -9,6 +9,7 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <type_traits>
 #include <vector>
 
 #include <Char.h>
@@ -132,9 +133,13 @@ namespace sys
         template <std::input_iterator It>
         constexpr explicit string(It beg, It end) : str(beg, end)
         { }
-        constexpr explicit string(const std::span<T> data) : string(data.begin(), data.end()) { }
+        constexpr explicit string(const std::span<const T> data) : string(data.begin(), data.end()) { }
+        constexpr explicit string(const std::basic_string_view<T> data) : string(data.begin(), data.end()) { }
         template <IEnumerable Container>
-        constexpr explicit string(const Container& container) : string(container.begin(), container.end())
+        requires (!std::is_convertible_v<Container, std::basic_string_view<char32_t>> && !std::is_convertible_v<Container, std::basic_string_view<char16_t>> &&
+                  !std::is_convertible_v<Container, std::basic_string_view<char8_t>> && !std::is_convertible_v<Container, std::basic_string_view<wchar_t>> &&
+                  !std::is_convertible_v<Container, std::basic_string_view<char>>)
+        constexpr explicit string(const Container& container) : string(std::begin(container), std::end(container))
         { }
         // NOLINTNEXTLINE(hicpp-explicit-conversions)
         constexpr string(const T c) : str(1uz, c) { }
@@ -186,14 +191,19 @@ namespace sys
         /// @brief Convert between strings of different character types.
         template <ICharacter U>
         requires (!std::same_as<T, U>)
-        constexpr explicit string(const string<U>& other)
+        constexpr explicit string(const std::basic_string_view<U> other)
         {
-            for (const char32_t c : str32_view(other))
+            for (const char32_t c : str32_view(std::span(other)))
             {
                 T buf[(sizeof(char32_t) / sizeof(T)) + 1uz] {};
                 this->append(std::span(buf, ch::write_codepoint(c, buf, unsafe())));
             }
         }
+        /// @see `sys::string<...>::string(const std::basic_string_view<...>)`
+        template <ICharacter U>
+        requires (!std::same_as<T, U>)
+        constexpr explicit string(const sys::string<U>& other) : string(_as(std::basic_string_view<U>, other))
+        { }
 
         [[nodiscard]] bool empty() const { return this->str.empty(); }
         [[nodiscard]] sz size() const { return this->str.size(); }
@@ -399,6 +409,10 @@ namespace sys
         friend class string;
     };
 
+    template <IUnicodeCharacter T>
+    str32_view(const std::basic_string_view<T>&) -> str32_view<T>;
+    template <IUnicodeCharacter T>
+    str32_view(const std::basic_string<T>&) -> str32_view<T>;
     template <IUnicodeCharacter T>
     str32_view(const string<T>&) -> str32_view<T>;
 
