@@ -68,7 +68,7 @@ def main(argv: List[str]) -> None:
                 """\
                 #pragma once
 
-                #include <LanguageSupport.h>
+                #include <cstdint>
 
                 namespace sys
                 {

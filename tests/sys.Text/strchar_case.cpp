@@ -1,3 +1,5 @@
+// NOLINTBEGIN(misc-include-cleaner)
+
 #include <catch2/catch_all.hpp>
 
 #include <module/sys.Text>
@@ -154,3 +156,5 @@ TEST_CASE("Folding is Context Independent", "[sys.Text][string][fold]")
     CHECK(sys::str16(u"ΑΣ").fold() == u"ασ");
     CHECK(sys::str(u8"ΑΣ").fold() == u8"ασ");
 }
+
+// NOLINTEND(misc-include-cleaner)

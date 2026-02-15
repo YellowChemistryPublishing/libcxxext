@@ -17,6 +17,7 @@
 #include <Numeric.h>
 #include <Traits.h>
 #include <data/UnicodeCCC.h>
+#include <data/UnicodeCasing.h>
 
 namespace sys
 {

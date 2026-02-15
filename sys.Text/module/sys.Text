@@ -1,5 +1,8 @@
 #pragma once
 
-#include <Char.h>              // IWYU pragma: export
-#include <CodepointIterator.h> // IWYU pragma: export
-#include <StringEx.h>          // IWYU pragma: export
+#include <Char.h>                   // IWYU pragma: export
+#include <CodepointIterator.h>      // IWYU pragma: export
+#include <StringEx.h>               // IWYU pragma: export
+#include <data/UnicodeCCC.h>        // IWYU pragma: export
+#include <data/UnicodeCasing.h>     // IWYU pragma: export
+#include <data/UnicodeWhitespace.h> // IWYU pragma: export

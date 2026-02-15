@@ -191,6 +191,7 @@ def main(argv: List[str]) -> None:
                 #include <string_view>
 
                 #include <LanguageSupport.h>
+                #include <Numeric.h>
 
                 namespace sys
                 {

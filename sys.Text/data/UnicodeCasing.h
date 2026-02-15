@@ -7,6 +7,7 @@
 #include <string_view>
 
 #include <LanguageSupport.h>
+#include <Numeric.h>
 
 namespace sys
 {

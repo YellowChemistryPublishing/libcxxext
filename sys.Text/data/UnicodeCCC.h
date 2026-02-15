@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <LanguageSupport.h>
+#include <cstdint>
 
 namespace sys
 {

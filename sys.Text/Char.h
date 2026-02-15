@@ -10,7 +10,6 @@
 #include <LanguageSupport.h>
 #include <Numeric.h>
 #include <Traits.h>
-#include <data/UnicodeCCC.h>
 #include <data/UnicodeCasing.h>
 #include <data/UnicodeWhitespace.h>
 
