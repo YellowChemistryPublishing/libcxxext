@@ -21,12 +21,12 @@ output_path: str = os.path.abspath(f"{script_dir}/../../sys.Text/data/UnicodeCas
 
 # C++ casing context expression equivalents.
 CONDITION_MAP = {
-    "Final_Sigma": "ctx.is_final_sigma",
-    "After_Soft_Dotted": "ctx.after_soft_dotted",
-    "More_Above": "ctx.more_above",
-    "After_I": "ctx.after_i",
-    "Before_Dot": "ctx.before_dot",
-    "Not_Before_Dot": "!ctx.before_dot",
+    "Final_Sigma": "fctx.is_preceded_by_cased && !lctx.followed_by_cased",
+    "After_Soft_Dotted": "fctx.after_soft_dotted",
+    "More_Above": "lctx.more_above",
+    "After_I": "fctx.after_i",
+    "Before_Dot": "lctx.before_dot",
+    "Not_Before_Dot": "!lctx.before_dot",
 }
 
 
@@ -159,14 +159,18 @@ def main(argv: List[str]) -> None:
 
                 namespace sys
                 {
-                    /// @brief Context for special casing rules.
-                    struct casing_context
+                    /// @brief Context for forward-looking casing rules.
+                    struct forward_casing_context
                     {
                         bool is_preceded_by_cased : 1 = false;
-                        bool is_final_sigma : 1 = false;
                         bool after_soft_dotted : 1 = false;
-                        bool more_above : 1 = false;
                         bool after_i : 1 = false;
+                    };
+                    /// @brief Context for precomputed lookahead casing rules.
+                    struct lookahead_casing_context
+                    {
+                        bool followed_by_cased : 1 = false;
+                        bool more_above : 1 = false;
                         bool before_dot : 1 = false;
                     };
                 } // namespace sys
@@ -282,8 +286,9 @@ def main(argv: List[str]) -> None:
                     dedent(
                         f"""\
                         /// @brief Special (conditional, 1:N) {direction}case mapping.
-                        constexpr sz dchar_to_{direction}_special(char32_t out[], const char32_t c, unsafe, const std::u8string_view lang = u8"",
-                                                                  [[maybe_unused]] const sys::casing_context& ctx = sys::casing_context()) noexcept
+                        constexpr sz dchar_to_{direction}_special(char32_t out[], const char32_t c, const std::u8string_view lang,
+                                                                  [[maybe_unused]] const sys::forward_casing_context& fctx,
+                                                                  [[maybe_unused]] const sys::lookahead_casing_context& lctx, unsafe) noexcept
                         {{
                         """
                     ),

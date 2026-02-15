@@ -107,6 +107,7 @@ namespace sys
         static consteval std::pair<char32_t, sz> read_codepoint_fail() noexcept { return { ch::replacement<char32_t>()[0], 1_uz }; }
     public:
         // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic, readability-magic-numbers)
+
         /// @brief Reads a (possibly multibyte) codepoint from a unicode buffer.
         /// @return `(char32_t codepoint, sz elements_read)`
         /// @note `unsafe` because `range` must not be empty.
@@ -166,6 +167,18 @@ namespace sys
             _retif(ch::read_codepoint_fail(), ret < cpMinReq[len] || !ch::is_scalar(_as(char32_t, ret))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
 
             return { _as(char32_t, ret), len };
+        }
+        /// @see `sys::ch::read_codepoint(const char32_t* buf, const char32_t* const, unsafe)`
+        static constexpr std::pair<char32_t, sz> read_codepoint(const std::span<const char> range, unsafe) noexcept
+        {
+            using ctype = ch::unicode_equiv<char>;
+            return read_codepoint(std::span<const ctype>(_asr(const ctype*, range.data()), range.size()), unsafe());
+        }
+        /// @see `sys::ch::read_codepoint(const char32_t* buf, const char32_t* const, unsafe)`
+        static constexpr std::pair<char32_t, sz> read_codepoint(const std::span<const wchar_t> range, unsafe) noexcept
+        {
+            using ctype = ch::unicode_equiv<wchar_t>;
+            return read_codepoint(std::span<const ctype>(_asr(const ctype*, range.data()), range.size()), unsafe());
         }
 
         /// @brief Writes a codepoint to a buffer.
@@ -236,6 +249,19 @@ namespace sys
             std::ranges::copy(ch::replacement<char8_t>(), out);
             return ch::replacement<char8_t>().size();
         }
+        /// @see `sys::ch::write_codepoint(char32_t c, char out[], unsafe)`
+        static constexpr sz write_codepoint(char32_t c, char out[], unsafe) noexcept
+        {
+            using ctype = ch::unicode_equiv<char>;
+            return write_codepoint(c, _asr(ctype*, out), unsafe());
+        }
+        /// @see `sys::ch::write_codepoint(char32_t c, char32_t out[], unsafe)`
+        static constexpr sz write_codepoint(char32_t c, wchar_t out[], unsafe) noexcept
+        {
+            using ctype = ch::unicode_equiv<wchar_t>;
+            return write_codepoint(c, _asr(ctype*, out), unsafe());
+        }
+
         // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic, readability-magic-numbers)
     };
 } // namespace sys

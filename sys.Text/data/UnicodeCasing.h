@@ -10,14 +10,18 @@
 
 namespace sys
 {
-    /// @brief Context for special casing rules.
-    struct casing_context
+    /// @brief Context for forward-looking casing rules.
+    struct forward_casing_context
     {
         bool is_preceded_by_cased : 1 = false;
-        bool is_final_sigma : 1 = false;
         bool after_soft_dotted : 1 = false;
-        bool more_above : 1 = false;
         bool after_i : 1 = false;
+    };
+    /// @brief Context for precomputed lookahead casing rules.
+    struct lookahead_casing_context
+    {
+        bool followed_by_cased : 1 = false;
+        bool more_above : 1 = false;
         bool before_dot : 1 = false;
     };
 } // namespace sys
@@ -10535,27 +10539,27 @@ namespace sys::internal
     }
 
     /// @brief Special (conditional, 1:N) lowercase mapping.
-    constexpr sz dchar_to_lower_special(char32_t out[], const char32_t c, unsafe, const std::u8string_view lang = u8"",
-                                        [[maybe_unused]] const sys::casing_context& ctx = sys::casing_context()) noexcept
+    constexpr sz dchar_to_lower_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx,
+                                        [[maybe_unused]] const sys::lookahead_casing_context& lctx, unsafe) noexcept
     {
-        if (c == U'\u03A3' && ctx.is_final_sigma)
+        if (c == U'\u03A3' && fctx.is_preceded_by_cased && !lctx.followed_by_cased)
         {
             out[0] = U'\u03C2';
             return 1_uz;
         }
-        if (c == U'\u0049' && lang == u8"lt" && ctx.more_above)
+        if (c == U'\u0049' && lang == u8"lt" && lctx.more_above)
         {
             out[0] = U'\u0069';
             out[1] = U'\u0307';
             return 2_uz;
         }
-        if (c == U'\u004A' && lang == u8"lt" && ctx.more_above)
+        if (c == U'\u004A' && lang == u8"lt" && lctx.more_above)
         {
             out[0] = U'\u006A';
             out[1] = U'\u0307';
             return 2_uz;
         }
-        if (c == U'\u012E' && lang == u8"lt" && ctx.more_above)
+        if (c == U'\u012E' && lang == u8"lt" && lctx.more_above)
         {
             out[0] = U'\u012F';
             out[1] = U'\u0307';
@@ -10592,12 +10596,12 @@ namespace sys::internal
             out[0] = U'\u0069';
             return 1_uz;
         }
-        if (c == U'\u0049' && lang == u8"tr" && !ctx.before_dot)
+        if (c == U'\u0049' && lang == u8"tr" && !lctx.before_dot)
         {
             out[0] = U'\u0131';
             return 1_uz;
         }
-        if (c == U'\u0049' && lang == u8"az" && !ctx.before_dot)
+        if (c == U'\u0049' && lang == u8"az" && !lctx.before_dot)
         {
             out[0] = U'\u0131';
             return 1_uz;
@@ -10612,8 +10616,8 @@ namespace sys::internal
         }
     }
     /// @brief Special (conditional, 1:N) uppercase mapping.
-    constexpr sz dchar_to_upper_special(char32_t out[], const char32_t c, unsafe, const std::u8string_view lang = u8"",
-                                        [[maybe_unused]] const sys::casing_context& ctx = sys::casing_context()) noexcept
+    constexpr sz dchar_to_upper_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx,
+                                        [[maybe_unused]] const sys::lookahead_casing_context& lctx, unsafe) noexcept
     {
         if (c == U'\u0069' && lang == u8"tr")
         {

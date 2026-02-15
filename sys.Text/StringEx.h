@@ -1,5 +1,6 @@
 #pragma once
 
+#include "data/UnicodeCCC.h"
 #include <algorithm>
 #include <concepts>
 #include <cstddef>
@@ -30,44 +31,37 @@ namespace sys
         {
             return ccc == canonical_combining_class::not_reordered || ccc == canonical_combining_class::above;
         }
-        static bool has_followed_by_cased(str32_iter<T> it, str32_iter<T> end, unsafe) noexcept
+        static constexpr std::vector<lookahead_casing_context> lookahead_contexts_for_str(std::span<const char32_t> codepoints)
         {
-            auto next = it;
-            for (++next; next != end; ++next)
+            std::vector<lookahead_casing_context> ret(codepoints.size());
+
+            bool followedByCased = false;
+            bool beforeDot = false;
+            char32_t nextCp = U'\0';
+            for (ssz i = ssz(codepoints.size()) - 1_z; i >= 0_z; i--)
             {
-                const char32_t nc = *next;
-                if (internal::dchar_is_cased(nc))
-                    return true;
-                if (!internal::dchar_is_case_ignorable(nc))
-                    return false;
+                const char32_t c = codepoints[sz(i)];
+                lookahead_casing_context& lctx = ret[sz(i)];
+                lctx.followed_by_cased = followedByCased;
+                lctx.more_above = nextCp != U'\0' && internal::dchar_ccc(nextCp) == canonical_combining_class::above;
+                lctx.before_dot = beforeDot;
+
+                if (internal::dchar_is_cased(c))
+                    followedByCased = true;
+                else if (!internal::dchar_is_case_ignorable(c))
+                    followedByCased = false;
+
+                if (c == U'\u0307')
+                    beforeDot = true;
+                else if (string::resets_combining(internal::dchar_ccc(c)))
+                    beforeDot = false;
+
+                nextCp = c;
             }
 
-            return false;
+            return ret;
         }
-        static bool has_more_above(str32_iter<T> it, str32_iter<T> end, unsafe) noexcept
-        {
-            auto next = it;
-            if (++next != end)
-                return internal::dchar_ccc(*next) == canonical_combining_class::above;
-            return false;
-        }
-        static bool has_before_dot(str32_iter<T> it, str32_iter<T> end, unsafe) noexcept
-        {
-            auto next = it;
-            for (++next; next != end; ++next)
-            {
-                const char32_t nc = *next;
-                if (nc == U'\u0307')
-                    return true;
-
-                const auto nccc = internal::dchar_ccc(nc);
-                if (string::resets_combining(nccc))
-                    return false;
-            }
-
-            return false;
-        }
-        static constexpr void update_context_for_char(casing_context& ctx, const char32_t c) noexcept
+        static constexpr void update_fcontext_for_char(forward_casing_context& ctx, const char32_t c) noexcept
         {
             if (internal::dchar_is_cased(c))
                 ctx.is_preceded_by_cased = true;
@@ -76,12 +70,12 @@ namespace sys
 
             if (internal::dchar_is_soft_dotted(c))
                 ctx.after_soft_dotted = true;
-            else if (const auto ccc = internal::dchar_ccc(c); string::resets_combining(ccc))
+            else if (const canonical_combining_class ccc = internal::dchar_ccc(c); string::resets_combining(ccc))
                 ctx.after_soft_dotted = false;
 
             if (c == U'\u0049')
                 ctx.after_i = true;
-            else if (const auto ccc = internal::dchar_ccc(c); string::resets_combining(ccc))
+            else if (const canonical_combining_class ccc = internal::dchar_ccc(c); string::resets_combining(ccc))
                 ctx.after_i = false;
         }
 
@@ -91,33 +85,40 @@ namespace sys
             string ret;
             ret.reserve(this->capacity());
 
-            sys::casing_context ctx;
-            const T* const begPtr = std::to_address(this->cbegin());
-            const T* const endPtr = std::to_address(this->cend());
-            const str32_view<T> str(std::span(begPtr, endPtr));
-            for (auto it = str.begin(); it != str.end(); ++it)
+            std::vector<char32_t> codepoints = [&]
             {
-                const char32_t c = *it;
+                const T* const begPtr = std::to_address(this->cbegin());
+                const T* const endPtr = std::to_address(this->cend());
+                const str32_view<T> str(std::span(begPtr, endPtr));
 
-                if (c == U'\u03A3')
-                    ctx.is_final_sigma = ctx.is_preceded_by_cased && !string::has_followed_by_cased(it, str.end(), unsafe());
-                if (lang == u8"lt")
-                    ctx.more_above = string::has_more_above(it, str.end(), unsafe());
-                if (lang == u8"tr" || lang == u8"az")
-                    ctx.before_dot = string::has_before_dot(it, str.end(), unsafe());
+                std::vector<char32_t> codepoints;
+                codepoints.reserve(this->capacity());
+                for (const char32_t c : str)
+                    codepoints.push_back(c);
+
+                return codepoints;
+            }();
+            _retif(ret, codepoints.empty());
+
+            std::vector<lookahead_casing_context> lookaheads = string::lookahead_contexts_for_str(codepoints);
+            forward_casing_context fctx;
+            for (sz i = 0_uz; i < sz(codepoints.size()); i++)
+            {
+                const char32_t c = codepoints[i];
+                const lookahead_casing_context& lctx = lookaheads[i];
 
                 char32_t conv[3];
-                sz resLen = 0_uz;
+                sz convSize = 0_uz;
                 if constexpr (IsUpper)
-                    resLen = internal::dchar_to_upper_special(conv, c, unsafe(), lang, ctx); // NOLINT(hicpp-no-array-decay)
+                    convSize = internal::dchar_to_upper_special(conv, c, lang, fctx, lctx, unsafe()); // NOLINT(hicpp-no-array-decay)
                 else
-                    resLen = internal::dchar_to_lower_special(conv, c, unsafe(), lang, ctx); // NOLINT(hicpp-no-array-decay)
+                    convSize = internal::dchar_to_lower_special(conv, c, lang, fctx, lctx, unsafe()); // NOLINT(hicpp-no-array-decay)
 
                 T buf[sizeof(char32_t) / sizeof(T)];
-                for (sz i = 0_uz; i < resLen; i++)
-                    ret.append(std::span(buf, ch::write_codepoint(conv[i], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                for (sz j = 0_uz; j < convSize; j++)
+                    ret.append(std::span(buf, ch::write_codepoint(conv[j], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
 
-                string::update_context_for_char(ctx, c);
+                string::update_fcontext_for_char(fctx, c);
             }
 
             return ret;
@@ -238,12 +239,6 @@ namespace sys
             return *this;
         }
         constexpr string append(const T c, const sz count) && { return this->append(c, count), std::move(*this); };
-        constexpr string& append(const std::basic_string_view<T> str) &
-        {
-            this->str.append(str);
-            return *this;
-        }
-        constexpr string append(const std::basic_string_view<T> str) && { return this->append(str), std::move(*this); };
         constexpr string& append(const std::span<const T> data) &
         {
             this->str.append(data.data(), data.size());
@@ -337,6 +332,14 @@ namespace sys
         {
             if (this->size() < delimiter.size())
                 return {};
+            if (delimiter.empty())
+            {
+                Container ret;
+                ret.reserve(this->size());
+                for (const T c : *this)
+                    meta::append_to(ret, c);
+                return ret;
+            }
 
             Container ret;
             auto from = this->begin();
@@ -372,8 +375,8 @@ namespace sys
             for (const string& part : container)
             {
                 if (needPrependSep)
-                    ret.append(sep.begin(), sep.end());
-                ret.append(part.begin(), part.end());
+                    ret.append(sep);
+                ret.append(part);
                 needPrependSep = true;
             }
 
