@@ -17,7 +17,7 @@ _pop_nowarn_deprecated();
 
 TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_storage]")
 {
-    rc::check("Fuzz primitives", [](const int64_t& val)
+    rc::check("Aligned storage writes match input data.", [](const int64_t& val)
     {
         sys::aligned_storage<int64_t> storage;
         std::memcpy(storage.data(), &val, sizeof(val));

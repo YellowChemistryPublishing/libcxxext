@@ -197,31 +197,25 @@ static_assert(std::same_as<type_switch<type_case<std::same_as<float, double>, fl
 // Container appending logic. | `sys::meta::append_to<...>(...)`
 // ================================================================================
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("`sys::meta::append_to` works for various containers.", "[sys][traits][meta][append_to]")
+TEST_CASE("`sys::meta::append_to` works for `std::vector<...>`.", "[sys][traits][meta][append_to]")
 {
-    SECTION("`std::vector<...>`")
-    {
-        std::vector<int> vec;
-        sys::meta::append_to(vec, 1);
-        CHECK(vec.size() == 1);
-        CHECK(vec[0] == 1);
-    }
-
-    SECTION("`std::string`")
-    {
-        std::string str;
-        sys::meta::append_to(str, 'a');
-        sys::meta::append_to(str, "bc");
-        CHECK(str == "abc");
-    }
-
-    SECTION("Custom Types")
-    {
-        append_receiver catcher;
-        sys::meta::append_to(catcher, 42); // NOLINT(readability-magic-numbers)
-        CHECK(catcher.val == 42);
-    }
+    std::vector<int> vec;
+    sys::meta::append_to(vec, 1);
+    CHECK(vec.size() == 1);
+    CHECK(vec[0] == 1);
+}
+TEST_CASE("`sys::meta::append_to` works for `std::string`.", "[sys][traits][meta][append_to]")
+{
+    std::string str;
+    sys::meta::append_to(str, 'a');
+    sys::meta::append_to(str, "bc");
+    CHECK(str == "abc");
+}
+TEST_CASE("`sys::meta::append_to` works for custom types.", "[sys][traits][meta][append_to]")
+{
+    append_receiver catcher;
+    sys::meta::append_to(catcher, 42); // NOLINT(readability-magic-numbers)
+    CHECK(catcher.val == 42);
 }
 
 // NOLINTEND(misc-include-cleaner)
