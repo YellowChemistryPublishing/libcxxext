@@ -89,19 +89,10 @@ namespace sys
             string ret;
             ret.reserve(this->capacity());
 
-            std::vector<char32_t> codepoints = [&]
-            {
-                const T* const begPtr = std::to_address(this->cbegin());
-                const T* const endPtr = std::to_address(this->cend());
-                const str32_view<T> str(std::span(begPtr, endPtr));
-
-                std::vector<char32_t> codepoints;
-                codepoints.reserve(this->capacity());
-                for (const char32_t c : str)
-                    codepoints.push_back(c);
-
-                return codepoints;
-            }();
+            std::vector<char32_t> codepoints;
+            codepoints.reserve(this->size());
+            for (const char32_t c : str32_view<T>(*this))
+                codepoints.push_back(c);
             _retif(ret, codepoints.empty());
 
             std::vector<lookahead_casing_context> lookaheads = string::lookahead_contexts_for_str(codepoints);
@@ -197,11 +188,10 @@ namespace sys
         requires (!std::same_as<T, U>)
         constexpr explicit string(const string<U>& other)
         {
-            this->reserve(other.capacity());
             for (const char32_t c : str32_view(other))
             {
                 T buf[(sizeof(char32_t) / sizeof(T)) + 1uz] {};
-                this->append(std::basic_string_view(buf, ch::write_codepoint(c, buf, unsafe())));
+                this->append(std::span(buf, ch::write_codepoint(c, buf, unsafe())));
             }
         }
 
@@ -331,9 +321,6 @@ namespace sys
         template <IAppendable Container = std::vector<string>>
         [[nodiscard]] Container split(const T delimiter) const
         {
-            if (this->empty())
-                return {};
-
             Container ret;
             auto from = this->begin();
             for (auto it = this->begin(); it < this->end(); ++it)
@@ -351,8 +338,6 @@ namespace sys
         template <IAppendable Container = std::vector<string>>
         [[nodiscard]] Container split(const std::basic_string_view<T> delimiter) const
         {
-            if (this->size() < delimiter.size())
-                return {};
             if (delimiter.empty())
             {
                 Container ret;
