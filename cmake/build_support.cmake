@@ -1,5 +1,5 @@
 if(NOT (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang" OR MSVC))
-    message(FATAL_ERROR "Unsupported compiler!")
+    message(FATAL_ERROR "[libcxxext] Unsupported compiler!")
 endif()
 
 add_library(sys.BuildSupport.CompilerOptions INTERFACE)

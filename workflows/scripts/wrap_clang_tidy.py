@@ -43,7 +43,7 @@ def main(argv: List[str]) -> None:
     def lint_batch(batch: List[str]) -> None:
         def on_fail() -> None:
             raise Exception(
-                f"`clang-tidy` produced non-zero exit code processing {", ".join([f"`{s}`" for s in batch])}"
+                f"`clang-tidy` produced non-zero exit code processing {', '.join([f'`{s}`' for s in batch])}"
             )
 
         exec_or_fail([clang_tidy_cmd] + batch + other_args, on_fail=on_fail)

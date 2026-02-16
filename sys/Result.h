@@ -75,7 +75,7 @@ namespace sys::internal
             if constexpr (std::is_reference_v<T>)
                 return *_as(result_type*, this)->value;
             else
-                return _as(result_type*, this)->value;
+                return std::move(_as(result_type*, this)->value);
         }
         constexpr T expect()
         {

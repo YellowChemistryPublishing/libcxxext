@@ -1,4 +1,4 @@
-if(NOT Python3_EXECUTABLE)
+if(NOT Python3_FOUND OR NOT Python3_EXECUTABLE)
     find_package(Python3 REQUIRED COMPONENTS Interpreter)
 endif()
 
@@ -6,11 +6,16 @@ if(NOT RUN_CLANG_TIDY)
     find_program(RUN_CLANG_TIDY NAMES "clang-tidy-25" "clang-tidy-24" "clang-tidy-23" "clang-tidy-22" "clang-tidy-21" "clang-tidy-20" "clang-tidy-19" "clang-tidy" PATHS "C:/Program Files/LLVM/bin" "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/bin" "/usr/bin")
 endif()
 if(NOT RUN_CLANG_TIDY)
-    message(WARNING "clang-tidy not found. Required for static analysis.")
+    message(WARNING "[libcxxext] clang-tidy not found. Required for static analysis.")
 endif()
 
 function(target_lint_clang_tidy TARGET_NAME)
     if(RUN_CLANG_TIDY)
+        # Make sure python is found in parent scopes.
+        if(NOT Python3_FOUND OR NOT Python3_EXECUTABLE)
+            find_package(Python3 REQUIRED COMPONENTS Interpreter)
+        endif()
+
         if(NOT TARGET clang_tidy_all)
             add_custom_target(clang_tidy_all)
             set_target_properties(clang_tidy_all PROPERTIES FOLDER "Static Analysis")
@@ -18,7 +23,7 @@ function(target_lint_clang_tidy TARGET_NAME)
 
         get_target_property(TARGET_SOURCES ${TARGET_NAME} SOURCES)
         if((NOT TARGET_SOURCES OR TARGET_SOURCES STREQUAL "") AND ("${ARGN}" STREQUAL ""))
-            message(WARNING "No sources provided, clang-tidy won't run!")
+            message(WARNING "[libcxxext] No sources provided, clang-tidy won't run!")
             return()
         endif()
 
@@ -38,7 +43,7 @@ function(target_lint_clang_tidy TARGET_NAME)
 
         add_custom_target(lint_ct_${TARGET_NAME}
             COMMAND
-            ${Python3_EXECUTABLE} "${CMAKE_CURRENT_LIST_DIR}/../workflows/scripts/wrap_clang_tidy.py" ${RUN_CLANG_TIDY}
+            "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../workflows/scripts/wrap_clang_tidy.py" "${RUN_CLANG_TIDY}"
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<LIST:FILTER,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,EXCLUDE,.*cmake_pch\.hxx.*>,PREPEND,\">,APPEND,\"> ${CLANG_TIDY_EXTRA_TOOL_ARGS}
             --
             -x c++ -std=c++$<IF:$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},CXX_STANDARD>>,$<TARGET_PROPERTY:${TARGET_NAME},CXX_STANDARD>,${CMAKE_CXX_STANDARD}>
