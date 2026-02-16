@@ -69,4 +69,16 @@ namespace sys
         [[nodiscard]] constexpr str32_iter<T> begin() const { return this->_beg; }
         [[nodiscard]] constexpr str32_iter<T> end() const { return this->_end; }
     };
+
+    template <ICharacter T>
+    struct string;
+
+    template <ICharacter T>
+    str32_view(std::span<T>) -> str32_view<T>;
+    template <ICharacter T>
+    str32_view(std::basic_string_view<T>) -> str32_view<T>;
+    template <ICharacter T>
+    str32_view(std::basic_string<T>) -> str32_view<T>;
+    template <ICharacter T>
+    str32_view(sys::string<T>) -> str32_view<T>;
 } // namespace sys

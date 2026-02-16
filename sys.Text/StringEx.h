@@ -203,6 +203,11 @@ namespace sys
         /// @see `sys::string<...>::string(const std::basic_string_view<...>)`
         template <ICharacter U>
         requires (!std::same_as<T, U>)
+        constexpr explicit string(const std::basic_string<U>& other) : string(std::basic_string_view<U>(other))
+        { }
+        /// @see `sys::string<...>::string(const std::basic_string_view<...>)`
+        template <ICharacter U>
+        requires (!std::same_as<T, U>)
         constexpr explicit string(const sys::string<U>& other) : string(_as(std::basic_string_view<U>, other))
         { }
 
@@ -229,6 +234,24 @@ namespace sys
         [[nodiscard]] bool contains(const std::basic_string_view<T> substr) const { return this->str.contains(substr); }
         [[nodiscard]] bool starts_with(const std::basic_string_view<T> substr) const { return this->str.starts_with(substr); }
         [[nodiscard]] bool ends_with(const std::basic_string_view<T> substr) const { return this->str.ends_with(substr); }
+
+        [[nodiscard]] sz find_index(const T c, const sz from = 0_uz) const
+        {
+            _retif(this->size(), from >= this->size());
+            const sz ret = this->str.find(c, from);
+            return ret != std::basic_string_view<T>::npos ? ret : this->size();
+        }
+        [[nodiscard]] sz find_index(const std::basic_string_view<T> substr, const sz from = 0_uz) const
+        {
+            _retif(this->size(), from >= this->size());
+            const sz ret = this->str.find(substr, from);
+            return ret != std::basic_string_view<T>::npos ? ret : this->size();
+        }
+        [[nodiscard]] string substr(const sz from, const sz count) const
+        {
+            _retif({}, from >= this->size());
+            return this->str.substr(from, count);
+        }
 
         constexpr void reserve(const sz capacity) { this->str.reserve(capacity); }
 
@@ -410,12 +433,10 @@ namespace sys
         friend class string;
     };
 
-    template <IUnicodeCharacter T>
-    str32_view(const std::basic_string_view<T>&) -> str32_view<T>;
-    template <IUnicodeCharacter T>
-    str32_view(const std::basic_string<T>&) -> str32_view<T>;
-    template <IUnicodeCharacter T>
-    str32_view(const string<T>&) -> str32_view<T>;
+    template <ICharacter T>
+    string(std::basic_string_view<T>) -> string<T>;
+    template <ICharacter T>
+    string(std::basic_string<T>) -> string<T>;
 
     using cstr = string<char>;
     using wstr = string<wchar_t>;
