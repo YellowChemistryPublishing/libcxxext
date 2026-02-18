@@ -1,6 +1,8 @@
 #pragma once
 
 #include <span>
+#include <string>
+#include <string_view>
 
 #include <Char.h>
 #include <Numeric.h>
@@ -71,7 +73,7 @@ namespace sys
     };
 
     template <ICharacter T>
-    struct string;
+    class string;
 
     template <ICharacter T>
     str32_view(std::span<T>) -> str32_view<T>;
