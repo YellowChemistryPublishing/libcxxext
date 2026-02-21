@@ -352,7 +352,7 @@ namespace sys
             return ret;
         }
 
-        template <IAppendable Container = std::vector<string>>
+        template <IAppendable<string> Container = std::vector<string>>
         [[nodiscard]] Container split(const T delimiter) const
         {
             Container ret;
@@ -369,7 +369,8 @@ namespace sys
 
             return ret;
         }
-        template <IAppendable Container = std::vector<string>>
+        template <typename Container = std::vector<string>>
+        requires IAppendable<Container, T> && IAppendable<Container, string>
         [[nodiscard]] Container split(const std::basic_string_view<T> delimiter) const
         {
             if (delimiter.empty())
@@ -396,17 +397,22 @@ namespace sys
 
             return ret;
         }
-        template <IAppendable Container = std::vector<string>>
-        [[nodiscard]] static string join(const Container& container, const std::basic_string_view<T> sep)
+        template <IEnumerable Container, typename Chars>
+        [[nodiscard]] static string join(const Container& container, const Chars& sep)
         {
             if (container.empty())
                 return {};
 
             size_t totalSize = 0;
-            for (const string& s : container)
-                totalSize += s.size();
-            if (container.size() > 1)
-                totalSize += sz(sep.size()) * (sz(container.size()) - 1_uz);
+            for (const auto& s : container)
+                totalSize += std::size(s);
+            if (std::size(container) > 1)
+            {
+                if constexpr (ICharacter<Chars>)
+                    totalSize += sz(std::size(container)) - 1_uz;
+                else
+                    totalSize += sz(std::size(sep)) * (sz(std::size(container)) - 1_uz);
+            }
 
             string ret;
             ret.reserve(totalSize + 1);

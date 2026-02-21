@@ -244,6 +244,11 @@ namespace sys::meta
         }
     };
 
+    template <typename T, typename With>
+    using replace_cv = std::conditional_t<std::is_const_v<With>,
+                                          std::add_const_t<std::conditional_t<std::is_volatile_v<With>, std::add_volatile_t<std::remove_cvref_t<T>>, std::remove_cvref_t<T>>>,
+                                          std::conditional_t<std::is_volatile_v<With>, std::add_volatile_t<std::remove_cvref_t<T>>, std::remove_cvref_t<T>>>;
+
     template <bool Condition, typename T>
     struct type_case final : meta_type
     {
@@ -276,6 +281,8 @@ namespace sys::meta
             return range.push(std::forward<Args>(args)...);
         else if constexpr (requires { range.append(std::forward<Args>(args)...); })
             return range.append(std::forward<Args>(args)...);
+        else if constexpr (requires { (range << ... << std::forward<Args>(args)); })
+            return (range << ... << std::forward<Args>(args));
         else if constexpr (requires { requires false; })
         { }
     }
@@ -353,10 +360,5 @@ namespace sys
     concept IAppendable = requires(T range) {
         requires (sizeof...(U) > 0);
         meta::append_to(range, std::declval<U>()...);
-    } || requires {
-        requires (sizeof...(U) == 0);
-        requires (requires { &T::emplace_back; } || requires { &T::push_back; } || requires { &T::push; } || requires { &T::append; } || requires {
-            std::declval<T>().emplace_back();
-        } || requires { std::declval<T>().push_back(); } || requires { std::declval<T>().push(); } || requires { std::declval<T>().append(); });
     };
 } // namespace sys
