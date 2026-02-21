@@ -231,8 +231,15 @@ namespace sys
         [[nodiscard]] constexpr auto crbegin() const { return this->str.crbegin(); }
         [[nodiscard]] constexpr auto crend() const { return this->str.crend(); }
 
+        [[nodiscard]] constexpr T& front(unsafe) { return this->str.front(); }
+        [[nodiscard]] constexpr const T& front(unsafe) const { return this->str.front(); }
+        [[nodiscard]] constexpr T& back(unsafe) { return this->str.back(); }
+        [[nodiscard]] constexpr const T& back(unsafe) const { return this->str.back(); }
+
         [[nodiscard]] bool contains(const std::basic_string_view<T> substr) const { return this->str.contains(substr); }
+        [[nodiscard]] bool starts_with(const T c) const { return this->str.starts_with(c); }
         [[nodiscard]] bool starts_with(const std::basic_string_view<T> substr) const { return this->str.starts_with(substr); }
+        [[nodiscard]] bool ends_with(const T c) const { return this->str.ends_with(c); }
         [[nodiscard]] bool ends_with(const std::basic_string_view<T> substr) const { return this->str.ends_with(substr); }
 
         [[nodiscard]] sz find_index(const T c, const sz from = 0_uz) const
@@ -254,6 +261,7 @@ namespace sys
         }
 
         constexpr void reserve(const sz capacity) { this->str.reserve(capacity); }
+        constexpr void clear() { this->str.clear(); }
 
         constexpr string& append(const T c) &
         {
@@ -274,18 +282,19 @@ namespace sys
         }
         constexpr string append(const std::span<const T> data) && { return this->append(data), std::move(*this); };
 
-        constexpr string& replace_invalid() & { return (*this = std::move(*this).replace_invalid()); }
-        constexpr string replace_invalid() &&
+        constexpr string& pop_back(unsafe) &
         {
-            string ret;
-            ret.reserve(this->capacity());
-            for (const char32_t c : str32_view(*this))
-            {
-                T buf[(sizeof(char32_t) / sizeof(T)) + 1uz] {};
-                ret.append(std::span(buf, ch::write_codepoint(c, buf, unsafe())));
-            }
-            return ret;
+            this->str.pop_back();
+            return *this;
         }
+        constexpr string pop_back(unsafe) && { return this->pop_back(unsafe()), std::move(*this); }
+        constexpr string& pop_back() &
+        {
+            if (!this->empty())
+                this->pop_back(unsafe());
+            return *this;
+        }
+        constexpr string pop_back() && { return this->pop_back(), std::move(*this); }
 
         constexpr string& trim() &
         {
@@ -329,6 +338,19 @@ namespace sys
             return *this;
         }
         constexpr string trim_end() && { return this->trim_end(), std::move(*this); };
+
+        constexpr string& replace_invalid() & { return (*this = std::move(*this).replace_invalid()); }
+        constexpr string replace_invalid() &&
+        {
+            string ret;
+            ret.reserve(this->capacity());
+            for (const char32_t c : str32_view(*this))
+            {
+                T buf[(sizeof(char32_t) / sizeof(T)) + 1uz] {};
+                ret.append(std::span(buf, ch::write_codepoint(c, buf, unsafe())));
+            }
+            return ret;
+        }
 
         constexpr string& to_lower(std::u8string_view lang = u8"") & { return (*this = std::move(*this).to_lower(lang)); }
         constexpr string to_lower(std::u8string_view lang = u8"") && { return this->as_cased<false>(lang); }
