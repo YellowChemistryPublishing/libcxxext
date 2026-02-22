@@ -14,15 +14,31 @@
 #include <inline/Integer.inl>
 
 // NOLINTBEGIN(bugprone-macro-parentheses)
-#define _res_movret(out_decl, res_xval)                   \
-    auto _ppcat(_result, __LINE__) = std::move(res_xval); \
-    if (!_ppcat(_result, __LINE__))                       \
-        return _ppcat(_result, __LINE__).err();           \
+#define _res_movret(out_decl, res_xval)                        \
+    auto _ppcat(_result, __LINE__) = res_xval;                 \
+    if (!_ppcat(_result, __LINE__))                            \
+    {                                                          \
+        return [](auto&& res)                                  \
+        {                                                      \
+            if constexpr (requires { res.err(); })             \
+                return std::forward<decltype(res)>(res).err(); \
+            else                                               \
+                return nullptr;                                \
+        }(std::move(_ppcat(_result, __LINE__)));               \
+    }                                                          \
     out_decl = _ppcat(_result, __LINE__).move();
-#define _res_movcoret(out_decl, res_xval)                 \
-    auto _ppcat(_result, __LINE__) = std::move(res_xval); \
-    if (!_ppcat(_result, __LINE__))                       \
-        co_return _ppcat(_result, __LINE__).err();        \
+#define _res_movcoret(out_decl, res_xval)                      \
+    auto _ppcat(_result, __LINE__) = res_xval;                 \
+    if (!_ppcat(_result, __LINE__))                            \
+    {                                                          \
+        co_return [](auto&& res)                               \
+        {                                                      \
+            if constexpr (requires { res.err(); })             \
+                return std::forward<decltype(res)>(res).err(); \
+            else                                               \
+                return nullptr;                                \
+        }(std::move(_ppcat(_result, __LINE__)));               \
+    }                                                          \
     out_decl = _ppcat(_result, __LINE__).move();
 // NOLINTEND(bugprone-macro-parentheses)
 

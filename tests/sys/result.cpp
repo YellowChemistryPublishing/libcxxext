@@ -68,4 +68,18 @@ TEST_CASE("Macros work as expected.", "[sys][result][macros]")
     CHECK(testFunc(false).err() == 404_i32);
 }
 
+TEST_CASE("Macros work with unit-result in non-template context.", "[sys][result][macros]")
+{
+    auto testUnitFunc = [](bool success) -> sys::result<i16, void>
+    {
+        sys::result<i16, void> res = success ? sys::result<i16, void>(10_i16) : sys::result<i16, void>(nullptr);
+        i16 val = 0_i16;
+        _res_movret(val, std::move(res));
+        return { val + 1_i16 };
+    };
+
+    CHECK(testUnitFunc(true).move() == 11_i16);
+    CHECK(!testUnitFunc(false));
+}
+
 // NOLINTEND(misc-include-cleaner)
