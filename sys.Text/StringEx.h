@@ -440,11 +440,11 @@ namespace sys
             ret.reserve(totalSize + 1);
 
             bool needPrependSep = false;
-            for (const string& part : container)
+            for (const auto& part : container)
             {
                 if (needPrependSep)
                     ret.append(sep);
-                ret.append(part);
+                ret.append(_as(string, part));
                 needPrependSep = true;
             }
 
