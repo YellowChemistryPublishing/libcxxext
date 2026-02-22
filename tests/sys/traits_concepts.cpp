@@ -236,8 +236,6 @@ static_assert(!sys::ISizeable<float>);
 // ================================================================================
 
 // Accepts standard containers.
-static_assert(sys::IAppendable<std::vector<int>>);
-static_assert(sys::IAppendable<std::string>);
 static_assert(sys::IAppendable<std::vector<int>, int>);
 static_assert(sys::IAppendable<std::string, char>);
 
@@ -265,10 +263,6 @@ namespace
 } // namespace
 
 // Accepts custom types with matching methods.
-static_assert(sys::IAppendable<push_backable>);
-static_assert(sys::IAppendable<pushable>);
-static_assert(sys::IAppendable<emplaceable>);
-static_assert(sys::IAppendable<appendable>);
 static_assert(sys::IAppendable<push_backable, int>);
 static_assert(sys::IAppendable<pushable, int>);
 static_assert(sys::IAppendable<emplaceable, int>);

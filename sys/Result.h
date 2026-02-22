@@ -148,6 +148,20 @@ namespace sys
         // NOLINTBEGIN(hicpp-explicit-conversions)
 
         /// @brief Constructs a result with a value.
+        constexpr result(const T& val) noexcept(noexcept(T(std::declval<const T&>())))
+        requires requires { internal::result_storage_type<T>(val); }
+            : status(result_status::ok)
+        {
+            new(&this->value) internal::result_storage_type<T>(val);
+        }
+        /// @brief Constructs a result with a value.
+        constexpr result(T&& val) noexcept(noexcept(T(std::declval<T&&>())))
+        requires requires { internal::result_storage_type<T>(std::move(val)); }
+            : status(result_status::ok)
+        {
+            new(&this->value) internal::result_storage_type<T>(std::move(val));
+        }
+        /// @brief Constructs a result with a value.
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...)))
         requires requires { internal::result_storage_type<T>(std::forward<Args>(args)...); }
@@ -162,6 +176,20 @@ namespace sys
             : status(result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(std::forward<Args>(args)...);
+        }
+        /// @brief Constructs a result with an error.
+        constexpr result(const Err& err) noexcept(noexcept(Err(std::declval<const Err&>())))
+        requires requires { internal::result_storage_type<Err>(err); }
+            : status(result_status::error)
+        {
+            new(&this->error) internal::result_storage_type<Err>(err);
+        }
+        /// @brief Constructs a result with an error.
+        constexpr result(Err&& err) noexcept(noexcept(Err(std::declval<Err&&>())))
+        requires requires { internal::result_storage_type<Err>(std::move(err)); }
+            : status(result_status::error)
+        {
+            new(&this->error) internal::result_storage_type<Err>(std::move(err));
         }
         /// @brief Constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
@@ -232,7 +260,7 @@ namespace sys
         result_status status = result_status::empty;
     public:
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...)))
+        constexpr result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...))) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         requires requires { internal::result_storage_type<T>(std::forward<Args>(args)...); }
             : status(result_status::ok)
         {
@@ -284,11 +312,12 @@ namespace sys
         };
         result_status status;
     public:
-        constexpr result() noexcept : status(result_status::ok) // NOLINT(hicpp-member-init)
+        constexpr result() noexcept : status(result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         { }
         /// @brief Constructs a result with an error.
         template <typename... Args>
-        constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...))) : status(result_status::error)
+        constexpr result(error_tag, Args&&... args) /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ noexcept(noexcept(Err(std::declval<Args&&>()...))) :
+            status(result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(std::forward<Args>(args)...);
         }
@@ -296,7 +325,7 @@ namespace sys
         /// @see `sys::result<T, Err>::result(Args&&...)`
         /// @note Participates in overload resolution only if the arguments cannot construct a `T`.
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...)))
+        constexpr result(Args&&... args) /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ noexcept(noexcept(Err(std::declval<Args&&>()...)))
         requires (sizeof...(Args) > 0uz)
             : result(error_tag(), std::forward<Args>(args)...)
         { }

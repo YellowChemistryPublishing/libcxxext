@@ -1,6 +1,9 @@
 #pragma once
 
+#include <type_traits>
+
 #include <LanguageSupport.h>
+#include <Traits.h>
 
 namespace sys
 {
@@ -14,8 +17,8 @@ namespace sys
 
         constexpr auto* downcast(this auto&& _this) noexcept
         {
-            using downcasted_this_type = meta::replace_cv<recurring_type, std::remove_reference_t<decltype(_this)>>&;
-            return &_as(downcasted_this_type, _this);
+            using type = meta::replace_cv<recurring_type, std::remove_reference_t<decltype(_this)>>;
+            return _as(type*, std::addressof(_this));
         }
     };
 } // namespace sys

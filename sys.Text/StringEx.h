@@ -419,32 +419,49 @@ namespace sys
 
             return ret;
         }
-        template <IEnumerable Container, typename Chars>
+        template <typename Container, typename Chars>
+        requires IEnumerable<Container> && IEmptyQueryable<Container>
         [[nodiscard]] static string join(const Container& container, const Chars& sep)
         {
-            if (container.empty())
+            if (meta::is_empty(container))
                 return {};
 
-            size_t totalSize = 0;
+            sz totalSize = 0_uz;
             for (const auto& s : container)
-                totalSize += std::size(s);
+            {
+                if constexpr (ICharacter<std::remove_cvref_t<decltype(s)>>)
+                    totalSize += 1_uz;
+                else
+                    totalSize += std::size(s);
+            }
             if (std::size(container) > 1)
             {
-                if constexpr (ICharacter<Chars>)
+                if constexpr (ICharacter<std::remove_cvref_t<decltype(sep)>>)
                     totalSize += sz(std::size(container)) - 1_uz;
+                else if constexpr (std::is_array_v<std::remove_cvref_t<decltype(sep)>>)
+                    totalSize += (sz(std::size(sep)) - 1_uz) * (sz(std::size(container)) - 1_uz);
                 else
                     totalSize += sz(std::size(sep)) * (sz(std::size(container)) - 1_uz);
             }
 
             string ret;
-            ret.reserve(totalSize + 1);
+            ret.reserve(totalSize);
 
             bool needPrependSep = false;
             for (const auto& part : container)
             {
                 if (needPrependSep)
-                    ret.append(sep);
-                ret.append(_as(string, part));
+                {
+                    if constexpr (std::is_array_v<std::remove_cvref_t<decltype(sep)>>)
+                        ret.append(std::basic_string_view(sep));
+                    else
+                        ret.append(sep);
+                }
+
+                if constexpr (requires { ret.append(part); })
+                    ret.append(part);
+                else
+                    ret.append(_as(string, part));
                 needPrependSep = true;
             }
 

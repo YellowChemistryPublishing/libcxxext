@@ -218,4 +218,18 @@ TEST_CASE("`sys::meta::append_to` works for custom types.", "[sys][traits][meta]
     CHECK(catcher.val == 42);
 }
 
+// ================================================================================
+// Type qualifier replacement logic. | `sys::meta::replace_cv<T, With>`
+// ================================================================================
+
+static_assert(std::same_as<sys::meta::replace_cv<int, const float>, const int>);
+static_assert(std::same_as<sys::meta::replace_cv<int, volatile float>, volatile int>);
+static_assert(std::same_as<sys::meta::replace_cv<int, const volatile float>, const volatile int>);
+
+// Works with references as the `With` type.
+static_assert(std::same_as<sys::meta::replace_cv<int, const float&>, const int>);
+static_assert(std::same_as<sys::meta::replace_cv<int, volatile float&>, volatile int>);
+static_assert(std::same_as<sys::meta::replace_cv<int, const volatile float&>, const volatile int>);
+static_assert(std::same_as<sys::meta::replace_cv<int, const float&&>, const int>);
+
 // NOLINTEND(misc-include-cleaner)

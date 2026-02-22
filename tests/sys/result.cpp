@@ -16,7 +16,7 @@ TEST_CASE("Constructing with a value works.", "[sys][result]")
 }
 TEST_CASE("Constructing with an error works.", "[sys][result]")
 {
-    const sys::result<i32, std::string_view> res("error_msg");
+    sys::result<i32, std::string_view> res("error_msg");
     CHECK(!res);
     CHECK(res.err() == "error_msg");
 }
@@ -59,8 +59,7 @@ TEST_CASE("Macros work as expected.", "[sys][result][macros]")
     auto testFunc = [](bool success) -> sys::result<i16, i32>
     {
         sys::result<i16, i32> res = success ? sys::result<i16, i32>(10_i16) : sys::result<i16, i32>(404_i32); // NOLINT(readability-magic-numbers)
-        i16 val = 0_i16;
-        _res_movret(val, res);
+        _res_movret(const i16 val, std::move(res));
         return { val + 1_i16 };
     };
 
@@ -70,11 +69,10 @@ TEST_CASE("Macros work as expected.", "[sys][result][macros]")
 
 TEST_CASE("Macros work with unit-result in non-template context.", "[sys][result][macros]")
 {
-    auto testUnitFunc = [](bool success) -> sys::result<i16, void>
+    auto testUnitFunc = [](bool success) -> sys::result<i16>
     {
-        sys::result<i16, void> res = success ? sys::result<i16, void>(10_i16) : sys::result<i16, void>(nullptr);
-        i16 val = 0_i16;
-        _res_movret(val, std::move(res));
+        sys::result<i16> res = success ? sys::result<i16>(10_i16) : sys::result<i16>(nullptr); // NOLINT(readability-magic-numbers)
+        _res_movret(const i16 val, std::move(res));
         return { val + 1_i16 };
     };
 

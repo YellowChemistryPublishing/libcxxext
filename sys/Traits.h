@@ -8,6 +8,8 @@
 #include <utility>
 #include <vector>
 
+#include <LanguageSupport.h>
+
 namespace sys::meta
 {
     struct meta_type
@@ -245,9 +247,10 @@ namespace sys::meta
     };
 
     template <typename T, typename With>
-    using replace_cv = std::conditional_t<std::is_const_v<With>,
-                                          std::add_const_t<std::conditional_t<std::is_volatile_v<With>, std::add_volatile_t<std::remove_cvref_t<T>>, std::remove_cvref_t<T>>>,
-                                          std::conditional_t<std::is_volatile_v<With>, std::add_volatile_t<std::remove_cvref_t<T>>, std::remove_cvref_t<T>>>;
+    using replace_cv = std::conditional_t<
+        std::is_const_v<std::remove_reference_t<With>>,
+        std::add_const_t<std::conditional_t<std::is_volatile_v<std::remove_reference_t<With>>, std::add_volatile_t<std::remove_cvref_t<T>>, std::remove_cvref_t<T>>>,
+        std::conditional_t<std::is_volatile_v<std::remove_reference_t<With>>, std::add_volatile_t<std::remove_cvref_t<T>>, std::remove_cvref_t<T>>>;
 
     template <bool Condition, typename T>
     struct type_case final : meta_type
@@ -270,6 +273,16 @@ namespace sys::meta
     template <typename... Cases>
     using type_switch = std::tuple_element_t<0, typename type_switch_cases<Cases...>::return_cases>::type;
 
+    template <typename T>
+    constexpr bool is_empty(const T& range)
+    {
+        if constexpr (requires { range.empty(); })
+            return range.empty();
+        else if constexpr (requires { range.size(); })
+            return std::size(range) == _as(decltype(std::size(range)), 0);
+        else if constexpr (requires { requires false; })
+        { }
+    }
     template <typename T, typename... Args>
     constexpr decltype(auto) append_to(T& range, Args&&... args)
     {
@@ -355,7 +368,10 @@ namespace sys
         } || std::same_as<std::remove_cvref_t<decltype(*std::begin(range))>, U>);
     };
 
-    /// @brief Whether `T` can be pushed back into.
+    /// @brief Whether `T` can be checked for emptiness.
+    template <typename T>
+    concept IEmptyQueryable = requires(T range) { meta::is_empty(range); };
+    /// @brief Whether `T` can be appended to.
     template <typename T, typename... U>
     concept IAppendable = requires(T range) {
         requires (sizeof...(U) > 0);

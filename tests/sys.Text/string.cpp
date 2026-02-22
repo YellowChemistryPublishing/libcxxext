@@ -3,6 +3,7 @@
 
 _push_nowarn_conv_comp();
 
+#include <string_view>
 #include <utility>
 
 // NOLINTBEGIN(misc-include-cleaner)
@@ -14,6 +15,8 @@ _push_nowarn_conv_comp();
 #include <module/sys.Text>
 
 _pop_nowarn_conv_comp();
+
+using namespace std::string_view_literals;
 
 TEST_CASE("Empty Constructors", "[sys.Text][string][ctor]")
 {
@@ -95,7 +98,7 @@ TEST_CASE("Split by Empty String Delimiter", "[sys.Text][string][split]")
 TEST_CASE("Join Strings", "[sys.Text][string][join]")
 {
     CHECK(sys::str::join(std::vector<sys::str> { u8"a", u8"b", u8"c" }, u8", ") == u8"a, b, c");
-    CHECK(sys::str::join({ u8"", u8"" }, u8",") == u8",");
+    CHECK(sys::str::join(std::initializer_list { u8""sv, u8""sv }, u8",") == u8",");
 }
 
 TEST_CASE("Transcoding UTF-8 -> UTF-(16|32)", "[sys.Text][string][conv]")
