@@ -41,7 +41,7 @@
         },
         {
             "checkset": "x86_64-linux-gcc-relwithdebinfo",
-            "with":     {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "config": "Debug", "gen": "Unix Makefiles", "to_package": "install"},
+            "with":     {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "config": "RelWithDebInfo", "gen": "Unix Makefiles", "to_package": "install"},
             "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"], "check:cpppack": ["check:cppbuild"] }
         },
         {

@@ -22,7 +22,7 @@ from lib.log import lassert_unsupported_bconf, lcheck_passed
 
 
 def additional_configure_flags(
-    config: str, gen: str, target_arch: str, host_platform: str, cl_name: str
+    cmake_config: str, gen: str, target_arch: str, host_platform: str, cl_name: str
 ) -> List[str]:
     if cl_name == "msvc" and "Visual Studio" in gen:
         return [
@@ -35,7 +35,7 @@ def additional_configure_flags(
             f"-G{gen}",
             f"-DCMAKE_C_COMPILER={" ".join(cl.cmd_cc(host_platform=host_platform, cl_name=cl_name))}",
             f"-DCMAKE_CXX_COMPILER={" ".join(cl.cmd_cxx(host_platform=host_platform, cl_name=cl_name))}",
-            f"-DCMAKE_BUILD_TYPE={config}",
+            f"-DCMAKE_BUILD_TYPE={cmake_config}",
         ] + (
             [
                 "-DCMAKE_C_FLAGS=-m32",
@@ -190,7 +190,7 @@ def main(argv: List[str]) -> None:
             args.build_dir_name,
         ]
         + additional_configure_flags(
-            config=args.config,
+            cmake_config=args.config,
             gen=args.use_generator,
             target_arch=args.arch,
             host_platform=args.platform,

@@ -5,7 +5,7 @@
 
 #include <CompilerWarnings.h>
 _push_nowarn_conv_comp();
-_push_nowarn_msvc(_clwarn_msvc_uncreachable);
+_push_nowarn_msvc(_clwarn_msvc_unreachable);
 
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>

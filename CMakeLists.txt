@@ -59,6 +59,6 @@ if(LIBCXXEXT_TESTS)
 endif()
 
 set(CPACK_GENERATOR "ZIP")
-set(CPACK_SOURCE_IGNORE_FILES "/build/" "/__pycache__/" "/checks.json" "/Doxyfile" "/workflows/" "/sys.Text/data_unicode/" "/\\\\.[^/]+/")
+set(CPACK_SOURCE_IGNORE_FILES "/[^/]*build/" "/__pycache__/" "/checks.json" "/Doxyfile" "/workflows/" "/sys.Text/data_unicode/" "/\\\\.[^/]+/")
 #                                                       ^ Library consumers don't need.                                    ^ Dirs beginning with a dot, i.e. `.cache/`.
 include(CPack)
