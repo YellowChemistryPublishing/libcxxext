@@ -72,7 +72,7 @@ def is_finding_ok(finding_file_name: str) -> bool:
 class Lockfile:
     """`with` syntax convenience for acquiring and releasing a lockfile."""
 
-    def __init__(self, name: str, timeout: int = 120) -> None:
+    def __init__(self, name: str, timeout: int = 240) -> None:
         self.name = name
         self.timeout = timeout
 

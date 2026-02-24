@@ -10,39 +10,37 @@ import lib.config as config
 tools_dir = f"{os.path.dirname(__file__)}/../../{config.tools_reldir}"
 
 if sys.platform == "win32":
-    import msvcrt as _msvcrt
+    import msvcrt as msvcrt
 
-    def _try_lock(f) -> bool:
-        # msvcrt.locking requires ≥1 byte to exist at the lock position.
+    def try_lock(f: BufferedRandom) -> bool:
         f.seek(0)
         f.write(b"\x00")
         f.flush()
         try:
             f.seek(0)
-            _msvcrt.locking(f.fileno(), _msvcrt.LK_NBLCK, 1)
+            msvcrt.locking(f.fileno(), msvcrt.LK_NBLCK, 1)
             return True
         except OSError:
             return False
 
-    def _unlock(f) -> None:
+    def unlock(f: BufferedRandom) -> None:
         f.seek(0)
-        _msvcrt.locking(f.fileno(), _msvcrt.LK_UNLCK, 1)
+        msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
 
 else:
-    import fcntl as _fcntl
+    import fcntl as fcntl
 
-    def _try_lock(f) -> bool:
+    def try_lock(f: BufferedRandom) -> bool:
         try:
-            _fcntl.flock(f.fileno(), _fcntl.LOCK_EX | _fcntl.LOCK_NB)
+            fcntl.flock(f.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
             return True
         except BlockingIOError:
             return False
 
-    def _unlock(f) -> None:
-        _fcntl.flock(f.fileno(), _fcntl.LOCK_UN)
+    def unlock(f: BufferedRandom) -> None:
+        fcntl.flock(f.fileno(), fcntl.LOCK_UN)
 
 
-# Maps lock name → open file handle holding the OS lock.
 held: Dict[str, BufferedRandom] = {}
 
 
@@ -55,7 +53,7 @@ def lockfile_acq(name: str, timeout: int = 120) -> None:
     start_time = time.time()
     while True:
         f = open(path, "a+b")
-        if _try_lock(f):
+        if try_lock(f):
             f.seek(0)
             f.truncate()
             f.write(str(os.getpid()).encode())
@@ -63,10 +61,12 @@ def lockfile_acq(name: str, timeout: int = 120) -> None:
             held[name] = f
             return
         f.close()
+
         if time.time() - start_time > timeout:
             raise TimeoutError(
                 f"Timeout acquiring project lock `{name}` after {timeout}s."
             )
+
         time.sleep(1)
 
 
@@ -74,7 +74,7 @@ def lockfile_rel(name: str) -> None:
     """Release a project-level lock."""
 
     if f := held.pop(name, None):
-        _unlock(f)
+        unlock(f)
         path = f.name
         f.close()
         try:
