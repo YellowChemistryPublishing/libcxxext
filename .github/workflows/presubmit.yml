@@ -154,10 +154,10 @@ jobs:
             - name: Post Canary Release
               uses: softprops/action-gh-release@v2
               with:
-                  tag_name: canary
+                  tag_name: main
                   name: "Canary 🪶"
                   body: "Latest canary release courtesy of automatic build and package."
                   prerelease: true
-                  files: artifacts/**/*
+                  files: artifacts/artifacts-*
                   fail_on_unmatched_files: false
                   generate_release_notes: true

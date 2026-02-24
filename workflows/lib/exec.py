@@ -127,21 +127,23 @@ def exec_or_fail(
 def exec_pkgmgr_cache_update(platform: str) -> None:
     """Update package manager cache, for platforms with one, if not done recently."""
 
-    with Lockfile("pkgmgr"):
-        if not has_stamp("pkgmgr_cache_update"):
-            stamp_id("pkgmgr_cache_update")
+    if not has_stamp("pkgmgr_cache_update"):
+        with Lockfile("pkgmgr"):
+            if not has_stamp("pkgmgr_cache_update"):
+                stamp_id("pkgmgr_cache_update")
 
-            if platform == "linux":
-                exec_or_fail(["sudo", "apt-get", "update"])
-            elif "msys" in platform:
-                exec_or_fail(["pacman", "-Syu", "--noconfirm"])
-            else:
-                lprint(
-                    f"No package manager for platform `{platform}`, skipping.",
-                    upstack=2,
-                )
+                if platform == "linux":
+                    exec_or_fail(["sudo", "apt-get", "update"])
+                elif "msys" in platform:
+                    exec_or_fail(["pacman", "-Syu", "--noconfirm"])
+                else:
+                    lprint(
+                        f"No package manager for platform `{platform}`, skipping.",
+                        upstack=2,
+                    )
 
-        else:
-            lprint(
-                f"Skipping package manager cache update--ran recently. (Delete ./{config.tools_reldir}/pkgmgr_cache_update_stamp to force an update.)"
-            )
+                return
+
+    lprint(
+        f"Skipping package manager cache update--ran recently. (Delete ./{config.tools_reldir}/pkgmgr_cache_update_stamp to force an update.)"
+    )

@@ -21,7 +21,7 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
     if host_platform == "linux":
         exec_pkgmgr_cache_update(host_platform)
 
-        apt_cmd = ["sudo", "apt-get"]
+        apt_cmd = ["sudo", "env", "DEBIAN_FRONTEND=noninteractive", "apt-get"]
 
         if cl_name == "clang":
             llvm_sh_url = "https://apt.llvm.org/llvm.sh"
@@ -45,8 +45,6 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
                         + [
                             "install",
                             "-y",
-                            "libc6-dev-i386",
-                            "libstdc++-14-dev",
                             "gcc-14-multilib",
                             "g++-14-multilib",
                         ]
