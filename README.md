@@ -11,7 +11,7 @@ A system library for C++, used as an extension of the existing standard library.
 This project provides some universal tooling for C++, for upstream consumption.
 
 > [!NOTE]  
-> Upstream targets: Depend on the copies of Catch2 and rapidcheck here.
+> Upstream targets: Depend on the copies of Catch2, rapidcheck, and doxygen-awesome-css here.
 
 CMake includes are under `cmake/`.
 

@@ -7,7 +7,7 @@ sys.path.append(os.path.abspath(f"{os.path.dirname(__file__)}/.."))
 
 import lib.config as config
 from lib.exec import exec_or_fail
-from lib.log import lcheck_failed, lcheck_passed, lprint
+from lib.log import lcheck_failed, lprint
 
 
 def main(argv: List[str]) -> None:
@@ -57,8 +57,6 @@ def main(argv: List[str]) -> None:
             except Exception as e:
                 lprint(str(e))
                 lcheck_failed()
-
-    lcheck_passed()
 
 
 if __name__ == "__main__":

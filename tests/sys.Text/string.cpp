@@ -1,20 +1,21 @@
-#include "StringEx.h"
-#include <CompilerWarnings.h>
-
-_push_nowarn_conv_comp();
 
 #include <string_view>
 #include <utility>
 
 // NOLINTBEGIN(misc-include-cleaner)
 
+#include <CompilerWarnings.h>
+_push_nowarn_conv_comp();
+_push_nowarn_msvc(_clwarn_msvc_unreachable);
+
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
 
+_pop_nowarn_msvc();
+_pop_nowarn_conv_comp();
+
 #include <module/sys>
 #include <module/sys.Text>
-
-_pop_nowarn_conv_comp();
 
 using namespace std::string_view_literals;
 

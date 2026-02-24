@@ -37,7 +37,7 @@ def main(argv: List[str]) -> None:
         "-cl",
         "--compiler",
         help="Compiler to use.",
-        choices=config.support_compilers,
+        choices=config.supported_compilers,
         metavar="",
         required=True,
     )

@@ -4,9 +4,11 @@ import os
 import re
 import subprocess
 import time
+from types import TracebackType
 from typing import Callable, List
 
 import lib.config as config
+from lib.lockfile import lockfile_acq, lockfile_rel
 from lib.log import format_cmd_for_printing, lcheck_failed, log_invoc_failed, lprint
 
 
@@ -67,6 +69,28 @@ def is_finding_ok(finding_file_name: str) -> bool:
     return has_stamp(f"findings_pass_{os.path.basename(finding_file_name)}")
 
 
+class Lockfile:
+    """`with` syntax convenience for acquiring and releasing a lockfile."""
+
+    def __init__(self, name: str, timeout: int = 240) -> None:
+        self.name = name
+        self.timeout = timeout
+
+    def __enter__(self) -> None:
+        lockfile_acq(self.name, self.timeout)
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
+        try:
+            lockfile_rel(self.name)
+        except Exception:
+            lcheck_failed(upstack=3)
+
+
 def exec_or_fail(
     cmd: List[str],
     *,
@@ -104,20 +128,22 @@ def exec_pkgmgr_cache_update(platform: str) -> None:
     """Update package manager cache, for platforms with one, if not done recently."""
 
     if not has_stamp("pkgmgr_cache_update"):
-        stamp_id("pkgmgr_cache_update")
+        with Lockfile("pkgmgr"):
+            if not has_stamp("pkgmgr_cache_update"):
+                stamp_id("pkgmgr_cache_update")
 
-        if platform == "linux":
-            exec_or_fail(["sudo", "apt-get", "-o", "DPkg::Lock::Timeout=60", "update"])
-        elif "msys" in platform:
-            exec_or_fail(["pacman", "-Syu", "--noconfirm"])
-        else:
-            lprint(
-                f"No package manager for platform `{platform}`, skipping.",
-                upstack=2,
-            )
-            return
+                if platform == "linux":
+                    exec_or_fail(["sudo", "apt-get", "update"])
+                elif "msys" in platform:
+                    exec_or_fail(["pacman", "-Syu", "--noconfirm"])
+                else:
+                    lprint(
+                        f"No package manager for platform `{platform}`, skipping.",
+                        upstack=2,
+                    )
 
-    else:
-        lprint(
-            f"Skipping package manager cache update--ran recently. (Delete ./{config.tools_reldir}/pkgmgr_cache_update_stamp to force an update.)"
-        )
+                return
+
+    lprint(
+        f"Skipping package manager cache update--ran recently. (Delete ./{config.tools_reldir}/pkgmgr_cache_update_stamp to force an update.)"
+    )

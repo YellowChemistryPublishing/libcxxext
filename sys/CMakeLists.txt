@@ -1,4 +1,4 @@
-file(GLOB_RECURSE SYS_HEADERS CONFIGURE_DEPENDS "*.h")
+file(GLOB_RECURSE SYS_HEADERS CONFIGURE_DEPENDS "*.h" "*.inl")
 
 add_library(sys INTERFACE)
 target_libcxxext_common_config(sys)

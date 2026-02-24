@@ -32,7 +32,7 @@ def run_check(
     check_args = [
         str_key_replace(arg, key_replace_dict) for arg in check.get("with", [])
     ]
-    lprint(f"Running {check_name}.")
+    lprint(f"Running \x1b[33;4m{check_name}\x1b[0m.")
 
     def on_fail() -> None:
         raise Exception(f"Note: \x1b[31;3mFailed\x1b[0m \x1b[1;3m{check_name}.\x1b[0m")
@@ -107,12 +107,12 @@ def main(argv: list[str]) -> None:
             ):
                 continue
 
-            chains = workflow.get("chains", {})
+            runs = workflow.get("runs", {})
             checks_and_deps = {
                 str_key_replace(name, key_replace_dict): [
                     str_key_replace(dep, key_replace_dict) for dep in deps
                 ]
-                for name, deps in chains.items()
+                for name, deps in runs.items()
             }
 
             completed: set[str] = set()
@@ -177,7 +177,7 @@ def main(argv: list[str]) -> None:
 
         else:
             lprint(
-                "No `on_push` workflows. It would be unproductive for this to be intentional."
+                f'No `on_push` workflow matching "{args.checkset}". It would be unproductive for this to be intentional.'
             )
             lcheck_failed()
 

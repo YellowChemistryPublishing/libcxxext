@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.30)
 
-project(libcxxext)
+project(libcxxext VERSION 1.0.0)
 
 include(CMakeDependentOption)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -51,12 +51,14 @@ if(LIBCXXEXT_TESTS)
     add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
     target_compile_features(Catch2 PUBLIC cxx_std_20)
     target_compile_features(Catch2WithMain PUBLIC cxx_std_20)
+
     add_subdirectory(rapidcheck EXCLUDE_FROM_ALL)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang|AppleClang)")
-        target_compile_options(rapidcheck PRIVATE -include cstdint)
-    elseif(MSVC)
-        target_compile_options(rapidcheck PRIVATE /FI cstdint)
-    endif()
+    target_compile_options(rapidcheck PRIVATE $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-include;cstdint> $<$<CXX_COMPILER_ID:MSVC>:/w;/FI;cstdint>)
 
     add_subdirectory(tests)
 endif()
+
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_SOURCE_IGNORE_FILES "/[^/]*build/" "/__pycache__/" "/checks.json" "/Doxyfile" "/workflows/" "/sys.Text/data_unicode/" "/\\\\.[^/]+/")
+#                                                       ^ Library consumers don't need.                                    ^ Dirs beginning with a dot, i.e. `.cache/`.
+include(CPack)

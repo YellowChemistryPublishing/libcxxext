@@ -17,12 +17,12 @@ import lib.config as config
 import tools.cmake as cmake
 import tools.cl as cl
 import tools.clang_tidy as clang_tidy
-from lib.exec import exec_or_fail, exec_pkgmgr_cache_update
+from lib.exec import exec_or_fail, exec_pkgmgr_cache_update, Lockfile
 from lib.log import lassert_unsupported_bconf, lcheck_passed
 
 
 def additional_configure_flags(
-    gen: str, target_arch: str, host_platform: str, cl_name: str
+    cmake_config: str, gen: str, target_arch: str, host_platform: str, cl_name: str
 ) -> List[str]:
     if cl_name == "msvc" and "Visual Studio" in gen:
         return [
@@ -35,7 +35,7 @@ def additional_configure_flags(
             f"-G{gen}",
             f"-DCMAKE_C_COMPILER={" ".join(cl.cmd_cc(host_platform=host_platform, cl_name=cl_name))}",
             f"-DCMAKE_CXX_COMPILER={" ".join(cl.cmd_cxx(host_platform=host_platform, cl_name=cl_name))}",
-            "-DCMAKE_BUILD_TYPE=Debug",
+            f"-DCMAKE_BUILD_TYPE={cmake_config}",
         ] + (
             [
                 "-DCMAKE_C_FLAGS=-m32",
@@ -80,9 +80,12 @@ def main(argv: List[str]) -> None:
         "-cl",
         "--compiler",
         help="Compiler to use.",
-        choices=config.support_compilers,
+        choices=config.supported_compilers,
         metavar="",
         required=True,
+    )
+    parser.add_argument(
+        "-c", "--config", help="CMake config name.", required=False, default="Debug"
     )
     parser.add_argument(
         "-gen", "--use-generator", help="CMake generator name.", required=True
@@ -133,17 +136,17 @@ def main(argv: List[str]) -> None:
 
     if args.platform == "linux":
         if args.use_generator == "Ninja":
-            exec_or_fail(
-                [
-                    "sudo",
-                    "apt-get",
-                    "-o",
-                    "DPkg::Lock::Timeout=60",
-                    "install",
-                    "-y",
-                    "ninja-build",
-                ]
-            )
+            with Lockfile("pkgmgr"):
+                exec_or_fail(
+                    [
+                        "sudo",
+                        "apt-get",
+                        "install",
+                        "-y",
+                        "ninja-build",
+                    ]
+                )
+
             exec_or_fail(["ninja", "--version"])
 
         elif args.use_generator != "Unix Makefiles":
@@ -187,7 +190,11 @@ def main(argv: List[str]) -> None:
             args.build_dir_name,
         ]
         + additional_configure_flags(
-            args.use_generator, args.arch, args.platform, args.compiler
+            cmake_config=args.config,
+            gen=args.use_generator,
+            target_arch=args.arch,
+            host_platform=args.platform,
+            cl_name=args.compiler,
         )
         + (args.extra_args.split(";") if args.extra_args else [])
         + (["--trace-expand", "--log-level=VERBOSE"] if args.cmake_verbose else []),

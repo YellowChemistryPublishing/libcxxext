@@ -36,7 +36,7 @@ def main(argv: List[str]) -> None:
         "-cl",
         "--compiler",
         help="Compiler to use.",
-        choices=config.support_compilers,
+        choices=config.supported_compilers,
         metavar="",
         required=True,
     )
@@ -49,7 +49,7 @@ def main(argv: List[str]) -> None:
     parser.add_argument(
         "-cv",
         "--cmake-verbose",
-        help="Make CMake output unreadable.",
+        help="Make CTest output unreadable.",
         action="store_true",
     )
     parser.add_argument(
@@ -78,8 +78,8 @@ def main(argv: List[str]) -> None:
             "--output-on-failure",
         ]
         + (["--debug", "--extra-verbose"] if args.cmake_verbose else []),
-        host_platform=args.platform,
         cl_name=args.compiler,
+        host_platform=args.platform,
     )
 
     lcheck_passed()
