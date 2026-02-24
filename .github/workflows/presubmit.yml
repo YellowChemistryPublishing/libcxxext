@@ -116,7 +116,7 @@ jobs:
                               subprocess.run(["gh", "artifact", "upload", str(f), "--name", name], check=True)
 
     release:
-        name: Aggregate and Release
+        name: Canary Release
         needs: presubmit
         if: (github.ref_name == 'main' || github.event_name == 'workflow_dispatch') && always()
         runs-on: ubuntu-latest
@@ -134,8 +134,8 @@ jobs:
               uses: softprops/action-gh-release@v2
               with:
                   tag_name: canary
-                  name: "Canary Build"
-                  body: "This is an automated canary release containing the latest build artifacts."
+                  name: "Canary 🪶"
+                  body: "Latest canary release courtesy of automatic build and package."
                   prerelease: true
                   files: artifacts/**/*
                   fail_on_unmatched_files: false

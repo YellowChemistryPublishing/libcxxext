@@ -3,7 +3,14 @@ import sys
 from typing import List
 
 import lib.config as config
-from lib.exec import exec_or_fail, exec_pkgmgr_cache_update, has_stamp, stamp_id
+from lib.exec import (
+    exec_or_fail,
+    exec_pkgmgr_cache_update,
+    has_stamp,
+    lockfile_acq,
+    lockfile_rel,
+    stamp_id,
+)
 from lib.log import lassert_unsupported_bconf
 
 
@@ -13,8 +20,14 @@ def install(*, host_platform: str) -> None:
 
     if host_platform == "linux":
         exec_pkgmgr_cache_update(host_platform)
-        apt_cmd = ["sudo", "apt-get", "-o", "DPkg::Lock::Timeout=60"]
-        exec_or_fail(apt_cmd + ["install", "-y", "doxygen"])
+
+        lockfile_acq("pkgmgr")
+        try:
+            apt_cmd = ["sudo", "apt-get"]
+            exec_or_fail(apt_cmd + ["install", "-y", "doxygen"])
+        finally:
+            lockfile_rel("pkgmgr")
+
     else:
         lassert_unsupported_bconf()
 

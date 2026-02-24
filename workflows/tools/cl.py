@@ -8,6 +8,8 @@ from lib.exec import (
     exec_pkgmgr_cache_update,
     find_command,
     has_stamp,
+    lockfile_acq,
+    lockfile_rel,
     stamp_id,
 )
 from lib.log import lassert_unsupported_bconf, lcheck_failed
@@ -19,72 +21,73 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
 
     if host_platform == "linux":
         exec_pkgmgr_cache_update(host_platform)
-        apt_cmd = ["sudo", "apt-get", "-o", "DPkg::Lock::Timeout=60"]
 
-        if cl_name == "clang":
-            llvm_sh_url = "https://apt.llvm.org/llvm.sh"
-            llvm_sh_relp = f"./{config.tools_reldir}/llvm.sh"
-            urllib.request.urlretrieve(llvm_sh_url, llvm_sh_relp)
-            exec_or_fail(["chmod", "+x", llvm_sh_relp])
+        lockfile_acq("pkgmgr")
+        try:
+            apt_cmd = ["sudo", "apt-get"]
 
-            # Locks apt repository, try a few times in case another process is using it.
-            for i in range(10):
+            if cl_name == "clang":
+                llvm_sh_url = "https://apt.llvm.org/llvm.sh"
+                llvm_sh_relp = f"./{config.tools_reldir}/llvm.sh"
+                urllib.request.urlretrieve(llvm_sh_url, llvm_sh_relp)
+                exec_or_fail(["chmod", "+x", llvm_sh_relp])
 
-                def on_fail() -> None:
-                    if i == 9:
-                        lcheck_failed()
+                exec_or_fail(["sudo", llvm_sh_relp, "19"])
 
-                exec_or_fail(["sudo", llvm_sh_relp, "19"], on_fail=on_fail)
-                time.sleep(1)
+                exec_or_fail(apt_cmd + ["install", "-y", "clang-19"])
 
-            exec_or_fail(apt_cmd + ["install", "-y", "clang-19"])
+                exec_or_fail(["clang-19", "--version"])
+                exec_or_fail(["clang++-19", "--version"])
 
-            exec_or_fail(["clang-19", "--version"])
-            exec_or_fail(["clang++-19", "--version"])
+                if target_arch == "i686":
+                    exec_or_fail(
+                        apt_cmd
+                        + [
+                            "install",
+                            "-y",
+                            "libc6-dev-i386",
+                            "libstdc++-14-dev",
+                            "gcc-14-multilib",
+                            "g++-14-multilib",
+                        ]
+                    )
 
-            if target_arch == "i686":
+                    exec_or_fail(["gcc-14", "--version"])
+                    exec_or_fail(["g++-14", "--version"])
+
+            elif cl_name == "gcc":
                 exec_or_fail(
-                    apt_cmd
-                    + [
-                        "install",
-                        "-y",
-                        "libc6-dev-i386",
-                        "libstdc++-14-dev",
-                        "gcc-14-multilib",
-                        "g++-14-multilib",
-                    ]
+                    apt_cmd + ["install", "-y", "gcc-14-multilib", "g++-14-multilib"]
                 )
 
                 exec_or_fail(["gcc-14", "--version"])
                 exec_or_fail(["g++-14", "--version"])
 
-        elif cl_name == "gcc":
-            exec_or_fail(
-                apt_cmd + ["install", "-y", "gcc-14-multilib", "g++-14-multilib"]
-            )
-
-            exec_or_fail(["gcc-14", "--version"])
-            exec_or_fail(["g++-14", "--version"])
-
-        else:
-            lassert_unsupported_bconf()
+            else:
+                lassert_unsupported_bconf()
+        finally:
+            lockfile_rel("pkgmgr")
 
     elif "msys" in host_platform:
         exec_pkgmgr_cache_update(host_platform)
 
-        pacman_cmd = ["pacman", "-S", "--needed", "--noconfirm"]
-        if cl_name == "clang":
-            exec_or_fail(pacman_cmd + ["mingw-w64-clang-x86_64-clang"])
-            exec_or_fail(["clang", "--version"])
-            exec_or_fail(["clang++", "--version"])
+        lockfile_acq("pkgmgr")
+        try:
+            pacman_cmd = ["pacman", "-S", "--needed", "--noconfirm"]
+            if cl_name == "clang":
+                exec_or_fail(pacman_cmd + ["mingw-w64-clang-x86_64-clang"])
+                exec_or_fail(["clang", "--version"])
+                exec_or_fail(["clang++", "--version"])
 
-        elif cl_name == "gcc":
-            exec_or_fail(pacman_cmd + ["mingw-w64-x86_64-gcc"])
-            exec_or_fail(["x86_64-w64-mingw32-gcc", "-v"])
-            exec_or_fail(["x86_64-w64-mingw32-g++", "-v"])
+            elif cl_name == "gcc":
+                exec_or_fail(pacman_cmd + ["mingw-w64-x86_64-gcc"])
+                exec_or_fail(["x86_64-w64-mingw32-gcc", "-v"])
+                exec_or_fail(["x86_64-w64-mingw32-g++", "-v"])
 
-        else:
-            lassert_unsupported_bconf()
+            else:
+                lassert_unsupported_bconf()
+        finally:
+            lockfile_rel("pkgmgr")
 
     elif host_platform != "win32":
         lassert_unsupported_bconf()

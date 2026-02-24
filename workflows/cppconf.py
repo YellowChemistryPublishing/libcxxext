@@ -17,7 +17,12 @@ import lib.config as config
 import tools.cmake as cmake
 import tools.cl as cl
 import tools.clang_tidy as clang_tidy
-from lib.exec import exec_or_fail, exec_pkgmgr_cache_update
+from lib.exec import (
+    exec_or_fail,
+    exec_pkgmgr_cache_update,
+    lockfile_acq,
+    lockfile_rel,
+)
 from lib.log import lassert_unsupported_bconf, lcheck_passed
 
 
@@ -136,17 +141,20 @@ def main(argv: List[str]) -> None:
 
     if args.platform == "linux":
         if args.use_generator == "Ninja":
-            exec_or_fail(
-                [
-                    "sudo",
-                    "apt-get",
-                    "-o",
-                    "DPkg::Lock::Timeout=60",
-                    "install",
-                    "-y",
-                    "ninja-build",
-                ]
-            )
+            lockfile_acq("pkgmgr")
+            try:
+                exec_or_fail(
+                    [
+                        "sudo",
+                        "apt-get",
+                        "install",
+                        "-y",
+                        "ninja-build",
+                    ]
+                )
+            finally:
+                lockfile_rel("pkgmgr")
+
             exec_or_fail(["ninja", "--version"])
 
         elif args.use_generator != "Unix Makefiles":

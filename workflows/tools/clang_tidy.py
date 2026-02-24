@@ -6,6 +6,8 @@ from lib.exec import (
     exec_pkgmgr_cache_update,
     find_command,
     has_stamp,
+    lockfile_acq,
+    lockfile_rel,
     stamp_id,
 )
 from lib.log import lassert_unsupported_bconf
@@ -17,18 +19,30 @@ def install(*, host_platform: str, cl_name: str) -> None:
 
     if host_platform == "linux":
         exec_pkgmgr_cache_update(host_platform)
-        apt_cmd = ["sudo", "apt-get", "-o", "DPkg::Lock::Timeout=60"]
-        exec_or_fail(apt_cmd + ["install", "-y", "clang-tidy-19"])
+        apt_cmd = ["sudo", "apt-get"]
+
+        lockfile_acq("pkgmgr")
+        try:
+            exec_or_fail(apt_cmd + ["install", "-y", "clang-tidy-19"])
+        finally:
+            lockfile_rel("pkgmgr")
+
         exec_or_fail(["clang-tidy-19", "--version"])
     elif "msys" in host_platform:
         exec_pkgmgr_cache_update(host_platform)
-        pacman_cmd = ["pacman", "-S", "--needed", "--noconfirm"]
-        if cl_name == "clang":
-            exec_or_fail(pacman_cmd + ["mingw-w64-clang-x86_64-clang-tools-extra"])
-        elif cl_name == "gcc":
-            exec_or_fail(pacman_cmd + ["mingw-w64-x86_64-clang-tools-extra"])
-        else:
-            lassert_unsupported_bconf()
+
+        lockfile_acq("pkgmgr")
+        try:
+            pacman_cmd = ["pacman", "-S", "--needed", "--noconfirm"]
+            if cl_name == "clang":
+                exec_or_fail(pacman_cmd + ["mingw-w64-clang-x86_64-clang-tools-extra"])
+            elif cl_name == "gcc":
+                exec_or_fail(pacman_cmd + ["mingw-w64-x86_64-clang-tools-extra"])
+            else:
+                lassert_unsupported_bconf()
+        finally:
+            lockfile_rel("pkgmgr")
+
         exec_or_fail(["clang-tidy", "--version"])
 
     elif host_platform != "win32":
