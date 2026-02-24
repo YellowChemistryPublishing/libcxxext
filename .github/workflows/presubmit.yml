@@ -139,7 +139,7 @@ jobs:
     release:
         name: Canary Release
         needs: presubmit
-        if: (github.ref_name == 'main' || github.event_name == 'workflow_dispatch') && always()
+        if: always()
         runs-on: ubuntu-latest
         permissions:
             contents: write
