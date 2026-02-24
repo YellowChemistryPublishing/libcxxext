@@ -8,8 +8,7 @@ from lib.exec import (
     exec_pkgmgr_cache_update,
     find_command,
     has_stamp,
-    lockfile_acq,
-    lockfile_rel,
+    Lockfile,
     stamp_id,
 )
 from lib.log import lassert_unsupported_bconf, lcheck_failed
@@ -22,24 +21,25 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
     if host_platform == "linux":
         exec_pkgmgr_cache_update(host_platform)
 
-        lockfile_acq("pkgmgr")
-        try:
-            apt_cmd = ["sudo", "apt-get"]
+        apt_cmd = ["sudo", "apt-get"]
 
-            if cl_name == "clang":
-                llvm_sh_url = "https://apt.llvm.org/llvm.sh"
-                llvm_sh_relp = f"./{config.tools_reldir}/llvm.sh"
-                urllib.request.urlretrieve(llvm_sh_url, llvm_sh_relp)
-                exec_or_fail(["chmod", "+x", llvm_sh_relp])
+        if cl_name == "clang":
+            llvm_sh_url = "https://apt.llvm.org/llvm.sh"
+            llvm_sh_relp = f"./{config.tools_reldir}/llvm.sh"
+            urllib.request.urlretrieve(llvm_sh_url, llvm_sh_relp)
+            exec_or_fail(["chmod", "+x", llvm_sh_relp])
 
+            with Lockfile("pkgmgr"):
                 exec_or_fail(["sudo", llvm_sh_relp, "19"])
 
+            with Lockfile("pkgmgr"):
                 exec_or_fail(apt_cmd + ["install", "-y", "clang-19"])
 
-                exec_or_fail(["clang-19", "--version"])
-                exec_or_fail(["clang++-19", "--version"])
+            exec_or_fail(["clang-19", "--version"])
+            exec_or_fail(["clang++-19", "--version"])
 
-                if target_arch == "i686":
+            if target_arch == "i686":
+                with Lockfile("pkgmgr"):
                     exec_or_fail(
                         apt_cmd
                         + [
@@ -52,27 +52,25 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
                         ]
                     )
 
-                    exec_or_fail(["gcc-14", "--version"])
-                    exec_or_fail(["g++-14", "--version"])
+                exec_or_fail(["gcc-14", "--version"])
+                exec_or_fail(["g++-14", "--version"])
 
-            elif cl_name == "gcc":
+        elif cl_name == "gcc":
+            with Lockfile("pkgmgr"):
                 exec_or_fail(
                     apt_cmd + ["install", "-y", "gcc-14-multilib", "g++-14-multilib"]
                 )
 
-                exec_or_fail(["gcc-14", "--version"])
-                exec_or_fail(["g++-14", "--version"])
+            exec_or_fail(["gcc-14", "--version"])
+            exec_or_fail(["g++-14", "--version"])
 
-            else:
-                lassert_unsupported_bconf()
-        finally:
-            lockfile_rel("pkgmgr")
+        else:
+            lassert_unsupported_bconf()
 
     elif "msys" in host_platform:
         exec_pkgmgr_cache_update(host_platform)
 
-        lockfile_acq("pkgmgr")
-        try:
+        with Lockfile("pkgmgr"):
             pacman_cmd = ["pacman", "-S", "--needed", "--noconfirm"]
             if cl_name == "clang":
                 exec_or_fail(pacman_cmd + ["mingw-w64-clang-x86_64-clang"])
@@ -86,8 +84,6 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
 
             else:
                 lassert_unsupported_bconf()
-        finally:
-            lockfile_rel("pkgmgr")
 
     elif host_platform != "win32":
         lassert_unsupported_bconf()

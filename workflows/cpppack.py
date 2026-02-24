@@ -58,7 +58,9 @@ def main(argv: List[str]) -> None:
         metavar="",
         required=True,
     )
-    parser.add_argument("-c", "--config", help="CMake config name.")
+    parser.add_argument(
+        "-c", "--config", help="CMake config name.", metavar="", required=True
+    )
     parser.add_argument(
         "-d", "--src-dir", help="Full src dir path.", metavar="", required=True
     )

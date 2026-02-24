@@ -7,6 +7,7 @@ import time
 from typing import Callable, List
 
 import lib.config as config
+from lib.lockfile import lockfile_acq, lockfile_rel
 from lib.log import format_cmd_for_printing, lcheck_failed, log_invoc_failed, lprint
 
 
@@ -67,6 +68,23 @@ def is_finding_ok(finding_file_name: str) -> bool:
     return has_stamp(f"findings_pass_{os.path.basename(finding_file_name)}")
 
 
+class Lockfile:
+    """`with` syntax convenience for acquiring and releasing a lockfile."""
+
+    def __init__(self, name: str, timeout: int = 120) -> None:
+        self.name = name
+        self.timeout = timeout
+
+    def __enter__(self) -> None:
+        lockfile_acq(self.name, self.timeout)
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        try:
+            lockfile_rel(self.name)
+        except:
+            lcheck_failed(upstack=3)
+
+
 def exec_or_fail(
     cmd: List[str],
     *,
@@ -100,45 +118,11 @@ def exec_or_fail(
     return stdout, stderr
 
 
-def lockfile_acq(name: str, timeout: int = 120) -> None:
-    """Acquire a project-level lock."""
-
-    path = os.path.abspath(f"./{config.tools_reldir}/{name}.lck")
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-
-    lprint(f"Acquiring project lock `{path}`...")
-
-    start_time = time.time()
-    while True:
-        try:
-            fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-            with os.fdopen(fd, "w") as f:
-                f.write(f"{os.getpid()}\n")
-            break
-        except FileExistsError:
-            if time.time() - start_time > timeout:
-                lprint(f"Timeout acquiring project lock `{path}` after {timeout}s.")
-                lcheck_failed()
-            time.sleep(1)
-
-    lprint(f"Acquired project lock `{path}`.")
-
-
-def lockfile_rel(name: str) -> None:
-    """Release a project-level lock."""
-
-    path = os.path.abspath(f"./{config.tools_reldir}/{name}.lck")
-    if os.path.exists(path):
-        os.remove(path)
-        lprint(f"Released project lock `{path}`.")
-
-
 def exec_pkgmgr_cache_update(platform: str) -> None:
     """Update package manager cache, for platforms with one, if not done recently."""
 
     if not has_stamp("pkgmgr_cache_update"):
-        lockfile_acq("pkgmgr")
-        try:
+        with Lockfile("pkgmgr"):
             # Re-check after acquiring lock.
             if not has_stamp("pkgmgr_cache_update"):
                 stamp_id("pkgmgr_cache_update")
@@ -152,8 +136,6 @@ def exec_pkgmgr_cache_update(platform: str) -> None:
                         f"No package manager for platform `{platform}`, skipping.",
                         upstack=2,
                     )
-        finally:
-            lockfile_rel("pkgmgr")
 
     else:
         lprint(

@@ -17,12 +17,7 @@ import lib.config as config
 import tools.cmake as cmake
 import tools.cl as cl
 import tools.clang_tidy as clang_tidy
-from lib.exec import (
-    exec_or_fail,
-    exec_pkgmgr_cache_update,
-    lockfile_acq,
-    lockfile_rel,
-)
+from lib.exec import exec_or_fail, exec_pkgmgr_cache_update, Lockfile
 from lib.log import lassert_unsupported_bconf, lcheck_passed
 
 
@@ -141,8 +136,7 @@ def main(argv: List[str]) -> None:
 
     if args.platform == "linux":
         if args.use_generator == "Ninja":
-            lockfile_acq("pkgmgr")
-            try:
+            with Lockfile("pkgmgr"):
                 exec_or_fail(
                     [
                         "sudo",
@@ -152,8 +146,6 @@ def main(argv: List[str]) -> None:
                         "ninja-build",
                     ]
                 )
-            finally:
-                lockfile_rel("pkgmgr")
 
             exec_or_fail(["ninja", "--version"])
 

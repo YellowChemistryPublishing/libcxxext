@@ -6,8 +6,7 @@ from lib.exec import (
     exec_or_fail,
     find_command,
     has_stamp,
-    lockfile_acq,
-    lockfile_rel,
+    Lockfile,
     stamp_id,
 )
 from lib.log import lassert_unsupported_bconf, lcheck_failed, lprint
@@ -24,9 +23,9 @@ def install(*, host_platform: str) -> None:
     llvm_sh_relp = f"./{config.tools_reldir}/llvm.sh"
     urllib.request.urlretrieve(llvm_sh_url, llvm_sh_relp)
     exec_or_fail(["chmod", "+x", llvm_sh_relp])
-    exec_or_fail(["sudo", llvm_sh_relp, "19"])
-    lockfile_acq("pkgmgr")
-    try:
+
+    with Lockfile("pkgmgr"):
+        exec_or_fail(["sudo", llvm_sh_relp, "19"])
         exec_or_fail(
             [
                 "sudo",
@@ -36,8 +35,6 @@ def install(*, host_platform: str) -> None:
                 "clang-format-19",
             ]
         )
-    finally:
-        lockfile_rel("pkgmgr")
 
     clang_fmt_cmd = find_command(
         [f"clang-format-{ver}" for ver in range(25, 18, -1)] + ["clang-format"]

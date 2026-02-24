@@ -8,6 +8,7 @@ import time
 from typing import List
 
 import lib.config as config
+from lib.lockfile import lockfile_relall
 
 
 shards: dict[int, int] = {}
@@ -88,6 +89,7 @@ def lcheck_failed(upstack: int = 2) -> None:
         f"\x1b[31;3mFailed\x1b[0m \x1b[1;3m{config.check_name}.\x1b[0m",
         upstack=upstack,
     )
+    lockfile_relall()
 
     exit(1)
 

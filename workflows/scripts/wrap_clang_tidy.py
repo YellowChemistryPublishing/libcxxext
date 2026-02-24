@@ -58,8 +58,6 @@ def main(argv: List[str]) -> None:
                 lprint(str(e))
                 lcheck_failed()
 
-    lcheck_passed()
-
 
 if __name__ == "__main__":
     main(sys.argv)
