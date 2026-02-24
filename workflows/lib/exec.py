@@ -4,6 +4,7 @@ import os
 import re
 import subprocess
 import time
+from types import TracebackType
 from typing import Callable, List
 
 import lib.config as config
@@ -78,7 +79,12 @@ class Lockfile:
     def __enter__(self) -> None:
         lockfile_acq(self.name, self.timeout)
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         try:
             lockfile_rel(self.name)
         except:

@@ -1,15 +1,17 @@
+// NOLINTBEGIN(misc-include-cleaner)
+
 #include <CompilerWarnings.h>
 _push_nowarn_conv_comp();
-
-// NOLINTBEGIN(misc-include-cleaner)
+_push_nowarn_msvc(_clwarn_msvc_uncreachable);
 
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
 
+_pop_nowarn_msvc();
+_pop_nowarn_conv_comp();
+
 #include <module/sys>
 #include <module/sys.Text>
-
-_pop_nowarn_conv_comp();
 
 TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fuzz][sys.Text][str32_iter]")
 {

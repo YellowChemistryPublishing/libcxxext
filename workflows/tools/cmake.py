@@ -16,7 +16,7 @@ def install(*, host_platform: str, cl_name: str) -> None:
 
     if host_platform == "linux":
         exec_pkgmgr_cache_update(host_platform)
-        apt_cmd = ["sudo", "apt-get", "-o", "DPkg::Lock::Timeout=60"]
+        apt_cmd = ["sudo", "apt-get"]
         exec_or_fail(apt_cmd + ["install", "-y", "cmake"])
     elif "msys" in host_platform:
         exec_pkgmgr_cache_update(host_platform)

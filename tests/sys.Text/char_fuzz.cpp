@@ -2,10 +2,12 @@
 
 #include <CompilerWarnings.h>
 _push_nowarn_conv_comp();
+_push_nowarn_msvc(_clwarn_msvc_uncreachable);
 
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
 
+_pop_nowarn_msvc();
 _pop_nowarn_conv_comp();
 
 #include <module/sys.Text>

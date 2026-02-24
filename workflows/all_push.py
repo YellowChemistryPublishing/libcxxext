@@ -32,7 +32,7 @@ def run_check(
     check_args = [
         str_key_replace(arg, key_replace_dict) for arg in check.get("with", [])
     ]
-    lprint(f"Running {check_name}.")
+    lprint(f"Running \x1b[33;4m{check_name}\x1b[0m.")
 
     def on_fail() -> None:
         raise Exception(f"Note: \x1b[31;3mFailed\x1b[0m \x1b[1;3m{check_name}.\x1b[0m")

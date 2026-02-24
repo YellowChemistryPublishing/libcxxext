@@ -130,18 +130,11 @@ jobs:
 
             - name: Upload Build Artifacts
               if: always()
-              env:
-                  GH_TOKEN: ${{ github.token }}
-              shell: python
-              run: |
-                  import os, subprocess
-                  from pathlib import Path
-                  target = Path("artifacts-build")
-                  if target.exists() and target.is_dir():
-                      for f in target.iterdir():
-                          if f.is_file():
-                              name = f"{f.name}"
-                              subprocess.run(["gh", "artifact", "upload", str(f), "--name", name], check=True)
+              uses: actions/upload-artifact@v4
+              with:
+                  name: artifacts-${{ matrix.checkset }}
+                  path: artifacts-build/**
+                  if-no-files-found: ignore
 
     release:
         name: Canary Release
