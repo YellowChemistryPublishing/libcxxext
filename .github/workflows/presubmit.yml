@@ -148,7 +148,7 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                   path: artifacts
-                  pattern: "*"
+                  pattern: "artifacts-*"
                   merge-multiple: true
 
             - name: Post Canary Release
@@ -158,6 +158,6 @@ jobs:
                   name: "Canary 🪶"
                   body: "Latest canary release courtesy of automatic build and package."
                   prerelease: true
-                  files: artifacts/artifacts-*
+                  files: artifacts/**
                   fail_on_unmatched_files: false
                   generate_release_notes: true

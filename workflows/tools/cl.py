@@ -19,10 +19,13 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
         return
 
     if host_platform == "linux":
+        exec_or_fail(
+            ["sudo", "systemctl", "stop", "unattended-upgrades"],
+            on_fail=lambda: None,
+        )
         exec_pkgmgr_cache_update(host_platform)
 
         apt_cmd = ["sudo", "env", "DEBIAN_FRONTEND=noninteractive", "apt-get"]
-
         if cl_name == "clang":
             llvm_sh_url = "https://apt.llvm.org/llvm.sh"
             llvm_sh_relp = f"./{config.tools_reldir}/llvm.sh"
