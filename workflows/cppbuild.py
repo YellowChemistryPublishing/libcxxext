@@ -15,13 +15,13 @@ import tools.cmake as cmake
 from lib.log import lassert_unsupported_bconf, lcheck_passed
 
 
-def additional_build_flags(gen: str, cl_name: str) -> List[str]:
+def additional_build_flags(config: str, gen: str, cl_name: str) -> List[str]:
     if cl_name == "msvc" and "Visual Studio" in gen:
         return [
             "--target",
             "ALL_BUILD",
             "--config",
-            "Debug",
+            config,
             "--",
             "/p:CL_MPCount=8",
         ]
@@ -65,9 +65,12 @@ def main(argv: List[str]) -> None:
         "-cl",
         "--compiler",
         help="Compiler to use.",
-        choices=config.support_compilers,
+        choices=config.supported_compilers,
         metavar="",
         required=True,
+    )
+    parser.add_argument(
+        "-c", "--config", help="CMake config name.", required=False, default="Debug"
     )
     parser.add_argument(
         "-gen", "--use-generator", help="CMake generator name.", required=True
@@ -109,7 +112,9 @@ def main(argv: List[str]) -> None:
             args.build_dir_name,
             "--parallel",
         ]
-        + additional_build_flags(gen=args.use_generator, cl_name=args.compiler)
+        + additional_build_flags(
+            config=args.config, gen=args.use_generator, cl_name=args.compiler
+        )
         + (["--verbose"] if args.cmake_verbose else []),
         host_platform=args.platform,
         cl_name=args.compiler,

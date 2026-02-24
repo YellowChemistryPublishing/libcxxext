@@ -7,7 +7,7 @@ from lib.log import lassert_unsupported_bconf
 
 
 def cmd() -> List[str]:
-    return ["ctest"]
+    return ["cpack"]
 
 
 def run(args: List[str], *, host_platform: str, cl_name: str) -> None:

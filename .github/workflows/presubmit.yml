@@ -93,9 +93,50 @@ jobs:
                   if-no-files-found: ignore
 
             - name: Upload Documentation
-              if: always() && matrix.checkset == 'generic-tools'
+              if: always()
               uses: actions/upload-artifact@v4
               with:
                   name: docs-build
                   path: "docs-build/"
                   if-no-files-found: ignore
+
+            - name: Upload Build Artifacts
+              if: always()
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              shell: python
+              run: |
+                  import os, subprocess
+                  from pathlib import Path
+                  target = Path("artifacts-build")
+                  if target.exists() and target.is_dir():
+                      for f in target.iterdir():
+                          if f.is_file():
+                              name = f"{f.name}"
+                              subprocess.run(["gh", "artifact", "upload", str(f), "--name", name], check=True)
+
+    release:
+        name: Aggregate and Release
+        needs: presubmit
+        if: (github.ref_name == 'main' || github.event_name == 'workflow_dispatch') && always()
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Download Artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  path: artifacts
+                  pattern: "*"
+                  merge-multiple: true
+
+            - name: Post Canary Release
+              uses: softprops/action-gh-release@v2
+              with:
+                  tag_name: canary
+                  name: "Canary Build"
+                  body: "This is an automated canary release containing the latest build artifacts."
+                  prerelease: true
+                  files: artifacts/**/*
+                  fail_on_unmatched_files: false
+                  generate_release_notes: true

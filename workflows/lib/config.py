@@ -15,13 +15,14 @@ gcovr_url_msys: str = (
 
 tools_reldir: str = "tooling-build"
 findings_reldir: str = "findings-build"
+artifacts_reldir: str = "artifacts-build"
 lprint_templog_relp: str = "tooling-build/lprint_tempout.log"
 
 # Probably no touchy.
 
 support_archs: List[str] = ["x86_64", "i686"]
 support_platforms: List[str] = ["linux", "win32", "msys64", "msysclang64", "macos"]
-support_compilers: List[str] = ["clang", "gcc", "msvc"]
+supported_compilers: List[str] = ["clang", "gcc", "msvc"]
 
 # Set in scripts.
 

@@ -1,5 +1,3 @@
-import os
-import sys
 from typing import List
 
 import lib.config as config

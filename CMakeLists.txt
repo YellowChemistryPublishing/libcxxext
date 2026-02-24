@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.30)
 
-project(libcxxext)
+project(libcxxext VERSION 1.0.0)
 
 include(CMakeDependentOption)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -60,3 +60,8 @@ if(LIBCXXEXT_TESTS)
 
     add_subdirectory(tests)
 endif()
+
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_SOURCE_IGNORE_FILES "/build/" "/__pycache__/" "/checks.json" "/Doxyfile" "/workflows/" "/sys.Text/data_unicode/" "/\\\\.[^/]+/")
+#                                                       ^ Library consumers don't need.                                    ^ Dirs beginning with a dot, i.e. `.cache/`.
+include(CPack)

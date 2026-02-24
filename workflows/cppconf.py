@@ -22,7 +22,7 @@ from lib.log import lassert_unsupported_bconf, lcheck_passed
 
 
 def additional_configure_flags(
-    gen: str, target_arch: str, host_platform: str, cl_name: str
+    config: str, gen: str, target_arch: str, host_platform: str, cl_name: str
 ) -> List[str]:
     if cl_name == "msvc" and "Visual Studio" in gen:
         return [
@@ -35,7 +35,7 @@ def additional_configure_flags(
             f"-G{gen}",
             f"-DCMAKE_C_COMPILER={" ".join(cl.cmd_cc(host_platform=host_platform, cl_name=cl_name))}",
             f"-DCMAKE_CXX_COMPILER={" ".join(cl.cmd_cxx(host_platform=host_platform, cl_name=cl_name))}",
-            "-DCMAKE_BUILD_TYPE=Debug",
+            f"-DCMAKE_BUILD_TYPE={config}",
         ] + (
             [
                 "-DCMAKE_C_FLAGS=-m32",
@@ -80,9 +80,12 @@ def main(argv: List[str]) -> None:
         "-cl",
         "--compiler",
         help="Compiler to use.",
-        choices=config.support_compilers,
+        choices=config.supported_compilers,
         metavar="",
         required=True,
+    )
+    parser.add_argument(
+        "-c", "--config", help="CMake config name.", required=False, default="Debug"
     )
     parser.add_argument(
         "-gen", "--use-generator", help="CMake generator name.", required=True
@@ -187,7 +190,11 @@ def main(argv: List[str]) -> None:
             args.build_dir_name,
         ]
         + additional_configure_flags(
-            args.use_generator, args.arch, args.platform, args.compiler
+            config=args.config,
+            gen=args.use_generator,
+            target_arch=args.arch,
+            host_platform=args.platform,
+            cl_name=args.compiler,
         )
         + (args.extra_args.split(";") if args.extra_args else [])
         + (["--trace-expand", "--log-level=VERBOSE"] if args.cmake_verbose else []),

@@ -107,12 +107,12 @@ def main(argv: list[str]) -> None:
             ):
                 continue
 
-            chains = workflow.get("chains", {})
+            runs = workflow.get("runs", {})
             checks_and_deps = {
                 str_key_replace(name, key_replace_dict): [
                     str_key_replace(dep, key_replace_dict) for dep in deps
                 ]
-                for name, deps in chains.items()
+                for name, deps in runs.items()
             }
 
             completed: set[str] = set()

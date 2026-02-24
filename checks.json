@@ -1,139 +1,108 @@
 {
-    "checks": [
+    "checks" : [
+        { "name": "check:cppconf", "script": "workflows/cppconf.py", "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-c=${config}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
+        { "name": "check:cppbuild", "script": "workflows/cppbuild.py", "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-c=${config}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
+        { "name": "check:cppfmt", "script": "workflows/cppfmt.py", "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/)).*\\.(h|inl|cpp)$"] },
+        { "name": "check:cpplint", "script": "workflows/cpplint.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
+        { "name": "check:cpptest", "script": "workflows/cpptest.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
         {
-            "name": "check:cppconf",
-            "script": "workflows/cppconf.py",
-            "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
-        },
-        {
-            "name": "check:cppbuild",
-            "script": "workflows/cppbuild.py",
-            "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
-        },
-        {
-            "name": "check:cpptest",
-            "script": "workflows/cpptest.py",
-            "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
-        },
-        {
-            "name": "check:cpplint",
-            "script": "workflows/cpplint.py",
-            "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"]
-        },
-        {
-            "name": "check:cppcov",
+            "name"  : "check:cppcov",
             "script": "workflows/cppcov.py",
-            "with": [
-                "-p=${run_on}",
-                "-cl=${compiler_name}",
-                "-d=.",
-                "-b=${target_arch}-${run_on}-${compiler_name}-build",
-                "-f=^(build|sys|sys\\.Containers|sys\\.Threading|sys\\.Text)/"
-            ]
+            "with"  : ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|sys|sys\\.Containers|sys\\.Threading|sys\\.Text)/"]
         },
         {
-            "name": "check:cppfmt",
-            "script": "workflows/cppfmt.py",
-            "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/)).*\\.(h|cpp)$"]
+            "name"  : "check:cpppack",
+            "script": "workflows/cpppack.py",
+            "with"  : ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-a=${target_arch}-${run_on}-${compiler_name}", "-i=${to_package}"]
         },
         { "name": "check:docgen", "script": "workflows/docgen.py", "with": ["-p=${run_on}"] },
         { "name": "check:pylint", "script": "workflows/pylint.py", "with": ["-p=${run_on}", "-d=./workflows"] }
     ],
     "on_push": [
         {
-            "checkset": "x86_64-linux-clang",
-            "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
-            "chains": {
-                "check:cppconf": [],
-                "check:cppbuild": ["check:cppconf"],
-                "check:cpplint": ["check:cppconf"],
-                "check:cpptest": ["check:cppbuild"],
-                "check:cppcov": ["check:cpptest"]
-            }
+            "checkset": "x86_64-linux-clang-debug",
+            "with"    : {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "config": "Debug", "gen": "Ninja"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"] }
         },
         {
-            "checkset": "x86_64-linux-gcc",
-            "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "gen": "Unix Makefiles" },
-            "chains": {
-                "check:cppconf": [],
-                "check:cppbuild": ["check:cppconf"],
-                "check:cpplint": ["check:cppconf"],
-                "check:cpptest": ["check:cppbuild"],
-                "check:cppcov": ["check:cpptest"]
-            }
+            "checkset": "x86_64-linux-clang-relwithdebinfo",
+            "with"    : {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "config": "RelWithDebInfo", "gen": "Ninja", "to_package": "install"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpppack": ["check:cppbuild"] }
         },
         {
-            "checkset": "i686-linux-clang",
-            "with": { "run_on": "linux", "target_arch": "i686", "compiler_name": "clang", "gen": "Ninja" },
-            "chains": { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"] }
+            "checkset": "x86_64-linux-gcc-debug",
+            "with"    : {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "config": "Debug", "gen": "Unix Makefiles"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"] }
         },
         {
-            "checkset": "i686-linux-gcc",
-            "with": { "run_on": "linux", "target_arch": "i686", "compiler_name": "gcc", "gen": "Unix Makefiles" },
-            "chains": { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"] }
+            "checkset": "x86_64-linux-gcc-relwithdebinfo",
+            "with"    : {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "config": "Debug", "gen": "Unix Makefiles", "to_package": "install"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"], "check:cpppack": ["check:cppbuild"] }
         },
         {
-            "checkset": "x86_64-msysclang64-clang",
-            "with": { "run_on": "msysclang64", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
-            "chains": {
-                "check:cppconf": [],
-                "check:cppbuild": ["check:cppconf"],
-                "check:cpplint": ["check:cppconf"],
-                "check:cpptest": ["check:cppbuild"],
-                "check:cppcov": ["check:cpptest"]
-            }
+            "checkset": "i686-linux-clang-debug",
+            "with"    : {"run_on": "linux", "target_arch": "i686", "compiler_name": "clang", "config": "Debug", "gen": "Ninja"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"] }
         },
         {
-            "checkset": "x86_64-msys64-gcc",
-            "with": {
-                "run_on": "msys64",
-                "target_arch": "x86_64",
-                "compiler_name": "gcc",
-                "gen": "MinGW Makefiles"
-            },
-            "chains": {
-                "check:cppconf": [],
-                "check:cppbuild": ["check:cppconf"],
-                "check:cpplint": ["check:cppconf"],
-                "check:cpptest": ["check:cppbuild"],
-                "check:cppcov": ["check:cpptest"]
-            }
+            "checkset": "i686-linux-clang-relwithdebinfo",
+            "with"    : {"run_on": "linux", "target_arch": "i686", "compiler_name": "clang", "config": "RelWithDebInfo", "gen": "Ninja", "to_package": "install"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpppack": ["check:cppbuild"] }
         },
         {
-            "checkset": "x86_64-win32-msvc",
-            "with": {
-                "run_on": "win32",
-                "target_arch": "x86_64",
-                "compiler_name": "msvc",
-                "gen": "Visual Studio 17 2022"
-            },
-            "chains": {
-                "check:cppconf": [],
-                "check:cppbuild": ["check:cppconf"],
-                "check:cpptest": ["check:cppbuild"],
-                "check:cpplint": ["check:cppbuild"]
-            }
+            "checkset": "i686-linux-gcc-debug",
+            "with"    : {"run_on": "linux", "target_arch": "i686", "compiler_name": "gcc", "config": "Debug", "gen": "Unix Makefiles"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"] }
         },
         {
-            "checkset": "i686-win32-msvc",
-            "with": {
-                "run_on": "win32",
-                "target_arch": "i686",
-                "compiler_name": "msvc",
-                "gen": "Visual Studio 17 2022"
-            },
-            "chains": {
-                "check:cppconf": [],
-                "check:cppbuild": ["check:cppconf"],
-                "check:cpptest": ["check:cppbuild"],
-                "check:cpplint": ["check:cppbuild"]
-            }
+            "checkset": "i686-linux-gcc-relwithdebinfo",
+            "with"    : {"run_on": "linux", "target_arch": "i686", "compiler_name": "gcc", "config": "RelWithDebInfo", "gen": "Unix Makefiles", "to_package": "install"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpppack": ["check:cppbuild"] }
+        },
+        {
+            "checkset": "x86_64-msysclang64-clang-debug",
+            "with"    : {"run_on": "msysclang64", "target_arch": "x86_64", "compiler_name": "clang", "config": "Debug", "gen": "Ninja"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"] }
+        },
+        {
+            "checkset": "x86_64-msysclang64-clang-relwithdebinfo",
+            "with"    : {"run_on": "msysclang64", "target_arch": "x86_64", "compiler_name": "clang", "config": "RelWithDebInfo", "gen": "Ninja", "to_package": "install"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"], "check:cpppack": ["check:cppbuild"] }
+        },
+        {
+            "checkset": "x86_64-msys64-gcc-debug",
+            "with"    : {"run_on": "msys64", "target_arch": "x86_64", "compiler_name": "gcc", "config": "Debug", "gen": "MinGW Makefiles"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"] }
+        },
+        {
+            "checkset": "x86_64-msys64-gcc-relwithdebinfo",
+            "with"    : {"run_on": "msys64", "target_arch": "x86_64", "compiler_name": "gcc", "config": "RelWithDebInfo", "gen": "MinGW Makefiles", "to_package": "install"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"], "check:cpppack": ["check:cppbuild"] }
+        },
+        {
+            "checkset": "x86_64-win32-msvc-debug",
+            "with"    : {"run_on": "win32", "target_arch": "x86_64", "compiler_name": "msvc", "config": "Debug", "gen": "Visual Studio 17 2022"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppbuild"], "check:cpptest": ["check:cppbuild"] }
+        },
+        {
+            "checkset": "x86_64-win32-msvc-relwithdebinfo",
+            "with"    : {"run_on": "win32", "target_arch": "x86_64", "compiler_name": "msvc", "config": "RelWithDebInfo", "gen": "Visual Studio 17 2022", "to_package": "install"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppbuild"], "check:cpptest": ["check:cppbuild"], "check:cpppack": ["check:cppbuild"] }
+        },
+        {
+            "checkset": "i686-win32-msvc-debug",
+            "with"    : {"run_on": "win32", "target_arch": "i686", "compiler_name": "msvc", "config": "Debug", "gen": "Visual Studio 17 2022"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppbuild"], "check:cpptest": ["check:cppbuild"] }
+        },
+        {
+            "checkset": "i686-win32-msvc-relwithdebinfo",
+            "with"    : {"run_on": "win32", "target_arch": "i686", "compiler_name": "msvc", "config": "RelWithDebInfo", "gen": "Visual Studio 17 2022", "to_package": "install"},
+            "runs"    : { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppbuild"], "check:cpptest": ["check:cppbuild"], "check:cpppack": ["check:cppbuild"] }
         },
         {
             "checkset": "generic-tools",
-            "with": { "run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "gen": "Ninja" },
-            "chains": { "check:cppfmt": [], "check:docgen": ["check:cppfmt"], "check:pylint": [] }
+            "with"    : {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "config": "Release", "gen": "Ninja", "to_package": "src"},
+            "runs"    : { "check:cppfmt": [], "check:docgen": ["check:cppfmt"], "check:pylint": [], "check:cppconf": [], "check:cpppack": ["check:cppconf"] }
         }
-    ],
-    "on_commit": []
+    ]
 }

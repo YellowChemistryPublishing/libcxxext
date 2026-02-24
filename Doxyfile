@@ -7,7 +7,7 @@
 DOXYFILE_ENCODING       = UTF-8
 
 PROJECT_NAME            = "libcxxext"
-PROJECT_NUMBER          = 0.1.0
+PROJECT_NUMBER          = 1.0.0
 PROJECT_BRIEF           = "A system library for C++, used as an extension of the existing standard library."
 PROJECT_LOGO            =
 PROJECT_ICON            =
