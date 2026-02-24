@@ -34,7 +34,7 @@ namespace sys
 {
     /// @brief Saturating integer-to-integer cast.
     template <sys::IBuiltinInteger To, sys::IBuiltinInteger From>
-    extern constexpr To bnumeric_cast(const From value, unsafe) noexcept
+    constexpr /* NOLINT(misc-use-internal-linkage) */ To bnumeric_cast(const From value, unsafe) noexcept
     {
 #if !_libcxxext_compiler_clang && defined(__cpp_lib_saturation_arithmetic) && __cpp_lib_saturation_arithmetic >= 202311l
         return std::saturate_cast<To>(value);
@@ -49,7 +49,7 @@ namespace sys
     }
     /// @brief Saturating floating-point-to-integer cast.
     template <sys::IBuiltinInteger To, sys::IBuiltinFloatingPoint From>
-    extern constexpr To bnumeric_cast(const From value, unsafe) noexcept
+    constexpr /* NOLINT(misc-use-internal-linkage) */ To bnumeric_cast(const From value, unsafe) noexcept
     {
         if (!std::isfinite(value) || value <= _as(From, std::numeric_limits<To>::lowest())) [[unlikely]]
             return std::numeric_limits<To>::lowest();
@@ -60,12 +60,12 @@ namespace sys
     }
 
     template <sys::IBuiltinIntegerSigned T>
-    static consteval T bsentinel()
+    consteval /* NOLINT(misc-use-internal-linkage) */ T bsentinel()
     {
         return std::numeric_limits<T>::lowest();
     }
     template <sys::IBuiltinIntegerUnsigned T>
-    static consteval T bsentinel()
+    consteval /* NOLINT(misc-use-internal-linkage) */ T bsentinel()
     {
         return std::numeric_limits<T>::max();
     }
@@ -344,70 +344,70 @@ using ssz = ::sys::integer<ptrdiff_t>;
 
 // NOLINTBEGIN(bugprone-exception-escape)
 // clang-format off: C++23 -- no space b/w "" and literal suffix.
-static consteval i8 operator""_i8(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ i8 operator""_i8(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least8_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least8_t>::min()))
         throw std::overflow_error("Literal too large for `i8`.");
 
     return { _as(int_least8_t, lit) };
 }
-static consteval i16 operator""_i16(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ i16 operator""_i16(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least16_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least16_t>::min()))
         throw std::overflow_error("Literal too large for `i16`.");
 
     return { _as(int_least16_t, lit) };
 }
-static consteval i32 operator""_i32(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ i32 operator""_i32(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least32_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least32_t>::min()))
         throw std::overflow_error("Literal too large for `i32`.");
 
     return { _as(int_least32_t, lit) };
 }
-static consteval i64 operator""_i64(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ i64 operator""_i64(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least64_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least64_t>::min()))
         throw std::overflow_error("Literal too large for `i64`.");
 
     return { _as(int_least64_t, lit) };
 }
-static consteval u8 operator""_u8(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ u8 operator""_u8(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least8_t>::max()))
         throw std::overflow_error("Literal too large for `u8`.");
 
     return { _as(uint_least8_t, lit) };
 }
-static consteval u16 operator""_u16(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ u16 operator""_u16(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least16_t>::max()))
         throw std::overflow_error("Literal too large for `u16`.");
 
     return { _as(uint_least16_t, lit) };
 }
-static consteval u32 operator""_u32(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ u32 operator""_u32(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least32_t>::max()))
         throw std::overflow_error("Literal too large for `u32`.");
 
     return { _as(uint_least32_t, lit) };
 }
-static consteval u64 operator""_u64(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ u64 operator""_u64(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least64_t>::max()))
         throw std::overflow_error("Literal too large for `u64`.");
 
     return { _as(uint_least64_t, lit) };
 }
-static consteval ssz operator""_z(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ ssz operator""_z(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<ptrdiff_t>::max()) || std::cmp_less(lit, std::numeric_limits<ptrdiff_t>::min()))
         throw std::overflow_error("Literal too large for `ssz`.");
 
     return { _as(ptrdiff_t, lit) };
 }
-static consteval sz operator""_uz(ullong lit) noexcept
+consteval /* NOLINT(misc-use-internal-linkage) */ sz operator""_uz(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<size_t>::max()))
         throw std::overflow_error("Literal too large for `sz`.");

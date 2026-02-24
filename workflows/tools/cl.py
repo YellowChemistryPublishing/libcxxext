@@ -34,15 +34,12 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
 
             with Lockfile("pkgmgr"):
                 exec_or_fail(["sudo", llvm_sh_relp, "19"])
-
-            with Lockfile("pkgmgr"):
                 exec_or_fail(apt_cmd + ["install", "-y", "clang-19"])
 
-            exec_or_fail(["clang-19", "--version"])
-            exec_or_fail(["clang++-19", "--version"])
+                exec_or_fail(["clang-19", "--version"])
+                exec_or_fail(["clang++-19", "--version"])
 
-            if target_arch == "i686":
-                with Lockfile("pkgmgr"):
+                if target_arch == "i686":
                     exec_or_fail(
                         apt_cmd
                         + [
@@ -53,8 +50,8 @@ def install(*, target_arch: str, host_platform: str, cl_name: str) -> None:
                         ]
                     )
 
-                exec_or_fail(["gcc-14", "--version"])
-                exec_or_fail(["g++-14", "--version"])
+                    exec_or_fail(["gcc-14", "--version"])
+                    exec_or_fail(["g++-14", "--version"])
 
         elif cl_name == "gcc":
             with Lockfile("pkgmgr"):
