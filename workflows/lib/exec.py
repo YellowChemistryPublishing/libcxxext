@@ -127,6 +127,39 @@ def exec_or_fail(
     return stdout, stderr
 
 
+def lockfile_acq(name: str, timeout: int = 120) -> None:
+    """Acquire a project-level lock."""
+
+    path = os.path.abspath(f"./{config.tools_reldir}/{name}.lck")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+
+    lprint(f"Acquiring project lock `{path}`...")
+
+    start_time = time.time()
+    while True:
+        try:
+            fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            with os.fdopen(fd, "w") as f:
+                f.write(f"{os.getpid()}\n")
+            break
+        except FileExistsError:
+            if time.time() - start_time > timeout:
+                lprint(f"Timeout acquiring project lock `{path}` after {timeout}s.")
+                lcheck_failed()
+            time.sleep(1)
+
+    lprint(f"Acquired project lock `{path}`.")
+
+
+def lockfile_rel(name: str) -> None:
+    """Release a project-level lock."""
+
+    path = os.path.abspath(f"./{config.tools_reldir}/{name}.lck")
+    if os.path.exists(path):
+        os.remove(path)
+        lprint(f"Released project lock `{path}`.")
+
+
 def exec_pkgmgr_cache_update(platform: str) -> None:
     """Update package manager cache, for platforms with one, if not done recently."""
 
