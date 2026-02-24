@@ -59,6 +59,7 @@
 #define _clwarn_msvc_export_interface 4251
 #define _clwarn_msvc_overflow 4756
 #define _clwarn_msvc_deprecated 4996
+#define _clwarn_msvc_uncreachable 4702
 
 /// @}
 
