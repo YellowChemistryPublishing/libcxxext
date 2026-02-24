@@ -135,15 +135,15 @@ def exec_pkgmgr_cache_update(platform: str) -> None:
             if not has_stamp("pkgmgr_cache_update"):
                 stamp_id("pkgmgr_cache_update")
 
-            if platform == "linux":
-                exec_or_fail(["sudo", "apt-get", "update"])
-            elif "msys" in platform:
-                exec_or_fail(["pacman", "-Syu", "--noconfirm"])
-            else:
-                lprint(
-                    f"No package manager for platform `{platform}`, skipping.",
-                    upstack=2,
-                )
+                if platform == "linux":
+                    exec_or_fail(["sudo", "apt-get", "update"])
+                elif "msys" in platform:
+                    exec_or_fail(["pacman", "-Syu", "--noconfirm"])
+                else:
+                    lprint(
+                        f"No package manager for platform `{platform}`, skipping.",
+                        upstack=2,
+                    )
 
                 return
 
