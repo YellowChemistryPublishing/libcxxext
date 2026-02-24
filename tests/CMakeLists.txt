@@ -1,5 +1,3 @@
-include(${CMAKE_CURRENT_LIST_DIR}/../cmake/catch2.cmake)
-
 file(GLOB_RECURSE TESTS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 foreach(TEST_FILE ${TESTS})

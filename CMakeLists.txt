@@ -22,6 +22,8 @@ set(LIBCXXEXT_TEST_UBSAN OFF CACHE BOOL "Enable UndefinedBehaviorSanitizer for t
 
 include(cmake/build_support.cmake)
 include(cmake/clang_tidy.cmake)
+
+include(cmake/gen_module_header.cmake)
 include(cmake/target_common.cmake)
 
 if(LIBCXXEXT_EXPORT_PCH)
@@ -41,6 +43,7 @@ endif()
 
 # Tests
 if(LIBCXXEXT_TESTS)
+    include(cmake/catch2.cmake)
     enable_testing()
 
     set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
