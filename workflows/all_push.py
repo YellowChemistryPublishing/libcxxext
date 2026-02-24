@@ -177,7 +177,7 @@ def main(argv: list[str]) -> None:
 
         else:
             lprint(
-                "No `on_push` workflows. It would be unproductive for this to be intentional."
+                f'No `on_push` workflow matching "{args.checkset}". It would be unproductive for this to be intentional.'
             )
             lcheck_failed()
 
