@@ -51,6 +51,7 @@
 #define _clwarn_gcc_c_cast "-Wold-style-cast"
 #define _clwarn_gcc_deprecated "-Wdeprecated-declarations"
 #define _clwarn_gcc_zero_as_nullptr "-Wzero-as-null-pointer-constant"
+#define _clwarn_gcc_string_overflow "-Wstringop-overflow"
 
 #define _clwarn_msvc_literal_suffix 4455
 #define _clwarn_msvc_unreachable 4702
