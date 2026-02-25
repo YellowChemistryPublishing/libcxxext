@@ -77,7 +77,9 @@ class Lockfile:
         self.timeout = timeout
 
     def __enter__(self) -> None:
+        lprint(f"Acquiring lockfile `{self.name}`.", upstack=2)
         lockfile_acq(self.name, self.timeout)
+        lprint(f"Acquired lockfile `{self.name}`.", upstack=2)
 
     def __exit__(
         self,
@@ -89,6 +91,7 @@ class Lockfile:
             lockfile_rel(self.name)
         except Exception:
             lcheck_failed(upstack=3)
+        lprint(f"Released lockfile `{self.name}`.", upstack=2)
 
 
 def exec_or_fail(
