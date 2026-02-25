@@ -31,6 +31,7 @@ def install(*, host_platform: str, cl_name: str) -> None:
 
     exec_or_fail(["cmake", "--version"])
     exec_or_fail(["ctest", "--version"])
+    exec_or_fail(["cpack", "--version"])
     stamp_id("tool_cmake")
 
 
