@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file AlignedStorage.h
+
 #include <algorithm>
 #include <tuple>
 

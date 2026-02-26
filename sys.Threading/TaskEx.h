@@ -1,6 +1,9 @@
 #pragma once
 
+/// @file TaskEx.h
+
 #include <CompilerWarnings.h>
+/// @private
 _push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compiler coroutine codegen.
 
 #include <concepts>

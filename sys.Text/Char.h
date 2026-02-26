@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file Char.h
+
 #include <algorithm>
 #include <concepts>
 #include <span>

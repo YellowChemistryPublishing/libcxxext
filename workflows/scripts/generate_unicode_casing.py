@@ -181,13 +181,11 @@ def main(argv: List[str]) -> None:
     # Generate C++ Header
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
+        f.write("#pragma once\n\n")
         write_header(f, os.path.basename(output_path), __file__)
-
         f.write(
             dedent(
                 """\
-                #pragma once
-
                 #include <string_view>
 
                 #include <LanguageSupport.h>
@@ -198,20 +196,16 @@ def main(argv: List[str]) -> None:
                     /// @brief Context for forward-looking casing rules.
                     struct forward_casing_context
                     {
-                        /// @cond
-                        bool is_preceded_by_cased : 1 = false;
-                        bool after_soft_dotted : 1 = false;
-                        bool after_i : 1 = false;
-                        /// @endcond
+                        bool is_preceded_by_cased : 1 = false; /**< Whether the previous character is cased. */
+                        bool after_soft_dotted : 1 = false;    /**< Whether the previous character is soft dotted. */
+                        bool after_i : 1 = false;              /**< Whether the previous character is `\u0049` or `\u0069`. */
                     };
                     /// @brief Context for precomputed lookahead casing rules.
                     struct lookahead_casing_context
                     {
-                        /// @cond
-                        bool followed_by_cased : 1 = false;
-                        bool more_above : 1 = false;
-                        bool before_dot : 1 = false;
-                        /// @endcond
+                        bool followed_by_cased : 1 = false; /**< Whether the next character is cased. */
+                        bool more_above : 1 = false;        /**< Whether the next character is above. */
+                        bool before_dot : 1 = false;        /**< Whether the next character is a dot. */
                     };
                 } // namespace sys
 

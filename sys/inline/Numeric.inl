@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file Numeric.inl
+
 #include <concepts>
 #include <limits>
 #include <utility>
@@ -19,11 +21,13 @@ namespace sys
             return To(value);
     }
 
+    /// @brief Returns an opinionated sentinel value for `T`.
     template <sys::IBuiltinFloatingPoint T>
     consteval /* NOLINT(misc-use-internal-linkage) */ T bsentinel() noexcept
     {
         return std::numeric_limits<T>::quiet_NaN();
     }
+    /// @brief Returns an opinionated sentinel value for `T`.
     template <sys::ICharacter T>
     consteval /* NOLINT(misc-use-internal-linkage) */ T bsentinel() noexcept
     {

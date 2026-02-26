@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file InplaceSet.h
+
 #include <cstddef>
 #include <utility>
 

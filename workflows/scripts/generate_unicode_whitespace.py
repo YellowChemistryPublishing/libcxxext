@@ -24,13 +24,11 @@ def main(argv: List[str]) -> None:
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
+        f.write("#pragma once\n\n")
         write_header(f, os.path.basename(output_path), __file__)
-
         f.write(
             dedent(
                 """\
-                #pragma once
-
                 // NOLINTBEGIN(bugprone-branch-clone)
 
                 namespace sys::internal

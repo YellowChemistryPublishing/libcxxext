@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file CompilerWarnings.h
+
 #include <Platform.h>
 
 // NOLINTBEGIN(modernize-macro-to-enum)

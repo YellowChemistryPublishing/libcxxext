@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file RecurringTemplate.h
+
 #include <type_traits>
 
 #include <LanguageSupport.h>
@@ -12,10 +14,12 @@ namespace sys
     struct recurring_template
     {
     protected:
+        /// @private
         using recurring_type = T; /**< Identity of `T`. */
 
         recurring_template() = default;
 
+        /// @private
         /// @brief Downcasts to `T`.
         constexpr auto* downcast(this auto&& _this) noexcept
         {

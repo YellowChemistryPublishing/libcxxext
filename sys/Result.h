@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file Result.h
+
 #include <algorithm>
 #include <cassert>
 #include <concepts>
@@ -14,6 +16,8 @@
 #include <inline/Integer.inl>
 
 // NOLINTBEGIN(bugprone-macro-parentheses)
+/// @def _res_movret(out_decl, res_xval)
+/// @brief Initialize `out_decl` with `res_xval`, early-returning if `res_xval` is an error.
 #define _res_movret(out_decl, res_xval)                        \
     auto _ppcat(_result, __LINE__) = res_xval;                 \
     if (!_ppcat(_result, __LINE__))                            \
@@ -27,6 +31,8 @@
         }(std::move(_ppcat(_result, __LINE__)));               \
     }                                                          \
     out_decl = _ppcat(_result, __LINE__).move();
+/// @def _res_movcoret(out_decl, res_xval)
+/// @brief Initialize `out_decl` with `res_xval`, early-coroutine-returning if `res_xval` is an error.
 #define _res_movcoret(out_decl, res_xval)                      \
     auto _ppcat(_result, __LINE__) = res_xval;                 \
     if (!_ppcat(_result, __LINE__))                            \
@@ -42,21 +48,22 @@
     out_decl = _ppcat(_result, __LINE__).move();
 // NOLINTEND(bugprone-macro-parentheses)
 
-namespace sys
+namespace sys::internal
 {
+    /// @internal
+    /// @brief Status of a result.
     enum class result_status : byte
     {
         ok,
         error,
         empty
     };
-} // namespace sys
 
-namespace sys::internal
-{
     template <typename T, typename Err>
     struct result_awaiter;
 
+    /// @internal
+    /// @brief Type to use in result storage to represent `T`.
     template <typename T>
     using result_storage_type = std::conditional_t<!std::is_reference_v<T>, std::remove_cv_t<T>, std::remove_reference_t<T>*>;
 
@@ -175,7 +182,7 @@ namespace sys
         {
             new(&this->value) internal::result_storage_type<T>(std::move(val));
         }
-        /// @brief Constructs a result with a value.
+        /// @brief Inplace constructs a result with a value.
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...)))
         requires requires { internal::result_storage_type<T>(std::forward<Args>(args)...); }
@@ -183,7 +190,7 @@ namespace sys
         {
             new(&this->value) internal::result_storage_type<T>(std::forward<Args>(args)...);
         }
-        /// @brief Constructs a result with an error.
+        /// @brief Inplace constructs a result with an error.
         template <typename... Args>
         constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...)))
         requires (!requires { internal::result_storage_type<T>(std::forward<Args>(args)...); } && requires { internal::result_storage_type<Err>(std::forward<Args>(args)...); })
@@ -198,14 +205,14 @@ namespace sys
         {
             new(&this->error) internal::result_storage_type<Err>(err);
         }
-        /// @brief Constructs a result with an error.
+        /// @brief Inplace constructs a result with an error.
         constexpr result(Err&& err) noexcept(noexcept(Err(std::declval<Err&&>())))
         requires requires { internal::result_storage_type<Err>(std::move(err)); }
             : status(result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(std::move(err));
         }
-        /// @brief Constructs a result with an error.
+        /// @brief Inplace constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
         /// @note Participates in overload resolution only if the arguments cannot construct a `T`.
         template <typename... Args>
@@ -340,14 +347,14 @@ namespace sys
     public:
         constexpr result() noexcept : status(result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         { }
-        /// @brief Constructs a result with an error.
+        /// @brief Inplace constructs a result with an error.
         template <typename... Args>
         constexpr result(error_tag, Args&&... args) /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ noexcept(noexcept(Err(std::declval<Args&&>()...))) :
             status(result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(std::forward<Args>(args)...);
         }
-        /// @brief Constructs a result with an error.
+        /// @brief Inplace constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
         /// @note Participates in overload resolution only if the arguments cannot construct a `T`.
         template <typename... Args>

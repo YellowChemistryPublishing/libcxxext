@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file Integer.inl
+
 #include <bit>
 #include <cmath>
 #include <cstddef>
@@ -57,11 +59,13 @@ namespace sys
             return To(value);
     }
 
+    /// @brief Returns an opinionated sentinel value for `T`.
     template <sys::IBuiltinIntegerSigned T>
     consteval /* NOLINT(misc-use-internal-linkage) */ T bsentinel()
     {
         return std::numeric_limits<T>::lowest();
     }
+    /// @brief Returns an opinionated sentinel value for `T`.
     template <sys::IBuiltinIntegerUnsigned T>
     consteval /* NOLINT(misc-use-internal-linkage) */ T bsentinel()
     {

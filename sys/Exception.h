@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file Exception.h
+
 #include <Platform.h>
 
 #include <cstdio> // NOLINT(misc-include-cleaner)

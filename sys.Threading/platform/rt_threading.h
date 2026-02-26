@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file rt_threading.h
+
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
@@ -23,10 +25,10 @@ namespace sys::platform
     struct noop_thread_critical_section
     { };
 
-    using thread_critical_section_isr = noop_thread_critical_section_isr;
-    using thread_critical_section = noop_thread_critical_section;
+    using thread_critical_section_isr = noop_thread_critical_section_isr; /**< Platform-specific ISR-safe critical section RAII guard. */
+    using thread_critical_section = noop_thread_critical_section;         /**< Platform-specific critical section RAII guard. */
 
-    using thread_id = std::thread::id;
+    using thread_id = std::thread::id; /**< Platform-specific thread ID. */
 
     /// @internal
     /// @brief Thread handle.
@@ -172,22 +174,34 @@ namespace sys::platform
         concurrent_queue queue;
     };
 
-    constexpr i32 task_max_delay = i32::highest();
+    constexpr i32 task_max_delay = i32::highest(); /**< Platform-specific max supported delay duration. */
 } // namespace sys::platform
 
+/// @def _impl_task_yield_rtype
+/// @brief `sys::task<void>::yield()` return type.
 #define _impl_task_yield_rtype ::sys::task<void>
+/// @def _impl_task_yield()
+/// @brief `sys::task<void>::yield()` implementation.
 #define _impl_task_yield() co_return
 
+/// @def _impl_task_delay_rtype
+/// @brief `sys::task<void>::delay(...)` return type.
 #define _impl_task_delay_rtype ::sys::task<void>
+/// @def _impl_task_delay()
+/// @brief `sys::task<void>::delay(...)` implementation.
 #define _impl_task_delay()                                                          \
     auto until = std::chrono::steady_clock::now() + std::chrono::milliseconds(*ms); \
     while (std::chrono::steady_clock::now() < until)                                \
         co_await task<>::yield();
 
+/// @def _task_yield_and_resume()
+/// @brief Yield and resume implementation on suspend.
 #define _task_yield_and_resume()                                          \
     if (auto* threadPool = ::sys::platform::thread_pool::instance.load()) \
     threadPool->push(this->handle)
 
+/// @def _task_yield_and_continue()
+/// @brief Yield and continue implementation of final suspend.
 #define _task_yield_and_continue()                                            \
     _retry:                                                                   \
     try                                                                       \

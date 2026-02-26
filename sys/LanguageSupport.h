@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file LanguageSupport.h
+
 #include <cstdio>          // NOLINT(misc-include-cleaner)
 #include <print>           // NOLINT(misc-include-cleaner)
 #include <source_location> // NOLINT(misc-include-cleaner)
@@ -29,6 +31,7 @@ struct unsafe final
 #else
 #define _inline_always __forceinline
 #endif
+
 /// @def _inline_never
 /// @brief Force noinline a function.
 #if !_libcxxext_compiler_msvc
@@ -36,12 +39,15 @@ struct unsafe final
 #else
 #define _inline_never [[msvc::noinline]]
 #endif
+
 /// @def _weak
 /// @brief Mark a function as weak.
 #define _weak [[gnu::weak]]
+
 /// @def _pure
 /// @brief Mark a function as pure.
 #define _pure [[gnu::pure]]
+
 /// @def _pure_const
 /// @brief Mark a function as pure and const.
 #if !_libcxxext_compiler_msvc
@@ -49,12 +55,15 @@ struct unsafe final
 #else
 #define _pure_const
 #endif
+
 /// @def _restrict
 /// @brief Mark a parameter (or `this`) as non-aliasing.
 #define _restrict __restrict__
+
 /// @def _pack(align)
 /// @brief Pack a structure to `align` bytes.
 #define _pack(align) _clpragma_fwd(pack(align))
+
 /// @def _packed
 /// @brief Pack a structure to the smallest possible alignment.
 #if !_libcxxext_compiler_msvc
@@ -63,6 +72,8 @@ struct unsafe final
 #define _packed __declspec(align(1))
 #endif
 
+/// @def _no_unique_address
+/// @brief Mark a member variable as possibly zero-size.
 #if _libcxxext_compiler_msvc
 #define _no_unique_address [[msvc::no_unique_address]]
 #else

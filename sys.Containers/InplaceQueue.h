@@ -1,9 +1,9 @@
 #pragma once
 
+/// @file InplaceQueue.h
+
 #include <cstddef>
 #include <iterator>
-
-/* export module core.Containers:inplace_queue; */
 
 namespace sys
 {

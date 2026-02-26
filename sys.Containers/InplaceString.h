@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file InplaceString.h
+
 #include <cstddef>
 #include <cstring>
 

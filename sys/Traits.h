@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file Traits.h
+
 #include <concepts>
 #include <cstddef>
 #include <limits>
@@ -291,6 +293,7 @@ namespace sys::meta
         }
     };
 
+    /// @brief Obtain the type `T`, inherited with the `cv` qualifiers of a reference-stripped `With`.
     template <typename T, typename With>
     using replace_cv = std::conditional_t<
         std::is_const_v<std::remove_reference_t<With>>,
@@ -324,6 +327,7 @@ namespace sys::meta
     template <typename... Cases>
     using type_switch = std::tuple_element_t<0, typename type_switch_cases<Cases...>::return_cases>::type;
 
+    /// @brief Check whether an empty-queryable `range` is empty.
     template <typename T>
     constexpr bool is_empty(const T& range)
     {
@@ -334,6 +338,7 @@ namespace sys::meta
         else if constexpr (requires { requires false; })
         { }
     }
+    /// @brief Inplace construct and append to an appendable `range`.
     template <typename T, typename... Args>
     constexpr decltype(auto) append_to(T& range, Args&&... args)
     {

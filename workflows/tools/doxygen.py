@@ -20,7 +20,7 @@ def install(*, host_platform: str) -> None:
 
         with Lockfile("pkgmgr"):
             apt_cmd = ["sudo", "apt-get"]
-            exec_or_fail(apt_cmd + ["install", "-y", "doxygen"])
+            exec_or_fail(apt_cmd + ["install", "-y", "graphviz", "doxygen"])
 
     else:
         lassert_unsupported_bconf()

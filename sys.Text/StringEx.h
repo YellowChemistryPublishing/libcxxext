@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file StringEx.h
+
 #include <algorithm>
 #include <concepts>
 #include <cstddef>
@@ -539,9 +541,9 @@ namespace sys
     };
 
     template <ICharacter T>
-    string(std::basic_string_view<T>) -> string<T>;
+    string(std::basic_string_view<T>) -> string<T>; /**< Deduction guide. */
     template <ICharacter T>
-    string(std::basic_string<T>) -> string<T>;
+    string(std::basic_string<T>) -> string<T>; /**< Deduction guide. */
 
     using cstr = string<char>;      /**< `char` string. */
     using wstr = string<wchar_t>;   /**< `wchar_t` string. */

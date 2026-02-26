@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file InplaceVector.h
+
 #include <cstddef>
 #include <utility>
 

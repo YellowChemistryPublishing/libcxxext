@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file CodepointIterator.h
+
 #include <span>
 #include <string>
 #include <string_view>
@@ -87,11 +89,11 @@ namespace sys
     class string;
 
     template <ICharacter T>
-    codepoint_view(std::span<T>) -> codepoint_view<T>;
+    codepoint_view(std::span<T>) -> codepoint_view<T>; /**< Deduction guide. */
     template <ICharacter T>
-    codepoint_view(std::basic_string_view<T>) -> codepoint_view<T>;
+    codepoint_view(std::basic_string_view<T>) -> codepoint_view<T>; /**< Deduction guide. */
     template <ICharacter T>
-    codepoint_view(std::basic_string<T>) -> codepoint_view<T>;
+    codepoint_view(std::basic_string<T>) -> codepoint_view<T>; /**< Deduction guide. */
     template <ICharacter T>
-    codepoint_view(sys::string<T>) -> codepoint_view<T>;
+    codepoint_view(sys::string<T>) -> codepoint_view<T>; /**< Deduction guide. */
 } // namespace sys

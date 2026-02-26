@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file Platform.h
+
 /// @defgroup compiler_detection Compiler Detection Constants
 /// @brief `#ifdef`able constants for compiler detection.
 /// @{
