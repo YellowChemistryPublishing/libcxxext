@@ -146,7 +146,7 @@ jobs:
     release:
         name: Canary Release
         needs: presubmit
-        if: (success())
+        if: success() && github.ref == 'refs/heads/main'
         runs-on: ubuntu-latest
         permissions:
             contents: write
