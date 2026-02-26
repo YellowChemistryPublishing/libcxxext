@@ -88,6 +88,13 @@ jobs:
               with:
                   submodules: recursive
 
+            - name: Cache Build Directory
+              uses: actions/cache@v4
+              with:
+                  path: ${{ matrix.checkset }}-build
+                  key: build-${{ matrix.checkset }}
+                  restore-keys: build-${{ matrix.checkset }}
+
             - name: Setup MSYS2
               if: matrix.msystem
               uses: msys2/setup-msys2@v2
@@ -139,7 +146,7 @@ jobs:
     release:
         name: Canary Release
         needs: presubmit
-        if: (always() && github.ref == 'refs/heads/main')
+        if: (success())
         runs-on: ubuntu-latest
         permissions:
             contents: write
@@ -151,10 +158,31 @@ jobs:
                   pattern: "artifacts-*"
                   merge-multiple: true
 
+            - name: Create and Push Canary Tag
+              id: tag
+              shell: python
+              run: |
+                  import os
+                  import subprocess
+                  from datetime import datetime, timezone
+
+                  tag_name = f"canary-{datetime.now(timezone.utc).strftime('%Y%m%d')}[{os.environ['GITHUB_RUN_ID']}]"
+
+                  try:
+                      subprocess.run(["git", "tag", tag_name], check=True)
+                      subprocess.run(["git", "push", "origin", tag_name], check=True)
+                      print(f"Successfully pushed tag: `{tag_name}`.")
+                  except subprocess.CalledProcessError as e:
+                      print(e)
+                      exit(1)
+
+                  with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                      f.write(f"name={tag_name}\n")
+
             - name: Post Canary Release
               uses: softprops/action-gh-release@v2
               with:
-                  tag_name: main
+                  tag_name: ${{ steps.tag.outputs.name }}
                   name: "Canary 🪶"
                   body: "Latest canary release courtesy of automatic build and package."
                   prerelease: true
