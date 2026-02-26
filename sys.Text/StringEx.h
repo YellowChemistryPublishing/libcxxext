@@ -130,7 +130,7 @@ namespace sys
         /// @brief Construct from a string literal.
         template <size_t N>
         requires (N > 0uz)
-        constexpr /* NOLINT(hicpp-explicit-conversions) */ string(const T (&str)[N]) : str(str, str + N - 1z)
+        constexpr string(const T (&str)[N]) : str(str, str + N - 1z) // NOLINT(hicpp-explicit-conversions)
         { }
         /// @brief Construct from an initializer list.
         constexpr string(const std::initializer_list<T> il) : str(il) { }
@@ -209,11 +209,11 @@ namespace sys
         /// @brief Convert to a C-string.
         [[nodiscard]] constexpr explicit operator const T*() const { return this->str.data(); }
         /// @brief Convert to a `std::span<const T>`.
-        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::span<const T>() const { return std::span<const T>(this->data(), this->size()); }
+        [[nodiscard]] constexpr operator std::span<const T>() const { return std::span<const T>(this->data(), this->size()); } // NOLINT(hicpp-explicit-conversions)
         /// @brief Convert to a `std::span<T>`.
-        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::span<T>() { return std::span<T>(this->data(), this->size()); }
+        [[nodiscard]] constexpr operator std::span<T>() { return std::span<T>(this->data(), this->size()); } // NOLINT(hicpp-explicit-conversions)
         /// @brief Convert to a `std::basic_string_view<T>`.
-        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::basic_string_view<T>() const
+        [[nodiscard]] constexpr operator std::basic_string_view<T>() const // NOLINT(hicpp-explicit-conversions)
         {
             return std::basic_string_view<T>(this->data(), this->size());
         }

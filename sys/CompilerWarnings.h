@@ -64,22 +64,22 @@
 /// @}
 
 /// @def _push_nowarn_clang(compilerWarning)
-/// @brief Push clang nowarn.
+/// @brief Push `clang` nowarn.
 #define _push_nowarn_clang(compilerWarning)
 /// @def _push_nowarn_gcc(compilerWarning)
-/// @brief Push gcc nowarn.
+/// @brief Push `gcc` nowarn.
 #define _push_nowarn_gcc(compilerWarning)
 /// @def _push_nowarn_msvc(compilerWarning)
-/// @brief Push msvc nowarn.
+/// @brief Push `msvc` nowarn.
 #define _push_nowarn_msvc(compilerWarning)
 /// @def _pop_nowarn_clang()
-/// @brief Pops clang nowarn.
+/// @brief Pops `clang` nowarn.
 #define _pop_nowarn_clang()
 /// @def _pop_nowarn_gcc()
-/// @brief Pops gcc nowarn.
+/// @brief Pops `gcc` nowarn.
 #define _pop_nowarn_gcc()
 /// @def _pop_nowarn_msvc()
-/// @brief Pops msvc nowarn.
+/// @brief Pops `msvc` nowarn.
 #define _pop_nowarn_msvc()
 
 /// @def _clpragma_fwd(...)

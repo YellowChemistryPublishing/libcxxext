@@ -252,6 +252,23 @@ namespace sys::meta
     };
     /// @endcond
 
+    /// @brief Metadata for parameter pack `Pack...`.
+    template <typename... Pack>
+    struct parameter_pack final : meta_type
+    {
+        using tuple = std::tuple<Pack...>; /**< Tuple of `Pack...`. */
+
+        template <size_t Index>
+        using at = std::tuple_element_t<Index, tuple>; /**< Type at `Index`. */
+
+        /// @brief Whether parameter pack contains `T`.
+        template <typename T>
+        static consteval bool contains()
+        {
+            return (std::same_as<T, Pack> || ...);
+        }
+    };
+
     /// @brief Metadata for a template type.
     template <typename T>
     struct template_type final : meta_type
@@ -273,23 +290,6 @@ namespace sys::meta
         static consteval bool is_from()
         {
             return is_templated_from<T, Template>::value();
-        }
-    };
-
-    /// @brief Metadata for parameter pack `Pack...`.
-    template <typename... Pack>
-    struct parameter_pack final : meta_type
-    {
-        using tuple = std::tuple<Pack...>; /**< Tuple of `Pack...`. */
-
-        template <size_t Index>
-        using at = std::tuple_element_t<Index, tuple>; /**< Type at `Index`. */
-
-        /// @brief Whether parameter pack contains `T`.
-        template <typename T>
-        static consteval bool contains()
-        {
-            return (std::same_as<T, Pack> || ...);
         }
     };
 
@@ -361,24 +361,24 @@ namespace sys
 {
     // NOLINTBEGIN(google-runtime-int)
 
-    // @brief Built-in signed integer type.
+    /// @brief Built-in signed integer type.
     template <typename T>
     concept IBuiltinIntegerSigned =
         std::same_as<T, signed char> || std::same_as<T, signed short> || std::same_as<T, signed int> || std::same_as<T, signed long> || std::same_as<T, signed long long>;
-    // @brief Built-in unsigned integer type.
+    /// @brief Built-in unsigned integer type.
     template <typename T>
     concept IBuiltinIntegerUnsigned =
         std::same_as<T, unsigned char> || std::same_as<T, unsigned short> || std::same_as<T, unsigned int> || std::same_as<T, unsigned long> || std::same_as<T, unsigned long long>;
 
     // NOLINTEND(google-runtime-int)
 
-    // @brief Built-in integer type.
+    /// @brief Built-in integer type.
     template <typename T>
     concept IBuiltinInteger = IBuiltinIntegerSigned<T> || IBuiltinIntegerUnsigned<T>;
-    // @brief Built-in floating-point type.
+    /// @brief Built-in floating-point type.
     template <typename T>
     concept IBuiltinFloatingPoint = std::same_as<T, float> || std::same_as<T, double> || std::same_as<T, long double>;
-    // @brief Built-in numeric type.
+    /// @brief Built-in numeric type.
     template <typename T>
     concept IBuiltinNumeric = IBuiltinInteger<T> || IBuiltinFloatingPoint<T>;
 

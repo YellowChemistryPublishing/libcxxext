@@ -9,6 +9,18 @@
 #include <CompilerWarnings.h>
 #include <Platform.h>
 
+/// @namespace sys
+/// @brief Contains every public facing system API.
+
+/// @namespace sys::internal
+/// @brief Internal implementation detail.
+
+/// @namespace sys::meta
+/// @brief Type trait metadata support.
+
+/// @namespace sys::platform
+/// @brief Platform-specific functionality.
+
 /// @def _catcat(a, b)
 /// @brief Concatenates two tokens; used to avoid macro expansion.
 #define _catcat(a, b) a##b
@@ -17,7 +29,7 @@
 #define _ppcat(a, b) _catcat(a, b)
 
 /// @def _assert_ctor_can_fail()
-/// @brief Reminder to use `...::ctor` instead of a constructor when the constructor may fail.
+/// @brief Reminder to use `...::%ctor` instead of a constructor when the constructor may fail.
 #define _assert_ctor_can_fail() static_assert(false, "This constructor may fail, use `...::ctor` instead.")
 
 /// @brief Tag type for function variants marked `unsafe`.

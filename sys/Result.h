@@ -164,21 +164,21 @@ namespace sys
             internal::result_storage_type<T> value;
             internal::result_storage_type<Err> error;
         };
-        result_status status = result_status::empty;
+        internal::result_status status = internal::result_status::empty;
     public:
         // NOLINTBEGIN(hicpp-explicit-conversions)
 
         /// @brief Constructs a result with a value.
         constexpr result(const T& val) noexcept(noexcept(T(std::declval<const T&>())))
         requires requires { internal::result_storage_type<T>(val); }
-            : status(result_status::ok)
+            : status(internal::result_status::ok)
         {
             new(&this->value) internal::result_storage_type<T>(val);
         }
         /// @brief Constructs a result with a value.
         constexpr result(T&& val) noexcept(noexcept(T(std::declval<T&&>())))
         requires requires { internal::result_storage_type<T>(std::move(val)); }
-            : status(result_status::ok)
+            : status(internal::result_status::ok)
         {
             new(&this->value) internal::result_storage_type<T>(std::move(val));
         }
@@ -186,7 +186,7 @@ namespace sys
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...)))
         requires requires { internal::result_storage_type<T>(std::forward<Args>(args)...); }
-            : status(result_status::ok)
+            : status(internal::result_status::ok)
         {
             new(&this->value) internal::result_storage_type<T>(std::forward<Args>(args)...);
         }
@@ -194,21 +194,21 @@ namespace sys
         template <typename... Args>
         constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...)))
         requires (!requires { internal::result_storage_type<T>(std::forward<Args>(args)...); } && requires { internal::result_storage_type<Err>(std::forward<Args>(args)...); })
-            : status(result_status::error)
+            : status(internal::result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(std::forward<Args>(args)...);
         }
         /// @brief Constructs a result with an error.
         constexpr result(const Err& err) noexcept(noexcept(Err(std::declval<const Err&>())))
         requires requires { internal::result_storage_type<Err>(err); }
-            : status(result_status::error)
+            : status(internal::result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(err);
         }
         /// @brief Inplace constructs a result with an error.
         constexpr result(Err&& err) noexcept(noexcept(Err(std::declval<Err&&>())))
         requires requires { internal::result_storage_type<Err>(std::move(err)); }
-            : status(result_status::error)
+            : status(internal::result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(std::move(err));
         }
@@ -230,17 +230,17 @@ namespace sys
         {
             switch (this->status)
             {
-            case result_status::ok:
+            case internal::result_status::ok:
                 using result_storage_type_t = internal::result_storage_type<T>;
                 if constexpr (!std::is_reference_v<T>)
                     this->value.~result_storage_type_t();
                 break;
-            case result_status::error:
+            case internal::result_status::error:
                 using result_storage_type_e = internal::result_storage_type<Err>;
                 if constexpr (!std::is_reference_v<Err>)
                     this->error.~result_storage_type_e();
                 break;
-            case result_status::empty:
+            case internal::result_status::empty:
             default:; // Do nothing.
             }
         }
@@ -259,7 +259,9 @@ namespace sys
             using std::swap;
 
             // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-            if (&a != &b && (a.status == result_status::ok || a.status == result_status::error || b.status == result_status::ok || b.status == result_status::error))
+            if (&a != &b &&
+                (a.status == internal::result_status::ok || a.status == internal::result_status::error || b.status == internal::result_status::ok ||
+                 b.status == internal::result_status::error))
                 std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + std::max(sizeof(internal::result_storage_type<T>), sizeof(internal::result_storage_type<Err>)),
                                  _asr(byte*, &b.value));
             swap(a.status, b.status);
@@ -283,18 +285,18 @@ namespace sys
             byte _;
             internal::result_storage_type<T> value;
         };
-        result_status status = result_status::empty;
+        internal::result_status status = internal::result_status::empty;
     public:
         /// @brief Inplace constructs an ok result.
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...))) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         requires requires { internal::result_storage_type<T>(std::forward<Args>(args)...); }
-            : status(result_status::ok)
+            : status(internal::result_status::ok)
         {
             new(&this->value) internal::result_storage_type<T>(std::forward<Args>(args)...);
         }
         /// @brief Contruct an error result.
-        constexpr result(std::nullptr_t) noexcept : status(result_status::error) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
+        constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         { }
         constexpr result(const result&) = delete;
         /// @brief Moveable.
@@ -304,7 +306,7 @@ namespace sys
         }
         ~result()
         {
-            if (this->status == result_status::ok)
+            if (this->status == internal::result_status::ok)
                 this->value.~T();
         }
 
@@ -322,7 +324,7 @@ namespace sys
             using std::swap;
 
             // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-            if (&a != &b && (a.status == result_status::ok || b.status == result_status::ok))
+            if (&a != &b && (a.status == internal::result_status::ok || b.status == internal::result_status::ok))
                 std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + sizeof(internal::result_storage_type<T>), _asr(byte*, &b.value));
             swap(a.status, b.status);
             // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
@@ -343,14 +345,14 @@ namespace sys
             byte _;
             internal::result_storage_type<Err> error;
         };
-        result_status status;
+        internal::result_status status;
     public:
-        constexpr result() noexcept : status(result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
+        constexpr result() noexcept : status(internal::result_status::ok) // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
         { }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
-        constexpr result(error_tag, Args&&... args) /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ noexcept(noexcept(Err(std::declval<Args&&>()...))) :
-            status(result_status::error)
+        constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...))) : // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
+            status(internal::result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(std::forward<Args>(args)...);
         }
@@ -358,19 +360,19 @@ namespace sys
         /// @see `sys::result<T, Err>::result(Args&&...)`
         /// @note Participates in overload resolution only if the arguments cannot construct a `T`.
         template <typename... Args>
-        constexpr result(Args&&... args) /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ noexcept(noexcept(Err(std::declval<Args&&>()...)))
         requires (sizeof...(Args) > 0uz)
-            : result(error_tag(), std::forward<Args>(args)...)
+        constexpr result(Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...))) : // NOLINT(hicpp-explicit-conversions, hicpp-member-init)
+            result(error_tag(), std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;
         /// @brief Moveable.
-        constexpr result(result&& other) noexcept : status(result_status::empty) // NOLINT(hicpp-member-init)
+        constexpr result(result&& other) noexcept : status(internal::result_status::empty) // NOLINT(hicpp-member-init)
         {
             swap(*this, other);
         }
         ~result()
         {
-            if (this->status == result_status::error)
+            if (this->status == internal::result_status::error)
                 this->error.~Err();
         }
 
@@ -387,7 +389,7 @@ namespace sys
             using std::swap;
 
             // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-            if (&a != &b && (a.status == result_status::error || b.status == result_status::error))
+            if (&a != &b && (a.status == internal::result_status::error || b.status == internal::result_status::error))
                 std::swap_ranges(_asr(byte*, &a.error), _asr(byte*, &a.error) + sizeof(internal::result_storage_type<Err>), _asr(byte*, &b.error));
             swap(a.status, b.status);
             // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
