@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file InplaceAtomicSet.h
+
 #include <atomic>
 #include <cstddef>
 

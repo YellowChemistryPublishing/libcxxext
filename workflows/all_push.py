@@ -181,13 +181,9 @@ def main(argv: list[str]) -> None:
             )
             lcheck_failed()
 
-    log_path = f"{config.findings_reldir}/ChecksetWorkflowOutput.log"
-    shutil.move(config.lprint_templog_relp, log_path)
-
     if has_failures:
         lcheck_failed()
 
-    mark_finding_ok(log_path)
     lcheck_passed()
 
 

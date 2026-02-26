@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file RecurringTemplate.h
+
 #include <type_traits>
 
 #include <LanguageSupport.h>
@@ -7,14 +9,18 @@
 
 namespace sys
 {
+    /// @brief Helper inheritable for accessing derived type `T`.
     template <typename T>
     struct recurring_template
     {
     protected:
-        using recurring_type = T;
+        /// @private
+        using recurring_type = T; /**< Identity of `T`. */
 
         recurring_template() = default;
 
+        /// @private
+        /// @brief Downcasts to `T`.
         constexpr auto* downcast(this auto&& _this) noexcept
         {
             using type = meta::replace_cv<recurring_type, std::remove_reference_t<decltype(_this)>>;

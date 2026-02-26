@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file AlignedStorage.h
+
 #include <algorithm>
 #include <tuple>
 
@@ -9,20 +11,21 @@
 namespace sys
 {
     /// @brief Uninitialized aligned storage.
-    ///
     /// @tparam Ts... Align to and be able to store at least the largest of these types.
     /// @note Pass `byref`.
     template <typename... Ts>
     requires (sizeof...(Ts) > 0)
     struct aligned_storage final
     {
-        alignas(Ts...) byte mem[std::max({ sizeof(Ts)... })] {};
+        alignas(Ts...) byte mem[std::max({ sizeof(Ts)... })] {}; /**< Direct access to storage. */
 
+        /// @brief Pointer to storage.
         template <typename T = std::tuple_element_t<0, std::tuple<Ts...>>>
         [[nodiscard]] const T* data() const noexcept
         {
             return _asr(const T*, std::addressof(this->mem));
         }
+        /// @brief Pointer to storage.
         template <typename T = std::tuple_element_t<0, std::tuple<Ts...>>>
         [[nodiscard]] T* data() noexcept
         {

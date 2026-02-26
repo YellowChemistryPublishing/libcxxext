@@ -11,11 +11,11 @@ _push_nowarn_conv_comp();
 _pop_nowarn_conv_comp();
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("UTF-8 Iteration (Valid)", "[sys.Text][str32_iter]")
+TEST_CASE("UTF-8 Iteration (Valid)", "[sys.Text][codepoint_iter]")
 {
     sys::str s = u8"A\u00A2\u20AC\U00010348";
-    sys::str32_iter<char8_t> it(s.data(), s.data() + s.size());             // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-    sys::str32_iter<char8_t> end(s.data() + s.size(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    sys::codepoint_iter<char8_t> it(s.data(), s.data() + s.size());             // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    sys::codepoint_iter<char8_t> end(s.data() + s.size(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
     REQUIRE(it != end);
     CHECK(*it == U'A');
@@ -38,11 +38,11 @@ TEST_CASE("UTF-8 Iteration (Valid)", "[sys.Text][str32_iter]")
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("UTF-16 Iteration (Valid)", "[sys.Text][str32_iter]")
+TEST_CASE("UTF-16 Iteration (Valid)", "[sys.Text][codepoint_iter]")
 {
     sys::str16 s = u"A\u00A2\u20AC\U00010348";
-    sys::str32_iter<char16_t> it(s.data(), s.data() + s.size());             // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-    sys::str32_iter<char16_t> end(s.data() + s.size(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    sys::codepoint_iter<char16_t> it(s.data(), s.data() + s.size());             // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    sys::codepoint_iter<char16_t> end(s.data() + s.size(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
     REQUIRE(it != end);
     CHECK(*it == U'A');
@@ -59,12 +59,12 @@ TEST_CASE("UTF-16 Iteration (Valid)", "[sys.Text][str32_iter]")
     CHECK(it == end);
 }
 
-TEST_CASE("Pathological UTF-8 Sequences", "[sys.Text][str32_iter]")
+TEST_CASE("Pathological UTF-8 Sequences", "[sys.Text][codepoint_iter]")
 {
     // Mixed valid and invalid.
-    const char8_t data[] { 0x41, 0xFF, 0x42, 0xC2 };  // NOLINT(readability-magic-numbers)
-    sys::str32_iter<char8_t> it(data, data + 4);      // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
-    sys::str32_iter<char8_t> end(data + 4, data + 4); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
+    const char8_t data[] { 0x41, 0xFF, 0x42, 0xC2 };      // NOLINT(readability-magic-numbers)
+    sys::codepoint_iter<char8_t> it(data, data + 4);      // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
+    sys::codepoint_iter<char8_t> end(data + 4, data + 4); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
 
     CHECK(*it == U'A');
     ++it;
@@ -77,11 +77,11 @@ TEST_CASE("Pathological UTF-8 Sequences", "[sys.Text][str32_iter]")
     CHECK(it == end);
 }
 
-TEST_CASE("Iterator Comparison", "[sys.Text][str32_iter]")
+TEST_CASE("Iterator Comparison", "[sys.Text][codepoint_iter]")
 {
     sys::str s = u8"test";
-    sys::str32_iter<char8_t> it1(s.data(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-    sys::str32_iter<char8_t> it2(s.data(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    sys::codepoint_iter<char8_t> it1(s.data(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    sys::codepoint_iter<char8_t> it2(s.data(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
     CHECK(it1 == it2);
 
@@ -89,10 +89,10 @@ TEST_CASE("Iterator Comparison", "[sys.Text][str32_iter]")
     CHECK(it1 != it2);
 }
 
-TEST_CASE("Dereference Stability", "[sys.Text][str32_iter]")
+TEST_CASE("Dereference Stability", "[sys.Text][codepoint_iter]")
 {
     sys::str s = u8"A";
-    sys::str32_iter<char8_t> it(s.data(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    sys::codepoint_iter<char8_t> it(s.data(), s.data() + s.size()); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
     CHECK(*it == U'A');
     CHECK(*it == U'A');

@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file CodepointIterator.h
+
 #include <span>
 #include <string>
 #include <string_view>
@@ -10,34 +12,41 @@
 
 namespace sys
 {
-    /// @brief UTF-32 codepoint view iterator for a string of unicode characters.
+    /// @brief UTF-32 codepoint view iterator for a unicode string.
     template <ICharacter T>
-    struct str32_iter final
+    struct codepoint_iter final
     {
     private:
         const T *cur = nullptr, *end = nullptr;
         ssz cp_size = 0_z;
     public:
-        constexpr str32_iter() = default;
-        constexpr str32_iter(const T* cur, const T* end) : cur(cur), end(end) { }
-        constexpr str32_iter(const str32_iter&) = default;
-        constexpr str32_iter(str32_iter&&) = default;
-        constexpr ~str32_iter() = default;
+        /// @brief Uninitialized iterator.
+        constexpr codepoint_iter() = default;
+        /// @brief Construct from a contiguous range.
+        constexpr codepoint_iter(const T* cur, const T* end) : cur(cur), end(end) { }
+        constexpr codepoint_iter(const codepoint_iter&) = default; /**< Copyable. */
+        constexpr codepoint_iter(codepoint_iter&&) = default;      /**< Moveable. */
+        constexpr ~codepoint_iter() = default;
 
-        constexpr str32_iter& operator=(const str32_iter&) = default;
-        constexpr str32_iter& operator=(str32_iter&&) = default;
+        constexpr codepoint_iter& operator=(const codepoint_iter&) = default; /**< Copy-assignable. */
+        constexpr codepoint_iter& operator=(codepoint_iter&&) = default;      /**< Move-assignable. */
 
+        /// @brief Codepoint value for current position.
         constexpr char32_t operator*() noexcept
         {
             const auto [c, size] = ch::read_codepoint(std::span(this->cur, this->end), unsafe());
             this->cp_size = ssz(size);
             return c;
         }
+        /// @brief Pointer to the current codepoint.
         constexpr const T* operator->() const { return this->cur; } // For `std::to_address(...)`.
-        friend constexpr bool operator==(const str32_iter& a, const str32_iter& b) noexcept { return a.cur == b.cur && a.end == b.end; }
-        friend constexpr auto operator<=>(const str32_iter& a, const str32_iter& b) noexcept { return (a.cur <=> b.cur) != 0 ? a.cur <=> b.cur : a.end <=> b.end; }
+        /// @brief Equality comparison.
+        friend constexpr bool operator==(const codepoint_iter& a, const codepoint_iter& b) noexcept { return a.cur == b.cur && a.end == b.end; }
+        /// @brief Three-way comparison.
+        friend constexpr auto operator<=>(const codepoint_iter& a, const codepoint_iter& b) noexcept { return (a.cur <=> b.cur) != 0 ? a.cur <=> b.cur : a.end <=> b.end; }
 
-        constexpr str32_iter& operator++()
+        /// @brief Pre-increment.
+        constexpr codepoint_iter& operator++()
         {
             if (!this->cp_size)
                 this->cp_size = ssz(ch::read_codepoint(std::span(this->cur, this->end), unsafe()).second);
@@ -45,42 +54,46 @@ namespace sys
             this->cp_size = 0_z;
             return *this;
         }
-        constexpr str32_iter operator++(int)
+        /// @brief Post-increment.
+        constexpr codepoint_iter operator++(int)
         {
-            const str32_iter ret = *this;
+            const codepoint_iter ret = *this;
             ++*this;
             return ret;
         }
     };
 
+    /// @brief UTF-32 codepoint view for a unicode string.
     template <ICharacter T>
-    struct str32_view final
+    struct codepoint_view final
     {
     private:
-        str32_iter<T> _beg {}, _end {};
+        codepoint_iter<T> _beg {}, _end {};
     public:
-        // NOLINTNEXTLINE(hicpp-explicit-conversions)
-        constexpr str32_view(const std::span<const T> range) : _beg(range.data(), range.data() + range.size()), _end(range.data() + range.size(), range.data() + range.size()) { }
-        constexpr str32_view(const str32_view&) = default;
-        constexpr str32_view(str32_view&&) = default;
-        constexpr ~str32_view() = default;
+        /// @brief Construct from a contiguous range.
+        constexpr codepoint_view(const std::span<const T> range) : // NOLINT(hicpp-explicit-conversions)
+            _beg(range.data(), range.data() + range.size()), _end(range.data() + range.size(), range.data() + range.size())
+        { }
+        constexpr codepoint_view(const codepoint_view&) = default; /**< Copyable. */
+        constexpr codepoint_view(codepoint_view&&) = default;      /**< Moveable. */
+        constexpr ~codepoint_view() = default;
 
-        constexpr str32_view& operator=(const str32_view&) = default;
-        constexpr str32_view& operator=(str32_view&&) = default;
+        constexpr codepoint_view& operator=(const codepoint_view&) = default; /**< Copy-assignable. */
+        constexpr codepoint_view& operator=(codepoint_view&&) = default;      /**< Move-assignable. */
 
-        [[nodiscard]] constexpr str32_iter<T> begin() const { return this->_beg; }
-        [[nodiscard]] constexpr str32_iter<T> end() const { return this->_end; }
+        [[nodiscard]] constexpr codepoint_iter<T> begin() const { return this->_beg; } /**< Begin iterator. */
+        [[nodiscard]] constexpr codepoint_iter<T> end() const { return this->_end; }   /**< End iterator. */
     };
 
     template <ICharacter T>
     class string;
 
     template <ICharacter T>
-    str32_view(std::span<T>) -> str32_view<T>;
+    codepoint_view(std::span<T>) -> codepoint_view<T>; /**< Deduction guide. */
     template <ICharacter T>
-    str32_view(std::basic_string_view<T>) -> str32_view<T>;
+    codepoint_view(std::basic_string_view<T>) -> codepoint_view<T>; /**< Deduction guide. */
     template <ICharacter T>
-    str32_view(std::basic_string<T>) -> str32_view<T>;
+    codepoint_view(std::basic_string<T>) -> codepoint_view<T>; /**< Deduction guide. */
     template <ICharacter T>
-    str32_view(sys::string<T>) -> str32_view<T>;
+    codepoint_view(sys::string<T>) -> codepoint_view<T>; /**< Deduction guide. */
 } // namespace sys

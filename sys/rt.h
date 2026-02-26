@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file rt.h
+
 #include <cstddef>
 
 namespace sys::platform

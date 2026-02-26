@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file Exception.h
+
 #include <Platform.h>
 
 #include <cstdio> // NOLINT(misc-include-cleaner)
@@ -49,7 +51,7 @@ namespace sys
     };
     /// @brief Thrown when a contract is violated.
     /// @note
-    /// Prefer using the `_contract_assert` macro instead. Don't catch this exception.
+    /// Prefer using the `_contract_assert` macro directly, instead. Don't catch this exception.
     /// Pass `byref`.
     struct contract_violation_exception final : public managed_exception
     {

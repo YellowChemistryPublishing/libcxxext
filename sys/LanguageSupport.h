@@ -1,11 +1,25 @@
 #pragma once
 
+/// @file LanguageSupport.h
+
 #include <cstdio>          // NOLINT(misc-include-cleaner)
 #include <print>           // NOLINT(misc-include-cleaner)
 #include <source_location> // NOLINT(misc-include-cleaner)
 
 #include <CompilerWarnings.h>
 #include <Platform.h>
+
+/// @namespace sys
+/// @brief Contains every public facing system API.
+
+/// @namespace sys::internal
+/// @brief Internal implementation detail.
+
+/// @namespace sys::meta
+/// @brief Type trait metadata support.
+
+/// @namespace sys::platform
+/// @brief Platform-specific functionality.
 
 /// @def _catcat(a, b)
 /// @brief Concatenates two tokens; used to avoid macro expansion.
@@ -15,7 +29,7 @@
 #define _ppcat(a, b) _catcat(a, b)
 
 /// @def _assert_ctor_can_fail()
-/// @brief Reminder to use `...::ctor` instead of a constructor when the constructor may fail.
+/// @brief Reminder to use `...::%ctor` instead of a constructor when the constructor may fail.
 #define _assert_ctor_can_fail() static_assert(false, "This constructor may fail, use `...::ctor` instead.")
 
 /// @brief Tag type for function variants marked `unsafe`.
@@ -29,6 +43,7 @@ struct unsafe final
 #else
 #define _inline_always __forceinline
 #endif
+
 /// @def _inline_never
 /// @brief Force noinline a function.
 #if !_libcxxext_compiler_msvc
@@ -36,12 +51,15 @@ struct unsafe final
 #else
 #define _inline_never [[msvc::noinline]]
 #endif
+
 /// @def _weak
 /// @brief Mark a function as weak.
 #define _weak [[gnu::weak]]
+
 /// @def _pure
 /// @brief Mark a function as pure.
 #define _pure [[gnu::pure]]
+
 /// @def _pure_const
 /// @brief Mark a function as pure and const.
 #if !_libcxxext_compiler_msvc
@@ -49,12 +67,15 @@ struct unsafe final
 #else
 #define _pure_const
 #endif
+
 /// @def _restrict
 /// @brief Mark a parameter (or `this`) as non-aliasing.
 #define _restrict __restrict__
+
 /// @def _pack(align)
 /// @brief Pack a structure to `align` bytes.
 #define _pack(align) _clpragma_fwd(pack(align))
+
 /// @def _packed
 /// @brief Pack a structure to the smallest possible alignment.
 #if !_libcxxext_compiler_msvc
@@ -63,16 +84,16 @@ struct unsafe final
 #define _packed __declspec(align(1))
 #endif
 
+/// @def _no_unique_address
+/// @brief Mark a member variable as possibly zero-size.
 #if _libcxxext_compiler_msvc
 #define _no_unique_address [[msvc::no_unique_address]]
 #else
 #define _no_unique_address [[no_unique_address]]
 #endif
 
-/// @defgroup Casts C++ Casts
-/// @details Convenience macro aliases for C++ casts.
-
-/// @addtogroup Casts
+/// @defgroup casts C++ Casts
+/// @brief Convenience macro aliases for C++ casts.
 /// @{
 
 /// @def _as
@@ -106,10 +127,8 @@ struct unsafe final
     }                                                                                                                                                                           \
     while (false)
 
-/// @defgroup EarlyReturnOperators Early Return Macros
-/// @details Convenience macros for early return operations.
-
-/// @addtogroup EarlyReturnOperators
+/// @defgroup early_return_operators Early Return Macros
+/// @brief Convenience macros for early return operations.
 /// @{
 
 /// @def _retif(val, cond)

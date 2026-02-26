@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file BitTwiddling.h
+
 #include <cstddef>
 #include <functional>
 
