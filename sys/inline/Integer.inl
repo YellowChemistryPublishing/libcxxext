@@ -21,7 +21,7 @@
 using byte = unsigned char; /**< Unsigned byte type. */             // NOLINT()
 using sbyte = signed char; /**< Signed byte type. */                // NOLINT()
 using ushort = unsigned short; /**< Unsigned short type. */         // NOLINT(google-runtime-int)
-using uint = unsigned int; /**< Signed short type. */               // NOLINT()
+using uint = unsigned int; /**< Unsigned int type. */               // NOLINT()
 using ulong = unsigned long; /**< Unsigned long type. */            // NOLINT(google-runtime-int)
 using llong = long long; /**< Signed long long type. */             // NOLINT(google-runtime-int)
 using ullong = unsigned long long; /**< Unsigned long long type. */ // NOLINT(google-runtime-int)

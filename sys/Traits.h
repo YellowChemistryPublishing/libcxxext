@@ -80,8 +80,8 @@ namespace sys::meta
                                 is_noexcept_prop<false>,
                                 is_member_func_prop<false>
     {
-        using return_type = T; /**< Return type of function `T`. */
-        using arguments = std::tuple<Args...> /**< Tuple of argument types of `T`. */;
+        using return_type = T;                 /**< Return type of function `T`. */
+        using arguments = std::tuple<Args...>; /**< Tuple of argument types of `T`. */
 
         using is_valid_prop<false>::is_valid;
         using is_const_prop<false>::is_const;

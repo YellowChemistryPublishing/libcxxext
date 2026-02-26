@@ -140,11 +140,12 @@ namespace sys
         constexpr explicit string(const std::span<const T> data) : string(data.begin(), data.end()) { }
         /// @brief Construct from a `std::basic_string_view<T>`.
         constexpr explicit string(const std::basic_string_view<T> data) : string(data.begin(), data.end()) { }
+        /// @brief Construct from an input range.
+        template <std::input_iterator It>
+        constexpr explicit string(It beg, It end) : str(beg, end)
+        { }
         /// @brief Construct from an `IEnumerable`.
         template <IEnumerable Container>
-        requires (!std::is_convertible_v<Container, std::basic_string_view<char32_t>> && !std::is_convertible_v<Container, std::basic_string_view<char16_t>> &&
-                  !std::is_convertible_v<Container, std::basic_string_view<char8_t>> && !std::is_convertible_v<Container, std::basic_string_view<wchar_t>> &&
-                  !std::is_convertible_v<Container, std::basic_string_view<char>>)
         constexpr explicit string(const Container& container) : string(std::begin(container), std::end(container))
         { }
         /// @brief Construct from a single character.
@@ -205,6 +206,10 @@ namespace sys
 
         /// @brief Convert to a C-string.
         [[nodiscard]] constexpr explicit operator const T*() const { return this->str.data(); }
+        /// @brief Convert to a `std::span<const T>`.
+        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::span<const T>() const { return std::span<const T>(this->data(), this->size()); }
+        /// @brief Convert to a `std::span<T>`.
+        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::span<T>() { return std::span<T>(this->data(), this->size()); }
         /// @brief Convert to a `std::basic_string_view<T>`.
         [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::basic_string_view<T>() const
         {
@@ -246,14 +251,14 @@ namespace sys
         [[nodiscard]] T* data() { return this->str.data(); }               /**< Obtain string data. */
         [[nodiscard]] const T* data() const { return this->str.data(); }   /**< Obtain string data. */
 
-        [[nodiscard]] constexpr auto begin() { return this->str.begin(); }          /**< Begin iterator. */
-        [[nodiscard]] constexpr auto end() { return this->str.end(); }              /**< End iterator. */
-        [[nodiscard]] constexpr auto cbegin() const { return this->str.begin(); }   /**< Const begin iterator. */
-        [[nodiscard]] constexpr auto cend() const { return this->str.end(); }       /**< Const end iterator. */
-        [[nodiscard]] constexpr auto rbegin() { return this->str.rbegin(); }        /**< Reverse begin iterator. */
-        [[nodiscard]] constexpr auto rend() { return this->str.rend(); }            /**< Reverse end iterator. */
-        [[nodiscard]] constexpr auto crbegin() const { return this->str.rbegin(); } /**< Const reverse begin iterator. */
-        [[nodiscard]] constexpr auto crend() const { return this->str.rend(); }     /**< Const reverse end iterator. */
+        [[nodiscard]] constexpr auto begin() const { return this->str.cbegin(); }    /**< Begin iterator. */
+        [[nodiscard]] constexpr auto end() const { return this->str.cend(); }        /**< End iterator. */
+        [[nodiscard]] constexpr auto cbegin() const { return this->str.cbegin(); }   /**< Const begin iterator. */
+        [[nodiscard]] constexpr auto cend() const { return this->str.cend(); }       /**< Const end iterator. */
+        [[nodiscard]] constexpr auto rbegin() const { return this->str.crbegin(); }  /**< Reverse begin iterator. */
+        [[nodiscard]] constexpr auto rend() const { return this->str.crend(); }      /**< Reverse end iterator. */
+        [[nodiscard]] constexpr auto crbegin() const { return this->str.crbegin(); } /**< Const reverse begin iterator. */
+        [[nodiscard]] constexpr auto crend() const { return this->str.crend(); }     /**< Const reverse end iterator. */
 
         [[nodiscard]] constexpr T& front(unsafe) { return this->str.front(); }             /**< First char. */
         [[nodiscard]] constexpr const T& front(unsafe) const { return this->str.front(); } /**< First char. */
