@@ -151,6 +151,10 @@ jobs:
         permissions:
             contents: write
         steps:
+            - uses: actions/checkout@v4
+              with:
+                  submodules: recursive
+
             - name: Download Artifacts
               uses: actions/download-artifact@v4
               with:
@@ -158,7 +162,7 @@ jobs:
                   pattern: "artifacts-*"
                   merge-multiple: true
 
-            - name: Create and Push Canary Tag
+            - name: Create Canary Tag
               id: tag
               shell: python
               run: |
@@ -166,7 +170,7 @@ jobs:
                   import subprocess
                   from datetime import datetime, timezone
 
-                  tag_name = f"canary-{datetime.now(timezone.utc).strftime('%Y%m%d')}[{os.environ['GITHUB_RUN_ID']}]"
+                  tag_name = f"canary-{datetime.now(timezone.utc).strftime('%Y%m%d')}.{os.environ['GITHUB_RUN_ID']}"
 
                   try:
                       subprocess.run(["git", "tag", tag_name], check=True)

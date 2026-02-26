@@ -148,5 +148,5 @@ def exec_pkgmgr_cache_update(platform: str) -> None:
                 return
 
     lprint(
-        f"Skipping package manager cache update--ran recently. (Delete ./{config.tools_reldir}/pkgmgr_cache_update_stamp to force an update.)"
+        f"Skipping package manager cache update--ran recently. (Delete `./{config.tools_reldir}/pkgmgr_cache_update_stamp` to force an update.)"
     )
