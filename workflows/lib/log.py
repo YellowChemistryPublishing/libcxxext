@@ -3,6 +3,7 @@
 import inspect
 import os
 import re
+import sys
 import threading
 import time
 from typing import List
@@ -79,7 +80,7 @@ def lcheck_passed(upstack: int = 2) -> None:
         upstack=upstack,
     )
 
-    exit(0)
+    sys.exit(0)
 
 
 def lcheck_failed(upstack: int = 2) -> None:
@@ -91,7 +92,7 @@ def lcheck_failed(upstack: int = 2) -> None:
     )
     lockfile_relall()
 
-    exit(1)
+    sys.exit(1)
 
 
 def lassert_unsupported_bconf(upstack: int = 2) -> None:

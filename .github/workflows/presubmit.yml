@@ -185,6 +185,7 @@ jobs:
               run: |
                   import os
                   import subprocess
+                  import sys
                   from datetime import datetime, timezone
 
                   tag_name = f"canary-{datetime.now(timezone.utc).strftime('%Y%m%d')}.{os.environ['GITHUB_RUN_ID']}"
@@ -195,7 +196,7 @@ jobs:
                       print(f"Successfully pushed tag: `{tag_name}`.")
                   except subprocess.CalledProcessError as e:
                       print(e)
-                      exit(1)
+                      sys.exit(1)
 
                   with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                       f.write(f"name={tag_name}\n")

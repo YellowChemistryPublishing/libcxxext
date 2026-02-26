@@ -76,7 +76,7 @@ def main(argv: List[str]) -> None:
                 print("</details>\n")
 
     if has_failing_finding:
-        exit(1)
+        sys.exit(1)
 
     # Unfortunately, this would show up in the findings too, so we just skip it.
     # lcheck_passed()
