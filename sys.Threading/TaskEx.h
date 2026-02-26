@@ -30,9 +30,12 @@ namespace sys::internal
     template <typename T>
     struct task_promise;
 
+    /// @internal
     /// @brief Promise for a `sys::async`.
     struct async_promise
     {
+        /// @cond
+
         constexpr async_promise() noexcept = default;
         async_promise(const async_promise&) = delete;
         async_promise(async_promise&&) = delete;
@@ -48,15 +51,19 @@ namespace sys::internal
 
         static void unhandled_exception() noexcept { std::rethrow_exception(std::current_exception()); }
         _inline_always constexpr void return_void() const noexcept { }
+
+        /// @endcond
     };
 
+    /// @internal
     /// @brief Awaiter for a task.
-    ///
     /// @tparam T Coroutine return type.
     /// @note Pass `byref`.
     template <typename T>
     struct task_awaiter
     {
+        /// @cond
+
         std::coroutine_handle<task_promise<T>> handle;
 
         [[nodiscard]] _inline_always constexpr bool await_ready() const noexcept { return !this->handle || this->handle.done(); }
@@ -72,26 +79,36 @@ namespace sys::internal
             if constexpr (!std::is_same_v<T, void>)
                 return std::move(*reinterpret_cast<T*>(&this->handle.promise().value));
         }
+
+        /// @endcond
     };
+    /// @internal
     /// @brief Final awaiter for a task.
-    ///
     /// @tparam T Coroutine return type.
     /// @note Pass `byref`.
     template <typename T>
     struct task_final_awaiter
     {
+        /// @cond
+
         std::coroutine_handle<task_promise<T>> handle;
 
         [[nodiscard]] _inline_always constexpr bool await_ready() const noexcept { return false; }
         _inline_never auto await_suspend(std::coroutine_handle<>) noexcept { _task_yield_and_continue(); }
-        constexpr void await_resume() const noexcept { }
+        _inline_always constexpr void await_resume() const noexcept { }
+
+        /// @endcond
     };
 
+    /// @internal
+    /// @brief Shared promise functionality for tasks.
     template <typename T>
     struct task_promise_b
     {
-        std::coroutine_handle<> continuation;
-        std::exception_ptr exception = nullptr;
+        std::coroutine_handle<> continuation;   /**< Coroutine continuation of this task. */
+        std::exception_ptr exception = nullptr; /**< Exception thrown within this task, if any. */
+
+        /// @cond
 
         static void* operator new(size_t sz) noexcept { return ::sys::platform::task_operator_new(sz); }
         static void operator delete(void* ptr) noexcept { ::sys::platform::task_operator_delete(ptr); }
@@ -102,9 +119,11 @@ namespace sys::internal
 
         [[noreturn]] static task<T> get_return_object_on_allocation_failure() { _throw(std::bad_alloc()); }
         _inline_always void unhandled_exception() { this->exception = std::current_exception(); }
+
+        /// @endcond
     };
-    /// @brief Promise for a `sys::task`.
-    ///
+    /// @internal
+    /// @brief Promise for a `sys::task<T>`.
     /// @tparam T Coroutine return type.
     /// @note Pass `byref`.
     template <typename T>
@@ -122,6 +141,8 @@ namespace sys::internal
         constexpr task_promise& operator=(const task_promise&) = delete;
         constexpr task_promise& operator=(task_promise&&) = delete;
 
+        /// @cond
+
         _inline_always task_final_awaiter<T> final_suspend() noexcept { return task_final_awaiter<T> { std::coroutine_handle<task_promise<T>>::from_promise(*this) }; }
 
         template <typename ReturnType>
@@ -131,11 +152,14 @@ namespace sys::internal
             this->has_value = true;
         }
 
+        /// @endcond
+
         friend struct sys::internal::task_awaiter<T>;
     private:
         sys::aligned_storage<T> value;
         bool has_value = false;
     };
+    /// @cond
     template <>
     struct task_promise<void> final : public task_promise_b<void>
     {
@@ -146,25 +170,28 @@ namespace sys::internal
 
         _inline_always constexpr void return_void() const noexcept { }
     };
+    /// @endcond
 } // namespace sys::internal
 
 namespace sys
 {
     /// @brief Task coroutine.
-    ///
     /// @tparam T Coroutine return type.
     /// @note Pass `byref`.
     template <typename T = void>
     class [[nodiscard]] task final
     {
     public:
+        /// @cond
         using promise_type = internal::task_promise<T>;
+        /// @endcond
 
         /// @brief The longest possible delay in milliseconds, supported by `sys::task<>::delay(...)`.
         static constexpr i32 max_delay = ::sys::platform::task_max_delay;
 
         constexpr task() noexcept = default;
         constexpr task(const task&) = delete;
+        /// @brief Moveable.
         constexpr task(task&& other) noexcept : handle(std::exchange(other.handle, nullptr)) { }
         _inline_always ~task()
         {
@@ -173,6 +200,7 @@ namespace sys
         }
 
         constexpr task& operator=(const task&) = delete;
+        /// @brief Move-assignable.
         constexpr task& operator=(task&& other) noexcept
         {
             if (this != &other) [[likely]]
@@ -184,6 +212,7 @@ namespace sys
             return *this;
         }
 
+        /// @see `sys::internal::task_awaiter<T>`
         _inline_always internal::task_awaiter<T> operator co_await() { return internal::task_awaiter<T>(this->handle); }
 
         /// @brief Suspend and allow the implementation (i.e. a scheduler) to decide when to resume.
@@ -211,6 +240,7 @@ namespace sys
                     co_await task<>::yield();
         }
 
+        /// @brief Swappable.
         friend void swap(task& a, task& b) noexcept
         {
             using std::swap;
@@ -227,7 +257,9 @@ namespace sys
     /// @brief Fire-and-forget launcher coroutine.
     struct async
     {
+        /// @cond
         using promise_type = internal::async_promise;
+        /// @endcond
 
         friend struct internal::async_promise;
     private:
@@ -235,7 +267,9 @@ namespace sys
     };
 } // namespace sys
 
+/// @cond
 sys::async sys::internal::async_promise::get_return_object() { return sys::async(std::coroutine_handle<sys::internal::async_promise>::from_promise(*this)); }
+/// @endcond
 
 _pop_nowarn_msvc();
 

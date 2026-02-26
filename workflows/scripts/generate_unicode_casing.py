@@ -198,16 +198,20 @@ def main(argv: List[str]) -> None:
                     /// @brief Context for forward-looking casing rules.
                     struct forward_casing_context
                     {
+                        /// @cond
                         bool is_preceded_by_cased : 1 = false;
                         bool after_soft_dotted : 1 = false;
                         bool after_i : 1 = false;
+                        /// @endcond
                     };
                     /// @brief Context for precomputed lookahead casing rules.
                     struct lookahead_casing_context
                     {
+                        /// @cond
                         bool followed_by_cased : 1 = false;
                         bool more_above : 1 = false;
                         bool before_dot : 1 = false;
+                        /// @endcond
                     };
                 } // namespace sys
 
@@ -224,6 +228,7 @@ def main(argv: List[str]) -> None:
                 indent(
                     dedent(
                         f"""\
+                        /// @internal
                         constexpr bool {name}(const char32_t c) noexcept
                         {{
                             switch (c)
@@ -263,6 +268,7 @@ def main(argv: List[str]) -> None:
                 indent(
                     dedent(
                         f"""\
+                        /// @internal
                         constexpr char32_t {name}(const char32_t c) noexcept
                         {{
                             switch (c)
@@ -323,6 +329,7 @@ def main(argv: List[str]) -> None:
                 indent(
                     dedent(
                         f"""\
+                        /// @internal
                         constexpr sz {name}(char32_t out[], const char32_t c, const std::u8string_view lang{context_params}, unsafe) noexcept
                         {{
                         """

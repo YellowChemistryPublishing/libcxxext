@@ -14,16 +14,20 @@ namespace sys
     /// @brief Context for forward-looking casing rules.
     struct forward_casing_context
     {
+        /// @cond
         bool is_preceded_by_cased : 1 = false;
         bool after_soft_dotted : 1 = false;
         bool after_i : 1 = false;
+        /// @endcond
     };
     /// @brief Context for precomputed lookahead casing rules.
     struct lookahead_casing_context
     {
+        /// @cond
         bool followed_by_cased : 1 = false;
         bool more_above : 1 = false;
         bool before_dot : 1 = false;
+        /// @endcond
     };
 } // namespace sys
 
@@ -31,6 +35,7 @@ namespace sys
 
 namespace sys::internal
 {
+    /// @internal
     constexpr bool dchar_is_cased(const char32_t c) noexcept
     {
         switch (c)
@@ -4670,6 +4675,7 @@ namespace sys::internal
         default: return false;
         }
     }
+    /// @internal
     constexpr bool dchar_is_case_ignorable(const char32_t c) noexcept
     {
         switch (c)
@@ -7471,6 +7477,7 @@ namespace sys::internal
         default: return false;
         }
     }
+    /// @internal
     constexpr bool dchar_is_soft_dotted(const char32_t c) noexcept
     {
         switch (c)
@@ -7529,6 +7536,7 @@ namespace sys::internal
         }
     }
 
+    /// @internal
     constexpr char32_t dchar_to_lower_simple(const char32_t c) noexcept
     {
         switch (c)
@@ -9024,6 +9032,7 @@ namespace sys::internal
         default: return c;
         }
     }
+    /// @internal
     constexpr char32_t dchar_to_upper_simple(const char32_t c) noexcept
     {
         switch (c)
@@ -10536,6 +10545,7 @@ namespace sys::internal
         default: return c;
         }
     }
+    /// @internal
     constexpr char32_t dchar_fold_simple(const char32_t c) noexcept
     {
         switch (c)
@@ -12056,6 +12066,7 @@ namespace sys::internal
         }
     }
 
+    /// @internal
     constexpr sz dchar_to_lower_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx,
                                         [[maybe_unused]] const sys::lookahead_casing_context& lctx, unsafe) noexcept
     {
@@ -12132,6 +12143,7 @@ namespace sys::internal
         default: out[0] = dchar_to_lower_simple(c); return 1_uz;
         }
     }
+    /// @internal
     constexpr sz dchar_to_upper_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx,
                                         [[maybe_unused]] const sys::lookahead_casing_context& lctx, unsafe) noexcept
     {
@@ -12574,6 +12586,7 @@ namespace sys::internal
         default: out[0] = dchar_to_upper_simple(c); return 1_uz;
         }
     }
+    /// @internal
     constexpr sz dchar_fold_special(char32_t out[], const char32_t c, const std::u8string_view lang, unsafe) noexcept
     {
         if (c == U'\u0049' && lang == u8"tr")

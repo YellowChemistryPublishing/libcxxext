@@ -4,12 +4,13 @@
 
 namespace sys
 {
+    /// @brief Wrapper for `noexcept` cleanup function.
     template <typename Func>
     requires (noexcept(std::declval<Func&>()()))
     struct destructor final
     {
-        // NOLINTNEXTLINE(hicpp-explicit-conversions)
-        destructor(Func&& func) : func(std::move(func)) { }
+        /// @brief Construct with a cleanup function.
+        destructor(Func&& func) : func(std::move(func)) { } // NOLINT(hicpp-explicit-conversions)
         destructor(const destructor&) = delete;
         destructor(destructor&&) = delete;
         ~destructor() { func(); }
@@ -20,13 +21,15 @@ namespace sys
         Func func;
     };
 
+    /// @brief Moveable, no-op-able, wrapper for `noexcept` cleanup function.
     template <typename Func>
     requires (noexcept(std::declval<Func&>()()))
     struct optional_destructor final
     {
-        // NOLINTNEXTLINE(hicpp-explicit-conversions)
-        optional_destructor(Func&& func) : func(std::move(func)) { }
+        /// @brief Construct with a cleanup function.
+        optional_destructor(Func&& func) : func(std::move(func)) { } // NOLINT(hicpp-explicit-conversions)
         optional_destructor(const optional_destructor&) = delete;
+        /// @brief Moveable.
         optional_destructor(optional_destructor&& other) noexcept : func(std::move(other.func)), execute(other.execute) { other.execute = false; }
         ~optional_destructor()
         {
@@ -35,6 +38,7 @@ namespace sys
         }
 
         optional_destructor& operator=(const optional_destructor&) = delete;
+        /// @brief Move-assignable.
         optional_destructor& operator=(optional_destructor&& other) noexcept
         {
             if (this != &other) [[likely]]
@@ -46,6 +50,7 @@ namespace sys
             return *this;
         }
 
+        /// @brief Mark this `sys::destructor<...>` as no-op.
         void release() noexcept { this->execute = false; }
     private:
         Func func;

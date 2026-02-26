@@ -13,15 +13,15 @@ _pop_nowarn_conv_comp();
 #include <module/sys>
 #include <module/sys.Text>
 
-TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fuzz][sys.Text][str32_iter]")
+TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fuzz][sys.Text][codepoint_iter]")
 {
     rc::check("Iterating over random bytes never crashes and exhausts buffer.", [](const std::vector<uint8_t>& bytes)
     {
         const char8_t* start = _asr(const char8_t*, bytes.data());
         const char8_t* endPtr = start + bytes.size(); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
-        sys::str32_iter<char8_t> it(start, endPtr);
-        const sys::str32_iter<char8_t> end(endPtr, endPtr);
+        sys::codepoint_iter<char8_t> it(start, endPtr);
+        const sys::codepoint_iter<char8_t> end(endPtr, endPtr);
 
         sz count = 0_uz;
         bool doDeref = false;

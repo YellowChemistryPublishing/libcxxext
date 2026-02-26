@@ -13,20 +13,18 @@
 #include <Platform.h>
 #include <Traits.h>
 
-/// @defgroup BuiltinInteger Built-in Integer Types
-/// @details Abbreviated built-in integer types.
+/// @defgroup builtin_integers Built-in Integer Types
+/// @brief Abbreviated built-in integer types.
 /// @note Pass `byval`.
-
-/// @addtogroup BuiltinInteger
 /// @{
 
-using byte = unsigned char;
-using sbyte = signed char;
-using ushort = unsigned short; // NOLINT(google-runtime-int)
-using uint = unsigned int;
-using ulong = unsigned long;       // NOLINT(google-runtime-int)
-using llong = long long;           // NOLINT(google-runtime-int)
-using ullong = unsigned long long; // NOLINT(google-runtime-int)
+using byte = unsigned char; /**< Unsigned byte type. */             // NOLINT()
+using sbyte = signed char; /**< Signed byte type. */                // NOLINT()
+using ushort = unsigned short; /**< Unsigned short type. */         // NOLINT(google-runtime-int)
+using uint = unsigned int; /**< Signed short type. */               // NOLINT()
+using ulong = unsigned long; /**< Unsigned long type. */            // NOLINT(google-runtime-int)
+using llong = long long; /**< Signed long long type. */             // NOLINT(google-runtime-int)
+using ullong = unsigned long long; /**< Unsigned long long type. */ // NOLINT(google-runtime-int)
 
 /// @}
 
@@ -71,7 +69,6 @@ namespace sys
     }
 
     /// @brief Safe(r) high-level integer wrapper.
-    ///
     /// @tparam For Built-in integer type.
     /// @details
     /// Provides saturating construction by default, with unsafe well-defined truncating variants.
@@ -313,37 +310,34 @@ namespace sys
     static_assert(alignof(integer<uint_least8_t>) == alignof(uint_least8_t));
 } // namespace sys
 
-/// @defgroup Integer Safe(r) Integer Types
-/// @details Convenience aliases for `sys::integer<...>`.
+/// @defgroup integers Safe(r) Integer Types
+/// @brief Convenience aliases for `sys::integer<...>`.
 /// @note Pass `byval`.
-
-/// @addtogroup Integer
 /// @{
 
-using i8 = ::sys::integer<int_least8_t>;
-using i16 = ::sys::integer<int_least16_t>;
-using i32 = ::sys::integer<int_least32_t>;
-using i64 = ::sys::integer<int_least64_t>;
+using i8 = ::sys::integer<int_least8_t>;   /**< Safe signed 8-bit int type. */
+using i16 = ::sys::integer<int_least16_t>; /**< Safe signed 16-bit int type. */
+using i32 = ::sys::integer<int_least32_t>; /**< Safe signed 32-bit int type. */
+using i64 = ::sys::integer<int_least64_t>; /**< Safe signed 64-bit int type. */
 
-using u8 = ::sys::integer<uint_least8_t>;
-using u16 = ::sys::integer<uint_least16_t>;
-using u32 = ::sys::integer<uint_least32_t>;
-using u64 = ::sys::integer<uint_least64_t>;
+using u8 = ::sys::integer<uint_least8_t>;   /**< Safe unsigned 8-bit int type. */
+using u16 = ::sys::integer<uint_least16_t>; /**< Safe unsigned 16-bit int type. */
+using u32 = ::sys::integer<uint_least32_t>; /**< Safe unsigned 32-bit int type. */
+using u64 = ::sys::integer<uint_least64_t>; /**< Safe unsigned 64-bit int type. */
 
-using sz = ::sys::integer<size_t>;
-using ssz = ::sys::integer<ptrdiff_t>;
+using sz = ::sys::integer<size_t>;     /**< Safe unsigned size type. */
+using ssz = ::sys::integer<ptrdiff_t>; /**< Safe signed size type. */
 
 /// @}
 
-/// @defgroup IntegerLiterals Integer Literals
-/// @details Literal suffixes for `sys::integer<...>`.
+/// @defgroup integer_literals Integer Literals
+/// @brief Literal suffixes for `sys::integer<...>`.
 /// @note Pass `byval`.
-
-/// @addtogroup IntegerLiterals
 /// @{
 
 // NOLINTBEGIN(bugprone-exception-escape)
 // clang-format off: C++23 -- no space b/w "" and literal suffix.
+/// @brief Literal suffix for `i8`.
 consteval /* NOLINT(misc-use-internal-linkage) */ i8 operator""_i8(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least8_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least8_t>::min()))
@@ -351,6 +345,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ i8 operator""_i8(ullong lit) n
 
     return { _as(int_least8_t, lit) };
 }
+/// @brief Literal suffix for `i16`.
 consteval /* NOLINT(misc-use-internal-linkage) */ i16 operator""_i16(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least16_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least16_t>::min()))
@@ -358,6 +353,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ i16 operator""_i16(ullong lit)
 
     return { _as(int_least16_t, lit) };
 }
+/// @brief Literal suffix for `i32`.
 consteval /* NOLINT(misc-use-internal-linkage) */ i32 operator""_i32(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least32_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least32_t>::min()))
@@ -365,6 +361,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ i32 operator""_i32(ullong lit)
 
     return { _as(int_least32_t, lit) };
 }
+/// @brief Literal suffix for `i64`.
 consteval /* NOLINT(misc-use-internal-linkage) */ i64 operator""_i64(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least64_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least64_t>::min()))
@@ -372,6 +369,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ i64 operator""_i64(ullong lit)
 
     return { _as(int_least64_t, lit) };
 }
+/// @brief Literal suffix for `u8`.
 consteval /* NOLINT(misc-use-internal-linkage) */ u8 operator""_u8(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least8_t>::max()))
@@ -379,6 +377,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ u8 operator""_u8(ullong lit) n
 
     return { _as(uint_least8_t, lit) };
 }
+/// @brief Literal suffix for `u16`.
 consteval /* NOLINT(misc-use-internal-linkage) */ u16 operator""_u16(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least16_t>::max()))
@@ -386,6 +385,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ u16 operator""_u16(ullong lit)
 
     return { _as(uint_least16_t, lit) };
 }
+/// @brief Literal suffix for `u32`.
 consteval /* NOLINT(misc-use-internal-linkage) */ u32 operator""_u32(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least32_t>::max()))
@@ -393,6 +393,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ u32 operator""_u32(ullong lit)
 
     return { _as(uint_least32_t, lit) };
 }
+/// @brief Literal suffix for `u64`.
 consteval /* NOLINT(misc-use-internal-linkage) */ u64 operator""_u64(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least64_t>::max()))
@@ -400,6 +401,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ u64 operator""_u64(ullong lit)
 
     return { _as(uint_least64_t, lit) };
 }
+/// @brief Literal suffix for `ssz`.
 consteval /* NOLINT(misc-use-internal-linkage) */ ssz operator""_z(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<ptrdiff_t>::max()) || std::cmp_less(lit, std::numeric_limits<ptrdiff_t>::min()))
@@ -407,6 +409,7 @@ consteval /* NOLINT(misc-use-internal-linkage) */ ssz operator""_z(ullong lit) n
 
     return { _as(ptrdiff_t, lit) };
 }
+/// @brief Literal suffix for `sz`.
 consteval /* NOLINT(misc-use-internal-linkage) */ sz operator""_uz(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<size_t>::max()))

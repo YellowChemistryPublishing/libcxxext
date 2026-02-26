@@ -22,6 +22,7 @@ namespace sys
     public:
         ch() = delete;
 
+        /// @brief Unicode character type equivalent to `T`.
         template <ICharacter T>
         using unicode_equiv =
             meta::type_switch<meta::type_case<std::same_as<T, char32_t>, char32_t>, meta::type_case<std::same_as<T, char16_t>, char16_t>,
@@ -187,6 +188,7 @@ namespace sys
         }
 
         /// @brief Writes a codepoint to a buffer.
+        /// @param c Codepoint value.
         /// @param out Buffer to write to, which must be at least `sizeof(char32_t)` bytes (2 `char16_t`s or 4 `char8_t`s).
         /// @return The number of elements written.
         /// @note `unsafe` because the byte-size of `out` must be `>= sizeof(char32_t)`.

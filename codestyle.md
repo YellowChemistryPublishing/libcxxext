@@ -72,13 +72,6 @@ integer types and standard integer aliases, i.e. `uint_least32_t`, `size_t`.
 
 ## Naming
 
-### `C++`
-
-- For macros, `_leading_underscore_snake_case`.
-- For concepts and template parameters, `PascalCase`.
-- For functions, member variables, global variables, enum types, and types, `snake_case`.
-- For _everything_ else, `camelCase`.
-
 ### Files and Directories
 
 - Scripts, test files, and directories are named in `snake_case`.
@@ -96,7 +89,7 @@ When deciding what casing to use:
 
 - For macros, `_leading_underscore_snake_case`.
 - For concepts and template parameters, `PascalCase`.
-- For functions, member variables, global variables, enum types, and types, `snake_case`.
+- For functions, member variables, global variables, enum types/values, and types, `snake_case`.
 - For _everything_ else, `camelCase`.
 
 Single statement bodies of control flow (i.e. after an `if`, `else`, `for`, etc.) must omit curly braces.
@@ -111,7 +104,7 @@ If you check all these boxes, your code is probably sufficiently well thought ou
 - `constexpr` anything that moves.
 - You are using `result<...>` for error handling.
 - An exception thrown at any point in my code would not cause a memory or resource leak (or, it is sufficiently justified that one must not occur).
-- For custom types, a function named `swap` is implemented in the same scope, and used in the type's move constructor.
+- For user-defined types, a function named `swap` is implemented in the same scope, and used in the type's move constructor.
     - (Please do the `friend constexpr void swap(T& a, T& b) { using std::swap; ... }` trick please.)
 - When applicable, a type has a member function with declaration `sz hash_code()` is provided.
 

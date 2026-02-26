@@ -21,11 +21,11 @@ namespace sys
         /// @brief Iterator for an `inplace_queue`.
         struct iterator
         {
-            using iterator_category = std::random_access_iterator_tag;
-            using difference_type = std::ptrdiff_t;
-            using value_type = T;
-            using pointer = T*;
-            using reference = T&;
+            using iterator_category = std::random_access_iterator_tag; /**< Random access iterator. */
+            using difference_type = std::ptrdiff_t;                    /**< Difference type. */
+            using value_type = T;                                      /**< Value type. */
+            using pointer = T*;                                        /**< Pointer type. */
+            using reference = T&;                                      /**< Reference type. */
 
             /// @brief Constructs an `Iterator` for an `inplace_queue`.
             /// @param queue The queue to iterate over.
@@ -76,16 +76,22 @@ namespace sys
                 return ret;
             }
 
+            /// @brief Add an offset.
             friend iterator operator+(const iterator& a, difference_type b) { return iterator(a.queue, (a.i + b) % Capacity); }
+            /// @brief Add an offset.
             friend iterator operator+(difference_type a, const iterator& b) { return iterator(b.queue, (b.i + a) % Capacity); }
+            /// @brief Difference between two iterators `a` and `b`.
             friend difference_type operator-(const iterator& a, const iterator& b) { return a.i > b.i ? std::ptrdiff_t(a.i - b.i) : -std::ptrdiff_t(b.i - a.i); }
+            /// @brief Subtract an offset.
             friend iterator operator-(const iterator& a, difference_type b) { return iterator(a.queue, (a.i + Capacity - b) % Capacity); }
 
+            /// @brief Add-assign an offset.
             iterator& operator+=(difference_type b)
             {
                 this->i = (this->i + b) % Capacity;
                 return *this;
             }
+            /// @brief Subtract-assign an offset.
             iterator& operator-=(difference_type b)
             {
                 this->i = (this->i + Capacity - b) % Capacity;
@@ -98,8 +104,8 @@ namespace sys
 
         inplace_queue() noexcept = default;
 
-        [[nodiscard]] bool empty() const noexcept { return this->size() == 0; }
-        [[nodiscard]] size_t size() const noexcept
+        [[nodiscard]] bool empty() const noexcept { return this->size() == 0; } /**< Query queue empty. */
+        [[nodiscard]] size_t size() const noexcept                              /**< Query queue size. */
         {
             if (full)
                 return Capacity;
@@ -107,11 +113,13 @@ namespace sys
                 return this->_end - this->_begin;
             return Capacity - this->_begin + this->_end;
         }
-        [[nodiscard]] consteval static size_t capacity() noexcept { return Capacity; }
+        [[nodiscard]] consteval static size_t capacity() noexcept { return Capacity; } /**< Query queue capacity. */
 
-        iterator begin() { return iterator(*this, this->_begin); }
-        iterator end() { return iterator(*this, this->_end); }
+        iterator begin() { return iterator(*this, this->_begin); } /**< Begin iterator. */
+        iterator end() { return iterator(*this, this->_end); }     /**< End iterator. */
 
+        /// @brief Enqueues `item` into the queue.
+        /// @return Whether the item was enqueued, or the queue was full.
         bool enqueue(const T& item)
         {
             if (this->full) [[unlikely]]
@@ -125,6 +133,8 @@ namespace sys
 
             return true;
         }
+        /// @brief Dequeues an item from the queue.
+        /// @return Whether the item was dequeued, or the queue was empty.
         bool try_dequeue(T& out)
         {
             if (!full && this->_begin == this->_end) [[unlikely]]

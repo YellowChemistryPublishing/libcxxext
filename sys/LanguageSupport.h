@@ -69,10 +69,8 @@ struct unsafe final
 #define _no_unique_address [[no_unique_address]]
 #endif
 
-/// @defgroup Casts C++ Casts
-/// @details Convenience macro aliases for C++ casts.
-
-/// @addtogroup Casts
+/// @defgroup casts C++ Casts
+/// @brief Convenience macro aliases for C++ casts.
 /// @{
 
 /// @def _as
@@ -106,10 +104,8 @@ struct unsafe final
     }                                                                                                                                                                           \
     while (false)
 
-/// @defgroup EarlyReturnOperators Early Return Macros
-/// @details Convenience macros for early return operations.
-
-/// @addtogroup EarlyReturnOperators
+/// @defgroup early_return_operators Early Return Macros
+/// @brief Convenience macros for early return operations.
 /// @{
 
 /// @def _retif(val, cond)
