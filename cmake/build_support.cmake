@@ -32,9 +32,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
     )
 else()
     target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
-        /utf-8 /Zc:preprocessor
+        /utf-8 /Zc:preprocessor /Zc:__cplusplus
 
-        /W4
+        /permissive- /W4
 
         /EHa
 
