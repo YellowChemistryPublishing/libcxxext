@@ -25,10 +25,10 @@ namespace sys::platform
     struct noop_thread_critical_section
     { };
 
-    using thread_critical_section_isr = noop_thread_critical_section_isr; ///< Platform-specific ISR-safe critical section RAII guard.
-    using thread_critical_section = noop_thread_critical_section;         ///< Platform-specific critical section RAII guard.
+    using thread_critical_section_isr = noop_thread_critical_section_isr; ///< @brief @anchor sys_thread_critical_section_isr
+    using thread_critical_section = noop_thread_critical_section;         ///< @brief @anchor sys_thread_critical_section
 
-    using thread_id = std::thread::id; ///< Platform-specific thread ID.
+    using thread_id = std::thread::id; ///< @brief @anchor sys_thread_id
 
     /// @internal
     /// @brief Thread handle.

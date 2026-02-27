@@ -24,12 +24,12 @@ namespace sys
         constexpr codepoint_iter() = default;
         /// @brief Construct from a contiguous range.
         constexpr codepoint_iter(const T* cur, const T* end) : cur(cur), end(end) { }
-        constexpr codepoint_iter(const codepoint_iter&) = default; ///< Copyable.
-        constexpr codepoint_iter(codepoint_iter&&) = default;      ///< Moveable.
+        constexpr codepoint_iter(const codepoint_iter&) = default; ///< @brief @anchor sys_codepoint_iter_copy
+        constexpr codepoint_iter(codepoint_iter&&) = default;      ///< @brief @anchor sys_codepoint_iter_move
         constexpr ~codepoint_iter() = default;
 
-        constexpr codepoint_iter& operator=(const codepoint_iter&) = default; ///< Copy-assignable.
-        constexpr codepoint_iter& operator=(codepoint_iter&&) = default;      ///< Move-assignable.
+        constexpr codepoint_iter& operator=(const codepoint_iter&) = default; ///< @brief @anchor sys_codepoint_iter_copy_assign
+        constexpr codepoint_iter& operator=(codepoint_iter&&) = default;      ///< @brief @anchor sys_codepoint_iter_move_assign
 
         /// @brief Codepoint value for current position.
         constexpr char32_t operator*() noexcept
