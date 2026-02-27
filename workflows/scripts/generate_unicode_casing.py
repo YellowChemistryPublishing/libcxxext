@@ -196,16 +196,16 @@ def main(argv: List[str]) -> None:
                     /// @brief Context for forward-looking casing rules.
                     struct forward_casing_context
                     {
-                        bool is_preceded_by_cased : 1 = false; /**< Whether the previous character is cased. */
-                        bool after_soft_dotted : 1 = false;    /**< Whether the previous character is soft dotted. */
-                        bool after_i : 1 = false;              /**< Whether the previous character is `\u0049` or `\u0069`. */
+                        bool is_preceded_by_cased : 1 = false; ///< Whether the previous character is cased.
+                        bool after_soft_dotted : 1 = false;    ///< Whether the previous character is soft dotted.
+                        bool after_i : 1 = false;              ///< Whether the previous character is `\u0049` or `\u0069`.
                     };
                     /// @brief Context for precomputed lookahead casing rules.
                     struct lookahead_casing_context
                     {
-                        bool followed_by_cased : 1 = false; /**< Whether the next character is cased. */
-                        bool more_above : 1 = false;        /**< Whether the next character is above. */
-                        bool before_dot : 1 = false;        /**< Whether the next character is a dot. */
+                        bool followed_by_cased : 1 = false; ///< Whether the next character is cased.
+                        bool more_above : 1 = false;        ///< Whether the next character is above.
+                        bool before_dot : 1 = false;        ///< Whether the next character is a dot.
                     };
                 } // namespace sys
 

@@ -25,10 +25,10 @@ namespace sys::platform
     struct noop_thread_critical_section
     { };
 
-    using thread_critical_section_isr = noop_thread_critical_section_isr; /**< Platform-specific ISR-safe critical section RAII guard. */
-    using thread_critical_section = noop_thread_critical_section;         /**< Platform-specific critical section RAII guard. */
+    using thread_critical_section_isr = noop_thread_critical_section_isr; ///< Platform-specific ISR-safe critical section RAII guard.
+    using thread_critical_section = noop_thread_critical_section;         ///< Platform-specific critical section RAII guard.
 
-    using thread_id = std::thread::id; /**< Platform-specific thread ID. */
+    using thread_id = std::thread::id; ///< Platform-specific thread ID.
 
     /// @internal
     /// @brief Thread handle.
@@ -136,7 +136,7 @@ namespace sys::platform
     /// @brief Thread pool.
     struct thread_pool
     {
-        static std::atomic<thread_pool*> instance; /**< Thread pool singleton. */
+        static std::atomic<thread_pool*> instance; ///< Thread pool singleton.
 
         thread_pool()
         {
@@ -174,7 +174,7 @@ namespace sys::platform
         concurrent_queue queue;
     };
 
-    constexpr i32 task_max_delay = i32::highest(); /**< Platform-specific max supported delay duration. */
+    constexpr i32 task_max_delay = i32::highest(); ///< Platform-specific max supported delay duration.
 } // namespace sys::platform
 
 /// @def _impl_task_yield_rtype

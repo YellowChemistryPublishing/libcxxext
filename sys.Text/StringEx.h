@@ -246,32 +246,32 @@ namespace sys
         constexpr explicit string(const sys::string<U>& other) : string(_as(std::basic_string_view<U>, other))
         { }
 
-        [[nodiscard]] bool empty() const { return this->str.empty(); }     /**< Check string empty. */
-        [[nodiscard]] sz size() const { return this->str.size(); }         /**< Query string size. */
-        [[nodiscard]] sz capacity() const { return this->str.capacity(); } /**< Query string capacity. */
-        [[nodiscard]] const T* c_str() const { return this->str.data(); }  /**< Obtain C-string. */
-        [[nodiscard]] T* data() { return this->str.data(); }               /**< Obtain string data. */
-        [[nodiscard]] const T* data() const { return this->str.data(); }   /**< Obtain string data. */
+        [[nodiscard]] bool empty() const { return this->str.empty(); }     ///< Check string empty.
+        [[nodiscard]] sz size() const { return this->str.size(); }         ///< Query string size.
+        [[nodiscard]] sz capacity() const { return this->str.capacity(); } ///< Query string capacity.
+        [[nodiscard]] const T* c_str() const { return this->str.data(); }  ///< Obtain C-string.
+        [[nodiscard]] T* data() { return this->str.data(); }               ///< Obtain string data.
+        [[nodiscard]] const T* data() const { return this->str.data(); }   ///< Obtain string data.
 
-        [[nodiscard]] constexpr auto begin() const { return this->str.cbegin(); }    /**< Begin iterator. */
-        [[nodiscard]] constexpr auto end() const { return this->str.cend(); }        /**< End iterator. */
-        [[nodiscard]] constexpr auto cbegin() const { return this->str.cbegin(); }   /**< Const begin iterator. */
-        [[nodiscard]] constexpr auto cend() const { return this->str.cend(); }       /**< Const end iterator. */
-        [[nodiscard]] constexpr auto rbegin() const { return this->str.crbegin(); }  /**< Reverse begin iterator. */
-        [[nodiscard]] constexpr auto rend() const { return this->str.crend(); }      /**< Reverse end iterator. */
-        [[nodiscard]] constexpr auto crbegin() const { return this->str.crbegin(); } /**< Const reverse begin iterator. */
-        [[nodiscard]] constexpr auto crend() const { return this->str.crend(); }     /**< Const reverse end iterator. */
+        [[nodiscard]] constexpr auto begin() const { return this->str.cbegin(); }    ///< Begin iterator.
+        [[nodiscard]] constexpr auto end() const { return this->str.cend(); }        ///< End iterator.
+        [[nodiscard]] constexpr auto cbegin() const { return this->str.cbegin(); }   ///< Const begin iterator.
+        [[nodiscard]] constexpr auto cend() const { return this->str.cend(); }       ///< Const end iterator.
+        [[nodiscard]] constexpr auto rbegin() const { return this->str.crbegin(); }  ///< Reverse begin iterator.
+        [[nodiscard]] constexpr auto rend() const { return this->str.crend(); }      ///< Reverse end iterator.
+        [[nodiscard]] constexpr auto crbegin() const { return this->str.crbegin(); } ///< Const reverse begin iterator.
+        [[nodiscard]] constexpr auto crend() const { return this->str.crend(); }     ///< Const reverse end iterator.
 
-        [[nodiscard]] constexpr T& front(unsafe) { return this->str.front(); }             /**< First char. */
-        [[nodiscard]] constexpr const T& front(unsafe) const { return this->str.front(); } /**< First char. */
-        [[nodiscard]] constexpr T& back(unsafe) { return this->str.back(); }               /**< Last char. */
-        [[nodiscard]] constexpr const T& back(unsafe) const { return this->str.back(); }   /**< Last char. */
+        [[nodiscard]] constexpr T& front(unsafe) { return this->str.front(); }             ///< First char.
+        [[nodiscard]] constexpr const T& front(unsafe) const { return this->str.front(); } ///< First char.
+        [[nodiscard]] constexpr T& back(unsafe) { return this->str.back(); }               ///< Last char.
+        [[nodiscard]] constexpr const T& back(unsafe) const { return this->str.back(); }   ///< Last char.
 
-        [[nodiscard]] bool contains(const std::basic_string_view<T> substr) const { return this->str.contains(substr); }       /**< Check if string contains `substr`. */
-        [[nodiscard]] bool starts_with(const T c) const { return this->str.starts_with(c); }                                   /**< Check if string starts with `c`. */
-        [[nodiscard]] bool starts_with(const std::basic_string_view<T> substr) const { return this->str.starts_with(substr); } /**< Check if string starts with `substr`. */
-        [[nodiscard]] bool ends_with(const T c) const { return this->str.ends_with(c); }                                       /**< Check if string ends with `c`. */
-        [[nodiscard]] bool ends_with(const std::basic_string_view<T> substr) const { return this->str.ends_with(substr); }     /**< Check if string ends with `substr`. */
+        [[nodiscard]] bool contains(const std::basic_string_view<T> substr) const { return this->str.contains(substr); }       ///< Check if string contains `substr`.
+        [[nodiscard]] bool starts_with(const T c) const { return this->str.starts_with(c); }                                   ///< Check if string starts with `c`.
+        [[nodiscard]] bool starts_with(const std::basic_string_view<T> substr) const { return this->str.starts_with(substr); } ///< Check if string starts with `substr`.
+        [[nodiscard]] bool ends_with(const T c) const { return this->str.ends_with(c); }                                       ///< Check if string ends with `c`.
+        [[nodiscard]] bool ends_with(const std::basic_string_view<T> substr) const { return this->str.ends_with(substr); }     ///< Check if string ends with `substr`.
 
         /// @brief Find the index of the first occurrence of `c` from `from`.
         [[nodiscard]] sz find_index(const T c, const sz from = 0_uz) const
@@ -294,8 +294,8 @@ namespace sys
             return this->str.substr(from, count);
         }
 
-        constexpr void reserve(const sz capacity) { this->str.reserve(capacity); } /**< Reserve capacity. */
-        constexpr void clear() { this->str.clear(); }                              /**< Clear string to empty. */
+        constexpr void reserve(const sz capacity) { this->str.reserve(capacity); } ///< Reserve capacity.
+        constexpr void clear() { this->str.clear(); }                              ///< Clear string to empty.
 
         /// @brief Append `c` to the end of the string.
         constexpr string& append(const T c) &
@@ -541,15 +541,15 @@ namespace sys
     };
 
     template <ICharacter T>
-    string(std::basic_string_view<T>) -> string<T>; /**< Deduction guide. */
+    string(std::basic_string_view<T>) -> string<T>; ///< @brief @anchor sys_string_from_basic_string_view
     template <ICharacter T>
-    string(std::basic_string<T>) -> string<T>; /**< Deduction guide. */
+    string(std::basic_string<T>) -> string<T>; ///< @brief @anchor sys_string_from_basic_string
 
-    using cstr = string<char>;      /**< `char` string. */
-    using wstr = string<wchar_t>;   /**< `wchar_t` string. */
-    using str = string<char8_t>;    /**< `char8_t` string. */
-    using str16 = string<char16_t>; /**< `char16_t` string. */
-    using str32 = string<char32_t>; /**< `char32_t` string. */
+    using cstr = string<char>;      ///< @brief @anchor sys_cstr
+    using wstr = string<wchar_t>;   ///< @brief @anchor sys_wstr
+    using str = string<char8_t>;    ///< @brief @anchor sys_str
+    using str16 = string<char16_t>; ///< @brief @anchor sys_str16
+    using str32 = string<char32_t>; ///< @brief @anchor sys_str32
 } // namespace sys
 
 /// @brief `std::formatter<...>` specialization for `sys::string<...>`.

@@ -3,8 +3,7 @@
 /// @file TaskEx.h
 
 #include <CompilerWarnings.h>
-/// @private
-_push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compiler coroutine codegen.
+_push_nowarn_msvc(_clwarn_msvc_unreachable); ///< @private @brief Erroneously generated for compiler coroutine codegen.
 
 #include <concepts>
 #include <coroutine>
@@ -108,8 +107,8 @@ namespace sys::internal
     template <typename T>
     struct task_promise_b
     {
-        std::coroutine_handle<> continuation;   /**< Coroutine continuation of this task. */
-        std::exception_ptr exception = nullptr; /**< Exception thrown within this task, if any. */
+        std::coroutine_handle<> continuation;   ///< Coroutine continuation of this task.
+        std::exception_ptr exception = nullptr; ///< Exception thrown within this task, if any.
 
         /// @cond
 

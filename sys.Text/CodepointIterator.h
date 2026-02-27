@@ -24,12 +24,12 @@ namespace sys
         constexpr codepoint_iter() = default;
         /// @brief Construct from a contiguous range.
         constexpr codepoint_iter(const T* cur, const T* end) : cur(cur), end(end) { }
-        constexpr codepoint_iter(const codepoint_iter&) = default; /**< Copyable. */
-        constexpr codepoint_iter(codepoint_iter&&) = default;      /**< Moveable. */
+        constexpr codepoint_iter(const codepoint_iter&) = default; ///< Copyable.
+        constexpr codepoint_iter(codepoint_iter&&) = default;      ///< Moveable.
         constexpr ~codepoint_iter() = default;
 
-        constexpr codepoint_iter& operator=(const codepoint_iter&) = default; /**< Copy-assignable. */
-        constexpr codepoint_iter& operator=(codepoint_iter&&) = default;      /**< Move-assignable. */
+        constexpr codepoint_iter& operator=(const codepoint_iter&) = default; ///< Copy-assignable.
+        constexpr codepoint_iter& operator=(codepoint_iter&&) = default;      ///< Move-assignable.
 
         /// @brief Codepoint value for current position.
         constexpr char32_t operator*() noexcept
@@ -74,26 +74,26 @@ namespace sys
         constexpr codepoint_view(const std::span<const T> range) : // NOLINT(hicpp-explicit-conversions)
             _beg(range.data(), range.data() + range.size()), _end(range.data() + range.size(), range.data() + range.size())
         { }
-        constexpr codepoint_view(const codepoint_view&) = default; /**< Copyable. */
-        constexpr codepoint_view(codepoint_view&&) = default;      /**< Moveable. */
+        constexpr codepoint_view(const codepoint_view&) = default; ///< @brief @anchor sys_codepoint_view_copy
+        constexpr codepoint_view(codepoint_view&&) = default;      ///< @brief @anchor sys_codepoint_view_move
         constexpr ~codepoint_view() = default;
 
-        constexpr codepoint_view& operator=(const codepoint_view&) = default; /**< Copy-assignable. */
-        constexpr codepoint_view& operator=(codepoint_view&&) = default;      /**< Move-assignable. */
+        constexpr codepoint_view& operator=(const codepoint_view&) = default; ///< @brief @anchor sys_codepoint_view_copy_assign
+        constexpr codepoint_view& operator=(codepoint_view&&) = default;      ///< @brief @anchor sys_codepoint_view_move_assign
 
-        [[nodiscard]] constexpr codepoint_iter<T> begin() const { return this->_beg; } /**< Begin iterator. */
-        [[nodiscard]] constexpr codepoint_iter<T> end() const { return this->_end; }   /**< End iterator. */
+        [[nodiscard]] constexpr codepoint_iter<T> begin() const { return this->_beg; } ///< @brief @anchor sys_codepoint_view_begin
+        [[nodiscard]] constexpr codepoint_iter<T> end() const { return this->_end; }   ///< @brief @anchor sys_codepoint_view_end
     };
 
     template <ICharacter T>
     class string;
 
     template <ICharacter T>
-    codepoint_view(std::span<T>) -> codepoint_view<T>; /**< Deduction guide. */
+    codepoint_view(std::span<T>) -> codepoint_view<T>; ///< @brief @anchor sys_codepoint_view_from_span
     template <ICharacter T>
-    codepoint_view(std::basic_string_view<T>) -> codepoint_view<T>; /**< Deduction guide. */
+    codepoint_view(std::basic_string_view<T>) -> codepoint_view<T>; ///< @brief @anchor sys_codepoint_view_from_basic_string_view
     template <ICharacter T>
-    codepoint_view(std::basic_string<T>) -> codepoint_view<T>; /**< Deduction guide. */
+    codepoint_view(std::basic_string<T>) -> codepoint_view<T>; ///< @brief @anchor sys_codepoint_view_from_basic_string
     template <ICharacter T>
-    codepoint_view(sys::string<T>) -> codepoint_view<T>; /**< Deduction guide. */
+    codepoint_view(sys::string<T>) -> codepoint_view<T>; ///< @brief @anchor sys_codepoint_view_from_string
 } // namespace sys

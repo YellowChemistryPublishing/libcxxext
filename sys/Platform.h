@@ -6,9 +6,9 @@
 /// @brief `#ifdef`able constants for compiler detection.
 /// @{
 
-#define _libcxxext_compiler_gcc 0   /**< Compiler detection constant. */
-#define _libcxxext_compiler_clang 0 /**< Compiler detection constant. */
-#define _libcxxext_compiler_msvc 0  /**< Compiler detection constant. */
+#define _libcxxext_compiler_gcc 0   ///< @brief @anchor sys_compiler_gcc
+#define _libcxxext_compiler_clang 0 ///< @brief @anchor sys_compiler_clang
+#define _libcxxext_compiler_msvc 0  ///< @brief @anchor sys_compiler_msvc
 
 /// @}
 
@@ -29,19 +29,19 @@
 /// @brief `#ifdef`able constants for executing ISA detection.
 /// @{
 
-#define _libcxxext_arch_unknown 0   /**< ISA detection constant. */
-#define _libcxxext_arch_x86_64 0    /**< ISA detection constant. */
-#define _libcxxext_arch_aarch64 0   /**< ISA detection constant. */
-#define _libcxxext_arch_arm 0       /**< ISA detection constant. */
-#define _libcxxext_arch_blackfin 0  /**< ISA detection constant. */
-#define _libcxxext_arch_x86 0       /**< ISA detection constant. */
-#define _libcxxext_arch_ia64 0      /**< ISA detection constant. */
-#define _libcxxext_arch_loongarch 0 /**< ISA detection constant. */
-#define _libcxxext_arch_mips 0      /**< ISA detection constant. */
-#define _libcxxext_arch_powerpc 0   /**< ISA detection constant. */
-#define _libcxxext_arch_riscv 0     /**< ISA detection constant. */
-#define _libcxxext_arch_sparc 0     /**< ISA detection constant. */
-#define _libcxxext_arch_superh 0    /**< ISA detection constant. */
+#define _libcxxext_arch_unknown 0   ///< @brief @anchor sys_arch_unknown
+#define _libcxxext_arch_x86_64 0    ///< @brief @anchor sys_arch_x86_64
+#define _libcxxext_arch_aarch64 0   ///< @brief @anchor sys_arch_aarch64
+#define _libcxxext_arch_arm 0       ///< @brief @anchor sys_arch_arm
+#define _libcxxext_arch_blackfin 0  ///< @brief @anchor sys_arch_blackfin
+#define _libcxxext_arch_x86 0       ///< @brief @anchor sys_arch_x86
+#define _libcxxext_arch_ia64 0      ///< @brief @anchor sys_arch_ia64
+#define _libcxxext_arch_loongarch 0 ///< @brief @anchor sys_arch_loongarch
+#define _libcxxext_arch_mips 0      ///< @brief @anchor sys_arch_mips
+#define _libcxxext_arch_powerpc 0   ///< @brief @anchor sys_arch_powerpc
+#define _libcxxext_arch_riscv 0     ///< @brief @anchor sys_arch_riscv
+#define _libcxxext_arch_sparc 0     ///< @brief @anchor sys_arch_sparc
+#define _libcxxext_arch_superh 0    ///< @brief @anchor sys_arch_superh
 
 /// @}
 
@@ -92,29 +92,29 @@
 /// @brief `#ifdef`able constants for target operating system detection.
 /// @{
 
-#define _libcxxext_os_unknown 0   /**< OS detection constant. */
-#define _libcxxext_os_aix 0       /**< OS detection constant. */
-#define _libcxxext_os_android 0   /**< OS detection constant. */
-#define _libcxxext_os_amigaos 0   /**< OS detection constant. */
-#define _libcxxext_os_bsd 0       /**< OS detection constant. */
-#define _libcxxext_os_ecos 0      /**< OS detection constant. */
-#define _libcxxext_os_web 0       /**< OS detection constant. */
-#define _libcxxext_os_fuchsia 0   /**< OS detection constant. */
-#define _libcxxext_os_haiku 0     /**< OS detection constant. */
-#define _libcxxext_os_os400 0     /**< OS detection constant. */
-#define _libcxxext_os_illumos 0   /**< OS detection constant. */
-#define _libcxxext_os_integrity 0 /**< OS detection constant. */
-#define _libcxxext_os_linux 0     /**< OS detection constant. */
-#define _libcxxext_os_lynx 0      /**< OS detection constant. */
-#define _libcxxext_os_macos 0     /**< OS detection constant. */
-#define _libcxxext_os_mint 0      /**< OS detection constant. */
-#define _libcxxext_os_msdos 0     /**< OS detection constant. */
-#define _libcxxext_os_nucleus 0   /**< OS detection constant. */
-#define _libcxxext_os_qnx 0       /**< OS detection constant. */
-#define _libcxxext_os_serenity 0  /**< OS detection constant. */
-#define _libcxxext_os_syllable 0  /**< OS detection constant. */
-#define _libcxxext_os_vxworks 0   /**< OS detection constant. */
-#define _libcxxext_os_windows 0   /**< OS detection constant. */
+#define _libcxxext_os_unknown 0   ///< @brief @anchor sys_os_unknown
+#define _libcxxext_os_aix 0       ///< @brief @anchor sys_os_aix
+#define _libcxxext_os_android 0   ///< @brief @anchor sys_os_android
+#define _libcxxext_os_amigaos 0   ///< @brief @anchor sys_os_amigaos
+#define _libcxxext_os_bsd 0       ///< @brief @anchor sys_os_bsd
+#define _libcxxext_os_ecos 0      ///< @brief @anchor sys_os_ecos
+#define _libcxxext_os_web 0       ///< @brief @anchor sys_os_web
+#define _libcxxext_os_fuchsia 0   ///< @brief @anchor sys_os_fuchsia
+#define _libcxxext_os_haiku 0     ///< @brief @anchor sys_os_haiku
+#define _libcxxext_os_os400 0     ///< @brief @anchor sys_os_os400
+#define _libcxxext_os_illumos 0   ///< @brief @anchor sys_os_illumos
+#define _libcxxext_os_integrity 0 ///< @brief @anchor sys_os_integrity
+#define _libcxxext_os_linux 0     ///< @brief @anchor sys_os_linux
+#define _libcxxext_os_lynx 0      ///< @brief @anchor sys_os_lynx
+#define _libcxxext_os_macos 0     ///< @brief @anchor sys_os_macos
+#define _libcxxext_os_mint 0      ///< @brief @anchor sys_os_mint
+#define _libcxxext_os_msdos 0     ///< @brief @anchor sys_os_msdos
+#define _libcxxext_os_nucleus 0   ///< @brief @anchor sys_os_nucleus
+#define _libcxxext_os_qnx 0       ///< @brief @anchor sys_os_qnx
+#define _libcxxext_os_serenity 0  ///< @brief @anchor sys_os_serenity
+#define _libcxxext_os_syllable 0  ///< @brief @anchor sys_os_syllable
+#define _libcxxext_os_vxworks 0   ///< @brief @anchor sys_os_vxworks
+#define _libcxxext_os_windows 0   ///< @brief @anchor sys_os_windows
 
 /// @}
 

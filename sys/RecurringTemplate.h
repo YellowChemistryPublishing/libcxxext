@@ -14,8 +14,7 @@ namespace sys
     struct recurring_template
     {
     protected:
-        /// @private
-        using recurring_type = T; /**< Identity of `T`. */
+        using recurring_type = T; ///< @private @brief @anchor sys_recurring_template_recurring_type
 
         recurring_template() = default;
 

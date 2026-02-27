@@ -20,13 +20,15 @@
 /// @note Pass `byval`.
 /// @{
 
-using byte = unsigned char; /**< Unsigned byte type. */             // NOLINT()
-using sbyte = signed char; /**< Signed byte type. */                // NOLINT()
-using ushort = unsigned short; /**< Unsigned short type. */         // NOLINT(google-runtime-int)
-using uint = unsigned int; /**< Unsigned int type. */               // NOLINT()
-using ulong = unsigned long; /**< Unsigned long type. */            // NOLINT(google-runtime-int)
-using llong = long long; /**< Signed long long type. */             // NOLINT(google-runtime-int)
-using ullong = unsigned long long; /**< Unsigned long long type. */ // NOLINT(google-runtime-int)
+// NOLINTBEGIN(google-runtime-int)
+using byte = unsigned char;        ///< @brief @anchor sys_byte
+using sbyte = signed char;         ///< @brief @anchor sys_sbyte
+using ushort = unsigned short;     ///< @brief @anchor sys_ushort
+using uint = unsigned int;         ///< @brief @anchor sys_uint
+using ulong = unsigned long;       ///< @brief @anchor sys_ulong
+using llong = long long;           ///< @brief @anchor sys_llong
+using ullong = unsigned long long; ///< @brief @anchor sys_ullong
+// NOLINTEND(google-runtime-int)
 
 /// @}
 
@@ -92,14 +94,14 @@ namespace sys
 
         [[nodiscard]] constexpr unsigned_t u() const noexcept { return std::bit_cast<unsigned_t>(**this); }
     public:
-        using underlying_type = For; /**< Identity of `For`. */
+        using underlying_type = For; ///< @brief @anchor sys_integer_underlying_type
 
-        [[nodiscard]] static consteval bool is_signed() { return std::is_signed_v<For>; } /**< Whether `underlying_type` is signed. */
+        [[nodiscard]] static consteval bool is_signed() { return std::is_signed_v<For>; } ///< @brief @anchor sys_integer_is_signed
 
-        [[nodiscard]] static consteval integer highest() { return std::numeric_limits<For>::max(); }   /**< Maximum value of `underlying_type`. */
-        [[nodiscard]] static consteval integer lowest() { return std::numeric_limits<For>::lowest(); } /**< Minimum value of `underlying_type`. */
-        [[nodiscard]] static consteval integer ones() { return _as(For, ~_as(For, 0)); }               /**< All bits set to `1`. */
-        [[nodiscard]] static consteval integer sentinel() { return sys::bsentinel<For>(); }            /**< Opinionated sentinel value for `underlying_type`. */
+        [[nodiscard]] static consteval integer highest() { return std::numeric_limits<For>::max(); }   ///< @brief @anchor sys_integer_highest
+        [[nodiscard]] static consteval integer lowest() { return std::numeric_limits<For>::lowest(); } ///< @brief @anchor sys_integer_lowest
+        [[nodiscard]] static consteval integer ones() { return _as(For, ~_as(For, 0)); }               ///< @brief @anchor sys_integer_ones
+        [[nodiscard]] static consteval integer sentinel() { return sys::bsentinel<For>(); }            ///< @brief @anchor sys_integer_sentinel
 
         constexpr integer() noexcept = default;
         /// @brief Construct from narrower-bounded `T`.
@@ -378,18 +380,18 @@ namespace sys
 /// @note Pass `byval`.
 /// @{
 
-using i8 = ::sys::integer<int_least8_t>;   /**< Safe signed 8-bit int type. */
-using i16 = ::sys::integer<int_least16_t>; /**< Safe signed 16-bit int type. */
-using i32 = ::sys::integer<int_least32_t>; /**< Safe signed 32-bit int type. */
-using i64 = ::sys::integer<int_least64_t>; /**< Safe signed 64-bit int type. */
+using i8 = ::sys::integer<int_least8_t>;   ///< @brief @anchor sys_i8
+using i16 = ::sys::integer<int_least16_t>; ///< @brief @anchor sys_i16
+using i32 = ::sys::integer<int_least32_t>; ///< @brief @anchor sys_i32
+using i64 = ::sys::integer<int_least64_t>; ///< @brief @anchor sys_i64
 
-using u8 = ::sys::integer<uint_least8_t>;   /**< Safe unsigned 8-bit int type. */
-using u16 = ::sys::integer<uint_least16_t>; /**< Safe unsigned 16-bit int type. */
-using u32 = ::sys::integer<uint_least32_t>; /**< Safe unsigned 32-bit int type. */
-using u64 = ::sys::integer<uint_least64_t>; /**< Safe unsigned 64-bit int type. */
+using u8 = ::sys::integer<uint_least8_t>;   ///< @brief @anchor sys_u8
+using u16 = ::sys::integer<uint_least16_t>; ///< @brief @anchor sys_u16
+using u32 = ::sys::integer<uint_least32_t>; ///< @brief @anchor sys_u32
+using u64 = ::sys::integer<uint_least64_t>; ///< @brief @anchor sys_u64
 
-using sz = ::sys::integer<size_t>;     /**< Safe unsigned size type. */
-using ssz = ::sys::integer<ptrdiff_t>; /**< Safe signed size type. */
+using sz = ::sys::integer<size_t>;     ///< @brief @anchor sys_sz
+using ssz = ::sys::integer<ptrdiff_t>; ///< @brief @anchor sys_ssz
 
 /// @}
 
