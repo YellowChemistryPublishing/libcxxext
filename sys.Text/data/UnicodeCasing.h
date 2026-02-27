@@ -14,16 +14,16 @@ namespace sys
     /// @brief Context for forward-looking casing rules.
     struct forward_casing_context
     {
-        bool is_preceded_by_cased : 1 = false; ///< @brief @anchor sys_forward_casing_context_is_preceded_by_cased
-        bool after_soft_dotted : 1 = false;    ///< @brief @anchor sys_forward_casing_context_after_soft_dotted
-        bool after_i : 1 = false;              ///< @brief @anchor sys_forward_casing_context_after_i
+        bool is_preceded_by_cased : 1 = false;
+        bool after_soft_dotted : 1 = false;
+        bool after_i : 1 = false;
     };
     /// @brief Context for precomputed lookahead casing rules.
     struct lookahead_casing_context
     {
-        bool followed_by_cased : 1 = false; ///< @brief @anchor sys_lookahead_casing_context_followed_by_cased
-        bool more_above : 1 = false;        ///< @brief @anchor sys_lookahead_casing_context_more_above
-        bool before_dot : 1 = false;        ///< @brief @anchor sys_lookahead_casing_context_before_dot
+        bool followed_by_cased : 1 = false;
+        bool more_above : 1 = false;
+        bool before_dot : 1 = false;
     };
 } // namespace sys
 

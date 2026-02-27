@@ -52,6 +52,7 @@ namespace sys::internal
 {
     /// @internal
     /// @brief Status of a result.
+    /// @note Pass `byval`.
     enum class result_status : byte
     {
         ok,

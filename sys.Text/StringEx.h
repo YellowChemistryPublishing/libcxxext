@@ -88,8 +88,36 @@ namespace sys
                 ctx.after_i = false;
         }
 
+        constexpr auto first_non_ws_beg() const
+        {
+            const T* const endPtr = std::to_address(this->cend());
+            const codepoint_iter<T> end(endPtr, endPtr);
+
+            auto ret = codepoint_iter<T>(std::to_address(this->cbegin()), endPtr);
+            while (ret < end && ch::is_whitespace(*ret))
+                ++ret;
+
+            return this->cbegin() + (std::to_address(ret) - std::to_address(this->cbegin()));
+        }
+        constexpr auto last_ws_beg() const
+        {
+            const T* const endPtr = std::to_address(this->cend());
+            const codepoint_iter<T> end(endPtr, endPtr);
+
+            const T* ret = std::to_address(this->cbegin());
+            auto it = codepoint_iter<T>(std::to_address(this->cbegin()), endPtr);
+            while (it < end)
+            {
+                if (!ch::is_whitespace(*it))
+                    ret = std::to_address(++it);
+                else
+                    ++it;
+            }
+
+            return this->cbegin() + (ret - std::to_address(this->cbegin()));
+        }
         template <bool IsUpper>
-        constexpr string as_cased(std::u8string_view lang)
+        constexpr string as_cased(std::u8string_view lang) const
         {
             string ret;
             ret.reserve(this->capacity());
@@ -124,29 +152,24 @@ namespace sys
             return ret;
         }
     public:
-        /// @brief Construct an empty string.
+        /// @brief Empty string.
         constexpr string() = default;
         constexpr string(std::nullptr_t) = delete;
-        /// @brief Construct from a string literal.
         template <size_t N>
         requires (N > 0uz)
         constexpr string(const T (&str)[N]) : str(str, str + N - 1z) // NOLINT(hicpp-explicit-conversions)
         { }
-        /// @brief Construct from an initializer list.
         constexpr string(const std::initializer_list<T> il) : str(il) { }
-        /// @brief Construct from a C-string.
-        constexpr string(const T* cstr, unsafe) : string(cstr, cstr + (cstr ? ch::buffer_size(cstr, unsafe()) : 0_uz)) { }
-        /// @brief Construct from a `std::basic_string<T>`.
+        /// @warning `unsafe` because `cstr` has preconditions.
+        /// @pre `const T cstr[N]` => `cstr != nullptr && cstr[N - 1z] == '\0'`
+        constexpr string(const T* cstr, unsafe) : string(cstr, cstr + ch::buffer_size(cstr, unsafe())) { }
         constexpr string(std::basic_string<T> str) : str(std::move(str)) { } // NOLINT(hicpp-explicit-conversions)
-        /// @brief Construct from a `std::span<const T>`.
         constexpr explicit string(const std::span<const T> data) : string(data.begin(), data.end()) { }
-        /// @brief Construct from a `std::basic_string_view<T>`.
         constexpr explicit string(const std::basic_string_view<T> data) : string(data.begin(), data.end()) { }
-        /// @brief Construct from an input range.
+        /// @pre `++...beg == end`
         template <std::input_iterator It>
         constexpr explicit string(It beg, It end) : str(beg, end)
         { }
-        /// @brief Construct from an `IEnumerable`.
         template <IEnumerable Container>
         constexpr explicit string(const Container& container) : string(std::begin(container), std::end(container))
         { }
@@ -154,74 +177,54 @@ namespace sys
         constexpr string(const T c) : str(1uz, c) { } // NOLINT(hicpp-explicit-conversions)
         /// @brief Repeat a character.
         constexpr string(const T c, const sz count) : str(count, c) { }
-        /// @brief Copyable.
         constexpr string(const string&) = default;
-        /// @brief Moveable.
         constexpr string(string&& other) noexcept { swap(*this, other); }
         ~string() = default;
 
-        /// @brief Copyable.
         constexpr string& operator=(const string&) = default;
-        /// @brief Moveable.
         constexpr string& operator=(string&& other) noexcept
         {
             swap(*this, other);
             return *this;
         }
 
-        /// @brief Equality comparison.
         friend constexpr bool operator==(const string&, const string&) = default;
-        /// @brief Transparent equality comparison (string literals).
         template <size_t N>
         friend constexpr bool operator==(const string& a, const T (&b)[N])
         {
             return a.str == b;
         }
-        /// @brief Transparent equality comparison (string literals).
         template <size_t N>
         friend constexpr bool operator==(const T (&a)[N], const string& b)
         {
             return b.str == a;
         }
-        /// @brief Equality comparison (string views).
         friend constexpr bool operator==(const string& a, const std::basic_string_view<T>& b) { return a.str == b; }
-        /// @brief Equality comparison (string views).
         friend constexpr bool operator==(const std::basic_string_view<T>& a, const string& b) { return b.str == a; }
-        /// @brief Three-way comparison.
         friend constexpr auto operator<=>(const string&, const string&) = default;
-        /// @brief Transparent three-way comparison (string literals).
         template <size_t N>
         friend constexpr auto operator<=>(const string& a, const T (&b)[N])
         {
             return a.str <=> b;
         }
-        /// @brief Transparent three-way comparison (string literals).
         template <size_t N>
         friend constexpr auto operator<=>(const T (&a)[N], const string& b)
         {
             return b.str <=> a;
         }
-        /// @brief Three-way comparison (string views).
         friend constexpr auto operator<=>(const string& a, const std::basic_string_view<T>& b) { return a.str <=> b; }
-        /// @brief Three-way comparison (string views).
         friend constexpr auto operator<=>(const std::basic_string_view<T>& a, const string& b) { return b.str <=> a; }
 
-        /// @brief Convert to a C-string.
         [[nodiscard]] constexpr explicit operator const T*() const { return this->str.data(); }
-        /// @brief Convert to a `std::span<const T>`.
         [[nodiscard]] constexpr operator std::span<const T>() const { return std::span<const T>(this->data(), this->size()); } // NOLINT(hicpp-explicit-conversions)
-        /// @brief Convert to a `std::span<T>`.
-        [[nodiscard]] constexpr operator std::span<T>() { return std::span<T>(this->data(), this->size()); } // NOLINT(hicpp-explicit-conversions)
-        /// @brief Convert to a `std::basic_string_view<T>`.
-        [[nodiscard]] constexpr operator std::basic_string_view<T>() const // NOLINT(hicpp-explicit-conversions)
+        [[nodiscard]] constexpr operator std::span<T>() { return std::span<T>(this->data(), this->size()); }                   // NOLINT(hicpp-explicit-conversions)
+        [[nodiscard]] constexpr operator std::basic_string_view<T>() const                                                     // NOLINT(hicpp-explicit-conversions)
         {
             return std::basic_string_view<T>(this->data(), this->size());
         }
-        /// @brief Access by index.
-        /// @note `unsafe` because `i` is unchecked.
+        /// @warning `unsafe` because `i` is unchecked.
         constexpr T& operator[](const sz i, unsafe) { return this->str[i]; }
-        /// @brief Access by index.
-        /// @note `unsafe` because `i` is unchecked.
+        /// @warning `unsafe` because `i` is unchecked.
         constexpr const T& operator[](const sz i, unsafe) const { return this->str[i]; }
 
         /// @brief Transcode between unicode strings of different character types.
@@ -235,43 +238,43 @@ namespace sys
                 this->append(std::span(buf, ch::write_codepoint(c, buf, unsafe())));
             }
         }
-        /// @see `sys::string<T>::string(data)`
+        /// @see `sys::string<T>::string(const std::basic_string_view<U>)`
         template <ICharacter U>
         requires (!std::same_as<T, U>)
         constexpr explicit string(const std::basic_string<U>& other) : string(std::basic_string_view<U>(other))
         { }
-        /// @see `sys::string<T>::string(data)`
+        /// @see `sys::string<T>::string(const std::basic_string_view<U>)`
         template <ICharacter U>
         requires (!std::same_as<T, U>)
         constexpr explicit string(const sys::string<U>& other) : string(_as(std::basic_string_view<U>, other))
         { }
 
-        [[nodiscard]] bool empty() const { return this->str.empty(); }     ///< @brief @anchor sys_string_empty
-        [[nodiscard]] sz size() const { return this->str.size(); }         ///< @brief @anchor sys_string_size
-        [[nodiscard]] sz capacity() const { return this->str.capacity(); } ///< @brief @anchor sys_string_capacity
-        [[nodiscard]] const T* c_str() const { return this->str.data(); }  ///< @brief @anchor sys_string_c_str
-        [[nodiscard]] T* data() { return this->str.data(); }               ///< @brief @anchor sys_string_data
-        [[nodiscard]] const T* data() const { return this->str.data(); }   ///< @brief @anchor sys_string_const_data
+        [[nodiscard]] bool empty() const { return this->str.empty(); }
+        [[nodiscard]] sz size() const { return this->str.size(); }
+        [[nodiscard]] sz capacity() const { return this->str.capacity(); }
+        [[nodiscard]] const T* c_str() const { return this->str.data(); }
+        [[nodiscard]] T* data() { return this->str.data(); }
+        [[nodiscard]] const T* data() const { return this->str.data(); }
 
-        [[nodiscard]] constexpr auto begin() const { return this->str.cbegin(); }    ///< @brief @anchor sys_string_begin
-        [[nodiscard]] constexpr auto end() const { return this->str.cend(); }        ///< @brief @anchor sys_string_end
-        [[nodiscard]] constexpr auto cbegin() const { return this->str.cbegin(); }   ///< @brief @anchor sys_string_cbegin
-        [[nodiscard]] constexpr auto cend() const { return this->str.cend(); }       ///< @brief @anchor sys_string_cend
-        [[nodiscard]] constexpr auto rbegin() const { return this->str.crbegin(); }  ///< @brief @anchor sys_string_rbegin
-        [[nodiscard]] constexpr auto rend() const { return this->str.crend(); }      ///< @brief @anchor sys_string_rend
-        [[nodiscard]] constexpr auto crbegin() const { return this->str.crbegin(); } ///< @brief @anchor sys_string_crbegin
-        [[nodiscard]] constexpr auto crend() const { return this->str.crend(); }     ///< @brief @anchor sys_string_crend
+        [[nodiscard]] constexpr auto begin() const { return this->str.cbegin(); }
+        [[nodiscard]] constexpr auto end() const { return this->str.cend(); }
+        [[nodiscard]] constexpr auto cbegin() const { return this->str.cbegin(); }
+        [[nodiscard]] constexpr auto cend() const { return this->str.cend(); }
+        [[nodiscard]] constexpr auto rbegin() const { return this->str.crbegin(); }
+        [[nodiscard]] constexpr auto rend() const { return this->str.crend(); }
+        [[nodiscard]] constexpr auto crbegin() const { return this->str.crbegin(); }
+        [[nodiscard]] constexpr auto crend() const { return this->str.crend(); }
 
-        [[nodiscard]] constexpr T& front(unsafe) { return this->str.front(); }             ///< @brief @anchor sys_string_front
-        [[nodiscard]] constexpr const T& front(unsafe) const { return this->str.front(); } ///< @brief @anchor sys_string_const_front
-        [[nodiscard]] constexpr T& back(unsafe) { return this->str.back(); }               ///< @brief @anchor sys_string_back
-        [[nodiscard]] constexpr const T& back(unsafe) const { return this->str.back(); }   ///< @brief @anchor sys_string_const_back
+        [[nodiscard]] constexpr T& front(unsafe) { return this->str.front(); }
+        [[nodiscard]] constexpr const T& front(unsafe) const { return this->str.front(); }
+        [[nodiscard]] constexpr T& back(unsafe) { return this->str.back(); }
+        [[nodiscard]] constexpr const T& back(unsafe) const { return this->str.back(); }
 
-        [[nodiscard]] bool contains(const std::basic_string_view<T> substr) const { return this->str.contains(substr); }       ///< @brief @anchor sys_string_contains
-        [[nodiscard]] bool starts_with(const T c) const { return this->str.starts_with(c); }                                   ///< @brief @anchor sys_string_starts_with
-        [[nodiscard]] bool starts_with(const std::basic_string_view<T> substr) const { return this->str.starts_with(substr); } ///< @brief @anchor sys_string_const_starts_with
-        [[nodiscard]] bool ends_with(const T c) const { return this->str.ends_with(c); }                                       ///< @brief @anchor sys_string_ends_with
-        [[nodiscard]] bool ends_with(const std::basic_string_view<T> substr) const { return this->str.ends_with(substr); }     ///< @brief @anchor sys_string_const_ends_with
+        [[nodiscard]] bool contains(const std::basic_string_view<T> substr) const { return this->str.contains(substr); }
+        [[nodiscard]] bool starts_with(const T c) const { return this->str.starts_with(c); }
+        [[nodiscard]] bool starts_with(const std::basic_string_view<T> substr) const { return this->str.starts_with(substr); }
+        [[nodiscard]] bool ends_with(const T c) const { return this->str.ends_with(c); }
+        [[nodiscard]] bool ends_with(const std::basic_string_view<T> substr) const { return this->str.ends_with(substr); }
 
         /// @brief Find the index of the first occurrence of `c` from `from`.
         [[nodiscard]] sz find_index(const T c, const sz from = 0_uz) const
@@ -287,15 +290,15 @@ namespace sys
             const sz ret = this->str.find(substr, from);
             return ret != std::basic_string_view<T>::npos ? ret : this->size();
         }
-        /// @brief Substring by range.
+        /// @brief Substring of range [`from`, `from` + `count`).
         [[nodiscard]] string substr(const sz from, const sz count) const
         {
             _retif({}, from >= this->size());
             return this->str.substr(from, count);
         }
 
-        constexpr void reserve(const sz capacity) { this->str.reserve(capacity); } ///< @brief @anchor sys_string_reserve
-        constexpr void clear() { this->str.clear(); }                              ///< @brief @anchor sys_string_clear
+        constexpr void reserve(const sz capacity) { this->str.reserve(capacity); }
+        constexpr void clear() { this->str.clear(); }
 
         /// @brief Append `c` to the end of the string.
         constexpr string& append(const T c) &
@@ -323,7 +326,7 @@ namespace sys
         constexpr string append(const std::span<const T> data) && { return this->append(data), std::move(*this); }
 
         /// @brief Remove the last character from the string.
-        /// @note `unsafe` because `.empty()` is unchecked.
+        /// @warning `unsafe` because `.empty()` is unchecked.
         constexpr string& pop_back(unsafe) &
         {
             this->str.pop_back();
@@ -341,6 +344,13 @@ namespace sys
         /// @overload
         constexpr string pop_back() && { return this->pop_back(), std::move(*this); }
 
+        /// @brief Obtain a copy with leading and trailing whitespace removed.
+        constexpr string trimmed() const
+        {
+            const auto from = this->first_non_ws_beg(), to = this->last_ws_beg();
+            _retif({}, from >= to);
+            return std::basic_string<T>(from, to);
+        }
         /// @brief Remove leading and trailing whitespace.
         constexpr string& trim() &
         {
@@ -349,51 +359,21 @@ namespace sys
         }
         /// @overload
         constexpr string trim() && { return this->trim(), std::move(*this); }
+        /// @brief Obtain a copy with leading whitespace removed.
+        constexpr string start_trimmed() const { return std::basic_string<T>(this->first_non_ws_beg(), this->cend()); }
         /// @brief Remove leading whitespace.
-        constexpr string& trim_start() &
-        {
-            const T* const endPtr = std::to_address(this->cend());
-            const codepoint_iter<T> end(endPtr, endPtr);
-
-            auto it = codepoint_iter<T>(std::to_address(this->cbegin()), endPtr);
-            while (it < end && ch::is_whitespace(*it))
-                ++it;
-
-            if (std::to_address(it) > std::to_address(this->cbegin()))
-                this->str.erase(this->cbegin(), this->cbegin() + (std::to_address(it) - std::to_address(this->cbegin())));
-
-            return *this;
-        }
+        constexpr string& trim_start() & { return this->str.erase(this->cbegin(), this->first_non_ws_beg()), *this; }
         /// @overload
         constexpr string trim_start() && { return this->trim_start(), std::move(*this); }
+        /// @brief Obtain a copy with trailing whitespace removed.
+        constexpr string end_trimmed() const { return std::basic_string<T>(this->cbegin(), this->last_ws_beg()); }
         /// @brief Remove trailing whitespace.
-        constexpr string& trim_end() &
-        {
-            const T* const endPtr = std::to_address(this->cend());
-            const codepoint_iter<T> end(endPtr, endPtr);
-
-            const T* lastSpaceBeg = std::to_address(this->cbegin());
-            auto it = codepoint_iter<T>(std::to_address(this->cbegin()), endPtr);
-            while (it < end)
-            {
-                if (!ch::is_whitespace(*it))
-                    lastSpaceBeg = std::to_address(++it);
-                else
-                    ++it;
-            }
-
-            if (lastSpaceBeg < std::to_address(this->cend()))
-                this->str.erase(this->cbegin() + (lastSpaceBeg - std::to_address(this->cbegin())), this->cend());
-
-            return *this;
-        }
+        constexpr string& trim_end() & { return this->str.erase(this->last_ws_beg(), this->cend()), *this; }
         /// @overload
         constexpr string trim_end() && { return this->trim_end(), std::move(*this); }
 
-        /// @brief Replace invalid codepoints with U+FFFD.
-        constexpr string& replace_invalid() & { return (*this = std::move(*this).replace_invalid()); }
-        /// @overload
-        constexpr string replace_invalid() &&
+        /// @brief Obtain a copy with invalids replaced with U+FFFD.
+        constexpr string invalids_replaced() const
         {
             string ret;
             ret.reserve(this->capacity());
@@ -404,20 +384,26 @@ namespace sys
             }
             return ret;
         }
+        /// @brief Replace invalid codepoints with U+FFFD.
+        constexpr string& replace_invalid() & { return (*this = this->invalids_replaced()); }
+        /// @overload
+        constexpr string replace_invalid() && { return this->invalids_replaced(); }
 
+        /// @brief Obtain a copy as lowercase.
+        constexpr string lowered(std::u8string_view lang = u8"") const { return this->as_cased<false>(lang); }
         /// @brief Convert to lowercase.
-        constexpr string& to_lower(std::u8string_view lang = u8"") & { return (*this = std::move(*this).to_lower(lang)); }
+        constexpr string& to_lower(std::u8string_view lang = u8"") & { return (*this = this->lowered(lang)); }
         /// @overload
-        constexpr string to_lower(std::u8string_view lang = u8"") && { return this->as_cased<false>(lang); }
+        constexpr string to_lower(std::u8string_view lang = u8"") && { return this->lowered(lang); }
+        /// @brief Obtain a copy as uppercase.
+        constexpr string uppered(std::u8string_view lang = u8"") const { return this->as_cased<true>(lang); }
         /// @brief Convert to uppercase.
-        constexpr string& to_upper(std::u8string_view lang = u8"") & { return (*this = std::move(*this).to_upper(lang)); }
+        constexpr string& to_upper(std::u8string_view lang = u8"") & { return (*this = this->uppered(lang)); }
         /// @overload
-        constexpr string to_upper(std::u8string_view lang = u8"") && { return this->as_cased<true>(lang); }
+        constexpr string to_upper(std::u8string_view lang = u8"") && { return this->uppered(lang); }
 
-        /// @brief Transform with canonical case folding.
-        constexpr string& fold(std::u8string_view lang = u8"") & { return (*this = std::move(*this).fold(lang)); }
-        /// @overload
-        constexpr string fold(std::u8string_view lang = u8"") &&
+        /// @brief Obtain a copy case folded.
+        constexpr string folded(std::u8string_view lang = u8"") const
         {
             string ret;
             ret.reserve(this->capacity());
@@ -432,6 +418,10 @@ namespace sys
             }
             return ret;
         }
+        /// @brief Transform with canonical case folding.
+        constexpr string& fold(std::u8string_view lang = u8"") & { return (*this = this->folded(lang)); }
+        /// @overload
+        constexpr string fold(std::u8string_view lang = u8"") && { return this->folded(lang); }
 
         /// @brief Split the string into substrings separated by `delimiter`.
         template <IAppendable<string> Container = std::vector<string>>
@@ -541,15 +531,15 @@ namespace sys
     };
 
     template <ICharacter T>
-    string(std::basic_string_view<T>) -> string<T>; ///< @brief @anchor sys_string_from_basic_string_view
+    string(std::basic_string_view<T>) -> string<T>;
     template <ICharacter T>
-    string(std::basic_string<T>) -> string<T>; ///< @brief @anchor sys_string_from_basic_string
+    string(std::basic_string<T>) -> string<T>;
 
-    using cstr = string<char>;      ///< @brief @anchor sys_cstr
-    using wstr = string<wchar_t>;   ///< @brief @anchor sys_wstr
-    using str = string<char8_t>;    ///< @brief @anchor sys_str
-    using str16 = string<char16_t>; ///< @brief @anchor sys_str16
-    using str32 = string<char32_t>; ///< @brief @anchor sys_str32
+    using cstr = string<char>;
+    using wstr = string<wchar_t>;
+    using str = string<char8_t>;
+    using str16 = string<char16_t>;
+    using str32 = string<char32_t>;
 } // namespace sys
 
 /// @brief `std::formatter<...>` specialization for `sys::string<...>`.

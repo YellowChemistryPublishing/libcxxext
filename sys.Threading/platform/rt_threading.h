@@ -25,10 +25,10 @@ namespace sys::platform
     struct noop_thread_critical_section
     { };
 
-    using thread_critical_section_isr = noop_thread_critical_section_isr; ///< @brief @anchor sys_thread_critical_section_isr
-    using thread_critical_section = noop_thread_critical_section;         ///< @brief @anchor sys_thread_critical_section
+    using thread_critical_section_isr = noop_thread_critical_section_isr;
+    using thread_critical_section = noop_thread_critical_section;
 
-    using thread_id = std::thread::id; ///< @brief @anchor sys_thread_id
+    using thread_id = std::thread::id;
 
     /// @internal
     /// @brief Thread handle.
@@ -101,7 +101,7 @@ namespace sys::platform
             this->cv.notify_one();
         }
         /// @brief Dequeue into `handle` if queue non-empty.
-        /// @note `unsafe` because unguarded.
+        /// @warning `unsafe` because unguarded.
         bool try_dequeue(std::coroutine_handle<>& handle, unsafe)
         {
             if (this->queue.empty())

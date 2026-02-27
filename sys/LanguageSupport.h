@@ -127,6 +127,17 @@ struct unsafe final
     }                                                                                                                                                                           \
     while (false)
 
+/// @def _contract_assert(cond)
+/// @brief Enforce a contract, throwing a `contract_violation_exception` if `cond` is `false`.
+#define _contract_assert(cond)                                                                                             \
+    do                                                                                                                     \
+    {                                                                                                                      \
+        const bool _expr = cond;                                                                                           \
+        if (!_expr)                                                                                                        \
+            _throw(::sys::contract_violation_exception("Contract violated, condition `" #cond "` evaluated to `false`.")); \
+    }                                                                                                                      \
+    while (false)
+
 /// @defgroup early_return_operators Early Return Macros
 /// @brief Convenience macros for early return operations.
 /// @{
@@ -153,14 +164,3 @@ struct unsafe final
     while (false)
 
 /// @}
-
-/// @def _contract_assert(cond)
-/// @brief Enforce a contract, throwing a `contract_violation_exception` if `cond` is `false`.
-#define _contract_assert(cond)                                                                                             \
-    do                                                                                                                     \
-    {                                                                                                                      \
-        const bool _expr = cond;                                                                                           \
-        if (!_expr)                                                                                                        \
-            _throw(::sys::contract_violation_exception("Contract violated, condition `" #cond "` evaluated to `false`.")); \
-    }                                                                                                                      \
-    while (false)

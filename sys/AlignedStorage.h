@@ -17,7 +17,7 @@ namespace sys
     requires (sizeof...(Ts) > 0)
     struct aligned_storage final
     {
-        alignas(Ts...) byte mem[std::max({ sizeof(Ts)... })] {}; ///< @brief @anchor sys_aligned_storage_mem
+        alignas(Ts...) byte mem[std::max({ sizeof(Ts)... })] {}; ///< Direct storage access.
 
         /// @brief Pointer to storage.
         template <typename T = std::tuple_element_t<0, std::tuple<Ts...>>>

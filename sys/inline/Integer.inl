@@ -21,20 +21,21 @@
 /// @{
 
 // NOLINTBEGIN(google-runtime-int)
-using byte = unsigned char;        ///< @brief @anchor sys_byte
-using sbyte = signed char;         ///< @brief @anchor sys_sbyte
-using ushort = unsigned short;     ///< @brief @anchor sys_ushort
-using uint = unsigned int;         ///< @brief @anchor sys_uint
-using ulong = unsigned long;       ///< @brief @anchor sys_ulong
-using llong = long long;           ///< @brief @anchor sys_llong
-using ullong = unsigned long long; ///< @brief @anchor sys_ullong
+using byte = unsigned char;
+using sbyte = signed char;
+using ushort = unsigned short;
+using uint = unsigned int;
+using ulong = unsigned long;
+using llong = long long;
+using ullong = unsigned long long;
 // NOLINTEND(google-runtime-int)
 
 /// @}
 
 namespace sys
 {
-    /// @brief Saturating integer-to-integer cast.
+    /// @brief Integer-to-integer cast.
+    /// @warning `unsafe` because this is saturating!
     template <sys::IBuiltinInteger To, sys::IBuiltinInteger From>
     constexpr To bnumeric_cast(const From value, unsafe) noexcept // NOLINT(misc-use-internal-linkage)
     {
@@ -49,7 +50,8 @@ namespace sys
             return To(value);
 #endif
     }
-    /// @brief Saturating floating-point-to-integer cast.
+    /// @brief Floating-point-to-integer cast.
+    /// @warning `unsafe` because this is saturating!
     template <sys::IBuiltinInteger To, sys::IBuiltinFloatingPoint From>
     constexpr To bnumeric_cast(const From value, unsafe) noexcept // NOLINT(misc-use-internal-linkage)
     {
@@ -61,13 +63,13 @@ namespace sys
             return To(value);
     }
 
-    /// @brief Returns an opinionated sentinel value for `T`.
+    /// @brief Opinionated sentinel value for `T`.
     template <sys::IBuiltinIntegerSigned T>
     consteval T bsentinel() // NOLINT(misc-use-internal-linkage)
     {
         return std::numeric_limits<T>::lowest();
     }
-    /// @brief Returns an opinionated sentinel value for `T`.
+    /// @brief Opinionated sentinel value for `T`.
     template <sys::IBuiltinIntegerUnsigned T>
     consteval T bsentinel() // NOLINT(misc-use-internal-linkage)
     {
@@ -94,183 +96,157 @@ namespace sys
 
         [[nodiscard]] constexpr unsigned_t u() const noexcept { return std::bit_cast<unsigned_t>(**this); }
     public:
-        using underlying_type = For; ///< @brief @anchor sys_integer_underlying_type
+        using underlying_type = For;
 
-        [[nodiscard]] static consteval bool is_signed() { return std::is_signed_v<For>; } ///< @brief @anchor sys_integer_is_signed
+        [[nodiscard]] static consteval bool is_signed() { return std::is_signed_v<For>; }
 
-        [[nodiscard]] static consteval integer highest() { return std::numeric_limits<For>::max(); }   ///< @brief @anchor sys_integer_highest
-        [[nodiscard]] static consteval integer lowest() { return std::numeric_limits<For>::lowest(); } ///< @brief @anchor sys_integer_lowest
-        [[nodiscard]] static consteval integer ones() { return _as(For, ~_as(For, 0)); }               ///< @brief @anchor sys_integer_ones
-        [[nodiscard]] static consteval integer sentinel() { return sys::bsentinel<For>(); }            ///< @brief @anchor sys_integer_sentinel
+        [[nodiscard]] static consteval integer highest() { return std::numeric_limits<For>::max(); }
+        [[nodiscard]] static consteval integer lowest() { return std::numeric_limits<For>::lowest(); }
+        /// @brief All ones.
+        [[nodiscard]] static consteval integer ones() { return _as(For, ~_as(For, 0)); }
+        /// @brief An opinionated sentinel value.
+        [[nodiscard]] static consteval integer sentinel() { return sys::bsentinel<For>(); }
 
         constexpr integer() noexcept = default;
-        /// @brief Construct from narrower-bounded `T`.
+        /// @brief From narrower-bounded.
         template <IBuiltinIntegerCanHold<For> T>
         constexpr integer(T v) noexcept : underlying(_as(For, v)) // NOLINT(hicpp-explicit-conversions)
         { }
-        /// @brief Saturating construction from any numerical `T`.
+        /// @note Saturating.
         template <typename T>
         requires ((!IBuiltinIntegerCanHold<T, For> && sys::IBuiltinInteger<T>) || sys::IBuiltinFloatingPoint<T>)
         constexpr explicit integer(T v) noexcept : underlying(bnumeric_cast<For>(v, unsafe()))
         { }
-        /// @brief Truncating construction from any built-in integer `T`.
+        /// @warning `unsafe` because this is truncating.
         template <sys::IBuiltinInteger T>
         constexpr explicit integer(T v, unsafe) noexcept : underlying(std::bit_cast<For>(_as(unsigned_t, std::bit_cast<std::make_unsigned_t<T>>(v))))
         { }
-        /// @brief Saturating copy construction from any other `sys::integer<T>`.
+        /// @note Saturating.
         template <sys::IBuiltinInteger T>
         constexpr explicit integer(integer<T> v) noexcept : integer(*v)
         { }
-        /// @brief Truncating copy construction from any other `sys::integer<T>`.
+        /// @warning `unsafe` because this is truncating.
         template <sys::IBuiltinInteger T>
         constexpr explicit integer(integer<T> v, unsafe) noexcept : integer(*v, unsafe())
         { }
-        /// @brief Copyable.
         constexpr integer(const integer& v) noexcept = default;
-        /// @brief Moveable.
         constexpr integer(integer&& v) noexcept = default;
         constexpr ~integer() noexcept = default;
 
-        /// @brief Assignment from narrower-bounded `T`.
         template <IBuiltinIntegerCanHold<For> T>
         constexpr integer& operator=(T v) noexcept
         {
             this->underlying = _as(For, v);
             return *this;
         }
-        /// @brief Copy-assignable.
         constexpr integer& operator=(const integer& other) noexcept = default;
-        /// @brief Move-assignable.
         constexpr integer& operator=(integer&& other) noexcept = default;
 
-        /// @brief Underlying value of built-in type.
         [[nodiscard]] constexpr For operator*() const noexcept { return this->underlying; }
-        /// @brief Underlying value of built-in type.
         [[nodiscard]] constexpr For& operator*() noexcept { return this->underlying; }
 
-        /// @brief Explicit saturating conversion to any built-in integer `T`.
+        /// @brief Saturating conversion to any built-in integer `T`.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
         {
             return bnumeric_cast<T>(**this, unsafe());
         }
-        /// @brief Underlying value of built-in type.
+        /// @brief _Implicit_ conversion to underlying type.
         [[nodiscard]] constexpr operator For() const noexcept { return **this; } // NOLINT(hicpp-explicit-conversions)
-        /// @brief Explicit conversion to any floating-point `T`.
+        /// @brief Conversion to any floating-point `T`.
         template <sys::IBuiltinFloatingPoint T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
         {
             return _as(T, **this);
         }
 
-        /// @brief Explicit conversion to `bool`.
         [[nodiscard]] constexpr explicit operator bool() const noexcept { return **this; }
-        /// @brief Boolean negation.
         [[nodiscard]] constexpr bool operator!() const noexcept { return !**this; }
 
-        /// @brief Transparent equality comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator==(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_equal(*a, *b);
         }
-        /// @brief Transparent equality comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator==(integer<For> a, T b) noexcept
         {
             return std::cmp_equal(*a, b);
         }
-        /// @brief Transparent equality comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator==(For a, integer<T> b) noexcept
         {
             return std::cmp_equal(a, *b);
         }
-        /// @brief Transparent less-than comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_less(*a, *b);
         }
-        /// @brief Transparent less-than comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<(integer<For> a, T b) noexcept
         {
             return std::cmp_less(*a, b);
         }
-        /// @brief Transparent less-than comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<(For a, integer<T> b) noexcept
         {
             return std::cmp_less(a, *b);
         }
-        /// @brief Transparent less-equal comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<=(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_less_equal(*a, *b);
         }
-        /// @brief Transparent less-equal comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<=(integer<For> a, T b) noexcept
         {
             return std::cmp_less_equal(*a, b);
         }
-        /// @brief Transparent less-equal comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator<=(For a, integer<T> b) noexcept
         {
             return std::cmp_less_equal(a, *b);
         }
-        /// @brief Transparent greater-than comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_greater(*a, *b);
         }
-        /// @brief Transparent greater-than comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>(integer<For> a, T b) noexcept
         {
             return std::cmp_greater(*a, b);
         }
-        /// @brief Transparent greater-than comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>(For a, integer<T> b) noexcept
         {
             return std::cmp_greater(a, *b);
         }
-        /// @brief Transparent greater-equal comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>=(integer<For> a, integer<T> b) noexcept
         {
             return std::cmp_greater_equal(*a, *b);
         }
-        /// @brief Transparent greater-equal comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>=(integer<For> a, T b) noexcept
         {
             return std::cmp_greater_equal(*a, b);
         }
-        /// @brief Transparent greater-equal comparison.
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator>=(For a, integer<T> b) noexcept
         {
             return std::cmp_greater_equal(a, *b);
         }
 
-        /// @brief Pre-increment.
         constexpr integer& operator++() noexcept { return (*this = integer(this->u() + _as(unsigned_t, 1), unsafe())); }
-        /// @brief Pre-decrement.
         constexpr integer& operator--() noexcept { return (*this = integer(this->u() - _as(unsigned_t, 1), unsafe())); }
-        /// @brief Post-increment.
         constexpr integer operator++(int) noexcept
         {
             integer ret = *this;
             *this = integer(this->u() + _as(unsigned_t, 1), unsafe());
             return ret;
         }
-        /// @brief Post-decrement.
         constexpr integer operator--(int) noexcept
         {
             integer ret = *this;
@@ -278,9 +254,7 @@ namespace sys
             return ret;
         }
 
-        /// @brief Unary plus.
         [[nodiscard]] constexpr integer operator+() const noexcept { return *this; }
-        /// @brief Unary minus.
         /// @note Be warned that the negation of a signed `integer<...>::lowest()` is not UB but instead `integer<...>::highest()`.
         [[nodiscard]] constexpr integer operator-() const noexcept
         {
@@ -292,13 +266,9 @@ namespace sys
             else [[likely]]
                 return integer(_as(For, -**this));
         }
-        /// @brief Integer addition.
         [[nodiscard]] friend constexpr integer operator+(integer a, integer b) noexcept { return integer(a.u() + b.u(), unsafe()); }
-        /// @brief Integer subtraction.
         [[nodiscard]] friend constexpr integer operator-(integer a, integer b) noexcept { return integer(a.u() - b.u(), unsafe()); }
-        /// @brief Integer multiplication.
         [[nodiscard]] friend constexpr integer operator*(integer a, integer b) noexcept { return integer(a.u() * b.u(), unsafe()); }
-        /// @brief Integer division.
         [[nodiscard]] friend constexpr integer operator/(integer a, integer b) noexcept
         {
             if (*b == 0) [[unlikely]]
@@ -312,7 +282,6 @@ namespace sys
             else [[likely]]
                 return integer(_as(For, *a / *b));
         }
-        /// @brief Integer remainder.
         [[nodiscard]] friend constexpr integer operator%(integer a, integer b) noexcept
         {
             if (*b == 0) [[unlikely]]
@@ -321,15 +290,10 @@ namespace sys
                 return integer(_as(For, *a % *b));
         }
 
-        /// @brief Bitwise not.
         [[nodiscard]] constexpr integer operator~() const noexcept { return integer(~this->u(), unsafe()); }
-        /// @brief Bitwise and.
         [[nodiscard]] friend constexpr integer operator&(integer a, integer b) noexcept { return integer(a.u() & b.u(), unsafe()); }
-        /// @brief Bitwise or.
         [[nodiscard]] friend constexpr integer operator|(integer a, integer b) noexcept { return integer(a.u() | b.u(), unsafe()); }
-        /// @brief Bitwise xor.
         [[nodiscard]] friend constexpr integer operator^(integer a, integer b) noexcept { return integer(a.u() ^ b.u(), unsafe()); }
-        /// @brief Bitwise logical left shift.
         [[nodiscard]] friend constexpr integer operator<<(integer a, integer b) noexcept
         {
             if constexpr (std::is_signed_v<For>)
@@ -338,7 +302,6 @@ namespace sys
 
             return integer(a.u() << b.u(), unsafe());
         }
-        /// @brief Bitwise logical right shift.
         [[nodiscard]] friend constexpr integer operator>>(integer a, integer b) noexcept
         {
             if constexpr (std::is_signed_v<For>)
@@ -348,25 +311,15 @@ namespace sys
             return integer(a.u() >> b.u(), unsafe());
         }
 
-        /// @brief Add-assign.
         constexpr integer& operator+=(const integer& other) noexcept { return (*this = *this + other); }
-        /// @brief Sub-assign.
         constexpr integer& operator-=(const integer& other) noexcept { return (*this = *this - other); }
-        /// @brief Mul-assign.
         constexpr integer& operator*=(const integer& other) noexcept { return (*this = *this * other); }
-        /// @brief Div-assign.
         constexpr integer& operator/=(const integer& other) noexcept { return (*this = *this / other); }
-        /// @brief Mod-assign.
         constexpr integer& operator%=(const integer& other) noexcept { return (*this = *this % other); }
-        /// @brief Bitand-assign.
         constexpr integer& operator&=(const integer& other) noexcept { return (*this = *this & other); }
-        /// @brief Bitor-assign.
         constexpr integer& operator|=(const integer& other) noexcept { return (*this = *this | other); }
-        /// @brief Bitxor-assign.
         constexpr integer& operator^=(const integer& other) noexcept { return (*this = *this ^ other); }
-        /// @brief Bitlsh-assign.
         constexpr integer& operator<<=(const integer& other) noexcept { return (*this = *this << other); }
-        /// @brief Bitrsh-assign.
         constexpr integer& operator>>=(const integer& other) noexcept { return (*this = *this >> other); }
     };
 
@@ -380,18 +333,18 @@ namespace sys
 /// @note Pass `byval`.
 /// @{
 
-using i8 = ::sys::integer<int_least8_t>;   ///< @brief @anchor sys_i8
-using i16 = ::sys::integer<int_least16_t>; ///< @brief @anchor sys_i16
-using i32 = ::sys::integer<int_least32_t>; ///< @brief @anchor sys_i32
-using i64 = ::sys::integer<int_least64_t>; ///< @brief @anchor sys_i64
+using i8 = ::sys::integer<int_least8_t>;
+using i16 = ::sys::integer<int_least16_t>;
+using i32 = ::sys::integer<int_least32_t>;
+using i64 = ::sys::integer<int_least64_t>;
 
-using u8 = ::sys::integer<uint_least8_t>;   ///< @brief @anchor sys_u8
-using u16 = ::sys::integer<uint_least16_t>; ///< @brief @anchor sys_u16
-using u32 = ::sys::integer<uint_least32_t>; ///< @brief @anchor sys_u32
-using u64 = ::sys::integer<uint_least64_t>; ///< @brief @anchor sys_u64
+using u8 = ::sys::integer<uint_least8_t>;
+using u16 = ::sys::integer<uint_least16_t>;
+using u32 = ::sys::integer<uint_least32_t>;
+using u64 = ::sys::integer<uint_least64_t>;
 
-using sz = ::sys::integer<size_t>;     ///< @brief @anchor sys_sz
-using ssz = ::sys::integer<ptrdiff_t>; ///< @brief @anchor sys_ssz
+using sz = ::sys::integer<size_t>;
+using ssz = ::sys::integer<ptrdiff_t>;
 
 /// @}
 

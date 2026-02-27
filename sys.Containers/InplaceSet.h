@@ -17,8 +17,8 @@ namespace sys
     public:
         inplace_set() = default;
 
-        [[nodiscard]] size_t size() const { return this->_size; }             ///< @brief @anchor sys_inplace_set_size
-        [[nodiscard]] consteval static size_t capacity() { return Capacity; } ///< @brief @anchor sys_inplace_set_capacity
+        [[nodiscard]] size_t size() const { return this->_size; }
+        [[nodiscard]] consteval static size_t capacity() { return Capacity; }
 
         /// @brief Tries to insert a value into the set.
         /// @return Whether `value` was inserted, or the set is full.

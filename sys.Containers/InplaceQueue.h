@@ -21,11 +21,11 @@ namespace sys
         /// @brief Iterator for an `inplace_queue`.
         struct iterator
         {
-            using iterator_category = std::random_access_iterator_tag; ///< @brief @anchor sys_inplace_queue_iterator_category
-            using difference_type = std::ptrdiff_t;                    ///< @brief @anchor sys_inplace_queue_iterator_difference_type
-            using value_type = T;                                      ///< @brief @anchor sys_inplace_queue_iterator_value_type
-            using pointer = T*;                                        ///< @brief @anchor sys_inplace_queue_iterator_pointer
-            using reference = T&;                                      ///< @brief @anchor sys_inplace_queue_iterator_reference
+            using iterator_category = std::random_access_iterator_tag;
+            using difference_type = std::ptrdiff_t;
+            using value_type = T;
+            using pointer = T*;
+            using reference = T&;
 
             /// @brief Constructs an `Iterator` for an `inplace_queue`.
             /// @param queue The queue to iterate over.
@@ -104,8 +104,8 @@ namespace sys
 
         inplace_queue() noexcept = default;
 
-        [[nodiscard]] bool empty() const noexcept { return this->size() == 0; } ///< @brief @anchor sys_inplace_queue_empty
-        [[nodiscard]] size_t size() const noexcept                              ///< @brief @anchor sys_inplace_queue_size
+        [[nodiscard]] bool empty() const noexcept { return this->size() == 0; }
+        [[nodiscard]] size_t size() const noexcept
         {
             if (full)
                 return Capacity;
@@ -113,10 +113,10 @@ namespace sys
                 return this->_end - this->_begin;
             return Capacity - this->_begin + this->_end;
         }
-        [[nodiscard]] consteval static size_t capacity() noexcept { return Capacity; } ///< @brief @anchor sys_inplace_queue_capacity
+        [[nodiscard]] consteval static size_t capacity() noexcept { return Capacity; }
 
-        iterator begin() { return iterator(*this, this->_begin); } ///< @brief @anchor sys_inplace_queue_begin
-        iterator end() { return iterator(*this, this->_end); }     ///< @brief @anchor sys_inplace_queue_end
+        iterator begin() { return iterator(*this, this->_begin); }
+        iterator end() { return iterator(*this, this->_end); }
 
         /// @brief Enqueues `item` into the queue.
         /// @return Whether the item was enqueued, or the queue was full.

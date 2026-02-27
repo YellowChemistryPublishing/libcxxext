@@ -24,55 +24,63 @@ namespace sys::meta
 
     /// @internal
     /// @brief Metadata validity property.
+    /// @note Static class.
     template <bool Value>
     struct is_valid_prop : meta_type
     {
-        static consteval bool is_valid() { return Value; } ///< @brief @anchor sys_meta_is_valid
+        static consteval bool is_valid() { return Value; }
     };
     /// @internal
     /// @brief Metadata has `const` attribute.
+    /// @note Static class.
     template <bool Value>
     struct is_const_prop : meta_type
     {
-        static consteval bool is_const() { return Value; } ///< @brief @anchor sys_meta_is_const
+        static consteval bool is_const() { return Value; }
     };
     /// @internal
     /// @brief Metadata has `volatile` attribute.
+    /// @note Static class.
     template <bool Value>
     struct is_volatile_prop : meta_type
     {
-        static consteval bool is_volatile() { return Value; } ///< @brief @anchor sys_meta_is_volatile
+        static consteval bool is_volatile() { return Value; }
     };
     /// @internal
     /// @brief Metadata is lvalue reference attribute.
+    /// @note Static class.
     template <bool Value>
     struct is_lvalue_ref_prop : meta_type
     {
-        static consteval bool is_lvalue_ref() { return Value; } ///< @brief @anchor sys_meta_is_lvalue_ref
+        static consteval bool is_lvalue_ref() { return Value; }
     };
     /// @internal
     /// @brief Metadata is rvalue reference attribute.
+    /// @note Static class.
     template <bool Value>
     struct is_rvalue_ref_prop : meta_type
     {
-        static consteval bool is_rvalue_ref() { return Value; } ///< @brief @anchor sys_meta_is_rvalue_ref
+        static consteval bool is_rvalue_ref() { return Value; }
     };
     /// @internal
     /// @brief Metadata has `noexcept` attribute.
+    /// @note Static class.
     template <bool Value>
     struct is_noexcept_prop : meta_type
     {
-        static consteval bool is_noexcept() { return Value; } ///< @brief @anchor sys_meta_is_noexcept
+        static consteval bool is_noexcept() { return Value; }
     };
     /// @internal
     /// @brief Metadata is member function attribute.
+    /// @note Static class.
     template <bool Value>
     struct is_member_func_prop : meta_type
     {
-        static consteval bool is_member_func() { return Value; } ///< @brief @anchor sys_meta_is_member_func
+        static consteval bool is_member_func() { return Value; }
     };
 
     /// @brief Metadata for some function signature `T`.
+    /// @note Static class.
     template <typename T = void, typename... Args>
     struct function_signature : is_valid_prop<false>,
                                 is_const_prop<false>,
@@ -82,8 +90,8 @@ namespace sys::meta
                                 is_noexcept_prop<false>,
                                 is_member_func_prop<false>
     {
-        using return_type = T;                 ///< @brief @anchor sys_meta_function_signature_return_type
-        using arguments = std::tuple<Args...>; ///< @brief @anchor sys_meta_function_signature_arguments
+        using return_type = T;
+        using arguments = std::tuple<Args...>;
 
         using is_valid_prop<false>::is_valid;
         using is_const_prop<false>::is_const;
@@ -253,13 +261,14 @@ namespace sys::meta
     /// @endcond
 
     /// @brief Metadata for parameter pack `Pack...`.
+    /// @note Static class.
     template <typename... Pack>
     struct parameter_pack final : meta_type
     {
-        using tuple = std::tuple<Pack...>; ///< @brief @anchor sys_meta_parameter_pack_tuple
+        using tuple = std::tuple<Pack...>;
 
         template <size_t Index>
-        using at = std::tuple_element_t<Index, tuple>; ///< @brief @anchor sys_meta_parameter_pack_at
+        using at = std::tuple_element_t<Index, tuple>;
 
         /// @brief Whether parameter pack contains `T`.
         template <typename T>
@@ -270,6 +279,7 @@ namespace sys::meta
     };
 
     /// @brief Metadata for a template type.
+    /// @note Static class.
     template <typename T>
     struct template_type final : meta_type
     {
@@ -304,7 +314,7 @@ namespace sys::meta
     template <bool Condition, typename T>
     struct type_case final : meta_type
     {
-        using type = T; ///< @brief @anchor sys_meta_type_case_type
+        using type = T;
 
         /// @brief Whether `Condition` is `true`.
         static consteval bool is_early_return() { return Condition; }
@@ -313,12 +323,11 @@ namespace sys::meta
     template <typename... Cases>
     struct type_switch_cases final : meta_type
     {
-        using cases = std::tuple<Cases...>; ///< @brief @anchor sys_meta_type_switch_cases_cases
-        using return_cases = decltype(std::tuple_cat(
-            std::declval<std::conditional_t<Cases::is_early_return(), std::tuple<Cases>, std::tuple<>>>()...)); ///< @brief @anchor sys_meta_type_switch_cases_return_cases
+        using cases = std::tuple<Cases...>;
+        using return_cases = decltype(std::tuple_cat(std::declval<std::conditional_t<Cases::is_early_return(), std::tuple<Cases>, std::tuple<>>>()...));
 
         template <size_t Index>
-        using at = std::tuple_element_t<Index, cases>; ///< @brief @anchor sys_meta_type_switch_cases_at
+        using at = std::tuple_element_t<Index, cases>;
 
         /// @brief How many cases meet their conditions.
         static consteval size_t count_returns() { return (Cases::is_early_return() + ...); }

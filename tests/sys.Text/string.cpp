@@ -48,7 +48,8 @@ TEST_CASE("Unsafe C-String Constructor", "[sys.Text][string][ctor]")
     sys::str s(u8"unsafe", unsafe());
     CHECK(s == u8"unsafe");
 
-    const sys::str empty(_as(const char8_t*, nullptr), unsafe());
+    const char8_t c = u8'\0';
+    const sys::str empty(&c, unsafe());
     CHECK(empty.empty());
 }
 

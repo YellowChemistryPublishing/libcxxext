@@ -14,12 +14,12 @@
 #if defined(__STDCPP_FLOAT32_T__) && __STDCPP_FLOAT32_T__
 using f32 = std::float32_t;
 #else
-using f32 = float; ///< @brief @anchor sys_f32
+using f32 = float; ///< 32-bit built-in floating point type.
 #endif
 #if defined(__STDCPP_FLOAT64_T__) && __STDCPP_FLOAT64_T__
 using f64 = std::float64_t;
 #else
-using f64 = double; ///< @brief @anchor sys_f64
+using f64 = double; ///< 64-bit built-in floating point type.
 #endif
 
 /// @}

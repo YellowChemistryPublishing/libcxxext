@@ -274,7 +274,7 @@ namespace sys
 
 namespace sys::internal
 {
-    /// @brief Get the Canonical Combining Class (CCC) for a codepoint.
+    /// @internal
     constexpr sys::canonical_combining_class dchar_ccc(const char32_t c) noexcept
     {
         switch (c)

@@ -33,7 +33,7 @@ def main(argv: List[str]) -> None:
 
                 namespace sys::internal
                 {
-                    /// @brief Check if a character is a Unicode whitespace character.
+                    /// @internal
                     constexpr bool dchar_is_ws(const char32_t c) noexcept
                     {
                         switch (c)
