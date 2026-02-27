@@ -4,7 +4,7 @@
 #include <module/sys>
 #include <module/sys.Threading>
 
-_push_nowarn_msvc(_clwarn_msvc_unreachable); // Erroneously generated for compiler coroutine codegen.
+_nowarn_begin_one_msvc(_clwarn_msvc_unreachable_code); // Erroneously generated for compiler coroutine codegen.
 
 static sys::task<> do_some_work(char taskID, i32 delayTime)
 {

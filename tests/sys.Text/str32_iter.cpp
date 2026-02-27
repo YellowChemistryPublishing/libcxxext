@@ -1,5 +1,5 @@
 #include <CompilerWarnings.h>
-_push_nowarn_conv_comp();
+_nowarn_begin_conv_comp();
 
 // NOLINTBEGIN(misc-include-cleaner)
 
@@ -8,7 +8,7 @@ _push_nowarn_conv_comp();
 #include <module/sys>
 #include <module/sys.Text>
 
-_pop_nowarn_conv_comp();
+_nowarn_end_conv_comp();
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("UTF-8 Iteration (Valid)", "[sys.Text][codepoint_iter]")

@@ -18,8 +18,12 @@
 /// @namespace sys::meta
 /// @brief Type trait metadata support.
 
-/// @namespace sys::platform
-/// @brief Platform-specific functionality.
+/// @def _xstr(x)
+/// @brief Stringifies a token; used to avoid macro expansion.
+#define _xstr(...) #__VA_ARGS__
+/// @def _ppstr(x)
+/// @brief Stringifies a token.
+#define _ppstr(...) _xstr(__VA_ARGS__)
 
 /// @def _catcat(a, b)
 /// @brief Concatenates two tokens; used to avoid macro expansion.
@@ -117,12 +121,10 @@ struct unsafe final
     do                                                                                                                                                                          \
     {                                                                                                                                                                           \
         const std::source_location _src_loc = std::source_location::current();                                                                                                  \
-        _push_nowarn_gcc(_clwarn_gcc_use_after_free);                                                                                                                           \
-        _push_nowarn_clang(_clwarn_clang_use_after_free);                                                                                                                       \
+        _nowarn_begin_use_after_free();                                                                                                                                         \
         std::println(stderr, "In function `{}` at \"{}:{}:{}\" - Throwing `{}`.", _src_loc.function_name(), _src_loc.file_name(), int(_src_loc.line()), int(_src_loc.column()), \
                      typeid(decltype(value)).name());                                                                                                                           \
-        _pop_nowarn_clang();                                                                                                                                                    \
-        _pop_nowarn_gcc();                                                                                                                                                      \
+        _nowarn_end_use_after_free();                                                                                                                                           \
         throw(value);                                                                                                                                                           \
     }                                                                                                                                                                           \
     while (false)

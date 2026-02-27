@@ -1,29 +1,20 @@
 import os
 import sys
 import re
-import urllib.request
-from typing import cast, Dict, List, Tuple
+from textwrap import dedent
+from typing import Dict, List, Tuple
 
 sys.path.append(os.path.abspath(f"{os.path.dirname(__file__)}/.."))
 
 import lib.config as config
 from lib.log import lcheck_passed, lprint
-from lib.uni import write_header
+from lib.uni import fetch_url, write_header
 
 script_dir: str = os.path.dirname(os.path.abspath(__file__))
 output_path: str = os.path.abspath(f"{script_dir}/../../sys/data/ClWarnMSVC.h")
 
 PORTAL_URL = "https://learn.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warnings-c4000-c5999"
 BASE_URL = "https://learn.microsoft.com/en-us/cpp/error-messages/compiler-warnings"
-
-
-def fetch_url(url: str) -> str:
-    lprint(f"Fetching `{url}`...")
-
-    opener = urllib.request.build_opener()
-    opener.addheaders = [("User-Agent", "Mozilla/5.0")]
-    with opener.open(url) as response:
-        return cast(str, response.read().decode("utf-8"))
 
 
 def parse_portal(html: str) -> List[str]:
@@ -95,7 +86,17 @@ def main() -> None:
     with open(output_path, "w", encoding="utf-8") as f:
         f.write("#pragma once\n\n")
         write_header(f, os.path.basename(output_path), __file__)
-        f.write("// NOLINTBEGIN(modernize-macro-to-enum)\n\n")
+        f.write(
+            dedent(
+                """\
+                // NOLINTBEGIN(modernize-macro-to-enum)
+
+                /// @addtogroup compiler_warnings
+                /// @{
+
+                """
+            )
+        )
 
         macro_kvs: List[Tuple[str, str]] = []
         for wid, desc in warning_data.items():
@@ -113,7 +114,16 @@ def main() -> None:
         for wid, mname in sorted(macro_kvs):
             f.write(f"#define {mname} {wid}\n")
 
-        f.write("\n// NOLINTEND(modernize-macro-to-enum)\n")
+        f.write(
+            dedent(
+                """\
+
+                /// @}
+
+                // NOLINTEND(modernize-macro-to-enum)
+                """
+            )
+        )
 
     lprint(f"Successfully generated `{output_path}`.")
     lcheck_passed()

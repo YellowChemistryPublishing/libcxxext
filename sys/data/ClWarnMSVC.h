@@ -6,6 +6,9 @@
 
 // NOLINTBEGIN(modernize-macro-to-enum)
 
+/// @addtogroup compiler_warnings
+/// @{
+
 #define _clwarn_msvc_nonstandard_extension_single_line_comment_was_used 4001
 #define _clwarn_msvc_too_many_arguments_for_function_like_macro_invocation_identifier 4002
 #define _clwarn_msvc_not_enough_arguments_for_function_like_macro_invocation_identifier 4003
@@ -927,5 +930,7 @@
 #define _clwarn_msvc_5307 5307
 #define _clwarn_msvc_modifying_reserved_macro_name_macro_name_may_cause_undefined_behavior 5308
 #define _clwarn_msvc_literal_suffix_name_requires_at_least_language_version 5309
+
+/// @}
 
 // NOLINTEND(modernize-macro-to-enum)

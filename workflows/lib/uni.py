@@ -1,8 +1,22 @@
-"""Unicode-related script helpers."""
+"""General-purpose script helpers."""
 
 import os
+import urllib.request
 from io import TextIOWrapper
-from typing import Set, List
+from typing import Set, List, cast
+
+from lib.log import lprint
+
+
+def fetch_url(url: str) -> str:
+    """Fetch web content from a URL."""
+
+    lprint(f"Fetching `{url}`...")
+
+    opener = urllib.request.build_opener()
+    opener.addheaders = [("User-Agent", "Mozilla/5.0")]
+    with opener.open(url) as response:
+        return cast(str, response.read().decode("utf-8"))
 
 
 def to_cxx_u32_literal(hex_str: str) -> str:

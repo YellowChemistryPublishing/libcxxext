@@ -2,20 +2,20 @@ if(NOT (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|AppleClang" OR MSVC))
     message(FATAL_ERROR "[libcxxext] Unsupported compiler!")
 endif()
 
+if(MSVC)
+    string(REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "/EHs" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHa")
+endif()
+
 add_library(sys.BuildSupport.CompilerOptions INTERFACE)
 if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-    if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
-            $<$<COMPILE_LANGUAGE:CXX>:-fconcepts-diagnostics-depth=4>
-            -fno-signaling-nans -fcx-limited-range
-        )
-    elseif(CMAKE_C_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
-            -Wno-extra-semi -Wno-c++98-compat-extra-semi # Let us put semicolons after `_Pragma(...)`.
-        )
-    endif()
-
     target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fconcepts-diagnostics-depth=4>
+
+        $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU>,$<COMPILE_LANG_AND_ID:CXX,GNU>>:-fno-signaling-nans -fcx-limited-range>
+        $<$<OR:$<COMPILE_LANG_AND_ID:C,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>>:-Wno-extra-semi -Wno-c++98-compat-extra-semi>
+
         $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override> $<$<COMPILE_LANGUAGE:CXX>:-Wold-style-cast> $<$<COMPILE_LANGUAGE:CXX>:-Woverloaded-virtual> $<$<COMPILE_LANGUAGE:CXX>:-Wzero-as-null-pointer-constant>
 
         -finput-charset=UTF-8 -fexec-charset=UTF-8
@@ -36,8 +36,6 @@ else()
 
         /permissive- /W4
 
-        /EHa
-
         /fp:fast
 
         /wd4324
@@ -45,37 +43,39 @@ else()
 endif()
 
 add_library(sys.BuildSupport.WarningsAsErrors INTERFACE)
-if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-    target_compile_options(sys.BuildSupport.WarningsAsErrors INTERFACE -Werror)
-    if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-        target_compile_options(sys.BuildSupport.WarningsAsErrors INTERFACE -Wno-c99-extensions)
-    endif()
-else()
-    target_compile_options(sys.BuildSupport.WarningsAsErrors INTERFACE /WX)
-endif()
+target_compile_options(sys.BuildSupport.WarningsAsErrors INTERFACE
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-Werror>
+    $<$<COMPILE_LANG_AND_ID:C,Clang,AppleClang>:-Wno-c99-extensions>
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/WX>
+)
 
 add_library(sys.BuildSupport.Hardening INTERFACE)
-if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-    target_compile_options(sys.BuildSupport.Hardening INTERFACE -fstack-protector-strong)
-endif()
+target_compile_options(sys.BuildSupport.Hardening INTERFACE
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-fstack-protector-strong>
+)
 
 add_library(sys.BuildSupport.EnableCoverage INTERFACE)
-if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-    target_compile_options(sys.BuildSupport.EnableCoverage INTERFACE -O0 -g -fprofile-arcs -ftest-coverage)
-    target_link_options(sys.BuildSupport.EnableCoverage INTERFACE -fprofile-arcs)
-endif()
+target_compile_options(sys.BuildSupport.EnableCoverage INTERFACE
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-O0 -g -fprofile-arcs -ftest-coverage>
+)
+target_link_options(sys.BuildSupport.EnableCoverage INTERFACE
+    $<$<OR:$<LINK_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<LINK_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-fprofile-arcs>
+)
 
 add_library(sys.BuildSupport.AddressSanitizer INTERFACE)
-if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-    target_compile_options(sys.BuildSupport.AddressSanitizer INTERFACE -fsanitize=address -fsanitize-address-use-after-scope)
-    target_link_options(sys.BuildSupport.AddressSanitizer INTERFACE -fsanitize=address -fsanitize-address-use-after-scope)
-elseif(MSVC)
-    target_compile_options(sys.BuildSupport.AddressSanitizer INTERFACE /fsanitize=address)
-    target_link_options(sys.BuildSupport.AddressSanitizer INTERFACE /fsanitize=address)
-endif()
+target_compile_options(sys.BuildSupport.AddressSanitizer INTERFACE
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-fsanitize=address -fsanitize-address-use-after-scope>
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/fsanitize=address>
+)
+target_link_options(sys.BuildSupport.AddressSanitizer INTERFACE
+    $<$<OR:$<LINK_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<LINK_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-fsanitize=address -fsanitize-address-use-after-scope>
+    $<$<OR:$<LINK_LANG_AND_ID:C,MSVC>,$<LINK_LANG_AND_ID:CXX,MSVC>>:/fsanitize=address>
+)
 
 add_library(sys.BuildSupport.UndefinedSanitizer INTERFACE)
-if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
-    target_compile_options(sys.BuildSupport.UndefinedSanitizer INTERFACE -fsanitize=undefined -fsanitize-recover=undefined,float-cast-overflow,float-divide-by-zero)
-    target_link_options(sys.BuildSupport.UndefinedSanitizer INTERFACE -fsanitize=undefined -fsanitize-recover=undefined,float-cast-overflow,float-divide-by-zero)
-endif()
+target_compile_options(sys.BuildSupport.UndefinedSanitizer INTERFACE
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-fsanitize=undefined -fsanitize-recover=undefined,float-cast-overflow,float-divide-by-zero>
+)
+target_link_options(sys.BuildSupport.UndefinedSanitizer INTERFACE
+    $<$<OR:$<LINK_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<LINK_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-fsanitize=undefined -fsanitize-recover=undefined,float-cast-overflow,float-divide-by-zero>
+)

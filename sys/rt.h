@@ -4,6 +4,9 @@
 
 #include <cstddef>
 
+/// @namespace sys::platform
+/// @brief Platform-specific functionality.
+
 namespace sys::platform
 {
     /// @internal

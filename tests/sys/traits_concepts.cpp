@@ -10,10 +10,10 @@
 
 TEST_CASE("Invariably passes.", "[sys][traits][concepts]") { CHECK(true); }
 
-_push_nowarn_clang(_clwarn_clang_unused_symbol);
+_nowarn_begin_one_clang(_clwarn_clang_unused_function);
 static int free_function(int, float) { return 0; }
 static void void_function() { }
-_pop_nowarn_clang();
+_nowarn_end_clang();
 
 // NOLINTBEGIN(google-runtime-int)
 

@@ -3,16 +3,16 @@
 // NOLINTBEGIN(misc-include-cleaner)
 
 #include <CompilerWarnings.h>
-_push_nowarn_deprecated();
-_push_nowarn_conv_comp();
-_push_nowarn_msvc(_clwarn_msvc_unreachable);
+_nowarn_begin_deprecated();
+_nowarn_begin_conv_comp();
+_nowarn_begin_one_msvc(_clwarn_msvc_unreachable_code);
 
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
 
-_pop_nowarn_msvc();
-_pop_nowarn_conv_comp();
-_pop_nowarn_deprecated();
+_nowarn_end_msvc();
+_nowarn_end_conv_comp();
+_nowarn_end_deprecated();
 
 #include <module/sys>
 
