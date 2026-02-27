@@ -54,13 +54,7 @@
 #define _clwarn_gcc_zero_as_nullptr "-Wzero-as-null-pointer-constant"
 #define _clwarn_gcc_string_overflow "-Wstringop-overflow"
 
-#define _clwarn_msvc_literal_suffix 4455
-#define _clwarn_msvc_unreachable 4702
-#define _clwarn_msvc_nameless_struct_union 4201
-#define _clwarn_msvc_export_interface 4251
-#define _clwarn_msvc_overflow 4756
-#define _clwarn_msvc_deprecated 4996
-#define _clwarn_msvc_discard_nodiscard 4834
+#include <data/ClWarnMSVC.h> // IWYU pragma: export
 
 /// @}
 

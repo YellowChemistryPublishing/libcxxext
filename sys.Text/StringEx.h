@@ -222,9 +222,10 @@ namespace sys
         {
             return std::basic_string_view<T>(this->data(), this->size());
         }
-        /// @warning `unsafe` because `i` is unchecked.
+        /// @warning `unsafe` because `i` has preconditions.
+        /// @pre `i < this->size()`
         constexpr T& operator[](const sz i, unsafe) { return this->str[i]; }
-        /// @warning `unsafe` because `i` is unchecked.
+        /// @overload
         constexpr const T& operator[](const sz i, unsafe) const { return this->str[i]; }
 
         /// @brief Transcode between unicode strings of different character types.
@@ -265,9 +266,15 @@ namespace sys
         [[nodiscard]] constexpr auto crbegin() const { return this->str.crbegin(); }
         [[nodiscard]] constexpr auto crend() const { return this->str.crend(); }
 
+        /// @warning `unsafe` because `this` has preconditions.
+        /// @pre `!this->empty()`
         [[nodiscard]] constexpr T& front(unsafe) { return this->str.front(); }
+        /// @overload
         [[nodiscard]] constexpr const T& front(unsafe) const { return this->str.front(); }
+        /// @warning `unsafe` because `this` has preconditions.
+        /// @pre `!this->empty()`
         [[nodiscard]] constexpr T& back(unsafe) { return this->str.back(); }
+        /// @overload
         [[nodiscard]] constexpr const T& back(unsafe) const { return this->str.back(); }
 
         [[nodiscard]] bool contains(const std::basic_string_view<T> substr) const { return this->str.contains(substr); }
@@ -326,7 +333,8 @@ namespace sys
         constexpr string append(const std::span<const T> data) && { return this->append(data), std::move(*this); }
 
         /// @brief Remove the last character from the string.
-        /// @warning `unsafe` because `.empty()` is unchecked.
+        /// @warning `unsafe` because `this` has preconditions.
+        /// @pre `!this->empty()`
         constexpr string& pop_back(unsafe) &
         {
             this->str.pop_back();
