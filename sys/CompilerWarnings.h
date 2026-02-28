@@ -175,6 +175,9 @@
     _nowarn_one_msvc(_clwarn_msvc_deprecated_declaration_deprecation_message)
 #define _nowarn_end_deprecated() _nowarn_end_msvc()
 
+#define _nowarn_begin_c_cast()
+#define _nowarn_end_c_cast()
+
 #define _nowarn_begin_use_after_free()
 #define _nowarn_end_use_after_free()
 
