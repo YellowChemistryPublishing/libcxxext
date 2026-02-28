@@ -2,6 +2,7 @@
 
 /// @file Destructor.h
 
+#include <type_traits>
 #include <utility>
 
 #include <LanguageSupport.h>
@@ -11,7 +12,7 @@ namespace sys
     /// @brief Wrapper for `noexcept` cleanup function.
     /// @note Pass `byref`.
     template <typename Func>
-    requires (noexcept(std::declval<Func&>()()) && noexcept(Func(std::declval<Func &&>())) && noexcept(std::declval<Func>().~Func()))
+    requires std::is_nothrow_invocable_v<Func&> && std::is_nothrow_move_constructible_v<Func> && std::is_nothrow_destructible_v<Func>
     struct destructor final
     {
         /// @brief Construct with a cleanup function.
@@ -26,10 +27,13 @@ namespace sys
         Func func;
     };
 
+    template <typename Func>
+    destructor(Func&&) -> destructor<std::remove_reference_t<Func>>;
+
     /// @brief Moveable, no-op-able, wrapper for `noexcept` cleanup function.
     /// @note Pass `byref`.
     template <typename Func>
-    requires (noexcept(std::declval<Func&>()()) && noexcept(Func(std::declval<Func &&>())) && noexcept(std::declval<Func>().~Func()))
+    requires std::is_nothrow_invocable_v<Func&> && std::is_nothrow_move_constructible_v<Func> && std::is_nothrow_destructible_v<Func>
     struct optional_destructor final
     {
         /// @brief Construct with a cleanup function.
@@ -80,6 +84,9 @@ namespace sys
         {
             Func func;
         };
-        bool execute = false;
+        bool execute = true;
     };
+
+    template <typename Func>
+    optional_destructor(Func&&) -> optional_destructor<std::remove_reference_t<Func>>;
 } // namespace sys
