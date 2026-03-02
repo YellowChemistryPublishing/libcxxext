@@ -296,7 +296,7 @@ namespace sys
         {
             new(&this->value) internal::result_storage_type<T>(std::forward<Args>(args)...);
         }
-        /// @brief Contruct an error result.
+        /// @brief Construct an error result.
         constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
         /// @brief Moveable.

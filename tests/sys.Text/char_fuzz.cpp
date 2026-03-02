@@ -54,9 +54,9 @@ TEST_CASE("UTF-32 -> UTF-16 -> UTF-32 is invariant.", "[fuzz][sys.Text][ch]")
     });
 }
 
-TEST_CASE("Arbitary UTF-8 sequence decode never crashes.", "[fuzz][sys.Text][ch]")
+TEST_CASE("Arbitrary UTF-8 sequence decode never crashes.", "[fuzz][sys.Text][ch]")
 {
-    rc::check("Arbitary UTF-8 sequence decode never crashes.", [](const std::vector<u8::underlying_type>& bytes)
+    rc::check("Arbitrary UTF-8 sequence decode never crashes.", [](const std::vector<u8::underlying_type>& bytes)
     {
         const char8_t* ptr = _asr(const char8_t*, bytes.data()); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
         const char8_t* end = ptr + bytes.size();
@@ -71,9 +71,9 @@ TEST_CASE("Arbitary UTF-8 sequence decode never crashes.", "[fuzz][sys.Text][ch]
         }
     });
 }
-TEST_CASE("Arbitary UTF-16 sequence decode never crashes.", "[fuzz][sys.Text][ch]")
+TEST_CASE("Arbitrary UTF-16 sequence decode never crashes.", "[fuzz][sys.Text][ch]")
 {
-    rc::check("Arbitary UTF-16 sequence decode never crashes.", [](const std::vector<u16::underlying_type>& bytes)
+    rc::check("Arbitrary UTF-16 sequence decode never crashes.", [](const std::vector<u16::underlying_type>& bytes)
     {
         const char16_t* ptr = _asr(const char16_t*, bytes.data()); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
         const char16_t* end = ptr + bytes.size();

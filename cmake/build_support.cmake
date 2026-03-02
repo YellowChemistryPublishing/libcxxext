@@ -16,7 +16,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
         $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU>,$<COMPILE_LANG_AND_ID:CXX,GNU>>:-fno-signaling-nans -fcx-limited-range>
         $<$<OR:$<COMPILE_LANG_AND_ID:C,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>>:-Wno-extra-semi -Wno-c++98-compat-extra-semi>
 
-        $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override> $<$<COMPILE_LANGUAGE:CXX>:-Wold-style-cast> $<$<COMPILE_LANGUAGE:CXX>:-Woverloaded-virtual> $<$<COMPILE_LANGUAGE:CXX>:-Wzero-as-null-pointer-constant>
+        $<$<COMPILE_LANGUAGE:CXX>:-Wsuggest-override -Wold-style-cast -Woverloaded-virtual -Wzero-as-null-pointer-constant>
 
         -finput-charset=UTF-8 -fexec-charset=UTF-8
 

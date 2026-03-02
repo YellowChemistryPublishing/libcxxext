@@ -144,7 +144,7 @@ namespace sys
 
                 T buf[sizeof(char32_t) / sizeof(T)];
                 for (sz j = 0_uz; j < convSize; j++)
-                    ret.append(std::span(buf, ch::write_codepoint(conv[j], buf, unsafe()))); /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */
+                    ret.append(std::span(buf, ch::write_codepoint(conv[j] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */, buf, unsafe())));
 
                 string::update_fcontext_for_char(fctx, c);
             }
