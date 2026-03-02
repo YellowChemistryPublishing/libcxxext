@@ -68,7 +68,7 @@ namespace sys
         codepoint_iter<T> _beg {}, _end {};
     public:
         /// @brief Construct from a contiguous range.
-        constexpr codepoint_view(const std::span<const T> range) noexcept : // NOLINT(hicpp-explicit-conversions)
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ codepoint_view(const std::span<const T> range) noexcept :
             _beg(range.data(), range.data() + range.size()), _end(range.data() + range.size(), range.data() + range.size())
         { }
         constexpr codepoint_view(const codepoint_view&) noexcept = default;

@@ -37,7 +37,7 @@ namespace sys
     /// @brief Integer-to-integer cast.
     /// @warning `unsafe` because this is saturating!
     template <sys::IBuiltinInteger To, sys::IBuiltinInteger From>
-    constexpr To bnumeric_cast(const From value, unsafe) noexcept // NOLINT(misc-use-internal-linkage)
+    /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const From value, unsafe) noexcept
     {
 #if !_libcxxext_compiler_clang && defined(__cpp_lib_saturation_arithmetic) && __cpp_lib_saturation_arithmetic >= 202311l
         return std::saturate_cast<To>(value);
@@ -53,7 +53,7 @@ namespace sys
     /// @brief Floating-point-to-integer cast.
     /// @warning `unsafe` because this is saturating!
     template <sys::IBuiltinInteger To, sys::IBuiltinFloatingPoint From>
-    constexpr To bnumeric_cast(const From value, unsafe) noexcept // NOLINT(misc-use-internal-linkage)
+    /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const From value, unsafe) noexcept
     {
         if (!std::isfinite(value) || value <= _as(From, std::numeric_limits<To>::lowest())) [[unlikely]]
             return std::numeric_limits<To>::lowest();
@@ -65,13 +65,13 @@ namespace sys
 
     /// @brief Opinionated sentinel value for `T`.
     template <sys::IBuiltinIntegerSigned T>
-    consteval T bsentinel() // NOLINT(misc-use-internal-linkage)
+    /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel()
     {
         return std::numeric_limits<T>::lowest();
     }
     /// @brief Opinionated sentinel value for `T`.
     template <sys::IBuiltinIntegerUnsigned T>
-    consteval T bsentinel() // NOLINT(misc-use-internal-linkage)
+    /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel()
     {
         return std::numeric_limits<T>::max();
     }
@@ -86,7 +86,7 @@ namespace sys
     /// All shifts are logical, with shift-by-negative as opposite-direction shift.
     /// @note Pass `byval`.
     template <sys::IBuiltinInteger For>
-    struct alignas(For) integer final
+    /* NOLINT(misc-use-internal-linkage) */ struct alignas(For) integer final
     {
     private:
         using signed_t = std::make_signed_t<For>;
@@ -110,7 +110,7 @@ namespace sys
         constexpr integer() noexcept = default;
         /// @brief From narrower-bounded.
         template <IBuiltinIntegerCanHold<For> T>
-        constexpr integer(T v) noexcept : underlying(_as(For, v)) // NOLINT(hicpp-explicit-conversions)
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ integer(T v) noexcept : underlying(_as(For, v))
         { }
         /// @note Saturating.
         template <typename T>
@@ -152,7 +152,7 @@ namespace sys
             return bnumeric_cast<T>(**this, unsafe());
         }
         /// @brief _Implicit_ conversion to underlying type.
-        [[nodiscard]] constexpr operator For() const noexcept { return **this; } // NOLINT(hicpp-explicit-conversions)
+        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator For() const noexcept { return **this; }
         /// @brief Conversion to any floating-point `T`.
         template <sys::IBuiltinFloatingPoint T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
@@ -356,7 +356,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
 // NOLINTBEGIN(bugprone-exception-escape)
 // clang-format off: C++23 -- no space b/w "" and literal suffix.
 /// @brief Literal suffix for `i8`.
-consteval i8 operator""_i8(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval i8 operator""_i8(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least8_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least8_t>::min()))
         throw std::overflow_error("Literal too large for `i8`.");
@@ -364,7 +364,7 @@ consteval i8 operator""_i8(ullong lit) noexcept // NOLINT(misc-use-internal-link
     return { _as(int_least8_t, lit) };
 }
 /// @brief Literal suffix for `i16`.
-consteval i16 operator""_i16(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval i16 operator""_i16(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least16_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least16_t>::min()))
         throw std::overflow_error("Literal too large for `i16`.");
@@ -372,7 +372,7 @@ consteval i16 operator""_i16(ullong lit) noexcept // NOLINT(misc-use-internal-li
     return { _as(int_least16_t, lit) };
 }
 /// @brief Literal suffix for `i32`.
-consteval i32 operator""_i32(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval i32 operator""_i32(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least32_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least32_t>::min()))
         throw std::overflow_error("Literal too large for `i32`.");
@@ -380,7 +380,7 @@ consteval i32 operator""_i32(ullong lit) noexcept // NOLINT(misc-use-internal-li
     return { _as(int_least32_t, lit) };
 }
 /// @brief Literal suffix for `i64`.
-consteval i64 operator""_i64(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval i64 operator""_i64(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least64_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least64_t>::min()))
         throw std::overflow_error("Literal too large for `i64`.");
@@ -388,7 +388,7 @@ consteval i64 operator""_i64(ullong lit) noexcept // NOLINT(misc-use-internal-li
     return { _as(int_least64_t, lit) };
 }
 /// @brief Literal suffix for `u8`.
-consteval u8 operator""_u8(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval u8 operator""_u8(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least8_t>::max()))
         throw std::overflow_error("Literal too large for `u8`.");
@@ -396,7 +396,7 @@ consteval u8 operator""_u8(ullong lit) noexcept // NOLINT(misc-use-internal-link
     return { _as(uint_least8_t, lit) };
 }
 /// @brief Literal suffix for `u16`.
-consteval u16 operator""_u16(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval u16 operator""_u16(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least16_t>::max()))
         throw std::overflow_error("Literal too large for `u16`.");
@@ -404,7 +404,7 @@ consteval u16 operator""_u16(ullong lit) noexcept // NOLINT(misc-use-internal-li
     return { _as(uint_least16_t, lit) };
 }
 /// @brief Literal suffix for `u32`.
-consteval u32 operator""_u32(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval u32 operator""_u32(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least32_t>::max()))
         throw std::overflow_error("Literal too large for `u32`.");
@@ -412,7 +412,7 @@ consteval u32 operator""_u32(ullong lit) noexcept // NOLINT(misc-use-internal-li
     return { _as(uint_least32_t, lit) };
 }
 /// @brief Literal suffix for `u64`.
-consteval u64 operator""_u64(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval u64 operator""_u64(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least64_t>::max()))
         throw std::overflow_error("Literal too large for `u64`.");
@@ -420,7 +420,7 @@ consteval u64 operator""_u64(ullong lit) noexcept // NOLINT(misc-use-internal-li
     return { _as(uint_least64_t, lit) };
 }
 /// @brief Literal suffix for `ssz`.
-consteval ssz operator""_z(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval ssz operator""_z(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<ptrdiff_t>::max()) || std::cmp_less(lit, std::numeric_limits<ptrdiff_t>::min()))
         throw std::overflow_error("Literal too large for `ssz`.");
@@ -428,7 +428,7 @@ consteval ssz operator""_z(ullong lit) noexcept // NOLINT(misc-use-internal-link
     return { _as(ptrdiff_t, lit) };
 }
 /// @brief Literal suffix for `sz`.
-consteval sz operator""_uz(ullong lit) noexcept // NOLINT(misc-use-internal-linkage)
+/* NOLINT(misc-use-internal-linkage) */ consteval sz operator""_uz(ullong lit) noexcept
 {
     if (std::cmp_greater(lit, std::numeric_limits<size_t>::max()))
         throw std::overflow_error("Literal too large for `sz`.");

@@ -138,13 +138,13 @@ namespace sys
                 char32_t conv[3];
                 sz convSize = 0_uz;
                 if constexpr (IsUpper)
-                    convSize = internal::dchar_to_upper_special(conv, c, lang, fctx, lctx, unsafe()); // NOLINT(hicpp-no-array-decay)
+                    convSize = internal::dchar_to_upper_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, fctx, lctx, unsafe());
                 else
-                    convSize = internal::dchar_to_lower_special(conv, c, lang, fctx, lctx, unsafe()); // NOLINT(hicpp-no-array-decay)
+                    convSize = internal::dchar_to_lower_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, fctx, lctx, unsafe());
 
                 T buf[sizeof(char32_t) / sizeof(T)];
                 for (sz j = 0_uz; j < convSize; j++)
-                    ret.append(std::span(buf, ch::write_codepoint(conv[j], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    ret.append(std::span(buf, ch::write_codepoint(conv[j], buf, unsafe()))); /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */
 
                 string::update_fcontext_for_char(fctx, c);
             }
@@ -157,13 +157,13 @@ namespace sys
         constexpr string(std::nullptr_t) = delete;
         template <size_t N>
         requires (N > 0uz)
-        constexpr string(const T (&str)[N]) : str(str, str + N - 1z) // NOLINT(hicpp-explicit-conversions)
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ string(const T (&str)[N]) : str(str, str + N - 1z)
         { }
         constexpr string(const std::initializer_list<T> il) : str(il) { }
         /// @warning `unsafe` because `cstr` has preconditions.
         /// @pre `const T cstr[N]` => `cstr != nullptr && cstr[N - 1z] == '\0'`
         constexpr string(const T* cstr, unsafe) : string(cstr, cstr + ch::buffer_size(cstr, unsafe())) { }
-        constexpr string(std::basic_string<T> str) : str(std::move(str)) { } // NOLINT(hicpp-explicit-conversions)
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ string(std::basic_string<T> str) : str(std::move(str)) { }
         constexpr explicit string(const std::span<const T> data) : string(data.begin(), data.end()) { }
         constexpr explicit string(const std::basic_string_view<T> data) : string(data.begin(), data.end()) { }
         /// @pre `++...beg == end`
@@ -174,7 +174,7 @@ namespace sys
         constexpr explicit string(const Container& container) : string(std::begin(container), std::end(container))
         { }
         /// @brief Construct from a single character.
-        constexpr string(const T c) : str(1uz, c) { } // NOLINT(hicpp-explicit-conversions)
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ string(const T c) : str(1uz, c) { }
         /// @brief Repeat a character.
         constexpr string(const T c, const sz count) : str(count, c) { }
         constexpr string(const string&) = default;
@@ -216,9 +216,9 @@ namespace sys
         friend constexpr auto operator<=>(const std::basic_string_view<T>& a, const string& b) { return b.str <=> a; }
 
         [[nodiscard]] constexpr explicit operator const T*() const { return this->str.data(); }
-        [[nodiscard]] constexpr operator std::span<const T>() const { return std::span<const T>(this->data(), this->size()); } // NOLINT(hicpp-explicit-conversions)
-        [[nodiscard]] constexpr operator std::span<T>() { return std::span<T>(this->data(), this->size()); }                   // NOLINT(hicpp-explicit-conversions)
-        [[nodiscard]] constexpr operator std::basic_string_view<T>() const                                                     // NOLINT(hicpp-explicit-conversions)
+        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::span<const T>() const { return std::span<const T>(this->data(), this->size()); }
+        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::span<T>() { return std::span<T>(this->data(), this->size()); }
+        [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator std::basic_string_view<T>() const
         {
             return std::basic_string_view<T>(this->data(), this->size());
         }
@@ -418,11 +418,11 @@ namespace sys
             for (const char32_t c : codepoint_view(*this))
             {
                 char32_t conv[3];
-                const sz convSize = internal::dchar_fold_special(conv, c, lang, unsafe()); // NOLINT(hicpp-no-array-decay)
+                const sz convSize = internal::dchar_fold_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, unsafe());
 
                 T buf[sizeof(char32_t) / sizeof(T)];
                 for (sz i = 0_uz; i < convSize; i++)
-                    ret.append(std::span(buf, ch::write_codepoint(conv[i], buf, unsafe()))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    ret.append(std::span(buf, ch::write_codepoint(conv[i] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */, buf, unsafe())));
             }
             return ret;
         }

@@ -6,12 +6,12 @@
 
 #include <CompilerWarnings.h>
 _nowarn_begin_conv_comp();
-_nowarn_begin_one_msvc(_clwarn_msvc_unreachable_code);
+_nowarn_begin_unreachable();
 
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
 
-_nowarn_end_msvc();
+_nowarn_end_unreachable();
 _nowarn_end_conv_comp();
 
 #include <module/sys>

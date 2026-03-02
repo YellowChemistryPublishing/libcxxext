@@ -36,8 +36,7 @@ namespace sys::platform
     {
         std::thread handle;
 
-        thread_handle(std::nullptr_t) // NOLINT(hicpp-explicit-conversions)
-        { }
+        /* NOLINT(hicpp-explicit-conversions) */ thread_handle(std::nullptr_t) { }
     public:
         /// @brief Obtain a thread handle representing the current thread.
         static thread_handle current_thread() { return nullptr; }

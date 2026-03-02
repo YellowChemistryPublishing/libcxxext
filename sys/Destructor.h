@@ -16,7 +16,7 @@ namespace sys
     struct destructor final
     {
         /// @brief Construct with a cleanup function.
-        destructor(Func&& func) : func(std::move(func)) { } // NOLINT(hicpp-explicit-conversions)
+        /* NOLINT(hicpp-explicit-conversions) */ destructor(Func&& func) : func(std::move(func)) { }
         destructor(const destructor&) = delete;
         destructor(destructor&&) = delete;
         ~destructor() { this->func(); }
@@ -37,7 +37,7 @@ namespace sys
     struct optional_destructor final
     {
         /// @brief Construct with a cleanup function.
-        optional_destructor(Func&& func) noexcept : func(std::move(func)) { } // NOLINT(hicpp-explicit-conversions)
+        /* NOLINT(hicpp-explicit-conversions) */ optional_destructor(Func&& func) noexcept : func(std::move(func)) { }
         optional_destructor(const optional_destructor&) = delete;
         optional_destructor(optional_destructor&& other) noexcept : func(std::move(other.func)), execute(other.execute)
         {

@@ -22,7 +22,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
 
         -Wall -Wextra -pedantic -Wconversion -Wsign-conversion -Wdouble-promotion -Wunused-result -Wuninitialized -Wimplicit-fallthrough -Wcast-align -Wnull-dereference -Wformat=2 -Werror=format-security -Wno-psabi
 
-        -fexceptions -fnon-call-exceptions -fasynchronous-unwind-tables
+        $<$<COMPILE_LANGUAGE:CXX>:-fexceptions -fnon-call-exceptions -fasynchronous-unwind-tables>
 
         -fno-math-errno -funsafe-math-optimizations -fno-rounding-math -fno-signed-zeros -fno-trapping-math -fexcess-precision=fast
 
@@ -30,9 +30,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
 
         -fdata-sections -ffunction-sections
     )
-else()
+elseif(MSVC)
     target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
-        /utf-8 /Zc:preprocessor /Zc:__cplusplus
+        /utf-8 /Zc:preprocessor $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/Zc:__cplusplus>
 
         /permissive- /W4
 
