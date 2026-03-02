@@ -1,4 +1,3 @@
-#include <cstdint>
 #include <vector>
 
 // NOLINTBEGIN(misc-include-cleaner)

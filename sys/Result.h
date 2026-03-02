@@ -290,14 +290,14 @@ namespace sys
     public:
         /// @brief Inplace constructs an ok result.
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...)))
+        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...)))
         requires requires { internal::result_storage_type<T>(std::forward<Args>(args)...); }
-            /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ : status(internal::result_status::ok)
+            : status(internal::result_status::ok)
         {
             new(&this->value) internal::result_storage_type<T>(std::forward<Args>(args)...);
         }
         /// @brief Contruct an error result.
-        constexpr result(std::nullptr_t) noexcept /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ : status(internal::result_status::error) { }
+        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
         /// @brief Moveable.
         constexpr result(result&& other) noexcept /* NOLINT(hicpp-member-init) */ { swap(*this, other); }
@@ -344,11 +344,11 @@ namespace sys
         };
         internal::result_status status;
     public:
-        constexpr result() noexcept /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ : status(internal::result_status::ok) { }
+        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result() noexcept : status(internal::result_status::ok) { }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
-        constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...)))
-            /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ : status(internal::result_status::error)
+        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(error_tag, Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...))) :
+            status(internal::result_status::error)
         {
             new(&this->error) internal::result_storage_type<Err>(std::forward<Args>(args)...);
         }
@@ -357,8 +357,8 @@ namespace sys
         /// @note Participates in overload resolution only if the arguments cannot construct a `T`.
         template <typename... Args>
         requires (sizeof...(Args) > 0uz)
-        constexpr result(Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...)))
-            /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ : result(error_tag(), std::forward<Args>(args)...)
+        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...))) :
+            result(error_tag(), std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;
         /// @brief Moveable.

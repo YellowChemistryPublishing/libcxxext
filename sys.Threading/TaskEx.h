@@ -184,9 +184,8 @@ namespace sys
     class [[nodiscard]] task final
     {
     public:
-        /// @cond
+        /// @private
         using promise_type = internal::task_promise<T>;
-        /// @endcond
 
         /// @brief The longest possible delay in milliseconds, supported by `sys::task<>::delay(...)`.
         static constexpr i32 max_delay = ::sys::platform::task_max_delay;
