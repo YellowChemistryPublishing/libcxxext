@@ -3,7 +3,7 @@
 /// @file TaskEx.h
 
 #include <CompilerWarnings.h>
-_nowarn_begin_one_msvc(_clwarn_msvc_unreachable_code); // Erroneously generated for compiler coroutine codegen.
+_nowarn_begin_unreachable(); // Erroneously generated for compiler coroutine codegen.
 
 #include <concepts>
 #include <coroutine>
@@ -184,9 +184,8 @@ namespace sys
     class [[nodiscard]] task final
     {
     public:
-        /// @cond
+        /// @private
         using promise_type = internal::task_promise<T>;
-        /// @endcond
 
         /// @brief The longest possible delay in milliseconds, supported by `sys::task<>::delay(...)`.
         static constexpr i32 max_delay = ::sys::platform::task_max_delay;
@@ -273,6 +272,6 @@ namespace sys
 sys::async sys::internal::async_promise::get_return_object() { return sys::async(std::coroutine_handle<sys::internal::async_promise>::from_promise(*this)); }
 /// @endcond
 
-_nowarn_end_msvc();
+_nowarn_end_unreachable();
 
 // NOLINTEND(misc-non-private-member-variables-in-classes)

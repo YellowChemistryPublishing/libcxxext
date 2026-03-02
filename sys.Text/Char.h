@@ -174,7 +174,7 @@ namespace sys
 
             // Overlong + Scalar Checks
             constexpr u32 cpMinReq[] = { 0_u32, 0_u32, 0x80_u32, 0x800_u32, 0x10000_u32 };
-            _retif(ch::read_codepoint_fail(), ret < cpMinReq[len] || !ch::is_scalar(_as(char32_t, ret))); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+            _retif(ch::read_codepoint_fail(), ret < cpMinReq[len] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */ || !ch::is_scalar(_as(char32_t, ret)));
 
             return { _as(char32_t, ret), len };
         }

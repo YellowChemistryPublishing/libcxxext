@@ -27,7 +27,7 @@ namespace sys
             if (this->_size == Capacity) [[unlikely]]
                 return false;
 
-            this->data[this->_size++] = std::move(value); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+            this->data[this->_size++] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */ = std::move(value);
             return true;
         }
         /// @brief Tries to erase a value from the set.
@@ -36,9 +36,9 @@ namespace sys
         {
             for (size_t i = 0; i < this->_size; i++)
             {
-                if (this->data[i] == value) // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                if (this->data[i] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */ == value)
                 {
-                    this->data[i] = std::move(this->data[--this->_size]); // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+                    this->data[i] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */ = std::move(this->data[--this->_size]);
                     return true;
                 }
             }

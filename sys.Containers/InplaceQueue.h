@@ -10,7 +10,7 @@ namespace sys
     /// @brief A queue that stores elements in-place.
     /// @tparam T The type of elements to store.
     /// @tparam Capacity The maximum number of elements that can be stored in the queue.
-    template <typename T, size_t Capacity = 128> // NOLINT(readability-magic-numbers)
+    template <typename T, size_t Capacity = 128uz /* NOLINT(readability-magic-numbers) */>
     requires (Capacity > 0)
     class inplace_queue
     {

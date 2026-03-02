@@ -2,12 +2,12 @@
 
 #include <CompilerWarnings.h>
 _nowarn_begin_conv_comp();
-_nowarn_begin_one_msvc(_clwarn_msvc_unreachable_code);
+_nowarn_begin_unreachable();
 
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
 
-_nowarn_end_msvc();
+_nowarn_end_unreachable();
 _nowarn_end_conv_comp();
 
 #include <module/sys>
@@ -15,7 +15,7 @@ _nowarn_end_conv_comp();
 
 TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fuzz][sys.Text][codepoint_iter]")
 {
-    rc::check("Iterating over random bytes never crashes and exhausts buffer.", [](const std::vector<uint8_t>& bytes)
+    rc::check("Iterating over random bytes never crashes and exhausts buffer.", [](const std::vector<u8::underlying_type>& bytes)
     {
         const char8_t* start = _asr(const char8_t*, bytes.data());
         const char8_t* endPtr = start + bytes.size(); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)

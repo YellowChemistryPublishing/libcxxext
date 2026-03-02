@@ -17,7 +17,7 @@ namespace sys
         /// @brief Constructs an empty string.
         constexpr inplace_string() : _size(0) { this->buffer[0] = 0; }
         /// @brief Constructs a string from a C-string.
-        constexpr inplace_string(const char* cstr) : _size(0) // NOLINT(hicpp-explicit-conversions)
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ inplace_string(const char* cstr) : _size(0)
         {
             const size_t len = std::strlen(cstr);
             if (len > Capacity)

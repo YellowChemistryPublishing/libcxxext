@@ -63,10 +63,7 @@ namespace sys
         /// ...
         /// _throw(sys::contract_violation_exception(reason));
         /// ```
-        contract_violation_exception(const char* why) : why(why) // NOLINT(hicpp-explicit-conversions)
-        {
-            std::println(stderr, "Note: {}", why);
-        }
+        /* NOLINT(hicpp-explicit-conversions) */ contract_violation_exception(const char* why) : why(why) { std::println(stderr, "Note: {}", why); }
 
         /// @brief Obtain the reason a contract was violated.
         [[nodiscard]] const char* what() const noexcept override { return this->why; }

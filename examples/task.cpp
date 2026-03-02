@@ -1,10 +1,11 @@
+#include <CompilerWarnings.h>
 #include <new>
 #include <print>
 
 #include <module/sys>
 #include <module/sys.Threading>
 
-_nowarn_begin_one_msvc(_clwarn_msvc_unreachable_code); // Erroneously generated for compiler coroutine codegen.
+_nowarn_begin_unreachable(); // Erroneously generated for compiler coroutine codegen.
 
 static sys::task<> do_some_work(char taskID, i32 delayTime)
 {
@@ -25,8 +26,8 @@ int main()
     try
     {
         const sys::platform::thread_pool pool;
-        parallel_routine('a', 1000_i32); // NOLINT(readability-magic-numbers)
-        parallel_routine('b', 10_i32);   // NOLINT(readability-magic-numbers)
+        parallel_routine('a', 1000_i32 /* NOLINT(readability-magic-numbers) */);
+        parallel_routine('b', 10_i32 /* NOLINT(readability-magic-numbers) */);
     }
     catch (const std::bad_alloc&)
     {
