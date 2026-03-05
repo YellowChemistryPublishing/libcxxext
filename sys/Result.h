@@ -122,9 +122,10 @@ namespace sys::internal
             return this->move(unsafe());
         }
         /// @brief `this->move()` if the result is good, otherwise `other`.
-        [[nodiscard]] constexpr T move_or(T&& other) noexcept(noexcept(this->move(unsafe())))
+        template <typename With>
+        [[nodiscard]] constexpr T move_or(With&& other) noexcept(noexcept(this->move(unsafe())) && noexcept(T(std::forward<With>(other))))
         {
-            _retif(std::move(other), this->downcast().status != result_status::ok);
+            _retif(T(std::forward<With>(other)), this->downcast().status != result_status::ok);
             return this->move(unsafe());
         }
     };
@@ -414,7 +415,7 @@ namespace sys
         ~result()
         {
             if (this->status == internal::result_status::error)
-                this->error.~Err();
+                std::destroy_at(std::addressof(this->error));
         }
 
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)

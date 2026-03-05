@@ -2,7 +2,6 @@
 
 /// @file BitTwiddling.h
 
-#include <cstddef>
 #include <functional>
 
 #include <LanguageSupport.h>
