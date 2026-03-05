@@ -102,16 +102,16 @@ struct unsafe final
 /// @brief Convenience macro aliases for C++ casts.
 /// @{
 
-/// @def _as
+/// @def _as(T, ...)
 /// @brief Alias for `static_cast`.
 #define _as(T, ...) static_cast<T>(__VA_ARGS__)
-/// @def _asd
+/// @def _asd(T, ...)
 /// @brief Alias for `dynamic_cast`.
 #define _asd(T, ...) dynamic_cast<T>(__VA_ARGS__)
-/// @def _asc
+/// @def _asc(T, ...)
 /// @brief Alias for `const_cast`.
 #define _asc(T, ...) const_cast<T>(__VA_ARGS__)
-/// @def _asr
+/// @def _asr(T, ...)
 /// @brief Alias for `reinterpret_cast`.
 #define _asr(T, ...) reinterpret_cast<T>(__VA_ARGS__)
 

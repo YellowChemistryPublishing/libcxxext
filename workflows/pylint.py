@@ -10,7 +10,7 @@ from typing import List
 import lib.config as config
 import tools.mypy as mypy
 from lib.exec import exec_or_fail, mark_finding_ok
-from lib.log import lcheck_passed
+from lib.log import lcheck_failed, lcheck_passed
 
 
 def main(argv: List[str]) -> None:
@@ -52,16 +52,25 @@ def main(argv: List[str]) -> None:
 
     mypy.install(host_platform=args.platform)
 
+    failed: bool = False
+
+    def on_fail() -> None:
+        nonlocal failed
+        failed = True
+
     content, _ = exec_or_fail(
         mypy.cmd(host_platform=args.platform) + ["--strict", args.src_dir],
         capture_output=True,
+        on_fail=on_fail,
     )
     os.makedirs(config.findings_reldir, exist_ok=True)
     log_path = f"{config.findings_reldir}/PythonLint.log"
     with open(log_path, "w", encoding="utf-8") as f:
         f.write(content)
-    mark_finding_ok(log_path)
+    if failed:
+        lcheck_failed()
 
+    mark_finding_ok(log_path)
     lcheck_passed()
 
 
