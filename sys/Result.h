@@ -7,10 +7,10 @@
 #include <concepts>
 #include <coroutine>
 #include <cstddef>
+#include <memory>
 #include <type_traits>
 #include <utility>
 
-#include <Exception.h>
 #include <LanguageSupport.h>
 #include <RecurringTemplate.h>
 #include <inline/Integer.inl>
@@ -77,7 +77,14 @@ namespace sys::internal
         result_b() noexcept = default;
     public:
         /// @brief Whether the result is good.
-        constexpr explicit operator bool() const noexcept { return this->downcast()->status == result_status::ok; }
+        constexpr explicit operator bool() const noexcept { return this->downcast().status == result_status::ok; }
+
+        /// @brief Apply `func(*this)` and return its output.
+        [[nodiscard]] constexpr auto transform(auto&& func) noexcept(noexcept(func(this->downcast())))
+        requires requires { func(this->downcast()); }
+        {
+            return func(this->downcast());
+        }
 
         /// @brief Returns an awaiter to enable short-circuiting, akin to rustlang's `operator?`.
         _inline_always result_awaiter<T, Err> operator co_await() { return result_awaiter<T, Err>(*this->downcast()); }
@@ -89,40 +96,36 @@ namespace sys::internal
     {
     protected:
         result_b_ok() noexcept = default;
+
+        [[nodiscard]] constexpr T move(unsafe) noexcept(std::is_reference_v<T> || noexcept(T(std::move(this->downcast().value))))
+        {
+            if constexpr (std::is_reference_v<T>)
+            {
+                T ret = *this->downcast().value;
+                this->downcast().status = internal::result_status::empty;
+                return ret;
+            }
+            else
+            {
+                T ret = std::move(this->downcast().value);
+                std::destroy_at(std::addressof(this->downcast().value));
+                this->downcast().status = internal::result_status::empty;
+                return ret;
+            }
+        }
     public:
         /// @brief Takes the value if the result is good.
         /// @pre `*this == true`
-        constexpr T move() noexcept(noexcept(T(std::declval<T&&>())))
+        [[nodiscard]] constexpr T move() noexcept(noexcept(this->move(unsafe())))
         {
-            // We use regular assert here as we expect this to be called in a noexcept context.
-            // Only a flagrant violation of result semantics would cause this to fail.
-            assert(this->downcast()->status == result_status::ok && "Taking value for a bad result!");
-            if constexpr (std::is_reference_v<T>)
-                return *this->downcast()->value;
-            else
-                return std::move(this->downcast()->value);
-        }
-
-        /// @brief `this->move()` carrying contract of being a good result.
-        /// @pre `*this == true`
-        constexpr T expect()
-        {
-            if (this->downcast()->status == result_status::ok)
-            {
-                if constexpr (std::is_reference_v<T>)
-                    return *this->downcast()->value;
-                else
-                    return std::move(this->downcast()->value);
-            }
-            else
-                _throw(contract_violation_exception("Result is not ok!"));
+            _contract_assert(this->downcast().status == result_status::ok, "Taking value for a bad result!");
+            return this->move(unsafe());
         }
         /// @brief `this->move()` if the result is good, otherwise `other`.
-        constexpr T move_or(T&& other) noexcept(noexcept(T(std::declval<T&&>())))
+        [[nodiscard]] constexpr T move_or(T&& other) noexcept(noexcept(this->move(unsafe())))
         {
-            if (this->downcast()->status != result_status::ok)
-                return std::move(other);
-            return std::move(this->downcast()->value);
+            _retif(std::move(other), this->downcast().status != result_status::ok);
+            return this->move(unsafe());
         }
     };
     /// @internal
@@ -135,10 +138,13 @@ namespace sys::internal
     public:
         /// @brief Take the error of a bad result.
         /// @pre `*this == false`
-        [[nodiscard]] constexpr Err err()
+        [[nodiscard]] constexpr Err err() noexcept(noexcept(Err(std::move(this->downcast().error))))
         {
-            _contract_assert(this->downcast()->status == result_status::error && "Taking error for a good or empty result!");
-            return std::move(this->downcast()->error);
+            _contract_assert(this->downcast().status == result_status::error, "Taking error for a good or empty result!");
+            Err ret = std::move(this->downcast().error);
+            std::destroy_at(std::addressof(this->downcast().error));
+            this->downcast().status = internal::result_status::empty;
+            return ret;
         }
     };
 } // namespace sys::internal
@@ -151,12 +157,16 @@ namespace sys
 
     /// @brief Concept for types that can be stored in a result.
     template <typename T>
-    concept IResultStorable = !std::same_as<std::remove_cvref_t<T>, error_tag> && (std::is_reference_v<T> || (!std::is_reference_v<T> && std::same_as<T, std::remove_cvref_t<T>>));
+    concept IResultStorable = requires {
+        requires !std::same_as<std::remove_cvref_t<T>, error_tag>;
+        requires std::is_reference_v<T> || std::same_as<T, std::remove_cvref_t<T>>;
+    };
 
     /// @brief A monadic type that can hold either a value or an error.
     /// @details Like the one in rustlang!
     /// @note Pass `byref`.
     template <IResultStorable T, IResultStorable Err = void>
+    requires (!std::is_reference_v<Err>) /* Intentionally don't support reference errors--doesn't really make sense. */
     struct [[nodiscard]] result final : internal::result_b<result, T, Err>, internal::result_b_ok<result, T, Err>, internal::result_b_err<result, T, Err>
     {
     private:
@@ -170,103 +180,103 @@ namespace sys
         // NOLINTBEGIN(hicpp-explicit-conversions)
 
         /// @brief Constructs a result with a value.
-        constexpr result(const T& val) noexcept(noexcept(T(std::declval<const T&>())))
-        requires requires { internal::result_storage_type<T>(val); }
-            : status(internal::result_status::ok)
-        {
-            new(&this->value) internal::result_storage_type<T>(val);
+        template <typename With>
+        constexpr result(With&& val) noexcept(std::is_reference_v<T> || noexcept(T(std::forward<With>(val))))
+        requires requires {
+            requires std::same_as<T, Err> || !std::same_as<std::remove_cvref_t<With>, Err>;
+            requires (std::is_reference_v<T> || requires { T(std::forward<With>(val)); });
         }
-        /// @brief Constructs a result with a value.
-        constexpr result(T&& val) noexcept(noexcept(T(std::declval<T&&>())))
-        requires requires { internal::result_storage_type<T>(std::move(val)); }
             : status(internal::result_status::ok)
         {
-            new(&this->value) internal::result_storage_type<T>(std::move(val));
+            if constexpr (std::is_reference_v<T>)
+                this->value = std::addressof(val);
+            else
+                std::construct_at(std::addressof(this->value), std::forward<With>(val));
         }
         /// @brief Inplace constructs a result with a value.
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...)))
-        requires requires { internal::result_storage_type<T>(std::forward<Args>(args)...); }
+        constexpr result(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...)))
+        requires requires {
+            requires !std::is_reference_v<T>;
+            T(std::forward<Args>(args)...);
+        }
             : status(internal::result_status::ok)
         {
-            new(&this->value) internal::result_storage_type<T>(std::forward<Args>(args)...);
+            std::construct_at(std::addressof(this->value), std::forward<Args>(args)...);
         }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
-        constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...)))
-        requires (!requires { internal::result_storage_type<T>(std::forward<Args>(args)...); } && requires { internal::result_storage_type<Err>(std::forward<Args>(args)...); })
+        constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::forward<Args>(args)...)))
+        requires requires { Err(std::forward<Args>(args)...); }
             : status(internal::result_status::error)
         {
-            new(&this->error) internal::result_storage_type<Err>(std::forward<Args>(args)...);
+            std::construct_at(std::addressof(this->error), std::forward<Args>(args)...);
         }
         /// @brief Constructs a result with an error.
-        constexpr result(const Err& err) noexcept(noexcept(Err(std::declval<const Err&>())))
-        requires requires { internal::result_storage_type<Err>(err); }
-            : status(internal::result_status::error)
-        {
-            new(&this->error) internal::result_storage_type<Err>(err);
+        /// @note Participates in overload resolution only if `err` cannot construct a `T`.
+        template <typename With>
+        constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
+        requires requires {
+            requires (!std::same_as<T, Err> && std::same_as<std::remove_cvref_t<With>, Err>) || !requires { T(std::forward<With>(err)); };
+            requires requires { Err(std::forward<With>(err)); };
         }
-        /// @brief Inplace constructs a result with an error.
-        constexpr result(Err&& err) noexcept(noexcept(Err(std::declval<Err&&>())))
-        requires requires { internal::result_storage_type<Err>(std::move(err)); }
-            : status(internal::result_status::error)
-        {
-            new(&this->error) internal::result_storage_type<Err>(std::move(err));
-        }
+            : result(error_tag(), std::forward<With>(err))
+        { }
         /// @brief Inplace constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
-        /// @note Participates in overload resolution only if the arguments cannot construct a `T`.
+        /// @note Participates in overload resolution only if `args...` cannot construct a `T`.
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...)))
-        requires (!requires { internal::result_storage_type<T>(std::forward<Args>(args)...); } && requires { internal::result_storage_type<Err>(std::forward<Args>(args)...); })
+        constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
+        requires requires {
+            requires !requires { T(std::forward<Args>(args)...); };
+            Err(std::forward<Args>(args)...);
+        }
             : result(error_tag(), std::forward<Args>(args)...)
         { }
 
         // NOLINTEND(hicpp-explicit-conversions)
 
         constexpr result(const result&) = delete;
-        /// @brief Moveable.
-        constexpr result(result&& other) noexcept { swap(*this, other); }
+        constexpr result(result&& other) noexcept((std::is_reference_v<T> || noexcept(T(other.move(unsafe())))) && noexcept(Err(other.err()))) : status(other.status)
+        {
+            switch (other.status)
+            {
+            [[likely]] case internal::result_status::ok:
+                if constexpr (std::is_reference_v<T>)
+                    this->value = std::addressof(other.move(unsafe()));
+                else
+                    std::construct_at(std::addressof(this->value), other.move(unsafe()));
+                break;
+            [[unlikely]] case internal::result_status::error:
+                std::construct_at(std::addressof(this->error), other.err());
+                break;
+            [[unlikely]] case internal::result_status::empty:
+            [[unlikely]] default:;
+            }
+        }
         constexpr ~result()
         {
             switch (this->status)
             {
-            case internal::result_status::ok:
-                using result_storage_type_t = internal::result_storage_type<T>;
+            [[likely]] case internal::result_status::ok:
                 if constexpr (!std::is_reference_v<T>)
-                    this->value.~result_storage_type_t();
+                    std::destroy_at(std::addressof(this->value));
                 break;
-            case internal::result_status::error:
-                using result_storage_type_e = internal::result_storage_type<Err>;
-                if constexpr (!std::is_reference_v<Err>)
-                    this->error.~result_storage_type_e();
+            [[unlikely]] case internal::result_status::error:
+                std::destroy_at(std::addressof(this->error));
                 break;
-            case internal::result_status::empty:
-            default:; // Do nothing.
+            [[unlikely]] case internal::result_status::empty:
+            [[unlikely]] default:;
             }
         }
 
         result& operator=(const result&) = delete;
-        /// @brief Move-assignable.
         result& operator=(result&& other) noexcept
         {
-            swap(*this, other);
+            _retif(*this, this == std::addressof(other));
+            std::destroy_at(this);
+            std::construct_at(this, std::move(other));
             return *this;
-        }
-
-        /// @brief Swappable.
-        constexpr void swap(result& a, result& b)
-        {
-            using std::swap;
-
-            // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-            if (&a != &b &&
-                (a.status == internal::result_status::ok || a.status == internal::result_status::error || b.status == internal::result_status::ok ||
-                 b.status == internal::result_status::error))
-                std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + std::max(sizeof(internal::result_storage_type<T>), sizeof(internal::result_storage_type<Err>)),
-                                 _asr(byte*, &b.value));
-            swap(a.status, b.status);
-            // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         }
 
         friend struct sys::internal::result_b<result, T, Err>;
@@ -288,43 +298,63 @@ namespace sys
         };
         internal::result_status status = internal::result_status::empty;
     public:
-        /// @brief Inplace constructs an ok result.
-        template <typename... Args>
-        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(Args&&... args) noexcept(noexcept(T(std::declval<Args&&>()...)))
-        requires requires { internal::result_storage_type<T>(std::forward<Args>(args)...); }
+        // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
+
+        /// @brief Constructs a result with a value.
+        template <typename With>
+        constexpr result(With&& val) noexcept(std::is_reference_v<T> || noexcept(T(std::forward<With>(val))))
+        requires (std::is_reference_v<T> || requires { T(std::forward<With>(val)); })
             : status(internal::result_status::ok)
         {
-            new(&this->value) internal::result_storage_type<T>(std::forward<Args>(args)...);
+            if constexpr (std::is_reference_v<T>)
+                this->value = std::addressof(val);
+            else
+                std::construct_at(std::addressof(this->value), std::forward<With>(val));
+        }
+        /// @brief Inplace constructs a result with a value.
+        template <typename... Args>
+        constexpr result(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...)))
+        requires requires {
+            requires !std::is_reference_v<T>;
+            T(std::forward<Args>(args)...);
+        }
+            : status(internal::result_status::ok)
+        {
+            std::construct_at(std::addressof(this->value), std::forward<Args>(args)...);
         }
         /// @brief Construct an error result.
-        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
+        constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
-        /// @brief Moveable.
-        constexpr result(result&& other) noexcept /* NOLINT(hicpp-member-init) */ { swap(*this, other); }
+        constexpr result(result&& other) noexcept : status(other.status)
+        {
+            switch (other.status)
+            {
+            [[likely]] case internal::result_status::ok:
+                if constexpr (std::is_reference_v<T>)
+                    this->value = std::addressof(other.move(unsafe()));
+                else
+                    std::construct_at(std::addressof(this->value), other.move(unsafe()));
+                break;
+            [[unlikely]] case internal::result_status::error:
+            [[unlikely]] case internal::result_status::empty:
+            [[unlikely]] default:;
+            }
+        }
         ~result()
         {
-            if (this->status == internal::result_status::ok)
-                this->value.~T();
+            if (this->status == internal::result_status::ok) [[likely]]
+                std::destroy_at(std::addressof(this->value));
         }
+
+        // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
 
         result& operator=(const result&) = delete;
-        /// @brief Move-assignable.
         result& operator=(result&& other) noexcept
         {
-            swap(*this, other);
+            _retif(*this, this == std::addressof(other));
+            std::destroy_at(this);
+            std::construct_at(this, std::move(other));
             return *this;
-        }
-
-        /// @brief Swappable.
-        friend constexpr void swap(result& a, result& b) noexcept
-        {
-            using std::swap;
-
-            // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-            if (&a != &b && (a.status == internal::result_status::ok || b.status == internal::result_status::ok))
-                std::swap_ranges(_asr(byte*, &a.value), _asr(byte*, &a.value) + sizeof(internal::result_storage_type<T>), _asr(byte*, &b.value));
-            swap(a.status, b.status);
-            // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         }
 
         friend struct sys::internal::result_b<result, T, void>;
@@ -344,48 +374,58 @@ namespace sys
         };
         internal::result_status status;
     public:
-        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result() noexcept : status(internal::result_status::ok) { }
+        // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
+
+        constexpr result() noexcept : status(internal::result_status::ok) { }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
-        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(error_tag, Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...))) :
-            status(internal::result_status::error)
+        constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::forward<Args>(args)...)))
+        requires requires { Err(std::forward<Args>(args)...); }
+            : status(internal::result_status::error)
         {
-            new(&this->error) internal::result_storage_type<Err>(std::forward<Args>(args)...);
+            std::construct_at(std::addressof(this->error), std::forward<Args>(args)...);
         }
+        /// @brief Constructs a result with an error.
+        template <typename With>
+        constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
+        requires requires { Err(std::forward<With>(err)); }
+            : result(error_tag(), std::forward<With>(err))
+        { }
         /// @brief Inplace constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
-        /// @note Participates in overload resolution only if the arguments cannot construct a `T`.
         template <typename... Args>
-        requires (sizeof...(Args) > 0uz)
-        constexpr /* NOLINT(hicpp-explicit-conversions, hicpp-member-init) */ result(Args&&... args) noexcept(noexcept(Err(std::declval<Args&&>()...))) :
-            result(error_tag(), std::forward<Args>(args)...)
+        constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
+        requires requires { Err(std::forward<Args>(args)...); }
+            : result(error_tag(), std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;
-        /// @brief Moveable.
-        constexpr result(result&& other) noexcept : /* NOLINT(hicpp-member-init) */ status(internal::result_status::empty) { swap(*this, other); }
+        constexpr result(result&& other) noexcept : status(other.status)
+        {
+            switch (other.status)
+            {
+            [[unlikely]] case internal::result_status::error:
+                std::construct_at(std::addressof(this->error), other.err());
+                break;
+            [[likely]] case internal::result_status::ok:
+            [[unlikely]] case internal::result_status::empty:
+            [[unlikely]] default:;
+            }
+        }
         ~result()
         {
             if (this->status == internal::result_status::error)
                 this->error.~Err();
         }
 
+        // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
+
         result& operator=(const result&) = delete;
-        /// @brief Move-assignable.
         result& operator=(result&& other) noexcept
         {
-            swap(*this, other);
+            _retif(*this, this == &other);
+            std::destroy_at(this);
+            std::construct_at(this, std::move(other));
             return *this;
-        }
-
-        friend constexpr void swap(result& a, result& b) noexcept
-        {
-            using std::swap;
-
-            // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-            if (&a != &b && (a.status == internal::result_status::error || b.status == internal::result_status::error))
-                std::swap_ranges(_asr(byte*, &a.error), _asr(byte*, &a.error) + sizeof(internal::result_storage_type<Err>), _asr(byte*, &b.error));
-            swap(a.status, b.status);
-            // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         }
 
         friend struct sys::internal::result_b<result, void, Err>;

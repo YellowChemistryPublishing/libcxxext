@@ -338,18 +338,32 @@ namespace sys::meta
 
     /// @brief Check whether an empty-queryable `range` is empty.
     template <typename T>
-    constexpr bool is_empty(const T& range)
+    constexpr bool is_empty(const T& range) noexcept(requires {
+        { range.empty() } noexcept;
+    } || requires {
+        { std::size(range) == std::declval<decltype(std::size(range))>() } noexcept;
+    })
     {
         if constexpr (requires { range.empty(); })
             return range.empty();
-        else if constexpr (requires { range.size(); })
+        else if constexpr (requires { std::size(range); })
             return std::size(range) == _as(decltype(std::size(range)), 0);
         else if constexpr (requires { requires false; })
         { }
     }
     /// @brief Inplace construct and append to an appendable `range`.
     template <typename T, typename... Args>
-    constexpr decltype(auto) append_to(T& range, Args&&... args)
+    constexpr decltype(auto) append_to(T& range, Args&&... args) noexcept(requires {
+        { range.emplace_back(std::forward<Args>(args)...) } noexcept;
+    } || requires {
+        { range.push_back(std::forward<Args>(args)...) } noexcept;
+    } || requires {
+        { range.push(std::forward<Args>(args)...) } noexcept;
+    } || requires {
+        { range.append(std::forward<Args>(args)...) } noexcept;
+    } || requires {
+        { (range << ... << std::forward<Args>(args)) } noexcept;
+    })
     {
         if constexpr (requires { range.emplace_back(std::forward<Args>(args)...); })
             return range.emplace_back(std::forward<Args>(args)...);

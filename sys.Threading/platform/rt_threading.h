@@ -53,12 +53,10 @@ namespace sys::platform
             this->handle = std::thread([](Func func, Args... args) { func(std::forward<Args>(args)...); }, std::forward<Func>(func), std::forward<Args>(args)...);
         }
         thread_handle(const thread_handle& other) = delete;
-        /// @brief Moveable.
         thread_handle(thread_handle&& other) noexcept { swap(*this, other); }
         ~thread_handle() { this->join(); }
 
         thread_handle& operator=(const thread_handle& other) = delete;
-        /// @brief Move-assignable.
         thread_handle& operator=(thread_handle&& other) noexcept
         {
             swap(*this, other);

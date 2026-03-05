@@ -27,8 +27,8 @@ TEST_CASE("Casting below range saturates to min.", "[sys][numeric_cast][unsafe]"
 
 TEST_CASE("Casting within range returns valid result.", "[sys][numeric_cast]")
 {
-    CHECK(sys::bnumeric_cast<int32_t>(10).expect() == 10);   // NOLINT(readability-magic-numbers)
-    CHECK(sys::bnumeric_cast<uint8_t>(255).expect() == 255); // NOLINT(readability-magic-numbers)
+    CHECK(sys::bnumeric_cast<int32_t>(10).move() == 10);   // NOLINT(readability-magic-numbers)
+    CHECK(sys::bnumeric_cast<uint8_t>(255).move() == 255); // NOLINT(readability-magic-numbers)
 }
 TEST_CASE("Casting out of range returns empty result.", "[sys][numeric_cast]")
 {

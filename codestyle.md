@@ -5,32 +5,32 @@
 CMake settings have configured compilation under gcc to use `-Wall -Wextra -Wpedantic -Werror`. To suppress false positives, see the useful macros in the `CompilerWarnings.h`
 header.
 
-You may not `throw` anything for the purpose of error checking. An exception is granted for fatal program conditions, such as that of a contract violation. In the case that a
-`throw` expression is required, you are forbidden from using the `throw` keyword directly, please see `_throw(expr)`. Correctly written production code is banned from executing a
-`_throw(expr)` expression, except for, once again, fatal error handling.
+You may not `throw` anything for the purpose of error checking. An exception is granted for fatal program conditions, such as that of a contract violation.. Correctly written
+production code is banned from executing a `throw` expression, except for, once again, fatal error handling.
 
 You _should_ not `catch(...)` anything, with the possible exception of hardware/system related exceptions, for example `std::bad_alloc`, for producing debugging information.
 
 Due to partial requirements to support exceptions, your code must expect that control flow may return to the caller at any time. Hence, you must make sure that your code _never_
-abandons unmanaged resources, i.e. (wrong) `spinLock.lock(); ... /* _throw(expr) */ ... spinLock.unlock();`. The natural corollary of this is that all synchronisation mechanisms
-(i.e. `sys::SpinLock`) must never have `.lock()` or `.unlock()` invoked directly-- you should use some lock guard instead.
+abandons unmanaged resources, i.e. (wrong) `spinLock.lock(); ... /* throw expr */ ... spinLock.unlock();`. The natural corollary of this is that all synchronisation mechanisms
+(i.e. `std::mutex`) must never have `.lock()` or `.unlock()` invoked directly--you should use some lock guard instead.
 
 No C-style casts! Shortened macros for all casts are provided for convenience, please use those! (i.e. `_as(T, expr)` equiv. `static_cast<T>(expr)`.) Alternatively, for many
 builtin types, prefer invoking their constructors explicitly. (i.e. `int(2.0f)`.)
 
-Please don't let constructors silently fail! Instead, include the static member function `static Result<T> ctor(...)`, and include in the body of the analogous constructor
+Please don't let constructors silently fail! Instead, include the static member function `static sys::result<T> ctor(...)`, and include in the body of the analogous constructor
 `_assert_ctor_can_fail()`.
 
 ## Informed Annotations
 
 Documenting functions using the doxygen syntax in comments is highly recommended for production code. (Non-Enum) Types must be additionally annotated with
-``/// @note Pass `byval`.``, ``/// @note Pass `byref`.``, or ``/// @note Pass `byptr`.`` indicating whether a type is best passed as `T`, `(const) T&`, or `(const) T (const)*`.
+``/// @note Pass `byval`.``, ``/// @note Pass `byref`.``, or ``/// @note Pass `byptr`.`` indicating whether a type is best passed as `T`, `(const) T&`, or `(const) T* (const)`.
 Types that act as static classes must be annotated with `/// @note Static class.`. The only mandatory field for production code is an `@attention Lifetime assumptions!` clause on
 functions, with a `cpp` block highlighting the lifetime requirements of non-trivial parameters.
 
 Any error checking passed up to a caller must be administered with short-circuiting guards. `_(co)retif(val, cond)` will return `val` iff. `cond` evaluates to `true`.
-`_res_mov(co)ret(out, res_xval)` will use in assignment the `Result<...>` object from `res_xval`, returning its error via `Result<...>::err()` in the error case, or otherwise,
-moving its result value into `out` via `Result<...>::move()`. When inside a coroutine, `co_await result` is semantically identical to `_res_mov_co_return(out, res_xval)`.
+`_res_mov(co)ret(out, res_xval)` will use in assignment the `sys::result<...>` object from `res_xval`, returning its error via `sys::result<...>::err()` in the error case, or
+otherwise, moving its result value into `out` via `sys::result<...>::move()`. When inside a coroutine, `co_await result` is semantically identical to
+`_res_mov_co_return(out, res_xval)`.
 
 Runtime domain/input validation may be achieved through contracts, with `_contract_assert(cond)`.
 

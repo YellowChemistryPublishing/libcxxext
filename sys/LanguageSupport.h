@@ -2,11 +2,13 @@
 
 /// @file LanguageSupport.h
 
+#include <cassert>         // NOLINT(misc-include-cleaner)
+#include <cstdint>         // NOLINT(misc-include-cleaner)
 #include <cstdio>          // NOLINT(misc-include-cleaner)
+#include <exception>       // NOLINT(misc-include-cleaner)
 #include <print>           // NOLINT(misc-include-cleaner)
 #include <source_location> // NOLINT(misc-include-cleaner)
 
-#include <CompilerWarnings.h>
 #include <Platform.h>
 
 /// @namespace sys
@@ -115,30 +117,23 @@ struct unsafe final
 
 /// @}
 
-/// @def _throw(value)
-/// @brief Logs a source location, and throws the value of the expression `value`.
-#define _throw(value)                                                                                                                                                           \
-    do                                                                                                                                                                          \
-    {                                                                                                                                                                           \
-        const std::source_location _src_loc = std::source_location::current();                                                                                                  \
-        _nowarn_begin_use_after_free();                                                                                                                                         \
-        std::println(stderr, "In function `{}` at \"{}:{}:{}\" - Throwing `{}`.", _src_loc.function_name(), _src_loc.file_name(), int(_src_loc.line()), int(_src_loc.column()), \
-                     typeid(decltype(value)).name());                                                                                                                           \
-        _nowarn_end_use_after_free();                                                                                                                                           \
-        throw(value);                                                                                                                                                           \
-    }                                                                                                                                                                           \
+#ifndef _contract_assert
+/// @def _contract_assert(cond, ...)
+/// @brief Enforce a contract, asserting if `cond` is `false`.
+#define _contract_assert(cond, ...)                                                                                                  \
+    do                                                                                                                               \
+    {                                                                                                                                \
+        if (!(cond))                                                                                                                 \
+        {                                                                                                                            \
+            std::println(stderr, "Contract violated, condition `" #cond "` evaluated to `false`." __VA_OPT__(" (" __VA_ARGS__ ")")); \
+            volatile uint_least64_t i = 5'000'000'000;                                                                               \
+            while (i--)                                                                                                              \
+            { }                                                                                                                      \
+            std::terminate();                                                                                                        \
+        }                                                                                                                            \
+    }                                                                                                                                \
     while (false)
-
-/// @def _contract_assert(cond)
-/// @brief Enforce a contract, throwing a `contract_violation_exception` if `cond` is `false`.
-#define _contract_assert(cond)                                                                                             \
-    do                                                                                                                     \
-    {                                                                                                                      \
-        const bool _expr = cond;                                                                                           \
-        if (!_expr)                                                                                                        \
-            _throw(::sys::contract_violation_exception("Contract violated, condition `" #cond "` evaluated to `false`.")); \
-    }                                                                                                                      \
-    while (false)
+#endif
 
 /// @defgroup early_return_operators Early Return Macros
 /// @brief Convenience macros for early return operations.

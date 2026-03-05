@@ -157,7 +157,8 @@ FILE_PATTERNS           = *.c \
                           *.hpp \
                           *.h++ \
                           *.inc \
-                          *.mm
+                          *.mm \
+                          *.md
 RECURSIVE               = YES
 EXCLUDE                 = install \
                           examples \

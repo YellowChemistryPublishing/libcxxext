@@ -40,7 +40,7 @@ def main(argv: List[str]) -> None:
         help="Filter for files to analyze.",
         metavar="",
         required=False,
-        default=".*\\.(h|hpp|c|cc|cpp|cxx|c++)$",
+        default=".*\\.(inc|inl|h|hpp|c|cc|cpp|cxx|c++)$",
     )
     parser.add_argument(
         "-v",
