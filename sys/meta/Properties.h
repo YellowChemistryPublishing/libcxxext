@@ -1,5 +1,7 @@
 #pragma once
 
+// @file
+
 namespace sys::meta
 {
     /// @internal
