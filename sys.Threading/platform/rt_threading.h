@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file rt_threading.h
+/// @file
 
 #include <atomic>
 #include <chrono>
@@ -16,7 +16,7 @@
 
 #include <LanguageSupport.h>
 #include <Numeric.h>
-#include <Traits.h>
+#include <meta/Function.h>
 
 namespace sys::platform
 {

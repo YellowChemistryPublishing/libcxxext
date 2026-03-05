@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file InplaceQueue.h
+/// @file
 
 #include <cstddef>
 #include <iterator>

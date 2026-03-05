@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file Char.h
+/// @file
 
 #include <algorithm>
 #include <concepts>
@@ -11,9 +11,10 @@
 
 #include <LanguageSupport.h>
 #include <Numeric.h>
-#include <Traits.h>
 #include <data/UnicodeCasing.h>
 #include <data/UnicodeWhitespace.h>
+#include <meta/Builtin.h>
+#include <meta/TypeSwitch.h>
 
 namespace sys
 {

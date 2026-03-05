@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file CodepointIterator.h
+/// @file
 
 #include <span>
 #include <string>
@@ -8,7 +8,7 @@
 
 #include <Char.h>
 #include <Numeric.h>
-#include <Traits.h>
+#include <meta/Builtin.h>
 
 namespace sys
 {

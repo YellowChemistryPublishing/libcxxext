@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file Integer.inl
+/// @file
 
 #include <bit>
 #include <cmath>
@@ -13,7 +13,7 @@
 
 #include <LanguageSupport.h>
 #include <Platform.h>
-#include <Traits.h>
+#include <meta/Builtin.h>
 
 /// @defgroup builtin_integers Built-in Integer Types
 /// @brief Abbreviated built-in integer types.

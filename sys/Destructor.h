@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file Destructor.h
+/// @file
 
 #include <type_traits>
 #include <utility>

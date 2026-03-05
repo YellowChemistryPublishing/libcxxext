@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file StringEx.h
+/// @file
 
 #include <algorithm>
 #include <concepts>
@@ -19,9 +19,10 @@
 #include <CodepointIterator.h>
 #include <LanguageSupport.h>
 #include <Numeric.h>
-#include <Traits.h>
 #include <data/UnicodeCCC.h>
 #include <data/UnicodeCasing.h>
+#include <meta/Builtin.h>
+#include <meta/Container.h>
 
 namespace sys
 {

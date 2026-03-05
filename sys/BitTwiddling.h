@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file BitTwiddling.h
+/// @file
 
 #include <functional>
 

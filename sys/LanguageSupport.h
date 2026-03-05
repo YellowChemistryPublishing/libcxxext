@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file LanguageSupport.h
+/// @file
 
 #include <cassert>         // NOLINT(misc-include-cleaner)
 #include <cstdint>         // NOLINT(misc-include-cleaner)

@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file rt.h
+/// @file
 
 #include <cstddef>
 

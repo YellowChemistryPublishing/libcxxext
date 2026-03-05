@@ -1,11 +1,11 @@
 #pragma once
 
-/// @file RecurringTemplate.h
+/// @file
 
 #include <type_traits>
 
 #include <LanguageSupport.h>
-#include <Traits.h>
+#include <meta/Type.h>
 
 namespace sys
 {

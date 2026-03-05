@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file Result.h
+/// @file
 
 #include <algorithm>
 #include <cassert>

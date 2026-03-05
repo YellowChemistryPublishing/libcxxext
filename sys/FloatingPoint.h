@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file FloatingPoint.h
+/// @file
 
 #if __has_include(<stdfloat>)
 #include <stdfloat> // NOLINT(misc-include-cleaner)
