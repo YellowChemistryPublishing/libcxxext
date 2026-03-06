@@ -78,12 +78,15 @@ namespace sys::internal
     public:
         /// @brief Whether the result is good.
         constexpr explicit operator bool() const noexcept { return this->downcast().status == result_status::ok; }
+        /// @brief Whether the result is bad.
+        /// @note We abuse operator overloading to make it so that both `operator bool()` and `operator!()` are false for an empty result!
+        constexpr bool operator!() const noexcept { return this->downcast().status == result_status::error; }
 
         /// @brief Apply `func(*this)` and return its output.
-        [[nodiscard]] constexpr auto transform(auto&& func) noexcept(noexcept(func(this->downcast())))
-        requires requires { func(this->downcast()); }
+        [[nodiscard]] constexpr auto transform(auto&& func) noexcept(noexcept(func(std::move(this->downcast()))))
+        requires requires { func(std::declval<Result<T, Err>&&>()); }
         {
-            return func(this->downcast());
+            return func(std::move(this->downcast()));
         }
 
         /// @brief Returns an awaiter to enable short-circuiting, akin to rustlang's `operator?`.
@@ -102,14 +105,14 @@ namespace sys::internal
             if constexpr (std::is_reference_v<T>)
             {
                 T ret = *this->downcast().value;
-                this->downcast().status = internal::result_status::empty;
+                this->downcast().status = result_status::empty;
                 return ret;
             }
             else
             {
                 T ret = std::move(this->downcast().value);
                 std::destroy_at(std::addressof(this->downcast().value));
-                this->downcast().status = internal::result_status::empty;
+                this->downcast().status = result_status::empty;
                 return ret;
             }
         }
@@ -184,7 +187,7 @@ namespace sys
         template <typename With>
         constexpr result(With&& val) noexcept(std::is_reference_v<T> || noexcept(T(std::forward<With>(val))))
         requires requires {
-            requires std::same_as<T, Err> || !std::same_as<std::remove_cvref_t<With>, Err>;
+            requires std::same_as<T, Err> || std::same_as<T, With&&> || !std::same_as<std::remove_cvref_t<With>, Err>;
             requires (std::is_reference_v<T> || requires { T(std::forward<With>(val)); });
         }
             : status(internal::result_status::ok)
@@ -218,7 +221,7 @@ namespace sys
         template <typename With>
         constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
         requires requires {
-            requires (!std::same_as<T, Err> && std::same_as<std::remove_cvref_t<With>, Err>) || !requires { T(std::forward<With>(err)); };
+            requires (!std::same_as<T, Err> && !std::same_as<T, With &&> && std::same_as<std::remove_cvref_t<With>, Err>) || !requires { T(std::forward<With>(err)); };
             requires requires { Err(std::forward<With>(err)); };
         }
             : result(error_tag(), std::forward<With>(err))
@@ -252,7 +255,8 @@ namespace sys
                 std::construct_at(std::addressof(this->error), other.err());
                 break;
             [[unlikely]] case internal::result_status::empty:
-            [[unlikely]] default:;
+            [[unlikely]] default:
+                other.status = internal::result_status::empty;
             }
         }
         constexpr ~result()
@@ -338,13 +342,15 @@ namespace sys
                 break;
             [[unlikely]] case internal::result_status::error:
             [[unlikely]] case internal::result_status::empty:
-            [[unlikely]] default:;
+            [[unlikely]] default:
+                other.status = internal::result_status::empty;
             }
         }
         ~result()
         {
-            if (this->status == internal::result_status::ok) [[likely]]
-                std::destroy_at(std::addressof(this->value));
+            if constexpr (std::is_reference_v<T>)
+                if (this->status == internal::result_status::ok) [[likely]]
+                    std::destroy_at(std::addressof(this->value));
         }
 
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
@@ -363,7 +369,7 @@ namespace sys
     };
 
     /// @brief Specialization of `sys::result<...>` that holds no value if ok.
-    /// @details
+    /// @brief For a result with a single possible success state.
     template <typename Err>
     struct [[nodiscard]] result<void, Err> final : internal::result_b<result, void, Err>, internal::result_b_err<result, void, Err>
     {
@@ -377,6 +383,7 @@ namespace sys
     public:
         // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
 
+        /// @brief Construct a success result.
         constexpr result() noexcept : status(internal::result_status::ok) { }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
@@ -396,7 +403,10 @@ namespace sys
         /// @see `sys::result<T, Err>::result(Args&&...)`
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
-        requires requires { Err(std::forward<Args>(args)...); }
+        requires requires {
+            requires sizeof...(Args) > 1uz;
+            Err(std::forward<Args>(args)...);
+        }
             : result(error_tag(), std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;
@@ -409,12 +419,13 @@ namespace sys
                 break;
             [[likely]] case internal::result_status::ok:
             [[unlikely]] case internal::result_status::empty:
-            [[unlikely]] default:;
+            [[unlikely]] default:
+                other.status = internal::result_status::empty;
             }
         }
         ~result()
         {
-            if (this->status == internal::result_status::error)
+            if (this->status == internal::result_status::error) [[unlikely]]
                 std::destroy_at(std::addressof(this->error));
         }
 
@@ -433,12 +444,41 @@ namespace sys
         friend struct sys::internal::result_b_err<result, void, Err>;
     };
 
+    /// @brief Specialization of `sys::result<...>` representing a boolean result.
+    /// @details A result valueless in both `T` and `Err`, iow. a `bool` with more explicit semantics.
+    template <>
+    struct [[nodiscard]] result<void, void> final : internal::result_b<result, void, void>
+    {
+    private:
+        internal::result_status status;
+    public:
+        // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
+
+        /// @brief Construct a success result.
+        constexpr result() noexcept : status(internal::result_status::ok) { }
+        /// @brief Construct an error result.
+        constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
+        constexpr result(result&& other) noexcept : status(other.status) { other.status = internal::result_status::empty; }
+
+        // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
+
+        result& operator=(const result&) = delete;
+        result& operator=(result&& other) noexcept
+        {
+            _retif(*this, this == &other);
+            std::destroy_at(this);
+            std::construct_at(this, std::move(other));
+            return *this;
+        }
+
+        friend struct sys::internal::result_b<result, void, void>;
+    };
+
     /// @brief Awaiter to enable short-circuiting, akin to rustlang's `operator?`.
     template <typename T, typename Err>
     struct result_awaiter final
     {
         /// @cond
-
         [[nodiscard]] _inline_always constexpr bool await_ready() const noexcept { return res; }
         template <typename Promise>
         _inline_always constexpr void await_suspend(std::coroutine_handle<Promise> parent)
@@ -454,7 +494,6 @@ namespace sys
                 parent.promise().continuation.resume();
         }
         _inline_always constexpr T await_resume() const noexcept(std::is_same_v<T, void>) { return res.move(); }
-
         /// @endcond
 
         friend struct sys::result<T, Err>;
