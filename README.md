@@ -36,6 +36,8 @@ add_subdirectory(path/to/libcxxext)
 target_link_libraries(my_target PRIVATE sys ...)
 ```
 
+You may also choose to use a packaged binary distribution, and link against any `bin/*`, `lib/*` directly. Make sure to add `include/` as an extra include path in your buildsystem.
+
 ## Overview
 
 ### Infrastructure
