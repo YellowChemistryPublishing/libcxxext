@@ -17,7 +17,7 @@ namespace sys
         using recurring_type = T; ///< @private
 
         /// @private
-        recurring_template() = default;
+        recurring_template() = default; // NOLINT(bugprone-crtp-constructor-accessibility)
 
         /// @private
         /// @brief Downcasts to `T`.

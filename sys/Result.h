@@ -100,7 +100,7 @@ namespace sys::internal
     protected:
         result_b_ok() noexcept = default;
 
-        [[nodiscard]] constexpr T move(unsafe) noexcept(std::is_reference_v<T> || noexcept(T(std::move(this->downcast().value))))
+        [[nodiscard]] constexpr T move(unsafe) noexcept(std::is_reference_v<T> || noexcept(T(std::declval<T&&>())))
         {
             if constexpr (std::is_reference_v<T>)
             {
@@ -458,7 +458,9 @@ namespace sys
         constexpr result() noexcept : status(internal::result_status::ok) { }
         /// @brief Construct an error result.
         constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
+        constexpr result(const result&) = delete;
         constexpr result(result&& other) noexcept : status(other.status) { other.status = internal::result_status::empty; }
+        constexpr ~result() = default;
 
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
 
