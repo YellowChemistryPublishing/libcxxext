@@ -127,6 +127,7 @@ namespace sys::internal
         /// @brief `this->move()` if the result is good, otherwise `other`.
         template <typename With>
         [[nodiscard]] constexpr T move_or(With&& other) noexcept(noexcept(this->move(unsafe())) && noexcept(T(std::forward<With>(other))))
+        requires (!std::is_reference_v<T> || std::is_lvalue_reference_v<With &&>)
         {
             _retif(T(std::forward<With>(other)), this->downcast().status != result_status::ok);
             return this->move(unsafe());
@@ -189,7 +190,8 @@ namespace sys
         constexpr result(With&& val) noexcept(std::is_reference_v<T> || noexcept(T(std::forward<With>(val))))
         requires requires {
             requires std::same_as<T, Err> || std::same_as<T, With&&> || !std::same_as<std::remove_cvref_t<With>, Err>;
-            requires (std::is_reference_v<T> || requires { T(std::forward<With>(val)); });
+            requires std::is_reference_v<T> || requires { T(std::forward<With>(val)); };
+            requires !std::is_reference_v<T> || std::is_lvalue_reference_v<With&&>;
         }
             : status(internal::result_status::ok)
         {
@@ -224,6 +226,7 @@ namespace sys
         requires requires {
             requires (!std::same_as<T, Err> && !std::same_as<T, With &&> && std::same_as<std::remove_cvref_t<With>, Err>) || !requires { T(std::forward<With>(err)); };
             requires requires { Err(std::forward<With>(err)); };
+            requires !std::is_reference_v<T> || std::is_lvalue_reference_v<With&&>;
         }
             : result(error_tag(), std::forward<With>(err))
         { }
@@ -309,7 +312,10 @@ namespace sys
         /// @brief Constructs a result with a value.
         template <typename With>
         constexpr result(With&& val) noexcept(std::is_reference_v<T> || noexcept(T(std::forward<With>(val))))
-        requires (std::is_reference_v<T> || requires { T(std::forward<With>(val)); })
+        requires requires {
+            requires std::is_reference_v<T> || requires { T(std::forward<With>(val)); };
+            requires !std::is_reference_v<T> || std::is_lvalue_reference_v<With&&>;
+        }
             : status(internal::result_status::ok)
         {
             if constexpr (std::is_reference_v<T>)
