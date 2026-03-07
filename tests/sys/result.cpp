@@ -44,27 +44,28 @@ TEST_CASE("Swap works correctly.", "[sys][result]")
     CHECK(res1.err() == "err");
 }
 
-TEST_CASE("Constructing unit-result with a value works.", "[sys][result][unit]")
+TEST_CASE("Constructing any unit-valued-result works.", "[sys][result][unit]")
 {
-    sys::result<i32, void> res = 789_i32; // NOLINT(readability-magic-numbers)
-    CHECK(res);
-    CHECK(res.move() == 789_i32);
-}
-TEST_CASE("Constructing with `nullptr` (error) works.", "[sys][result][unit]") { CHECK(!sys::result<i32, void>(nullptr)); }
-TEST_CASE("Constructing unit-valued result works.", "[sys][result][unit]") { CHECK(sys::result<void, i32>()); }
-TEST_CASE("Constructing unit-valued result with error works.", "[sys][result][unit]")
-{
-    sys::result<void, i32> res = 789_i32; // NOLINT(readability-magic-numbers)
-    CHECK(!res);
-    CHECK(res.err() == 789_i32);
+    sys::result<i32, void> res1 = 789_i32; // NOLINT(readability-magic-numbers)
+    CHECK(res1);
+    CHECK(res1.move() == 789_i32);
+
+    CHECK(!sys::result<i32, void>(nullptr));
+
+    CHECK(sys::result<void, i32>());
+
+    sys::result<void, i32> res2 = 789_i32; // NOLINT(readability-magic-numbers)
+    CHECK(!res2);
+    CHECK(res2.err() == 789_i32);
 }
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Move semantics are sensible.")
 {
     sys::result<i16> res1 = 1_i16;
     sys::result<i16> res2 = std::move(res1);
 
-    CHECK(!_as(bool, res1));
+    CHECK(!_as(bool, res1)); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
     CHECK(!!res1);
     CHECK(res2);
     CHECK(!!res2);
@@ -73,7 +74,7 @@ TEST_CASE("Move semantics are sensible.")
     i16 val = 2_i16;
     sys::result<i16&, i16> res3 = val;
     sys::result<i16&, i16> res4 = std::move(res3);
-    CHECK(!_as(bool, res3));
+    CHECK(!_as(bool, res3)); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
     CHECK(!!res3);
     CHECK(res4);
     CHECK(!!res4);
@@ -81,7 +82,7 @@ TEST_CASE("Move semantics are sensible.")
 
     sys::result<void, i16> res5 = 3_i16;
     sys::result<void, i16> res6 = std::move(res5);
-    CHECK(!_as(bool, res5));
+    CHECK(!_as(bool, res5)); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
     CHECK(!!res5);
     CHECK(!_as(bool, res6));
     CHECK(!res6);
@@ -89,7 +90,7 @@ TEST_CASE("Move semantics are sensible.")
 
     sys::result<i16, std::string> res7 = 4_i16;
     sys::result<i16, std::string> res8 = std::move(res7);
-    CHECK(!_as(bool, res7));
+    CHECK(!_as(bool, res7)); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
     CHECK(!!res7);
     CHECK(res8);
     CHECK(!!res8);

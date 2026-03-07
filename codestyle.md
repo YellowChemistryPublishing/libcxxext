@@ -5,7 +5,7 @@
 CMake settings have configured compilation under gcc to use `-Wall -Wextra -Wpedantic -Werror`. To suppress false positives, see the useful macros in the `CompilerWarnings.h`
 header.
 
-You may not `throw` anything for the purpose of error checking. An exception is granted for fatal program conditions, such as that of a contract violation.. Correctly written
+You may not `throw` anything for the purpose of error checking. An exception is granted for fatal program conditions, such as that of a contract violation. Correctly written
 production code is banned from executing a `throw` expression, except for, once again, fatal error handling.
 
 You _should_ not `catch(...)` anything, with the possible exception of hardware/system related exceptions, for example `std::bad_alloc`, for producing debugging information.

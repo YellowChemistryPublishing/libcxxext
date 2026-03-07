@@ -199,21 +199,21 @@ static_assert(std::same_as<type_switch<type_case<std::same_as<float, double>, fl
 TEST_CASE("`sys::meta::append_to` works for `std::vector<...>`.", "[sys][traits][meta][append_to]")
 {
     std::vector<int> vec;
-    sys::meta::append_to(vec, 1);
+    sys::meta::generic_container_adaptor(vec).append_back(1);
     CHECK(vec.size() == 1);
     CHECK(vec[0] == 1);
 }
 TEST_CASE("`sys::meta::append_to` works for `std::string`.", "[sys][traits][meta][append_to]")
 {
     std::string str;
-    sys::meta::append_to(str, 'a');
-    sys::meta::append_to(str, "bc");
+    sys::meta::generic_container_adaptor(str).append_back('a');
+    sys::meta::generic_container_adaptor(str).append_back("bc");
     CHECK(str == "abc");
 }
 TEST_CASE("`sys::meta::append_to` works for custom types.", "[sys][traits][meta][append_to]")
 {
     append_receiver catcher;
-    sys::meta::append_to(catcher, 42); // NOLINT(readability-magic-numbers)
+    sys::meta::generic_container_adaptor(catcher).append_back(42); // NOLINT(readability-magic-numbers)
     CHECK(catcher.val == 42);
 }
 

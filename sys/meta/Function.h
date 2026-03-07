@@ -4,6 +4,7 @@
 
 #include <concepts>
 #include <tuple>
+#include <utility>
 
 #include <meta/Properties.h>
 

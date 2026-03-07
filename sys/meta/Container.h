@@ -6,39 +6,48 @@
 #include <cstddef>
 #include <iterator>
 #include <type_traits>
+#include <utility>
 
 #include <LanguageSupport.h>
 
 namespace sys::meta
 {
-    /// @brief Check whether an empty-queryable `range` is empty.
     template <typename T>
-    constexpr bool is_empty(const T& range)
+    struct generic_container_adaptor
     {
-        if constexpr (requires { range.empty(); })
-            return range.empty();
-        else if constexpr (requires { std::size(range); })
-            return std::size(range) == _as(decltype(std::size(range)), 0);
-        else if constexpr (requires { requires false; })
-        { }
-    }
-    /// @brief Inplace construct and append to an appendable `range`.
-    template <typename T, typename... Args>
-    constexpr decltype(auto) append_to(T& range, Args&&... args)
-    {
-        if constexpr (requires { range.emplace_back(std::forward<Args>(args)...); })
-            return range.emplace_back(std::forward<Args>(args)...);
-        else if constexpr (requires { range.push_back(std::forward<Args>(args)...); })
-            return range.push_back(std::forward<Args>(args)...);
-        else if constexpr (requires { range.push(std::forward<Args>(args)...); })
-            return range.push(std::forward<Args>(args)...);
-        else if constexpr (requires { range.append(std::forward<Args>(args)...); })
-            return range.append(std::forward<Args>(args)...);
-        else if constexpr (requires { (range << ... << std::forward<Args>(args)); })
-            return (range << ... << std::forward<Args>(args));
-        else if constexpr (requires { requires false; })
-        { }
-    }
+    private:
+        T& range; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
+    public:
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ generic_container_adaptor(T& range) noexcept : range(range) { }
+
+        /// @brief Check whether an empty-queryable `this->range` is empty.
+        [[nodiscard]] constexpr bool empty() const
+        {
+            if constexpr (requires { this->range.empty(); })
+                return this->range.empty();
+            else if constexpr (requires { std::size(this->range); })
+                return std::size(this->range) == _as(decltype(std::size(this->range)), 0);
+            else if constexpr (requires { requires false; })
+            { }
+        }
+        /// @brief (Potentially) inplace construct and append an element to an appendable `this->range`.
+        template <typename... Args>
+        constexpr void append_back(Args&&... args)
+        {
+            if constexpr (requires { this->range.emplace_back(std::forward<Args>(args)...); })
+                this->range.emplace_back(std::forward<Args>(args)...);
+            else if constexpr (requires { this->range.push_back(std::forward<Args>(args)...); })
+                this->range.push_back(std::forward<Args>(args)...);
+            else if constexpr (requires { this->range.push(std::forward<Args>(args)...); })
+                this->range.push(std::forward<Args>(args)...);
+            else if constexpr (requires { this->range.append(std::forward<Args>(args)...); })
+                this->range.append(std::forward<Args>(args)...);
+            else if constexpr (requires { (this->range << ... << std::forward<Args>(args)); })
+                (this->range << ... << std::forward<Args>(args));
+            else if constexpr (requires { requires false; })
+            { }
+        }
+    };
 } // namespace sys::meta
 
 namespace sys
@@ -70,11 +79,11 @@ namespace sys
 
     /// @brief Whether `T` can be checked for emptiness.
     template <typename T>
-    concept IEmptyQueryable = requires(T range) { meta::is_empty(range); };
+    concept IEmptyQueryable = requires(T range) { meta::generic_container_adaptor(range).empty(); };
     /// @brief Whether `T` can be appended to.
     template <typename T, typename... U>
     concept IAppendable = requires(T range) {
         requires (sizeof...(U) > 0);
-        meta::append_to(range, std::declval<U>()...);
+        meta::generic_container_adaptor(range).append_back(std::declval<U>()...);
     };
 } // namespace sys
