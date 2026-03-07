@@ -10,7 +10,7 @@ from typing import List
 import lib.config as config
 import tools.doxygen as doxygen
 from lib.exec import exec_or_fail, mark_finding_ok
-from lib.log import lcheck_passed
+from lib.log import lcheck_failed, lcheck_passed
 
 
 def main(argv: List[str]) -> None:
@@ -49,12 +49,20 @@ def main(argv: List[str]) -> None:
 
     doxygen.install(host_platform=args.platform)
 
-    content, _ = exec_or_fail(doxygen.cmd(), capture_output=True)
+    failed: bool = False
+
+    def on_fail() -> None:
+        nonlocal failed
+        failed = True
+
+    content, _ = exec_or_fail(doxygen.cmd(), capture_output=True, on_fail=on_fail)
     log_path = f"{config.findings_reldir}/Docgen.log"
     with open(log_path, "w") as f:
         f.write(content)
-    mark_finding_ok(log_path)
+    if failed:
+        lcheck_failed()
 
+    mark_finding_ok(log_path)
     lcheck_passed()
 
 

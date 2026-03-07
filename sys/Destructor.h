@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file Destructor.h
+/// @file
 
 #include <type_traits>
 #include <utility>
@@ -16,7 +16,7 @@ namespace sys
     struct destructor final
     {
         /// @brief Construct with a cleanup function.
-        /* NOLINT(hicpp-explicit-conversions) */ destructor(Func&& func) : func(std::move(func)) { }
+        /* NOLINT(hicpp-explicit-conversions) */ destructor(Func&& func) noexcept : func(std::move(func)) { }
         destructor(const destructor&) = delete;
         destructor(destructor&&) = delete;
         ~destructor() { this->func(); }

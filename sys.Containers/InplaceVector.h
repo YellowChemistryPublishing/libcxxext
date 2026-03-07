@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file InplaceVector.h
+/// @file
 
 #include <cstddef>
 #include <utility>

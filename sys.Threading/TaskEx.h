@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file TaskEx.h
+/// @file
 
 #include <CompilerWarnings.h>
 _nowarn_begin_unreachable(); // Erroneously generated for compiler coroutine codegen.
@@ -119,7 +119,7 @@ namespace sys::internal
 
         _inline_always task<T> get_return_object() { return task<T>(std::coroutine_handle<task_promise<T>>::from_promise(*_as(task_promise<T>*, this))); }
 
-        [[noreturn]] static task<T> get_return_object_on_allocation_failure() { _throw(std::bad_alloc()); }
+        [[noreturn]] static task<T> get_return_object_on_allocation_failure() { throw std::bad_alloc(); }
         _inline_always void unhandled_exception() { this->exception = std::current_exception(); }
 
         /// @endcond
@@ -192,7 +192,6 @@ namespace sys
 
         constexpr task() noexcept = default;
         constexpr task(const task&) = delete;
-        /// @brief Moveable.
         constexpr task(task&& other) noexcept : handle(std::exchange(other.handle, nullptr)) { }
         _inline_always ~task()
         {
@@ -201,7 +200,6 @@ namespace sys
         }
 
         constexpr task& operator=(const task&) = delete;
-        /// @brief Move-assignable.
         constexpr task& operator=(task&& other) noexcept
         {
             if (this != &other) [[likely]]
@@ -241,7 +239,6 @@ namespace sys
                     co_await task<>::yield();
         }
 
-        /// @brief Swappable.
         friend void swap(task& a, task& b) noexcept
         {
             using std::swap;

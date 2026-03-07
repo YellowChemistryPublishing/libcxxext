@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file StringEx.h
+/// @file
 
 #include <algorithm>
 #include <concepts>
@@ -19,9 +19,10 @@
 #include <CodepointIterator.h>
 #include <LanguageSupport.h>
 #include <Numeric.h>
-#include <Traits.h>
 #include <data/UnicodeCCC.h>
 #include <data/UnicodeCasing.h>
+#include <meta/Builtin.h>
+#include <meta/Container.h>
 
 namespace sys
 {
@@ -441,11 +442,11 @@ namespace sys
             {
                 if (*it == delimiter)
                 {
-                    meta::append_to(ret, string(from, it));
+                    meta::generic_container_adaptor(ret).append_back(string(from, it));
                     from = it + 1z;
                 }
             }
-            meta::append_to(ret, string(from, this->end()));
+            meta::generic_container_adaptor(ret).append_back(string(from, this->end()));
 
             return ret;
         }
@@ -459,7 +460,7 @@ namespace sys
                 Container ret;
                 ret.reserve(this->size());
                 for (const T c : *this)
-                    meta::append_to(ret, c);
+                    meta::generic_container_adaptor(ret).append_back(c);
                 return ret;
             }
 
@@ -469,12 +470,12 @@ namespace sys
             {
                 if (std::basic_string_view<T>(it, it + delimiter.size()) == delimiter)
                 {
-                    meta::append_to(ret, string(from, it));
+                    meta::generic_container_adaptor(ret).append_back(string(from, it));
                     it += delimiter.size() - 1z;
                     from = it + 1z;
                 }
             }
-            meta::append_to(ret, string(from, this->end()));
+            meta::generic_container_adaptor(ret).append_back(string(from, this->end()));
 
             return ret;
         }
@@ -483,7 +484,7 @@ namespace sys
         requires IEnumerable<Container> && IEmptyQueryable<Container>
         [[nodiscard]] static string join(const Container& container, const Chars& sep)
         {
-            if (meta::is_empty(container))
+            if (meta::generic_container_adaptor(container).empty())
                 return {};
 
             sz totalSize = 0_uz;

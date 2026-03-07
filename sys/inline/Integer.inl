@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file Integer.inl
+/// @file
 
 #include <bit>
 #include <cmath>
@@ -13,7 +13,7 @@
 
 #include <LanguageSupport.h>
 #include <Platform.h>
-#include <Traits.h>
+#include <meta/Builtin.h>
 
 /// @defgroup builtin_integers Built-in Integer Types
 /// @brief Abbreviated built-in integer types.
@@ -34,6 +34,19 @@ using ullong = unsigned long long;
 
 namespace sys
 {
+    /// @brief Opinionated sentinel value for `T`.
+    template <sys::IBuiltinIntegerSigned T>
+    /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel() noexcept
+    {
+        return std::numeric_limits<T>::lowest();
+    }
+    /// @brief Opinionated sentinel value for `T`.
+    template <sys::IBuiltinIntegerUnsigned T>
+    /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel() noexcept
+    {
+        return std::numeric_limits<T>::max();
+    }
+
     /// @brief Integer-to-integer cast.
     /// @warning `unsafe` because this is saturating!
     template <sys::IBuiltinInteger To, sys::IBuiltinInteger From>
@@ -55,25 +68,14 @@ namespace sys
     template <sys::IBuiltinInteger To, sys::IBuiltinFloatingPoint From>
     /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const From value, unsafe) noexcept
     {
-        if (!std::isfinite(value) || value <= _as(From, std::numeric_limits<To>::lowest())) [[unlikely]]
+        if (!std::isfinite(value)) [[unlikely]]
+            return sys::bsentinel<To>();
+        else if (value <= _as(From, std::numeric_limits<To>::lowest())) [[unlikely]]
             return std::numeric_limits<To>::lowest();
         else if (value >= _as(From, std::numeric_limits<To>::max())) [[unlikely]]
             return std::numeric_limits<To>::max();
         else [[likely]]
             return To(value);
-    }
-
-    /// @brief Opinionated sentinel value for `T`.
-    template <sys::IBuiltinIntegerSigned T>
-    /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel()
-    {
-        return std::numeric_limits<T>::lowest();
-    }
-    /// @brief Opinionated sentinel value for `T`.
-    template <sys::IBuiltinIntegerUnsigned T>
-    /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel()
-    {
-        return std::numeric_limits<T>::max();
     }
 
     /// @brief Safe(r) high-level integer wrapper.
@@ -98,14 +100,14 @@ namespace sys
     public:
         using underlying_type = For;
 
-        [[nodiscard]] static consteval bool is_signed() { return std::is_signed_v<For>; }
+        [[nodiscard]] static consteval bool is_signed() noexcept { return std::is_signed_v<For>; }
 
-        [[nodiscard]] static consteval integer highest() { return std::numeric_limits<For>::max(); }
-        [[nodiscard]] static consteval integer lowest() { return std::numeric_limits<For>::lowest(); }
+        [[nodiscard]] static consteval integer highest() noexcept { return std::numeric_limits<For>::max(); }
+        [[nodiscard]] static consteval integer lowest() noexcept { return std::numeric_limits<For>::lowest(); }
         /// @brief All ones.
-        [[nodiscard]] static consteval integer ones() { return _as(For, ~_as(For, 0)); }
+        [[nodiscard]] static consteval integer ones() noexcept { return _as(For, ~_as(For, 0)); }
         /// @brief An opinionated sentinel value.
-        [[nodiscard]] static consteval integer sentinel() { return sys::bsentinel<For>(); }
+        [[nodiscard]] static consteval integer sentinel() noexcept { return sys::bsentinel<For>(); }
 
         constexpr integer() noexcept = default;
         /// @brief From narrower-bounded.

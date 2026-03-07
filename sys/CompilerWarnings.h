@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file CompilerWarnings.h
+/// @file
 
 #include <Platform.h>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-/// @file Thread.h
+/// @file
 
 #include <rt_threading.h>
 

@@ -1,19 +1,19 @@
 #pragma once
 
-/// @file Char.h
+/// @file
 
 #include <algorithm>
 #include <concepts>
 #include <span>
 #include <string>
 #include <string_view>
-#include <utility>
 
 #include <LanguageSupport.h>
 #include <Numeric.h>
-#include <Traits.h>
 #include <data/UnicodeCasing.h>
 #include <data/UnicodeWhitespace.h>
+#include <meta/Builtin.h>
+#include <meta/TypeSwitch.h>
 
 namespace sys
 {
@@ -106,14 +106,20 @@ namespace sys
 
         /// @brief The number of buffer elements in a null-terminated string.
         /// @warning `unsafe` because `cstr` has preconditions.
-        /// @pre `const char cstr[N]` => `cstr != nullptr && cstr[N - 1z] == '\0'`
+        /// @pre `const char cstr[N]` => `cstr != nullptr && N > 0uz && cstr[N - 1z] == '\0'`
         template <ICharacter T>
         static constexpr sz buffer_size(const T* cstr, unsafe) noexcept(noexcept(std::char_traits<T>::length(cstr)))
         {
             return std::char_traits<T>::length(cstr);
         }
+
+        struct codepoint_data
+        {
+            char32_t c;
+            sz size_bytes;
+        };
     private:
-        static consteval std::pair<char32_t, sz> read_codepoint_fail() noexcept { return { ch::replacement<char32_t>()[0], 1_uz }; }
+        static consteval codepoint_data read_codepoint_fail() noexcept { return codepoint_data { .c = ch::replacement<char32_t>()[0], .size_bytes = 1_uz }; }
     public:
         // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic, readability-magic-numbers)
 
@@ -121,29 +127,29 @@ namespace sys
         /// @return `(char32_t codepoint, sz elements_read)`
         /// @warning `unsafe` because `range` has preconditions.
         /// @pre `range.empty() == false`
-        static constexpr std::pair<char32_t, sz> read_codepoint(const std::span<const char32_t> range, unsafe) noexcept
+        static constexpr codepoint_data read_codepoint(const std::span<const char32_t> range, unsafe) noexcept
         {
             const u32 ret = _as(u32::underlying_type, range[0]);
             _retif(ch::read_codepoint_fail(), !ch::is_scalar(_as(char32_t, ret)));
-            return { _as(char32_t, ret), 1_uz };
+            return codepoint_data { .c = _as(char32_t, ret), .size_bytes = 1_uz };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, unsafe)`
-        static constexpr std::pair<char32_t, sz> read_codepoint(const std::span<const char16_t> range, unsafe) noexcept
+        static constexpr codepoint_data read_codepoint(const std::span<const char16_t> range, unsafe) noexcept
         {
             const u32 lead = _as(u32::underlying_type, range[0]);
-            _retif(std::make_pair(_as(char32_t, lead), 1_uz), !ch::is_surrogate(_as(char32_t, lead))); // BMP
+            _retif((codepoint_data { .c = _as(char32_t, lead), .size_bytes = 1_uz }), !ch::is_surrogate(_as(char32_t, lead))); // BMP
             _retif(ch::read_codepoint_fail(), !ch::is_high_surrogate(_as(char32_t, lead)) || range.size() < 2uz);
 
             const u32 trail = _as(u32::underlying_type, range[1]);
             _retif(ch::read_codepoint_fail(), !ch::is_low_surrogate(_as(char32_t, trail)));
 
-            return { _as(char32_t, 0x10000_u32 + ((lead - 0xD800_u32) << 10_u32) + (trail - 0xDC00_u32)), 2_uz };
+            return codepoint_data { .c = _as(char32_t, 0x10000_u32 + ((lead - 0xD800_u32) << 10_u32) + (trail - 0xDC00_u32)), .size_bytes = 2_uz };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, unsafe)`
-        static constexpr std::pair<char32_t, sz> read_codepoint(const std::span<const char8_t> range, unsafe) noexcept // NOLINT(readability-function-cognitive-complexity)
+        static constexpr codepoint_data read_codepoint(const std::span<const char8_t> range, unsafe) noexcept // NOLINT(readability-function-cognitive-complexity)
         {
             u32 ret = _as(u32::underlying_type, range[0]);
-            _retif(std::make_pair(_as(char32_t, ret), 1_uz), ret < 0x80_u32); // 1-byte sequence, fast path.
+            _retif((codepoint_data { .c = _as(char32_t, ret), .size_bytes = 1_uz }), ret < 0x80_u32); // 1-byte sequence, fast path.
 
             sz len = 0_uz;
             if (ret >= 0xC2_u32 && ret < 0xE0_u32)
@@ -176,16 +182,16 @@ namespace sys
             constexpr u32 cpMinReq[] = { 0_u32, 0_u32, 0x80_u32, 0x800_u32, 0x10000_u32 };
             _retif(ch::read_codepoint_fail(), ret < cpMinReq[len] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */ || !ch::is_scalar(_as(char32_t, ret)));
 
-            return { _as(char32_t, ret), len };
+            return codepoint_data { .c = _as(char32_t, ret), .size_bytes = len };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, unsafe)`
-        static constexpr std::pair<char32_t, sz> read_codepoint(const std::span<const char> range, unsafe) noexcept
+        static constexpr codepoint_data read_codepoint(const std::span<const char> range, unsafe) noexcept
         {
             using ctype = ch::unicode_equiv<char>;
             return read_codepoint(std::span<const ctype>(_asr(const ctype*, range.data()), range.size()), unsafe());
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, unsafe)`
-        static constexpr std::pair<char32_t, sz> read_codepoint(const std::span<const wchar_t> range, unsafe) noexcept
+        static constexpr codepoint_data read_codepoint(const std::span<const wchar_t> range, unsafe) noexcept
         {
             using ctype = ch::unicode_equiv<wchar_t>;
             return read_codepoint(std::span<const ctype>(_asr(const ctype*, range.data()), range.size()), unsafe());
