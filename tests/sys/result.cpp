@@ -65,7 +65,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<i16> res1 = 1_i16;
     sys::result<i16> res2 = std::move(res1);
 
-    CHECK(!_as(bool, res1)); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
+    CHECK(!_as(bool, res1)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK(!!res1);
     CHECK(res2);
     CHECK(!!res2);
@@ -74,7 +74,7 @@ TEST_CASE("Move semantics are sensible.")
     i16 val = 2_i16;
     sys::result<i16&, i16> res3 = val;
     sys::result<i16&, i16> res4 = std::move(res3);
-    CHECK(!_as(bool, res3)); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
+    CHECK(!_as(bool, res3)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK(!!res3);
     CHECK(res4);
     CHECK(!!res4);
@@ -82,7 +82,7 @@ TEST_CASE("Move semantics are sensible.")
 
     sys::result<void, i16> res5 = 3_i16;
     sys::result<void, i16> res6 = std::move(res5);
-    CHECK(!_as(bool, res5)); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
+    CHECK(!_as(bool, res5)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK(!!res5);
     CHECK(!_as(bool, res6));
     CHECK(!res6);
@@ -90,7 +90,7 @@ TEST_CASE("Move semantics are sensible.")
 
     sys::result<i16, std::string> res7 = 4_i16;
     sys::result<i16, std::string> res8 = std::move(res7);
-    CHECK(!_as(bool, res7)); // NOLINT(bugprone-use-after-move,hicpp-invalid-access-moved)
+    CHECK(!_as(bool, res7)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK(!!res7);
     CHECK(res8);
     CHECK(!!res8);

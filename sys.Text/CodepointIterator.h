@@ -21,7 +21,7 @@ namespace sys
         ssz cp_size = 0_z;
     public:
         /// @brief Uninitialized iterator.
-        constexpr codepoint_iter() = default;
+        constexpr codepoint_iter() noexcept = default;
         /// @brief Construct from a contiguous range.
         /// @pre `end >= cur`
         constexpr codepoint_iter(const T* cur, const T* end) noexcept : cur(cur), end(end) { }
@@ -47,7 +47,7 @@ namespace sys
         constexpr codepoint_iter& operator++() noexcept
         {
             if (!this->cp_size)
-                this->cp_size = ssz(ch::read_codepoint(std::span(this->cur, this->end), unsafe()).second);
+                this->cp_size = ssz(ch::read_codepoint(std::span(this->cur, this->end), unsafe()).size_bytes);
             this->cur += this->cp_size;
             this->cp_size = 0_z;
             return *this;

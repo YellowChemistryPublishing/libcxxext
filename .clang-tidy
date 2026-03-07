@@ -14,7 +14,7 @@ Checks: >
 
     -google-build-using-namespace, -google-explicit-constructor, -google-readability-braces-around-statements, -google-readability-function-size,
 
-    -hicpp-avoid-c-arrays, -hicpp-avoid-goto, -hicpp-braces-around-statements, -hicpp-function-size, -hicpp-move-const-arg, -hicpp-named-parameter,
+    -hicpp-avoid-c-arrays, -hicpp-avoid-goto, -hicpp-braces-around-statements, -hicpp-function-size, -hicpp-invalid-access-moved, -hicpp-move-const-arg, -hicpp-named-parameter,
     -hicpp-non-private-member-variables-in-classes, -hicpp-uppercase-literal-suffix, -hicpp-use-auto,
 
     -llvm-header-guard, -llvm-qualified-auto,
