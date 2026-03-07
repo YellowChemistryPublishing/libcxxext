@@ -66,7 +66,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<i16> res2 = std::move(res1);
 
     CHECK(!_as(bool, res1)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
-    CHECK(!!res1);
+    CHECK(!!res1);           // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res2);
     CHECK(!!res2);
     CHECK(res2.move() == 1_i16);
@@ -75,7 +75,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<i16&, i16> res3 = val;
     sys::result<i16&, i16> res4 = std::move(res3);
     CHECK(!_as(bool, res3)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
-    CHECK(!!res3);
+    CHECK(!!res3);           // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res4);
     CHECK(!!res4);
     CHECK(std::addressof(res4.move()) == std::addressof(val));
@@ -83,7 +83,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<void, i16> res5 = 3_i16;
     sys::result<void, i16> res6 = std::move(res5);
     CHECK(!_as(bool, res5)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
-    CHECK(!!res5);
+    CHECK(!!res5);           // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(!_as(bool, res6));
     CHECK(!res6);
     CHECK(res6.err() == 3_i16);
@@ -91,7 +91,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<i16, std::string> res7 = 4_i16;
     sys::result<i16, std::string> res8 = std::move(res7);
     CHECK(!_as(bool, res7)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
-    CHECK(!!res7);
+    CHECK(!!res7);           // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res8);
     CHECK(!!res8);
     CHECK(res8.move() == 4_i16);
@@ -140,10 +140,10 @@ TEST_CASE("Value/error type semantics are correct.", "[sys][result]")
     CHECK([]() -> sys::result<std::string, const char*> { return { 4uz, 'a' }; }().move() == "aaaa");
     CHECK(std::string_view([]() -> sys::result<std::string, const char*> { return { sys::error_tag(), "oops" }; }().err()) == "oops");
 
-    CHECK([]() -> sys::result<ullong, long> { return 10293948287ull; }().move() == 10293948287ull);
-    CHECK([]() -> sys::result<ullong, long> { return 10293948287; }().move() == 10293948287ull);
-    CHECK([]() -> sys::result<ullong, long> { return 12l; }().err() == 12);
-    CHECK([]() -> sys::result<ullong, long> { return { sys::error_tag(), 12 }; }().err() == 12);
+    CHECK([]() -> sys::result<u64, i16> { return 10293948287_u64; }().move() == 10293948287_u64);
+    CHECK([]() -> sys::result<u64, i16> { return 10293948287_i64; }().move() == 10293948287_u64);
+    CHECK([]() -> sys::result<u64, i16> { return 12_i16; }().err() == 12_i16);
+    CHECK([]() -> sys::result<u64, i16> { return { sys::error_tag(), 12_u64 }; }().err() == 12_i16);
 }
 
 TEST_CASE("Value type can be reference.", "[sys][result]")
