@@ -217,13 +217,6 @@
 #undef _nowarn_end_deprecated
 #define _nowarn_end_deprecated() _nowarn_end_msvc()
 
-#undef _nowarn_begin_c_cast
-#define _nowarn_begin_c_cast()            \
-    _nowarn_begin_msvc();                 \
-    _nowarn_one_msvc(_clwarn_msvc_c_cast)
-#undef _nowarn_end_c_cast
-#define _nowarn_end_c_cast() _nowarn_end_msvc()
-
 #undef _nowarn_begin_unreachable
 #define _nowarn_begin_unreachable()                 \
     _nowarn_begin_msvc();                           \
