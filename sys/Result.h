@@ -14,6 +14,7 @@
 #include <LanguageSupport.h>
 #include <RecurringTemplate.h>
 #include <inline/Integer.inl>
+#include <meta/Type.h>
 
 // NOLINTBEGIN(bugprone-macro-parentheses)
 /// @def _res_movret(out_decl, res_xval)
@@ -76,6 +77,9 @@ namespace sys::internal
     protected:
         result_b() noexcept = default;
     public:
+        static_assert(!meta::template_type<T>::template is_from<Result>(), "No monkey business with result types holding other result types!");
+        static_assert(!meta::template_type<Err>::template is_from<Result>(), "No monkey business with result types holding other result types!");
+
         /// @brief Whether the result is good.
         constexpr explicit operator bool() const noexcept { return this->downcast().status == result_status::ok; }
         /// @brief Whether the result is bad.
@@ -104,7 +108,10 @@ namespace sys::internal
         /// @brief Constructs a result with a value.
         template <typename With>
         constexpr void ctor_ok(With&& val) noexcept(std::is_lvalue_reference_v<T> || noexcept(T(std::forward<With>(val))))
-        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
+        requires requires {
+            requires !std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With&&>;
+            requires std::is_lvalue_reference_v<T> || requires { T(std::forward<With>(val)); };
+        }
         {
             if constexpr (std::is_lvalue_reference_v<T>)
                 this->downcast().value = std::addressof(val);
@@ -175,16 +182,21 @@ namespace sys::internal
             std::construct_at(std::addressof(this->downcast().error), std::forward<Args>(args)...);
             this->downcast().status = internal::result_status::error;
         }
-    public:
-        /// @brief Take the error of a bad result.
-        /// @pre `*this == false`
-        [[nodiscard]] constexpr Err err() noexcept(noexcept(Err(std::move(this->downcast().error))))
+
+        [[nodiscard]] constexpr Err err(unsafe) noexcept(noexcept(Err(std::move(this->downcast().error))))
         {
-            _contract_assert(this->downcast().status == result_status::error, "Taking error for a good or empty result!");
             Err ret = std::move(this->downcast().error);
             std::destroy_at(std::addressof(this->downcast().error));
             this->downcast().status = internal::result_status::empty;
             return ret;
+        }
+    public:
+        /// @brief Take the error of a bad result.
+        /// @pre `*this == false`
+        [[nodiscard]] constexpr Err err() noexcept(noexcept(Err(this->err(unsafe()))))
+        {
+            _contract_assert(this->downcast().status == result_status::error, "Taking error for a good or empty result!");
+            return this->err(unsafe());
         }
     };
 } // namespace sys::internal
@@ -218,9 +230,6 @@ namespace sys
         };
         internal::result_status status = internal::result_status::empty;
     public:
-        static_assert(!meta::template_type<T>::template is_from<result>(), "No monkey business with result types holding other result types!");
-        static_assert(!meta::template_type<Err>::template is_from<result>(), "No monkey business with result types holding other result types!");
-
         // NOLINTBEGIN(hicpp-explicit-conversions)
 
         /// @brief Constructs a result with a value.
@@ -228,7 +237,7 @@ namespace sys
         constexpr result(With&& val) noexcept(noexcept(this->ctor_ok(std::forward<With>(val))))
         requires requires {
             requires std::same_as<T, Err> || !std::same_as<std::remove_cvref_t<With>, Err>;
-            requires std::is_lvalue_reference_v<T> || requires { T(std::forward<With>(val)); };
+            requires requires { this->ctor_ok(std::forward<With>(val)); };
         }
         {
             this->ctor_ok(std::forward<With>(val));
@@ -236,12 +245,14 @@ namespace sys
         /// @brief Inplace constructs a result with a value.
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(this->ctor_ok(std::forward<Args>(args)...)))
+        requires requires { this->ctor_ok(std::forward<Args>(args)...); }
         {
             this->ctor_ok(std::forward<Args>(args)...);
         }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
         constexpr result(error_tag, Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
+        requires requires { this->ctor_err(std::forward<Args>(args)...); }
         {
             this->ctor_err(std::forward<Args>(args)...);
         }
@@ -267,19 +278,15 @@ namespace sys
         // NOLINTEND(hicpp-explicit-conversions)
 
         constexpr result(const result&) = delete;
-        constexpr result(result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>) && std::is_nothrow_move_constructible_v<Err>) :
-            status(other.status)
+        constexpr result(result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>) && std::is_nothrow_move_constructible_v<Err>)
         {
             switch (other.status)
             {
             [[likely]] case internal::result_status::ok:
-                if constexpr (std::is_lvalue_reference_v<T>)
-                    this->value = std::addressof(other.move(unsafe()));
-                else
-                    std::construct_at(std::addressof(this->value), other.move(unsafe()));
+                this->ctor_ok(other.move(unsafe()));
                 break;
             [[unlikely]] case internal::result_status::error:
-                std::construct_at(std::addressof(this->error), other.err());
+                this->ctor_err(other.err(unsafe()));
                 break;
             [[unlikely]] case internal::result_status::empty:
             [[unlikely]] default:
@@ -334,13 +341,17 @@ namespace sys
         /// @brief Constructs a result with a value.
         template <typename With>
         constexpr result(With&& val) noexcept(noexcept(this->ctor_ok(std::forward<With>(val))))
-        requires (!std::same_as<std::remove_cvref_t<With>, result>)
+        requires requires {
+            requires !std::same_as<std::remove_cvref_t<With>, result>;
+            requires requires { this->ctor_ok(std::forward<With>(val)); };
+        }
         {
             this->ctor_ok(std::forward<With>(val));
         }
         /// @brief Inplace constructs a result with a value.
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(this->ctor_ok(std::forward<Args>(args)...)))
+        requires requires { this->ctor_ok(std::forward<Args>(args)...); }
         {
             this->ctor_ok(std::forward<Args>(args)...);
         }
@@ -352,12 +363,11 @@ namespace sys
             switch (other.status)
             {
             [[likely]] case internal::result_status::ok:
-                if constexpr (std::is_lvalue_reference_v<T>)
-                    this->value = std::addressof(other.move(unsafe()));
-                else
-                    std::construct_at(std::addressof(this->value), other.move(unsafe()));
+                this->ctor_ok(other.move(unsafe()));
                 break;
             [[unlikely]] case internal::result_status::error:
+                this->status = internal::result_status::error;
+                [[fallthrough]];
             [[unlikely]] case internal::result_status::empty:
             [[unlikely]] default:
                 other.status = internal::result_status::empty;
@@ -397,7 +407,7 @@ namespace sys
             byte _;
             internal::result_storage_type<Err> error;
         };
-        internal::result_status status;
+        internal::result_status status = internal::result_status::empty;
     public:
         // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
 
@@ -406,20 +416,27 @@ namespace sys
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
         constexpr result(error_tag, Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
+        requires requires { this->ctor_err(std::forward<Args>(args)...); }
         {
             this->ctor_err(std::forward<Args>(args)...);
         }
         /// @brief Constructs a result with an error.
         template <typename With>
         constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
-        requires (!std::same_as<std::remove_cvref_t<With>, result>)
+        requires requires {
+            requires !std::same_as<std::remove_cvref_t<With>, result>;
+            requires requires { result(error_tag(), std::forward<With>(err)); };
+        }
             : result(error_tag(), std::forward<With>(err))
         { }
         /// @brief Inplace constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
-        requires (sizeof...(Args) > 1uz)
+        requires requires {
+            requires sizeof...(Args) > 1uz;
+            requires requires { result(error_tag(), std::forward<Args>(args)...); };
+        }
             : result(error_tag(), std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;
@@ -428,9 +445,11 @@ namespace sys
             switch (other.status)
             {
             [[unlikely]] case internal::result_status::error:
-                std::construct_at(std::addressof(this->error), other.err());
+                this->ctor_err(other.err(unsafe()));
                 break;
             [[likely]] case internal::result_status::ok:
+                this->status = internal::result_status::ok;
+                [[fallthrough]];
             [[unlikely]] case internal::result_status::empty:
             [[unlikely]] default:
                 other.status = internal::result_status::empty;
@@ -463,7 +482,7 @@ namespace sys
     struct [[nodiscard]] result<void, void> final : internal::result_b<result, void, void>
     {
     private:
-        internal::result_status status;
+        internal::result_status status = internal::result_status::empty;
     public:
         // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
 
