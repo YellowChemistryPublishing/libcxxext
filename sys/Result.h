@@ -263,6 +263,7 @@ namespace sys
         requires requires {
             requires (!std::same_as<T, Err> && !std::same_as<T, With &&> && std::same_as<std::remove_cvref_t<With>, Err>) || !requires { T(std::forward<With>(err)); };
             requires !std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With&&>;
+            requires requires { this->ctor_err(std::forward<With>(err)); };
         }
             : result(error_tag(), std::forward<With>(err))
         { }
@@ -271,7 +272,7 @@ namespace sys
         /// @note Participates in overload resolution only if `args...` cannot construct a `T`.
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
-        requires (!requires { T(std::forward<Args>(args)...); })
+        requires requires { requires !requires { T(std::forward<Args>(args)...); }; requires requires { this->ctor_err(std::forward<Args>(args)...); }; }
             : result(error_tag(), std::forward<Args>(args)...)
         { }
 
@@ -425,7 +426,7 @@ namespace sys
         constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
         requires requires {
             requires !std::same_as<std::remove_cvref_t<With>, result>;
-            requires requires { result(error_tag(), std::forward<With>(err)); };
+            requires requires { this->ctor_err(std::forward<With>(err)); };
         }
             : result(error_tag(), std::forward<With>(err))
         { }
@@ -434,8 +435,8 @@ namespace sys
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
         requires requires {
-            requires sizeof...(Args) > 1uz;
-            requires requires { result(error_tag(), std::forward<Args>(args)...); };
+            requires sizeof...(Args) != 1uz;
+            requires requires { this->ctor_err(std::forward<Args>(args)...); };
         }
             : result(error_tag(), std::forward<Args>(args)...)
         { }
