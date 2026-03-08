@@ -66,7 +66,7 @@ namespace sys::internal
     /// @internal
     /// @brief Type to use in result storage to represent `T`.
     template <typename T>
-    using result_storage_type = std::conditional_t<!std::is_reference_v<T>, std::remove_cv_t<T>, std::remove_reference_t<T>*>;
+    using result_storage_type = std::conditional_t<!std::is_lvalue_reference_v<T>, std::remove_cv_t<T>, std::remove_reference_t<T>*>;
 
     /// @internal
     /// @brief Shared functionality for result types.
@@ -100,9 +100,34 @@ namespace sys::internal
     protected:
         result_b_ok() noexcept = default;
 
-        [[nodiscard]] constexpr T move(unsafe) noexcept(std::is_reference_v<T> || noexcept(T(std::declval<T&&>())))
+        /// @internal
+        /// @brief Constructs a result with a value.
+        template <typename With>
+        constexpr void ctor_ok(With&& val) noexcept(std::is_lvalue_reference_v<T> || noexcept(T(std::forward<With>(val))))
+        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
         {
-            if constexpr (std::is_reference_v<T>)
+            if constexpr (std::is_lvalue_reference_v<T>)
+                this->downcast().value = std::addressof(val);
+            else
+                std::construct_at(std::addressof(this->downcast().value), std::forward<With>(val));
+            this->downcast().status = internal::result_status::ok;
+        }
+        /// @internal
+        /// @brief Inplace constructs a result with a value.
+        template <typename... Args>
+        constexpr void ctor_ok(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...)))
+        requires requires {
+            requires !std::is_lvalue_reference_v<T>;
+            T(std::forward<Args>(args)...);
+        }
+        {
+            std::construct_at(std::addressof(this->downcast().value), std::forward<Args>(args)...);
+            this->downcast().status = internal::result_status::ok;
+        }
+
+        [[nodiscard]] constexpr T move(unsafe) noexcept(std::is_lvalue_reference_v<T> || noexcept(T(std::declval<T&&>())))
+        {
+            if constexpr (std::is_lvalue_reference_v<T>)
             {
                 T ret = *this->downcast().value;
                 this->downcast().status = result_status::empty;
@@ -127,7 +152,7 @@ namespace sys::internal
         /// @brief `this->move()` if the result is good, otherwise `other`.
         template <typename With>
         [[nodiscard]] constexpr T move_or(With&& other) noexcept(noexcept(this->move(unsafe())) && noexcept(T(std::forward<With>(other))))
-        requires (!std::is_reference_v<T> || std::is_lvalue_reference_v<With &&>)
+        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
         {
             _retif(T(std::forward<With>(other)), this->downcast().status != result_status::ok);
             return this->move(unsafe());
@@ -140,6 +165,16 @@ namespace sys::internal
     {
     protected:
         result_b_err() noexcept = default;
+
+        /// @internal
+        /// @brief Inplace constructs a result with an error.
+        template <typename... Args>
+        constexpr void ctor_err(Args&&... args) noexcept(noexcept(Err(std::forward<Args>(args)...)))
+        requires requires { Err(std::forward<Args>(args)...); }
+        {
+            std::construct_at(std::addressof(this->downcast().error), std::forward<Args>(args)...);
+            this->downcast().status = internal::result_status::error;
+        }
     public:
         /// @brief Take the error of a bad result.
         /// @pre `*this == false`
@@ -165,14 +200,14 @@ namespace sys
     concept IResultStorable = requires {
         requires !std::same_as<std::remove_cvref_t<T>, std::nullptr_t>;
         requires !std::same_as<std::remove_cvref_t<T>, error_tag>;
-        requires std::is_reference_v<T> || std::same_as<T, void> || (std::same_as<T, std::remove_cvref_t<T>> && std::is_nothrow_destructible_v<T>);
+        requires std::is_lvalue_reference_v<T> || std::same_as<T, void> || (std::same_as<T, std::remove_cvref_t<T>> && !std::is_array_v<T> && std::is_nothrow_destructible_v<T>);
     };
 
     /// @brief A monadic type that can hold either a value or an error.
     /// @details Like the one in rustlang!
     /// @note Pass `byref`.
     template <IResultStorable T, IResultStorable Err = void>
-    requires (!std::is_reference_v<Err>) /* Intentionally don't support reference errors--doesn't really make sense. */
+    requires (!std::is_lvalue_reference_v<Err>) /* Intentionally don't support reference errors--doesn't really make sense. */
     struct [[nodiscard]] result final : internal::result_b<result, T, Err>, internal::result_b_ok<result, T, Err>, internal::result_b_err<result, T, Err>
     {
     private:
@@ -183,41 +218,32 @@ namespace sys
         };
         internal::result_status status = internal::result_status::empty;
     public:
+        static_assert(!meta::template_type<T>::template is_from<result>(), "No monkey business with result types holding other result types!");
+        static_assert(!meta::template_type<Err>::template is_from<result>(), "No monkey business with result types holding other result types!");
+
         // NOLINTBEGIN(hicpp-explicit-conversions)
 
         /// @brief Constructs a result with a value.
         template <typename With>
-        constexpr result(With&& val) noexcept(std::is_reference_v<T> || noexcept(T(std::forward<With>(val))))
+        constexpr result(With&& val) noexcept(noexcept(this->ctor_ok(std::forward<With>(val))))
         requires requires {
-            requires std::same_as<T, Err> || std::same_as<T, With&&> || !std::same_as<std::remove_cvref_t<With>, Err>;
-            requires std::is_reference_v<T> || requires { T(std::forward<With>(val)); };
-            requires !std::is_reference_v<T> || std::is_lvalue_reference_v<With&&>;
+            requires std::same_as<T, Err> || !std::same_as<std::remove_cvref_t<With>, Err>;
+            requires std::is_lvalue_reference_v<T> || requires { T(std::forward<With>(val)); };
         }
-            : status(internal::result_status::ok)
         {
-            if constexpr (std::is_reference_v<T>)
-                this->value = std::addressof(val);
-            else
-                std::construct_at(std::addressof(this->value), std::forward<With>(val));
+            this->ctor_ok(std::forward<With>(val));
         }
         /// @brief Inplace constructs a result with a value.
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...)))
-        requires requires {
-            requires !std::is_reference_v<T>;
-            T(std::forward<Args>(args)...);
-        }
-            : status(internal::result_status::ok)
+        constexpr result(Args&&... args) noexcept(noexcept(this->ctor_ok(std::forward<Args>(args)...)))
         {
-            std::construct_at(std::addressof(this->value), std::forward<Args>(args)...);
+            this->ctor_ok(std::forward<Args>(args)...);
         }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
-        constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::forward<Args>(args)...)))
-        requires requires { Err(std::forward<Args>(args)...); }
-            : status(internal::result_status::error)
+        constexpr result(error_tag, Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
         {
-            std::construct_at(std::addressof(this->error), std::forward<Args>(args)...);
+            this->ctor_err(std::forward<Args>(args)...);
         }
         /// @brief Constructs a result with an error.
         /// @note Participates in overload resolution only if `err` cannot construct a `T`.
@@ -225,8 +251,7 @@ namespace sys
         constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
         requires requires {
             requires (!std::same_as<T, Err> && !std::same_as<T, With &&> && std::same_as<std::remove_cvref_t<With>, Err>) || !requires { T(std::forward<With>(err)); };
-            requires requires { Err(std::forward<With>(err)); };
-            requires !std::is_reference_v<T> || std::is_lvalue_reference_v<With&&>;
+            requires !std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With&&>;
         }
             : result(error_tag(), std::forward<With>(err))
         { }
@@ -235,23 +260,20 @@ namespace sys
         /// @note Participates in overload resolution only if `args...` cannot construct a `T`.
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
-        requires requires {
-            requires !requires { T(std::forward<Args>(args)...); };
-            Err(std::forward<Args>(args)...);
-        }
+        requires (!requires { T(std::forward<Args>(args)...); })
             : result(error_tag(), std::forward<Args>(args)...)
         { }
 
         // NOLINTEND(hicpp-explicit-conversions)
 
         constexpr result(const result&) = delete;
-        constexpr result(result&& other) noexcept((std::is_reference_v<T> || std::is_nothrow_move_constructible_v<T>) && std::is_nothrow_move_constructible_v<Err>) :
+        constexpr result(result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>) && std::is_nothrow_move_constructible_v<Err>) :
             status(other.status)
         {
             switch (other.status)
             {
             [[likely]] case internal::result_status::ok:
-                if constexpr (std::is_reference_v<T>)
+                if constexpr (std::is_lvalue_reference_v<T>)
                     this->value = std::addressof(other.move(unsafe()));
                 else
                     std::construct_at(std::addressof(this->value), other.move(unsafe()));
@@ -269,7 +291,7 @@ namespace sys
             switch (this->status)
             {
             [[likely]] case internal::result_status::ok:
-                if constexpr (!std::is_reference_v<T>)
+                if constexpr (!std::is_lvalue_reference_v<T>)
                     std::destroy_at(std::addressof(this->value));
                 break;
             [[unlikely]] case internal::result_status::error:
@@ -311,38 +333,26 @@ namespace sys
 
         /// @brief Constructs a result with a value.
         template <typename With>
-        constexpr result(With&& val) noexcept(std::is_reference_v<T> || noexcept(T(std::forward<With>(val))))
-        requires requires {
-            requires std::is_reference_v<T> || requires { T(std::forward<With>(val)); };
-            requires !std::is_reference_v<T> || std::is_lvalue_reference_v<With&&>;
-        }
-            : status(internal::result_status::ok)
+        constexpr result(With&& val) noexcept(noexcept(this->ctor_ok(std::forward<With>(val))))
+        requires (!std::same_as<std::remove_cvref_t<With>, result>)
         {
-            if constexpr (std::is_reference_v<T>)
-                this->value = std::addressof(val);
-            else
-                std::construct_at(std::addressof(this->value), std::forward<With>(val));
+            this->ctor_ok(std::forward<With>(val));
         }
         /// @brief Inplace constructs a result with a value.
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...)))
-        requires requires {
-            requires !std::is_reference_v<T>;
-            T(std::forward<Args>(args)...);
-        }
-            : status(internal::result_status::ok)
+        constexpr result(Args&&... args) noexcept(noexcept(this->ctor_ok(std::forward<Args>(args)...)))
         {
-            std::construct_at(std::addressof(this->value), std::forward<Args>(args)...);
+            this->ctor_ok(std::forward<Args>(args)...);
         }
         /// @brief Construct an error result.
         constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
-        constexpr result(result&& other) noexcept((std::is_reference_v<T> || std::is_nothrow_move_constructible_v<T>)) : status(other.status)
+        constexpr result(result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>)) : status(other.status)
         {
             switch (other.status)
             {
             [[likely]] case internal::result_status::ok:
-                if constexpr (std::is_reference_v<T>)
+                if constexpr (std::is_lvalue_reference_v<T>)
                     this->value = std::addressof(other.move(unsafe()));
                 else
                     std::construct_at(std::addressof(this->value), other.move(unsafe()));
@@ -355,7 +365,7 @@ namespace sys
         }
         ~result()
         {
-            if constexpr (!std::is_reference_v<T>)
+            if constexpr (!std::is_lvalue_reference_v<T>)
                 if (this->status == internal::result_status::ok) [[likely]]
                     std::destroy_at(std::addressof(this->value));
         }
@@ -378,7 +388,7 @@ namespace sys
     /// @brief Specialization of `sys::result<...>` that holds no value if ok.
     /// @details For a result with a single possible success state.
     template <typename Err>
-    requires (!std::is_reference_v<Err>)
+    requires (!std::is_lvalue_reference_v<Err>)
     struct [[nodiscard]] result<void, Err> final : internal::result_b<result, void, Err>, internal::result_b_err<result, void, Err>
     {
     private:
@@ -395,26 +405,21 @@ namespace sys
         constexpr result() noexcept : status(internal::result_status::ok) { }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
-        constexpr result(error_tag, Args&&... args) noexcept(noexcept(Err(std::forward<Args>(args)...)))
-        requires requires { Err(std::forward<Args>(args)...); }
-            : status(internal::result_status::error)
+        constexpr result(error_tag, Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
         {
-            std::construct_at(std::addressof(this->error), std::forward<Args>(args)...);
+            this->ctor_err(std::forward<Args>(args)...);
         }
         /// @brief Constructs a result with an error.
         template <typename With>
         constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
-        requires requires { Err(std::forward<With>(err)); }
+        requires (!std::same_as<std::remove_cvref_t<With>, result>)
             : result(error_tag(), std::forward<With>(err))
         { }
         /// @brief Inplace constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
-        requires requires {
-            requires sizeof...(Args) > 1uz;
-            Err(std::forward<Args>(args)...);
-        }
+        requires (sizeof...(Args) > 1uz)
             : result(error_tag(), std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;

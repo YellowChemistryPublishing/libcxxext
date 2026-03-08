@@ -45,7 +45,7 @@ static_assert(!sys::meta::function_signature<int(int, float)>::is_signature_of<v
 static_assert(!sys::meta::function_signature<int(int, float)>::is_signature_of<int (*)(int)>());
 
 // ================================================================================
-// Function pointer types. | `sys::meta::function_signature<T(*)(Args...)>`
+// Function pointer types. | `sys::meta::function_signature<T (*)(Args...)>`
 // ================================================================================
 
 // `return_type` is correctly deduced.
