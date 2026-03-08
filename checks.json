@@ -21,8 +21,8 @@
     "on_push": [
         {
             "checkset": "generic-tools",
-            "with":     {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "config": "Release", "gen": "Ninja", "to_package": "src"},
-            "runs":     { "check:cppfmt": [], "check:docgen": [], "check:pylint": [], "check:cppconf": [], "check:cpppack": ["check:cppconf"] }
+            "with":     {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "config": "Release", "gen": "Ninja"},
+            "runs":     {"check:cppfmt": [], "check:docgen": [], "check:pylint": [], "check:cppconf": []}
         },
         {
             "checkset": "x86_64-linux-clang-debug",
@@ -31,7 +31,7 @@
         },
         {
             "checkset": "x86_64-linux-clang-relwithdebinfo",
-            "with":     {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "config": "RelWithDebInfo", "gen": "Ninja", "to_package": "install"},
+            "with":     {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "clang", "config": "RelWithDebInfo", "gen": "Ninja", "to_package": "all"},
             "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cpppack": ["check:cppbuild"] }
         },
         {
@@ -91,7 +91,7 @@
         },
         {
             "checkset": "x86_64-win32-msvc-relwithdebinfo",
-            "with":     {"run_on": "win32", "target_arch": "x86_64", "compiler_name": "msvc", "config": "RelWithDebInfo", "gen": "Visual Studio 17 2022", "to_package": "install"},
+            "with":     {"run_on": "win32", "target_arch": "x86_64", "compiler_name": "msvc", "config": "RelWithDebInfo", "gen": "Visual Studio 17 2022", "to_package": "all"},
             "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cpppack": ["check:cppbuild"] }
         },
         {
