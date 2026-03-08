@@ -47,13 +47,11 @@ This project provides some universal tooling for C++, for upstream consumption.
 > [!NOTE]  
 > Upstream targets: Depend on the copies of Catch2, rapidcheck, and doxygen-awesome-css here.
 
-CMake includes are under `cmake/`.
-
 | Script                      |                                                                            |
 | --------------------------- | -------------------------------------------------------------------------- |
-| `build_support.cmake`       | Linkable CMake utility targets.                                            |
-| `catch2.cmake`              | Create unit and property-based / fuzz tests.                               |
-| `clang_tidy.cmake`          | Check target sources with clang-tidy. Don't forget to pass in headers too! |
+| `cmake/build_support.cmake` | Linkable CMake utility targets.                                            |
+| `cmake/catch2.cmake`        | Create unit and property-based / fuzz tests.                               |
+| `cmake/clang_tidy.cmake`    | Check target sources with clang-tidy. Don't forget to pass in headers too! |
 | `workflows/all_push.py`     | Presubmit on-push workflow running checks described in some `checks.json`. |
 | `workflows/all_findings.py` | Presubmit findings aggregator workflow printing markdown to `stdout`.      |
 | `workflows/cppconf.py`      | CMake C/C++ configure project check.                                       |
@@ -87,22 +85,22 @@ CMake includes are under `cmake/`.
 
 ## See Also
 
-|                        |                               |
-| ---------------------- | ----------------------------- |
-| License                | [LICENSE](LICENSE)            |
-| C/C++ Style Guide      | [codestyle.md](codestyle.md)  |
-| C/C++ Formatting Rules | [clang-format](.clang-format) |
-| C/C++ Linting Rules    | [clang-tidy](.clang-tidy)     |
-| Presubmit Checksets    | [checks.json](checks.json)    |
+|                        |                                                                                                |
+| ---------------------- | ---------------------------------------------------------------------------------------------- |
+| License                | [LICENSE](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/LICENSE)            |
+| C/C++ Style Guide      | [codestyle.md](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/codestyle.md)  |
+| C/C++ Formatting Rules | [clang-format](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/.clang-format) |
+| C/C++ Linting Rules    | [clang-tidy](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/.clang-tidy)     |
+| Presubmit Checksets    | [checks.json](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/checks.json)    |
 
 ### ... See Even More
 
-|                                 |                                        |
-| ------------------------------- | -------------------------------------- |
-| Presubmit Check Scripts         | [workflows](workflows)                 |
-| Presubmit `.py` Support Library | [workflows/lib](workflows/lib)         |
-| General-Purpose Scripts         | [workflows/scripts](workflows/scripts) |
-| Presubmit Check Tool Support    | [workflows/tools](workflows/tools)     |
+|                                 |                                                                                                         |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Presubmit Check Scripts         | [workflows](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/workflows)                 |
+| Presubmit `.py` Support Library | [workflows/lib](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/workflows/lib)         |
+| General-Purpose Scripts         | [workflows/scripts](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/workflows/scripts) |
+| Presubmit Check Tool Support    | [workflows/tools](https://github.com/YellowChemistryPublishing/libcxxext/tree/main/workflows/tools)     |
 
 ## Project Metadata
 
