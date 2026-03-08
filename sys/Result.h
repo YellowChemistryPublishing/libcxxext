@@ -236,6 +236,7 @@ namespace sys
         template <typename With>
         constexpr result(With&& val) noexcept(noexcept(this->ctor_ok(std::forward<With>(val))))
         requires requires {
+            requires !std::same_as<With&&, result&&>;
             requires std::same_as<T, Err> || !std::same_as<std::remove_cvref_t<With>, Err>;
             requires requires { this->ctor_ok(std::forward<With>(val)); };
         }
@@ -261,6 +262,7 @@ namespace sys
         template <typename With>
         constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
         requires requires {
+            requires !std::same_as<With&&, result&&>;
             requires (!std::same_as<T, Err> && !std::same_as<T, With &&> && std::same_as<std::remove_cvref_t<With>, Err>) || !requires { T(std::forward<With>(err)); };
             requires !std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With&&>;
             requires requires { this->ctor_err(std::forward<With>(err)); };
@@ -343,7 +345,7 @@ namespace sys
         template <typename With>
         constexpr result(With&& val) noexcept(noexcept(this->ctor_ok(std::forward<With>(val))))
         requires requires {
-            requires !std::same_as<std::remove_cvref_t<With>, result>;
+            requires !std::same_as<With&&, result&&>;
             requires requires { this->ctor_ok(std::forward<With>(val)); };
         }
         {
@@ -425,7 +427,7 @@ namespace sys
         template <typename With>
         constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
         requires requires {
-            requires !std::same_as<std::remove_cvref_t<With>, result>;
+            requires !std::same_as<With&&, result&&>;
             requires requires { this->ctor_err(std::forward<With>(err)); };
         }
             : result(error_tag(), std::forward<With>(err))
