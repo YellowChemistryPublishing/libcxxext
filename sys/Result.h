@@ -77,8 +77,8 @@ namespace sys::internal
     protected:
         result_b() noexcept = default;
     public:
-        static_assert(!meta::template_type<T>::template is_from<Result>(), "No monkey business with result types holding other result types!");
-        static_assert(!meta::template_type<Err>::template is_from<Result>(), "No monkey business with result types holding other result types!");
+        static_assert(!meta::template_type<std::remove_cvref_t<T>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
+        static_assert(!meta::template_type<std::remove_cvref_t<Err>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
 
         /// @brief Whether the result is good.
         constexpr explicit operator bool() const noexcept { return this->downcast().status == result_status::ok; }
@@ -274,7 +274,10 @@ namespace sys
         /// @note Participates in overload resolution only if `args...` cannot construct a `T`.
         template <typename... Args>
         constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
-        requires requires { requires !requires { T(std::forward<Args>(args)...); }; requires requires { this->ctor_err(std::forward<Args>(args)...); }; }
+        requires requires {
+            requires !requires { T(std::forward<Args>(args)...); };
+            requires requires { this->ctor_err(std::forward<Args>(args)...); };
+        }
             : result(error_tag(), std::forward<Args>(args)...)
         { }
 
@@ -361,7 +364,7 @@ namespace sys
         /// @brief Construct an error result.
         constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
-        constexpr result(result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>)) : status(other.status)
+        constexpr result(result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>))
         {
             switch (other.status)
             {
