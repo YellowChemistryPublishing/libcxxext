@@ -7,12 +7,14 @@ target_sources(sys INTERFACE
     FILES ${SYS_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys"
 )
 target_include_directories(sys INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-generate_module_header(
-    sys
-    "${CMAKE_CURRENT_SOURCE_DIR}/module/sys"
-    "${CMAKE_CURRENT_SOURCE_DIR}/"
-    ${SYS_HEADERS}
-)
+if(PROJECT_IS_TOP_LEVEL)
+    generate_module_header(
+        sys
+        "${CMAKE_CURRENT_SOURCE_DIR}/module/sys"
+        "${CMAKE_CURRENT_SOURCE_DIR}/"
+        ${SYS_HEADERS}
+    )
+endif()
 if(LIBCXXEXT_EXPORT_PCH)
     target_precompile_headers(sys INTERFACE ${SYS_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys")
 endif()

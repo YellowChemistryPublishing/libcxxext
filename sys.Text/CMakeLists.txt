@@ -7,12 +7,14 @@ target_sources(sys.Text INTERFACE
     FILES ${SYS_TEXT_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Text"
 )
 target_include_directories(sys.Text INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-generate_module_header(
-    sys.Text
-    "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Text"
-    "${CMAKE_CURRENT_SOURCE_DIR}/"
-    ${SYS_TEXT_HEADERS}
-)
+if(PROJECT_IS_TOP_LEVEL)
+    generate_module_header(
+        sys.Text
+        "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Text"
+        "${CMAKE_CURRENT_SOURCE_DIR}/"
+        ${SYS_TEXT_HEADERS}
+    )
+endif()
 if(LIBCXXEXT_EXPORT_PCH)
     target_precompile_headers(sys.Text INTERFACE ${SYS_TEXT_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Text")
 endif()

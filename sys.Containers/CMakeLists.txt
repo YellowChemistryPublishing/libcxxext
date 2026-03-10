@@ -7,12 +7,14 @@ target_sources(sys.Containers INTERFACE
     FILES ${SYS_CTRS_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Containers"
 )
 target_include_directories(sys.Containers INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
-generate_module_header(
-    sys.Containers
-    "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Containers"
-    "${CMAKE_CURRENT_SOURCE_DIR}/"
-    ${SYS_CTRS_HEADERS}
-)
+if(PROJECT_IS_TOP_LEVEL)
+    generate_module_header(
+        sys.Containers
+        "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Containers"
+        "${CMAKE_CURRENT_SOURCE_DIR}/"
+        ${SYS_CTRS_HEADERS}
+    )
+endif()
 if(LIBCXXEXT_EXPORT_PCH)
     target_precompile_headers(sys.Containers INTERFACE ${SYS_CTRS_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Containers")
 endif()

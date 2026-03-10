@@ -46,7 +46,7 @@ function(target_lint_clang_tidy TARGET_NAME)
             "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../workflows/scripts/wrap_clang_tidy.py" "${RUN_CLANG_TIDY}"
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<LIST:FILTER,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,EXCLUDE,.*cmake_pch\.hxx.*>,PREPEND,\">,APPEND,\"> ${CLANG_TIDY_EXTRA_TOOL_ARGS}
             --
-            -x c++ -std=c++$<IF:$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},CXX_STANDARD>>,$<TARGET_PROPERTY:${TARGET_NAME},CXX_STANDARD>,${CMAKE_CXX_STANDARD}>
+            -x c++ "-std=c++$<IF:$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},CXX_STANDARD>>,$<TARGET_PROPERTY:${TARGET_NAME},CXX_STANDARD>,${CMAKE_CXX_STANDARD}>"
             -Wno-pragma-once-outside-header -Wno-pragma-system-header-outside-header
             #                               ^ When using `#pragma GCC system_header` with CMake precompiled headers.
             # ^ When running on a plain header, spurious.

@@ -15,7 +15,7 @@ _nowarn_begin_unreachable(); // Erroneously generated for compiler coroutine cod
 #include <LanguageSupport.h>
 #include <Numeric.h>
 #include <rt.h>
-#include <rt_threading.h>
+#include <rt_threading.h> // IWYU pragma: export
 
 // NOLINTBEGIN(misc-non-private-member-variables-in-classes)
 

@@ -47,33 +47,34 @@ def main(argv: List[str]) -> None:
     os.chdir(args.workdir)
 
     has_failing_finding: bool = False
-    for filename in os.listdir(config.findings_reldir):
-        filepath = f"{config.findings_reldir}/{filename}"
-        if os.path.isfile(filepath):
-            content: str = ""
-            with open(filepath, "r") as f:
-                content = f.read()
+    if os.path.exists(config.findings_reldir):
+        for filename in os.listdir(config.findings_reldir):
+            filepath = f"{config.findings_reldir}/{filename}"
+            if os.path.isfile(filepath):
+                content: str = ""
+                with open(filepath, "r") as f:
+                    content = f.read()
 
-            print(f"## {Path(filepath).stem}\n")
-            if not is_finding_ok(filepath):
-                print("> [!CAUTION]  \n> Finding did not report success.\n")
-                has_failing_finding = True
+                print(f"## {Path(filepath).stem}\n")
+                if not is_finding_ok(filepath):
+                    print("> [!CAUTION]  \n> Finding did not report success.\n")
+                    has_failing_finding = True
 
-            if content.strip() == "":
-                print("Check found no findings.\n")
+                if content.strip() == "":
+                    print("Check found no findings.\n")
 
-            else:
-                print("<details>\n")
-                print("<summary><b>View Findings</b></summary>\n")
-
-                if Path(filepath).suffix == ".md":
-                    print(content)
                 else:
-                    print("```")
-                    print(content.strip())
-                    print("```\n")
+                    print("<details>\n")
+                    print("<summary><b>View Findings</b></summary>\n")
 
-                print("</details>\n")
+                    if Path(filepath).suffix == ".md":
+                        print(content)
+                    else:
+                        print("```")
+                        print(content.strip())
+                        print("```\n")
+
+                    print("</details>\n")
 
     if has_failing_finding:
         sys.exit(1)
