@@ -97,7 +97,7 @@ namespace sys::internal
         _inline_always result_awaiter<T, Err> operator co_await() { return result_awaiter<T, Err>(this->downcast()); }
     };
     /// @internal
-    /// @brief Shared functionality for result types that are good.
+    /// @brief Shared functionality for result types that have a good value.
     template <template <typename T, typename Err> class Result, typename T, typename Err>
     struct result_b_ok : recurring_template<Result<T, Err>>
     {
@@ -149,7 +149,7 @@ namespace sys::internal
             }
         }
     public:
-        /// @brief Takes the value if the result is good.
+        /// @brief Takes the value if the result has a good value.
         /// @pre `*this == true`
         [[nodiscard]] constexpr T move() noexcept(noexcept(this->move(unsafe())))
         {
@@ -166,7 +166,7 @@ namespace sys::internal
         }
     };
     /// @internal
-    /// @brief Shared functionality for result types that are bad.
+    /// @brief Shared functionality for result types that have a bad value.
     template <template <typename T, typename Err> class Result, typename T, typename Err>
     struct result_b_err : recurring_template<Result<T, Err>>
     {
@@ -197,6 +197,20 @@ namespace sys::internal
         {
             _contract_assert(this->downcast().status == result_status::error, "Taking error for a good or empty result!");
             return this->err(unsafe());
+        }
+
+        [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept
+        {
+            switch (this->downcast().status)
+            {
+            case result_status::error: return Result<T, void>(nullptr);
+            case result_status::ok:
+                if constexpr (std::same_as<T, void>)
+                    return Result<T, void>();
+                return Result<T, void>(this->downcast().move(unsafe()));
+            case result_status::empty:
+            default: return Result<T, void>();
+            }
         }
     };
 } // namespace sys::internal
@@ -229,6 +243,8 @@ namespace sys
             internal::result_storage_type<Err> error;
         };
         internal::result_status status = internal::result_status::empty;
+
+        constexpr result() = default;
     public:
         // NOLINTBEGIN(hicpp-explicit-conversions)
 

@@ -163,4 +163,12 @@ TEST_CASE("Can transform result to any value.", "[sys][result][transform]")
     CHECK(sys::result<i64, i32>(23_i64).transform([](sys::result<i64, i32>&& res) { return res ? std::move(res).move() : 24_i64; }) == 23_i64);
 }
 
+TEST_CASE("Can convert result to unit-result.", "[sys][result]")
+{
+    CHECK(!_as(sys::result<i64>, sys::result<i64>(nullptr)));
+    CHECK(_as(sys::result<void>, sys::result<void>()));
+    CHECK(_as(sys::result<i64>, sys::result<i64, i32>(23_i32)).move() == 23_i64);
+    CHECK(_as(sys::result<i64>, sys::result<i64, i32>(23_i64)).move() == 23_i64);
+}
+
 // NOLINTEND(misc-include-cleaner)

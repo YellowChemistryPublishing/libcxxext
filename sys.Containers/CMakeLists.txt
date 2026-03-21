@@ -20,7 +20,7 @@ if(LIBCXXEXT_EXPORT_PCH)
 endif()
 target_link_libraries(sys.Containers INTERFACE
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
-    $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
+    $<$<AND:$<CONFIG:Debug>,$<BOOL:${LIBCXXEXT_COVERAGE}>>:sys.BuildSupport.EnableCoverage>
 )
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)
