@@ -2,8 +2,6 @@
 
 /// @file
 
-#include <CompilerWarnings.h>
-
 #include <algorithm>
 #include <concepts>
 #include <cstddef>
@@ -15,9 +13,7 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
-_nowarn_begin_one_gcc(_clwarn_gcc_stringop_overflow);
 #include <vector>
-_nowarn_end_gcc();
 
 #include <Char.h>
 #include <CodepointIterator.h>
