@@ -2,6 +2,8 @@
 
 /// @file
 
+#include <CompilerWarnings.h>
+
 #include <algorithm>
 #include <concepts>
 #include <cstddef>
@@ -13,7 +15,9 @@
 #include <string>
 #include <string_view>
 #include <type_traits>
+_nowarn_begin_one_gcc(_clwarn_gcc_stringop_overflow);
 #include <vector>
+_nowarn_end_gcc();
 
 #include <Char.h>
 #include <CodepointIterator.h>
@@ -179,11 +183,7 @@ namespace sys
         /// @brief Repeat a character.
         constexpr string(const T c, const sz count) : str(count, c) { }
         constexpr string(const string&) = default;
-
-        _nowarn_begin_one_gcc(_clwarn_gcc_stringop_overflow);
         constexpr string(string&& other) noexcept { swap(*this, other); }
-        _nowarn_end_gcc();
-
         ~string() = default;
 
         constexpr string& operator=(const string&) = default;
