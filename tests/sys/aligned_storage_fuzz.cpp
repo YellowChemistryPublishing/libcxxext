@@ -3,7 +3,6 @@
 #include <cstring>
 
 #include <CompilerWarnings.h>
-_nowarn_begin_one_gcc(_clwarn_gcc_stringop_overflow);
 _nowarn_begin_deprecated();
 _nowarn_begin_conv_comp();
 _nowarn_begin_unreachable();
@@ -28,7 +27,5 @@ TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_stora
         RC_ASSERT(std::memcmp(storage.data(), &val, sizeof(val)) == 0);
     });
 }
-
-_nowarn_end_gcc();
 
 // NOLINTEND(misc-include-cleaner)

@@ -179,7 +179,11 @@ namespace sys
         /// @brief Repeat a character.
         constexpr string(const T c, const sz count) : str(count, c) { }
         constexpr string(const string&) = default;
+
+        _nowarn_begin_one_gcc(_clwarn_gcc_stringop_overflow);
         constexpr string(string&& other) noexcept { swap(*this, other); }
+        _nowarn_end_gcc();
+
         ~string() = default;
 
         constexpr string& operator=(const string&) = default;
