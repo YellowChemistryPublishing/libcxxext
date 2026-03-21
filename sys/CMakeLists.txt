@@ -20,7 +20,7 @@ if(LIBCXXEXT_EXPORT_PCH)
 endif()
 target_link_libraries(sys INTERFACE
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
-    $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
+    $<$<AND:$<CONFIG:Debug>,$<BOOL:${LIBCXXEXT_COVERAGE}>>:sys.BuildSupport.EnableCoverage>
 )
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_link_libraries(sys INTERFACE stdc++exp)

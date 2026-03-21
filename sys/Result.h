@@ -71,7 +71,7 @@ namespace sys::internal
 
     /// @internal
     /// @brief Shared functionality for result types.
-    template <template <typename T, typename Err> class Result, typename T, typename Err>
+    template <template <typename, typename> class Result, typename T, typename Err>
     struct result_b : recurring_template<Result<T, Err>>
     {
     protected:
@@ -97,8 +97,60 @@ namespace sys::internal
         _inline_always result_awaiter<T, Err> operator co_await() { return result_awaiter<T, Err>(this->downcast()); }
     };
     /// @internal
-    /// @brief Shared functionality for result types that are good.
-    template <template <typename T, typename Err> class Result, typename T, typename Err>
+    /// @brief Shared functionality for result types that have a bad value.
+    template <template <typename, typename> class Result, typename T, typename Err>
+    struct result_b_err : recurring_template<Result<T, Err>>
+    {
+    protected:
+        result_b_err() noexcept = default;
+
+        /// @internal
+        /// @brief Inplace constructs a result with an error.
+        template <typename... Args>
+        constexpr void ctor_err(Args&&... args) noexcept(noexcept(Err(std::forward<Args>(args)...)))
+        requires requires { Err(std::forward<Args>(args)...); }
+        {
+            std::construct_at(std::addressof(this->downcast().error), std::forward<Args>(args)...);
+            this->downcast().status = internal::result_status::error;
+        }
+
+        [[nodiscard]] constexpr Err err(unsafe) noexcept(noexcept(Err(std::move(this->downcast().error))))
+        {
+            Err ret = std::move(this->downcast().error);
+            std::destroy_at(std::addressof(this->downcast().error));
+            this->downcast().status = internal::result_status::empty;
+            return ret;
+        }
+    public:
+        /// @brief Take the error of a bad result.
+        /// @pre `*this == false`
+        [[nodiscard]] constexpr Err err() noexcept(noexcept(Err(this->err(unsafe()))))
+        {
+            _contract_assert(this->downcast().status == result_status::error, "Taking error for a good or empty result!");
+            return this->err(unsafe());
+        }
+
+        [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || std::is_lvalue_reference_v<T> || requires {
+            requires !std::same_as<T, void>;
+            { T(std::declval<T&&>()) } noexcept;
+        })
+        {
+            switch (this->downcast().status)
+            {
+            case result_status::error: return Result<T, void>(nullptr);
+            case result_status::ok:
+                if constexpr (std::same_as<T, void>)
+                    return Result<T, void>();
+                else
+                    return Result<T, void>(this->downcast().move(unsafe()));
+            case result_status::empty:
+            default: return Result<T, void>(unsafe());
+            }
+        }
+    };
+    /// @internal
+    /// @brief Shared functionality for result types that have a good value.
+    template <template <typename, typename> class Result, typename T, typename Err>
     struct result_b_ok : recurring_template<Result<T, Err>>
     {
     protected:
@@ -149,7 +201,7 @@ namespace sys::internal
             }
         }
     public:
-        /// @brief Takes the value if the result is good.
+        /// @brief Takes the value if the result has a good value.
         /// @pre `*this == true`
         [[nodiscard]] constexpr T move() noexcept(noexcept(this->move(unsafe())))
         {
@@ -164,40 +216,9 @@ namespace sys::internal
             _retif(T(std::forward<With>(other)), this->downcast().status != result_status::ok);
             return this->move(unsafe());
         }
-    };
-    /// @internal
-    /// @brief Shared functionality for result types that are bad.
-    template <template <typename T, typename Err> class Result, typename T, typename Err>
-    struct result_b_err : recurring_template<Result<T, Err>>
-    {
-    protected:
-        result_b_err() noexcept = default;
 
-        /// @internal
-        /// @brief Inplace constructs a result with an error.
-        template <typename... Args>
-        constexpr void ctor_err(Args&&... args) noexcept(noexcept(Err(std::forward<Args>(args)...)))
-        requires requires { Err(std::forward<Args>(args)...); }
-        {
-            std::construct_at(std::addressof(this->downcast().error), std::forward<Args>(args)...);
-            this->downcast().status = internal::result_status::error;
-        }
-
-        [[nodiscard]] constexpr Err err(unsafe) noexcept(noexcept(Err(std::move(this->downcast().error))))
-        {
-            Err ret = std::move(this->downcast().error);
-            std::destroy_at(std::addressof(this->downcast().error));
-            this->downcast().status = internal::result_status::empty;
-            return ret;
-        }
-    public:
-        /// @brief Take the error of a bad result.
-        /// @pre `*this == false`
-        [[nodiscard]] constexpr Err err() noexcept(noexcept(Err(this->err(unsafe()))))
-        {
-            _contract_assert(this->downcast().status == result_status::error, "Taking error for a good or empty result!");
-            return this->err(unsafe());
-        }
+        template <template <typename, typename> class, typename, typename>
+        friend struct sys::internal::result_b_err;
     };
 } // namespace sys::internal
 
@@ -341,6 +362,9 @@ namespace sys
             internal::result_storage_type<T> value;
         };
         internal::result_status status = internal::result_status::empty;
+
+        // To ensure well-defined conversion from any `Err` result to `void` result.
+        constexpr explicit result(unsafe) noexcept /* NOLINT(hicpp-member-init) */ { };
     public:
         // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
 
@@ -399,6 +423,8 @@ namespace sys
 
         friend struct sys::internal::result_b<result, T, void>;
         friend struct sys::internal::result_b_ok<result, T, void>;
+        template <template <typename, typename> class, typename, typename>
+        friend struct sys::internal::result_b_err;
     };
 
     /// @brief Specialization of `sys::result<...>` that holds no value if ok.
@@ -489,6 +515,8 @@ namespace sys
     {
     private:
         internal::result_status status = internal::result_status::empty;
+
+        constexpr explicit result(unsafe) noexcept { };
     public:
         // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
 
@@ -512,6 +540,8 @@ namespace sys
         friend void swap(result& a, result& b) noexcept { std::swap(a.status, b.status); }
 
         friend struct sys::internal::result_b<result, void, void>;
+        template <template <typename, typename> class, typename, typename>
+        friend struct sys::internal::result_b_err;
     };
 
     /// @brief Awaiter to enable short-circuiting, akin to rustlang's `operator?`.

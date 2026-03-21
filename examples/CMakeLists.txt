@@ -10,7 +10,7 @@ foreach(EXAMPLE_FILE ${EXAMPLES})
         PRIVATE
         sys.BuildSupport.CompilerOptions
         sys sys.Containers sys.Threading
-        $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
+        $<$<AND:$<CONFIG:Debug>,$<BOOL:${LIBCXXEXT_COVERAGE}>>:sys.BuildSupport.EnableCoverage>
     )
     set_target_properties(${EXAMPLE_NAME} PROPERTIES FOLDER "Examples")
 

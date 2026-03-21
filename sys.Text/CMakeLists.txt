@@ -6,7 +6,9 @@ target_sources(sys.Text INTERFACE
     FILE_SET HEADERS
     FILES ${SYS_TEXT_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Text"
 )
+
 target_include_directories(sys.Text INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+target_compile_options(sys.Text INTERFACE $<$<CXX_COMPILER_ID:GNU>:-Wno-stringop-overflow>)
 if(PROJECT_IS_TOP_LEVEL)
     generate_module_header(
         sys.Text
@@ -21,7 +23,7 @@ endif()
 target_link_libraries(sys.Text INTERFACE
     sys
     $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
-    $<$<BOOL:${LIBCXXEXT_COVERAGE}>:sys.BuildSupport.EnableCoverage>
+    $<$<AND:$<CONFIG:Debug>,$<BOOL:${LIBCXXEXT_COVERAGE}>>:sys.BuildSupport.EnableCoverage>
 )
 
 if(LIBCXXEXT_DEVELOPMENT_MODE)

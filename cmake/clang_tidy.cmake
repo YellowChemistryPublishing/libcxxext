@@ -16,9 +16,9 @@ function(target_lint_clang_tidy TARGET_NAME)
             find_package(Python3 REQUIRED COMPONENTS Interpreter)
         endif()
 
-        if(NOT TARGET clang_tidy_all)
-            add_custom_target(clang_tidy_all)
-            set_target_properties(clang_tidy_all PROPERTIES FOLDER "Static Analysis")
+        if(NOT TARGET all_lint)
+            add_custom_target(all_lint)
+            set_target_properties(all_lint PROPERTIES FOLDER "Static Analysis")
         endif()
 
         get_target_property(TARGET_SOURCES ${TARGET_NAME} SOURCES)
@@ -41,7 +41,7 @@ function(target_lint_clang_tidy TARGET_NAME)
             endif()
         endforeach()
 
-        add_custom_target(lint_ct_${TARGET_NAME}
+        add_custom_target(lint_cxx${TARGET_NAME}
             COMMAND
             "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../workflows/scripts/wrap_clang_tidy.py" "${RUN_CLANG_TIDY}"
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<LIST:FILTER,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,EXCLUDE,.*cmake_pch\.hxx.*>,PREPEND,\">,APPEND,\"> ${CLANG_TIDY_EXTRA_TOOL_ARGS}
@@ -58,7 +58,7 @@ function(target_lint_clang_tidy TARGET_NAME)
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
             COMMAND_EXPAND_LISTS
         )
-        set_target_properties(lint_ct_${TARGET_NAME} PROPERTIES FOLDER "Static Analysis")
-        add_dependencies(clang_tidy_all lint_ct_${TARGET_NAME})
+        set_target_properties(lint_cxx${TARGET_NAME} PROPERTIES FOLDER "Static Analysis")
+        add_dependencies(all_lint lint_cxx${TARGET_NAME})
     endif()
 endfunction()
