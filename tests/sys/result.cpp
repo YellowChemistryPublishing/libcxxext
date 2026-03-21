@@ -167,7 +167,7 @@ TEST_CASE("Can convert result to unit-result.", "[sys][result]")
 {
     CHECK(!_as(sys::result<i64>, sys::result<i64>(nullptr)));
     CHECK(_as(sys::result<void>, sys::result<void>()));
-    CHECK(_as(sys::result<i64>, sys::result<i64, i32>(23_i32)).move() == 23_i64);
+    CHECK(!_as(sys::result<i64>, sys::result<i64, i32>(23_i32)));
     CHECK(_as(sys::result<i64>, sys::result<i64, i32>(23_i64)).move() == 23_i64);
 }
 

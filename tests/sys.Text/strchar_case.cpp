@@ -1,5 +1,8 @@
 // NOLINTBEGIN(misc-include-cleaner)
 
+#include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_stringop_overflow);
+
 #include <catch2/catch_all.hpp>
 
 #include <module/sys.Text>
@@ -156,5 +159,7 @@ TEST_CASE("Folding is Context Independent", "[sys.Text][string][fold]")
     CHECK(sys::str16(u"ΑΣ").fold() == u"ασ");
     CHECK(sys::str(u8"ΑΣ").fold() == u8"ασ");
 }
+
+_nowarn_end_gcc();
 
 // NOLINTEND(misc-include-cleaner)
