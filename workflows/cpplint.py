@@ -79,7 +79,7 @@ def main(argv: List[str]) -> None:
             str(args.build_dir_name),
             "--parallel",
             "--target",
-            "clang_tidy_all",
+            "all_lint",
         ]
         + (["--verbose"] if args.cmake_verbose else []),
         capture_output=True,

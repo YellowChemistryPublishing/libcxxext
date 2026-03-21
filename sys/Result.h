@@ -130,8 +130,9 @@ namespace sys::internal
             return this->err(unsafe());
         }
 
-        [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || requires {
-            { this->downcast().move(unsafe()) } noexcept;
+        [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || std::is_lvalue_reference_v<T> || requires {
+            requires !std::same_as<T, void>;
+            { T(std::declval<T&&>()) } noexcept;
         })
         {
             switch (this->downcast().status)
