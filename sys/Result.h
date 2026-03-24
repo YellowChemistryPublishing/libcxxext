@@ -77,8 +77,8 @@ namespace sys::internal
     protected:
         result_b() noexcept = default;
     public:
-        static_assert(!meta::template_type<std::remove_cvref_t<T>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
-        static_assert(!meta::template_type<std::remove_cvref_t<Err>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
+        static_assert(!meta::type<std::remove_cvref_t<T>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
+        static_assert(!meta::type<std::remove_cvref_t<Err>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
 
         /// @brief Whether the result is good.
         constexpr explicit operator bool() const noexcept { return this->downcast().status == result_status::ok; }
@@ -230,7 +230,9 @@ namespace sys
 
     /// @brief Concept for types that can be stored in a result.
     template <typename T>
-    concept IResultStorable = requires {
+    concept IResultStorable = !requires {
+        { sizeof(T) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
+    } || requires {
         requires !std::same_as<std::remove_cvref_t<T>, std::nullptr_t>;
         requires !std::same_as<std::remove_cvref_t<T>, error_tag>;
         requires std::is_lvalue_reference_v<T> || std::same_as<T, void> || (std::same_as<T, std::remove_cvref_t<T>> && !std::is_array_v<T> && std::is_nothrow_destructible_v<T>);
@@ -240,7 +242,9 @@ namespace sys
     /// @details Like the one in rustlang!
     /// @note Pass `byref`.
     template <IResultStorable T, IResultStorable Err = void>
-    requires (!std::is_lvalue_reference_v<Err>) /* Intentionally don't support reference errors--doesn't really make sense. */
+    requires (!requires {
+                 { sizeof(T) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
+             } || !std::is_lvalue_reference_v<Err>)     /* Intentionally don't support reference errors--doesn't really make sense. */
     struct [[nodiscard]] result final : internal::result_b<result, T, Err>, internal::result_b_ok<result, T, Err>, internal::result_b_err<result, T, Err>
     {
     private:
@@ -430,7 +434,9 @@ namespace sys
     /// @brief Specialization of `sys::result<...>` that holds no value if ok.
     /// @details For a result with a single possible success state.
     template <typename Err>
-    requires (!std::is_lvalue_reference_v<Err>)
+    requires (!requires {
+                 { sizeof(Err) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
+             } || !std::is_lvalue_reference_v<Err>)
     struct [[nodiscard]] result<void, Err> final : internal::result_b<result, void, Err>, internal::result_b_err<result, void, Err>
     {
     private:

@@ -1,0 +1,145 @@
+#include <atomic>
+#include <chrono>
+#include <stdexcept>
+#include <thread>
+#include <vector>
+
+// NOLINTBEGIN(misc-include-cleaner)
+
+#include <catch2/catch_all.hpp>
+
+#include <module/sys>
+#include <module/sys.Threading>
+
+TEST_CASE("Once executes exactly once sequentially.", "[sys.Threading][once]")
+{
+    sys::once o;
+    i32 counter = 0_i32;
+
+    CHECK_FALSE(o.is_completed());
+    CHECK_NOTHROW(o.call_once([&] { ++counter; }));
+    CHECK(o.is_completed());
+    CHECK(counter == 1_i32);
+
+    CHECK_NOTHROW(o.call_once([&] { ++counter; }));
+    CHECK(counter == 1_i32);
+    CHECK(o.is_completed());
+}
+
+TEST_CASE("Once correctly forwards arguments.", "[sys.Threading][once]")
+{
+    sys::once o;
+    i32 res = 0_i32;
+
+    o.call_once([&](const i32 a, const i32 b)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
+        res = a + b;
+    }, 10_i32 /* NOLINT(readability-magic-numbers) */, 20_i32 /* NOLINT(readability-magic-numbers) */);
+    CHECK(res == 30_i32);
+    CHECK(o.is_completed());
+}
+
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
+TEST_CASE("Once handles exceptions and allows retry.", "[sys.Threading][once]")
+{
+    sys::once o;
+    i32 count = 0_i32;
+
+    auto func = [&]
+    {
+        if (++count == 1_i32)
+            throw std::runtime_error("uh oh");
+        return 42_i32 /* NOLINT(readability-magic-numbers) */;
+    };
+
+    CHECK_THROWS_AS(o.call_once(func), std::runtime_error);
+    CHECK_FALSE(o.is_completed());
+    CHECK(count == 1_i32);
+
+    CHECK_NOTHROW(o.call_once(func));
+    CHECK(o.is_completed());
+    CHECK(count == 2_i32);
+
+    o.call_once(func);
+    CHECK(count == 2_i32);
+}
+
+TEST_CASE("Once actually guards under contention.", "[sys.Threading][once]")
+{
+    constexpr int numThreads = 160;
+
+    sys::once o;
+    std::atomic<int> runCount = 0;
+    std::atomic<int> readyCount = 0;
+    std::atomic_flag flag = ATOMIC_FLAG_INIT;
+
+    std::vector<sys::thread_handle> threads;
+    for (sz i = 0_uz; i < numThreads; i++)
+    {
+        threads.emplace_back(sys::thread_handle::ctor([&]
+        {
+            ++readyCount;
+            while (!flag.test(std::memory_order_acquire))
+                sys::thread_yield();
+
+            o.call_once([&]
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
+                ++runCount;
+            });
+            CHECK(o.is_completed());
+        }).move());
+    }
+
+    while (readyCount.load(std::memory_order_acquire) != numThreads)
+        sys::thread_yield();
+    flag.test_and_set(std::memory_order_release);
+
+    threads.clear();
+    CHECK(runCount.load() == 1);
+    CHECK(o.is_completed());
+}
+
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
+TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
+{
+    sys::once o;
+    std::atomic_flag started = ATOMIC_FLAG_INIT;
+    std::atomic_flag done = ATOMIC_FLAG_INIT;
+
+    const sys::thread_handle thread = sys::thread_handle::ctor([&]
+    {
+        o.call_once([&]
+        {
+            started.test_and_set(std::memory_order_release);
+            while (!done.test(std::memory_order_acquire))
+                sys::thread_yield();
+        });
+    }).move();
+    while (!started.test(std::memory_order_acquire))
+        sys::thread_yield();
+
+    CHECK_FALSE(o.is_completed());
+
+    std::atomic_flag waitFinished = ATOMIC_FLAG_INIT;
+    const sys::thread_handle waiterThread = sys::thread_handle::ctor([&]
+    {
+        o.wait();
+        o.wait(); // Should return immediately.
+        waitFinished.test_and_set(std::memory_order_release);
+        CHECK(o.is_completed());
+    }).move();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
+    CHECK_FALSE(waitFinished.test(std::memory_order_acquire));
+
+    done.test_and_set(std::memory_order_release);
+    while (!waitFinished.test(std::memory_order_acquire))
+        sys::thread_yield();
+
+    CHECK(waitFinished.test(std::memory_order_acquire));
+    CHECK(o.is_completed());
+}
+
+// NOLINTEND(misc-include-cleaner)

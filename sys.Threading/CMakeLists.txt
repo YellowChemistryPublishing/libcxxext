@@ -1,52 +1,51 @@
-if(NOT PLATFORM_SUPPORT_DIR)
-    set(PLATFORM_SUPPORT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/platform")
-endif()
+if(NOT TARGET sys.Threading)
+    set(TINYCTHREAD_DISABLE_TESTS ON CACHE INTERNAL "" FORCE)
+    set(TINYCTHREAD_INSTALL OFF CACHE INTERNAL "" FORCE)
+    set(CMAKE_POLICY_VERSION_MINIMUM 3.10)
+    add_subdirectory(../tinycthread "${CMAKE_BINARY_DIR}/tinycthread" EXCLUDE_FROM_ALL)
 
-file(GLOB SYS_THREAD_HEADERS CONFIGURE_DEPENDS "*.h")
-file(GLOB SYS_THREAD_SRCS CONFIGURE_DEPENDS "*.cpp" "${PLATFORM_SUPPORT_DIR}/*.cpp")
-if(NOT PLATFORM_SUPPORT_DIR STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/platform")
-    list(FILTER SYS_THREAD_HEADERS EXCLUDE REGEX ".*/rt_threading\\.h$")
-    list(FILTER SYS_THREAD_SRCS EXCLUDE REGEX ".*/rt_threading\\.cpp$")
-endif()
+    target_link_libraries(libsyscor PRIVATE $<LINK_LIBRARY:WHOLE_ARCHIVE,tinycthread>)
+    target_include_directories(libsyscor INTERFACE $<TARGET_PROPERTY:tinycthread,INTERFACE_INCLUDE_DIRECTORIES>)
 
-add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} ${SYS_THREAD_SRCS})
-target_libcxxext_common_config(sys.Threading)
-target_sources(sys.Threading PRIVATE
-    FILE_SET HEADERS
-    FILES ${SYS_THREAD_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Threading"
-)
-target_include_directories(sys.Threading PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<BUILD_INTERFACE:${PLATFORM_SUPPORT_DIR}>
-)
-if(PROJECT_IS_TOP_LEVEL)
-    generate_module_header(
-        sys.Threading
-        "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Threading"
-        "${CMAKE_CURRENT_SOURCE_DIR}/"
-        ${SYS_THREAD_HEADERS}
+    file(GLOB SYS_THREAD_HEADERS CONFIGURE_DEPENDS "*.h")
+
+    add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} "src.cpp")
+    target_libcxxext_common_config(sys.Threading)
+    target_sources(sys.Threading PRIVATE
+        FILE_SET HEADERS
+        FILES ${SYS_THREAD_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Threading"
+    )
+    target_include_directories(sys.Threading PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+    if(libcxxext_IS_TOP_LEVEL)
+        generate_module_header(
+            sys.Threading
+            "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Threading"
+            "${CMAKE_CURRENT_SOURCE_DIR}/"
+            ${SYS_THREAD_HEADERS}
+        )
+    endif()
+    if(LIBCXXEXT_EXPORT_PCH)
+        target_precompile_headers(sys.Threading INTERFACE ${SYS_THREAD_HEADERS})
+        target_link_libraries(sys.Threading PRIVATE sys.BuildSupport.stdc++inc)
+    endif()
+    target_link_libraries(sys.Threading
+        PRIVATE
+        sys.BuildSupport.CompilerOptions
+        PUBLIC
+        libsyscor
+        sys
+        $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
+        $<$<AND:$<CONFIG:Debug>,$<BOOL:${LIBCXXEXT_COVERAGE}>>:sys.BuildSupport.EnableCoverage>
+    )
+
+    if(LIBCXXEXT_DEVELOPMENT_MODE)
+        target_lint_clang_tidy(sys.Threading "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/.*\"" ${SYS_THREAD_HEADERS})
+    endif()
+
+    install(TARGETS sys.Threading
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        FILE_SET HEADERS
     )
 endif()
-if(LIBCXXEXT_EXPORT_PCH)
-    target_precompile_headers(sys.Threading INTERFACE ${SYS_THREAD_HEADERS})
-    target_link_libraries(sys.Threading PRIVATE sys.BuildSupport.stdc++inc)
-endif()
-target_link_libraries(sys.Threading
-    PRIVATE
-    sys.BuildSupport.CompilerOptions
-    PUBLIC
-    sys
-    $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
-    $<$<AND:$<CONFIG:Debug>,$<BOOL:${LIBCXXEXT_COVERAGE}>>:sys.BuildSupport.EnableCoverage>
-)
-
-if(LIBCXXEXT_DEVELOPMENT_MODE)
-    target_lint_clang_tidy(sys.Threading "-header-filter=\"^${CMAKE_CURRENT_SOURCE_DIR}/.*\"" ${SYS_THREAD_HEADERS})
-endif()
-
-install(TARGETS sys.Threading
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    FILE_SET HEADERS
-)

@@ -2,6 +2,14 @@
 
 /// @file
 
+/// @def _libcxxext_have_cxx_exceptions
+/// @brief Whether the compiler is setup to provide runtime support for C++ exceptions.
+#define _libcxxext_have_cxx_exceptions 0
+#if (defined(__EXCEPTIONS) && __EXCEPTIONS) || (defined(_CPPUNWIND) && _CPPUNWIND)
+#undef _libcxxext_have_cxx_exceptions
+#define _libcxxext_have_cxx_exceptions 1
+#endif
+
 /// @defgroup compiler_detection Compiler Detection Constants
 /// @brief `#ifdef`able constants for compiler detection.
 /// @{

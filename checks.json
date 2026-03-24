@@ -5,11 +5,7 @@
         { "name": "check:cppfmt", "script": "workflows/cppfmt.py", "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/)).*\\.(h|inl|cpp)$"] },
         { "name": "check:cpplint", "script": "workflows/cpplint.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
         { "name": "check:cpptest", "script": "workflows/cpptest.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
-        {
-            "name":   "check:cppcov",
-            "script": "workflows/cppcov.py",
-            "with":   ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|sys|sys\\.Containers|sys\\.Threading|sys\\.Text)/"]
-        },
+        { "name": "check:cppcov", "script": "workflows/cppcov.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|(sys[\\.A-Za-z]*))/"] },
         {
             "name":   "check:cpppack",
             "script": "workflows/cpppack.py",

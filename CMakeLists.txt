@@ -7,7 +7,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Config
 if(NOT DEFINED LIBCXXEXT_DEVELOPMENT_MODE)
-    set(LIBCXXEXT_DEVELOPMENT_MODE ${PROJECT_IS_TOP_LEVEL} CACHE BOOL "Build libcxxext in development mode.")
+    set(LIBCXXEXT_DEVELOPMENT_MODE ${libcxxext_IS_TOP_LEVEL} CACHE BOOL "Build libcxxext in development mode.")
 endif()
 if(LIBCXXEXT_DEVELOPMENT_MODE AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/install" CACHE PATH "Install path prefix." FORCE)
@@ -31,6 +31,7 @@ if(LIBCXXEXT_EXPORT_PCH)
     include(cmake/stdc++.cmake)
 endif()
 
+add_subdirectory(libsyscor)
 add_subdirectory(sys)
 add_subdirectory(sys.Containers)
 add_subdirectory(sys.Text)
@@ -43,22 +44,19 @@ endif()
 
 # Tests
 if(LIBCXXEXT_TESTS)
-    include(cmake/catch2.cmake)
     enable_testing()
-
-    set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "" FORCE)
-    set(CATCH_INSTALL_EXTRAS OFF CACHE INTERNAL "" FORCE)
-    add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
-    target_compile_features(Catch2 PUBLIC cxx_std_20)
-    target_compile_features(Catch2WithMain PUBLIC cxx_std_20)
-
-    add_subdirectory(rapidcheck EXCLUDE_FROM_ALL)
-    target_compile_options(rapidcheck PRIVATE $<$<CXX_COMPILER_ID:GNU,Clang,AppleClang>:-include;cstdint> $<$<CXX_COMPILER_ID:MSVC>:/w;/FI;cstdint>)
-
     add_subdirectory(tests)
+
+    find_program(GCOVR_EXECUTABLE gcovr)
+    if(GCOVR_EXECUTABLE)
+        add_custom_target(libcxxext_coverage
+            COMMAND ${GCOVR_EXECUTABLE} --lcov "${CMAKE_BINARY_DIR}/coverage.info" --gcov-ignore-parse-errors negative_hits.warn
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+    endif()
 endif()
 
 set(CPACK_GENERATOR "ZIP")
 set(CPACK_SOURCE_IGNORE_FILES "/[^/]*build/" "/__pycache__/" "/checks.json" "/Doxyfile" "/workflows/" "/sys.Text/data_unicode/" "/\\\\.[^/]+/")
-#                                                       ^ Library consumers don't need.                                    ^ Dirs beginning with a dot, i.e. `.cache/`.
+#                                                            ^ Library consumers don't need.                                    ^ Dirs beginning with a dot, i.e. `.cache/`.
 include(CPack)

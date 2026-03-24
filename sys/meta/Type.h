@@ -29,10 +29,10 @@ namespace sys::meta
         }
     };
 
-    /// @brief Metadata for a template type.
+    /// @brief Metadata for some type.
     /// @note Static class.
     template <typename T>
-    struct template_type final : meta_type
+    struct type final : meta_type
     {
     private:
         template <typename, template <typename...> class>

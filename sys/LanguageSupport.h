@@ -120,18 +120,25 @@ struct unsafe final
 #ifndef _contract_assert
 /// @def _contract_assert(cond, ...)
 /// @brief Enforce a contract, asserting if `cond` is `false`.
-#define _contract_assert(cond, ...)                                                                                                  \
-    do                                                                                                                               \
-    {                                                                                                                                \
-        if (!(cond))                                                                                                                 \
-        {                                                                                                                            \
-            std::println(stderr, "Contract violated, condition `" #cond "` evaluated to `false`." __VA_OPT__(" (" __VA_ARGS__ ")")); \
-            volatile uint_least64_t i = 5'000'000'000;                                                                               \
-            while (i--)                                                                                                              \
-            { }                                                                                                                      \
-            std::terminate();                                                                                                        \
-        }                                                                                                                            \
-    }                                                                                                                                \
+#define _contract_assert(cond, ...)                                                                                                      \
+    do                                                                                                                                   \
+    {                                                                                                                                    \
+        if (!(cond)) /* NOLINT(readability-simplify-boolean-expr) */                                                                     \
+        {                                                                                                                                \
+            try                                                                                                                          \
+            {                                                                                                                            \
+                std::println(stderr, "Contract violated, condition `" #cond "` evaluated to `false`." __VA_OPT__(" (" __VA_ARGS__ ")")); \
+            }                                                                                                                            \
+            catch (...)                                                                                                                  \
+            { }                                                                                                                          \
+                                                                                                                                         \
+            volatile uint_least64_t i = 5'000'000'000;                                                                                   \
+            while (i--)                                                                                                                  \
+            { }                                                                                                                          \
+                                                                                                                                         \
+            std::terminate();                                                                                                            \
+        }                                                                                                                                \
+    }                                                                                                                                    \
     while (false)
 #endif
 
