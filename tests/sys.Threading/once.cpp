@@ -75,10 +75,10 @@ TEST_CASE("Once actually guards under contention.", "[sys.Threading][once]")
     std::atomic<int> readyCount = 0;
     std::atomic_flag flag = ATOMIC_FLAG_INIT;
 
-    std::vector<sys::thread> threads;
+    std::vector<sys::managed_thread> threads;
     for (sz i = 0_uz; i < numThreads; i++)
     {
-        threads.emplace_back(sys::thread::ctor([&]
+        threads.emplace_back(sys::managed_thread::ctor([&]
         {
             ++readyCount;
             while (!flag.test(std::memory_order_acquire))
@@ -109,7 +109,7 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
     std::atomic_flag started = ATOMIC_FLAG_INIT;
     std::atomic_flag done = ATOMIC_FLAG_INIT;
 
-    const sys::thread thread = sys::thread::ctor([&]
+    const sys::managed_thread thread = sys::managed_thread::ctor([&]
     {
         o.call_once([&]
         {
@@ -124,7 +124,7 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
     CHECK_FALSE(o.is_completed());
 
     std::atomic_flag waitFinished = ATOMIC_FLAG_INIT;
-    const sys::thread waiterThread = sys::thread::ctor([&]
+    const sys::managed_thread waiterThread = sys::managed_thread::ctor([&]
     {
         o.wait();
         o.wait(); // Should return immediately.

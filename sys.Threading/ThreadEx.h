@@ -3,6 +3,7 @@
 /// @file
 
 #include <concepts>
+#include <cstddef>
 #include <new>
 #include <tinycthread.h>
 #include <type_traits>
@@ -25,12 +26,13 @@ namespace sys
     private:
         thrd_t th {};
 
+        /// @warning `unsafe` because `th` must be initialized and running, or empty.
         thread_id(const thrd_t th, unsafe) noexcept : th(th) { }
     public:
         /* NOLINT(hicpp-explicit-conversions) */ thread_id(std::nullptr_t) noexcept { }
         thread_id(const thread_id&) noexcept = default;
         thread_id(thread_id&&) noexcept = default;
-        ~thread_id() = default;
+        ~thread_id() noexcept = default;
 
         thread_id& operator=(const thread_id&) noexcept = default;
         thread_id& operator=(thread_id&&) noexcept = default;
@@ -48,9 +50,50 @@ namespace sys
         using internal::nullable_value_result<thread_id>::operator=;
     };
 
+    class managed_thread;
+
     thread thread_current() noexcept;
 
     class thread final
+    {
+        thrd_t th {};
+
+        /// @warning `unsafe` because `th` must be initialized and running, or empty.
+        thread(const thrd_t th, unsafe) noexcept : th(th) { }
+    public:
+        /// @brief Empty, non-joinable.
+        thread() noexcept = default;
+        thread(const thread&) noexcept = delete;
+        thread(thread&& other) noexcept { swap(*this, other); }
+        ~thread() noexcept = default;
+
+        thread& operator=(const thread&) noexcept = delete;
+        thread& operator=(thread&& other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        /// @brief Whether this thread is valid.
+        [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
+        [[nodiscard]] thread_id id() const noexcept { return { this->th, unsafe() }; }
+
+        friend void swap(thread& a, thread& b) noexcept { std::swap(a.th, b.th); }
+        friend thread sys::thread_current() noexcept;
+
+        friend class sys::managed_thread;
+    };
+
+    /// @brief Obtains a handle to the current thread.
+    inline thread thread_current() noexcept { return { thrd_current(), unsafe() }; }
+
+    /// @brief Yields the current thread.
+    inline void thread_yield() noexcept { thrd_yield(); }
+
+    /// @brief Exits the current thread with the given return code.
+    inline void thread_exit(const int ret) noexcept { thrd_exit(ret); }
+
+    class managed_thread final
     {
         /// @brief Checks if `Func` could be the type of a global function.
         template <typename Func>
@@ -59,41 +102,32 @@ namespace sys
             return std::is_function_v<std::remove_pointer_t<std::decay_t<Func>>>;
         }
         template <typename Func>
-        using storage_type = std::conditional_t<thread::is_global_func<Func>(), std::decay_t<Func>, std::decay_t<Func>*>;
+        using storage_type = std::conditional_t<managed_thread::is_global_func<Func>(), std::decay_t<Func>, std::decay_t<Func>*>;
 
         thrd_t th {};
-        bool is_ref = true;
 
         /// @warning `unsafe` because `th` must be initialized and running.
-        thread(const thrd_t th, const bool is_ref, unsafe) noexcept : th(th), is_ref(is_ref) { }
+        managed_thread(const thrd_t th, unsafe) noexcept : th(th) { }
     public:
-        friend void swap(thread& a, thread& b) noexcept(noexcept(std::swap(a.th, b.th)))
-        {
-            std::swap(a.th, b.th);
-            std::swap(a.is_ref, b.is_ref);
-        }
-        friend thread sys::thread_current() noexcept;
-
-        /// @brief Empty, non-joinable.
-        thread() noexcept = default;
-        thread(const thread&) = delete;
-        thread(thread&& other) noexcept(noexcept(swap(*this, other))) { swap(*this, other); }
-        ~thread() noexcept
+        managed_thread() noexcept = default;
+        managed_thread(const managed_thread&) noexcept = delete;
+        managed_thread(managed_thread&& other) noexcept { swap(*this, other); }
+        ~managed_thread() noexcept
         {
             if (this->joinable())
                 _contract_assert(thrd_join(this->th, nullptr) == thrd_success, "If this happens we're genuinely cooked.");
         }
 
-        thread& operator=(const thread&) = delete;
-        thread& operator=(thread&& other) noexcept(noexcept(swap(*this, other)))
+        managed_thread& operator=(const managed_thread&) noexcept = delete;
+        managed_thread& operator=(managed_thread&& other) noexcept
         {
             swap(*this, other);
             return *this;
         }
 
-        /// @brief Create a `sys::thread` with `func`.
+        /// @brief Trampoline off a `sys::managed_thread` executing `func`.
         template <typename Func>
-        static result<thread, threading_error> ctor(Func&& func) noexcept(noexcept(auto(std::forward<Func>(func)())))
+        static result<managed_thread, threading_error> ctor(Func&& func) noexcept(noexcept(auto(std::forward<Func>(func)())))
         requires requires {
             { func() };
         }
@@ -102,19 +136,19 @@ namespace sys
 
             storage_type<Func> f = [&] noexcept
             {
-                if constexpr (!thread::is_global_func<Func>())
+                if constexpr (!managed_thread::is_global_func<Func>())
                     return new(std::nothrow) std::decay_t<Func>(std::forward<Func>(func)); // NOLINT(cppcoreguidelines-owning-memory)
                 else
                     return func;
             }();
-            if constexpr (thread::is_global_func<Func>())
+            if constexpr (managed_thread::is_global_func<Func>())
                 _retif(threading_error::invalid_argument, !f);
             else
                 _retif(threading_error::oom, !f);
 
             sys::optional_destructor releaseFunc = [&] noexcept
             {
-                if constexpr (!thread::is_global_func<Func>())
+                if constexpr (!managed_thread::is_global_func<Func>())
                     delete f; // NOLINT(cppcoreguidelines-owning-memory)
             };
 
@@ -123,7 +157,7 @@ namespace sys
                 int ret = 0;
                 std::decay_t<Func> func = [&]()
                 {
-                    if constexpr (!thread::is_global_func<Func>())
+                    if constexpr (!managed_thread::is_global_func<Func>())
                         return *(_as(std::decay_t<Func>*, arg));
                     else
                         return _asr(std::decay_t<Func>, arg);
@@ -148,14 +182,14 @@ namespace sys
                 return threading_error::init_failed;
 
             releaseFunc.release(unsafe());
-            return thread(th, false, unsafe());
+            return managed_thread(th, unsafe());
         }
 
-        /// @brief Whether this thread is joinable.
-        [[nodiscard]] explicit operator bool() const noexcept { return this->joinable(); }
-        [[nodiscard]] bool joinable() const noexcept { return !this->is_ref && this->th != thrd_t {} && !thrd_equal(this->th, thrd_current()); }
+        /// @brief Whether this managed thread is valid.
+        [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
+        [[nodiscard]] bool joinable() const noexcept { return this->th != thrd_t {} && !thrd_equal(this->th, thrd_current()); }
 
-        [[nodiscard]] thread_id id() const noexcept { return { this->th, unsafe() }; }
+        [[nodiscard]] thread thread() const noexcept { return { this->th, unsafe() }; }
 
         result<sys::integer<int>, threading_error> join() noexcept
         {
@@ -165,7 +199,6 @@ namespace sys
             if (thrd_join(this->th, &*res) != thrd_success)
                 return threading_error::operation_failed;
             this->th = thrd_t {};
-            this->is_ref = true;
             return res;
         }
         void detach() noexcept
@@ -174,18 +207,10 @@ namespace sys
 
             (void)thrd_detach(this->th);
             this->th = thrd_t {};
-            this->is_ref = true;
         }
+
+        friend void swap(managed_thread& a, managed_thread& b) noexcept { std::swap(a.th, b.th); }
     };
-
-    /// @brief Obtains a handle to the current thread.
-    inline thread thread_current() noexcept { return { thrd_current(), true, unsafe() }; }
-
-    /// @brief Yields the current thread.
-    inline void thread_yield() noexcept { thrd_yield(); }
-
-    /// @brief Exits the current thread with the given return code.
-    inline void thread_exit(const int ret) noexcept { thrd_exit(ret); }
 } // namespace sys
 
 #undef timespec // NOLINT(misc-include-cleaner)

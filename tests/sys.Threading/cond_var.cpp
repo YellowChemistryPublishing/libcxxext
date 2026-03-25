@@ -1,6 +1,3 @@
-#include <atomic>
-#include <chrono>
-#include <thread>
 #include <vector>
 
 // NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
@@ -17,7 +14,7 @@ TEST_CASE("Condition variable wait / signal.", "[sys.Threading][cond_var]")
     sys::mutex mtx;
     bool ready = false;
 
-    sys::thread t = sys::thread::ctor([&]
+    sys::managed_thread t = sys::managed_thread::ctor([&]
     {
         const auto gRes = mtx.lock();
         REQUIRE(gRes);
@@ -45,10 +42,10 @@ TEST_CASE("Condition variable broadcast wakes everyone.", "[sys.Threading][cond_
     sys::mutex mtx;
     i32 count = 0;
 
-    std::vector<sys::thread> waiters;
+    std::vector<sys::managed_thread> waiters;
     for (i32 i = 0; i < numWaiters; ++i)
     {
-        waiters.emplace_back(sys::thread::ctor([&]
+        waiters.emplace_back(sys::managed_thread::ctor([&]
         {
             const auto gRes = mtx.lock();
             REQUIRE(gRes);
@@ -77,10 +74,10 @@ TEST_CASE("Condition variable lazy initialization internally under contention.",
 {
     sys::cond_var cv;
     constexpr i32 numThreads = 20;
-    std::vector<sys::thread> threads;
+    std::vector<sys::managed_thread> threads;
 
     for (i32 i = 0; i < numThreads; ++i)
-        threads.emplace_back(sys::thread::ctor([&] { REQUIRE(cv.notify_one()); }).move());
+        threads.emplace_back(sys::managed_thread::ctor([&] { REQUIRE(cv.notify_one()); }).move());
 
     threads.clear();
 }

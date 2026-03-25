@@ -1,5 +1,5 @@
 Checks: >
-    -*, sys-*,
+    -*, custom-*,
 
     bugprone-*, cert-err33-c, cert-flp30-c, clang-analyzer-*, concurrency-*, cppcoreguidelines-*, google-*, hicpp-*, llvm-*, misc-*, modernize-*, performance-*, portability-*,
     readability-*,
