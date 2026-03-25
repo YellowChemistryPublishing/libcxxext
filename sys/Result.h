@@ -14,6 +14,7 @@
 #include <LanguageSupport.h>
 #include <RecurringTemplate.h>
 #include <inline/Integer.inl>
+#include <meta/Nullable.h>
 #include <meta/Type.h>
 
 // NOLINTBEGIN(bugprone-macro-parentheses)
@@ -72,7 +73,7 @@ namespace sys::internal
     /// @internal
     /// @brief Shared functionality for result types.
     template <template <typename, typename> class Result, typename T, typename Err>
-    struct result_b : recurring_template<Result<T, Err>>
+    struct result_b : public recurring_template<Result<T, Err>>
     {
     protected:
         result_b() noexcept = default;
@@ -102,7 +103,7 @@ namespace sys::internal
     /// @internal
     /// @brief Shared functionality for result types that have a bad value.
     template <template <typename, typename> class Result, typename T, typename Err>
-    struct result_b_err : recurring_template<Result<T, Err>>
+    struct result_b_err : public recurring_template<Result<T, Err>>
     {
     protected:
         result_b_err() noexcept = default;
@@ -154,7 +155,7 @@ namespace sys::internal
     /// @internal
     /// @brief Shared functionality for result types that have a good value.
     template <template <typename, typename> class Result, typename T, typename Err>
-    struct result_b_ok : recurring_template<Result<T, Err>>
+    struct result_b_ok : public recurring_template<Result<T, Err>>
     {
     protected:
         result_b_ok() noexcept = default;
@@ -238,7 +239,9 @@ namespace sys
     } || requires {
         requires !std::same_as<std::remove_cvref_t<T>, std::nullptr_t>;
         requires !std::same_as<std::remove_cvref_t<T>, error_tag>;
-        requires std::is_lvalue_reference_v<T> || std::same_as<T, void> || (std::same_as<T, std::remove_cvref_t<T>> && !std::is_array_v<T> && std::is_nothrow_destructible_v<T>);
+        requires std::is_lvalue_reference_v<T> || std::same_as<T, void> ||
+            (std::same_as<T, std::remove_cvref_t<T>> && !std::is_array_v<T> && std::is_move_constructible_v<T> && std::is_move_assignable_v<T> &&
+             std::is_nothrow_destructible_v<T>);
     };
 
     /// @brief A monadic type that can hold either a value or an error.
@@ -247,10 +250,9 @@ namespace sys
     template <IResultStorable T, IResultStorable Err = void>
     requires (!requires {
                  { sizeof(T) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
-             } || !std::is_lvalue_reference_v<Err>)     /* Intentionally don't support reference errors--doesn't really make sense. */
-    struct [[nodiscard]] result final : internal::result_b<result, T, Err>, internal::result_b_ok<result, T, Err>, internal::result_b_err<result, T, Err>
+             } || !std::is_reference_v<Err>)            /* Intentionally don't support reference errors--doesn't really make sense. */
+    class [[nodiscard]] result final : public internal::result_b<result, T, Err>, public internal::result_b_ok<result, T, Err>, public internal::result_b_err<result, T, Err>
     {
-    private:
         union
         {
             internal::result_storage_type<T> value;
@@ -360,9 +362,8 @@ namespace sys
     /// @brief Specialization of `sys::result<...>` with a unit error type.
     /// @details For a result with a single possible error state, iow. a valueless error.
     template <IResultStorable T>
-    struct [[nodiscard]] result<T, void> final : internal::result_b<result, T, void>, internal::result_b_ok<result, T, void>
+    class [[nodiscard]] result<T, void> final : public internal::result_b<result, T, void>, public internal::result_b_ok<result, T, void>
     {
-    private:
         union
         {
             byte _;
@@ -439,10 +440,9 @@ namespace sys
     template <typename Err>
     requires (!requires {
                  { sizeof(Err) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
-             } || !std::is_lvalue_reference_v<Err>)
-    struct [[nodiscard]] result<void, Err> final : internal::result_b<result, void, Err>, internal::result_b_err<result, void, Err>
+             } || !std::is_reference_v<Err>)
+    class [[nodiscard]] result<void, Err> final : public internal::result_b<result, void, Err>, public internal::result_b_err<result, void, Err>
     {
-    private:
         union
         {
             byte _;
@@ -520,9 +520,8 @@ namespace sys
     /// @brief Specialization of `sys::result<...>` representing a boolean result.
     /// @details A result valueless in both `T` and `Err`, iow. a `bool` with more explicit semantics.
     template <>
-    struct [[nodiscard]] result<void, void> final : internal::result_b<result, void, void>
+    class [[nodiscard]] result<void, void> final : public internal::result_b<result, void, void>
     {
-    private:
         internal::result_status status = internal::result_status::empty;
 
         constexpr explicit result(unsafe) noexcept { };
@@ -552,6 +551,65 @@ namespace sys
         template <template <typename, typename> class, typename, typename>
         friend struct sys::internal::result_b_err;
     };
+} // namespace sys
+
+namespace sys::internal
+{
+    /// @warning Be careful, `T` must be empty-queryable after moved-from, for an underlying specialization of `sys::result<...>` to be valid in its entirety!
+    template <IResultStorable T>
+    requires requires {
+        requires !std::is_reference_v<T>;
+        meta::generic_nullable_adaptor<std::add_const_t<T>>(std::declval<std::add_const_t<T>&>()).is_null();
+    }
+    class [[nodiscard]] nullable_value_result : public internal::result_b<result, T, void>
+    {
+        T value;
+    public:
+        template <typename... Args>
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ nullable_value_result(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) :
+            value(std::forward<Args>(args)...)
+        { }
+        constexpr nullable_value_result(const nullable_value_result&) = delete;
+        constexpr nullable_value_result(nullable_value_result&& other) noexcept(noexcept(swap(*this, other))) { swap(*this, other); }
+        constexpr ~nullable_value_result() = default;
+
+        nullable_value_result& operator=(const nullable_value_result&) = delete;
+        nullable_value_result& operator=(nullable_value_result&& other) noexcept(noexcept(swap(*this, other)))
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        // Deliberately shadow otherwise invalid functions in base.
+        constexpr explicit operator bool() const noexcept { return !meta::generic_nullable_adaptor<std::add_const_t<T>>(this->value).is_null(); }
+        constexpr bool operator!() const noexcept { return !_as(bool, *this); }
+
+        [[nodiscard]] constexpr T move() noexcept(noexcept(T(std::move(this->value))))
+        {
+            _contract_assert(*this, "Taking value for a bad result!");
+            return std::move(this->value);
+        }
+        template <typename With>
+        [[nodiscard]] constexpr T move_or(With&& other) noexcept(noexcept(T(std::move(this->value))) && noexcept(T(std::forward<With>(other))))
+        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
+        {
+            _retif(T(std::forward<With>(other)), !(*this));
+            return std::move(this->value);
+        }
+
+        friend void swap(nullable_value_result& a, nullable_value_result& b) noexcept(noexcept(std::swap(a.value, b.value))) { std::swap(a.value, b.value); }
+    };
+} // namespace sys::internal
+
+namespace sys
+{
+    template <typename T>
+    class [[nodiscard]] result<T*, void> final : public internal::nullable_value_result<T*>
+    {
+    public:
+        using internal::nullable_value_result<T*>::nullable_value_result;
+        using internal::nullable_value_result<T*>::operator=;
+    };
 
     /// @brief Awaiter to enable short-circuiting, akin to rustlang's `operator?`.
     template <typename T, typename Err>
@@ -562,7 +620,7 @@ namespace sys
         template <typename Promise>
         _inline_always constexpr void await_suspend(std::coroutine_handle<Promise> parent)
         {
-            if constexpr (!std::is_same_v<Err, void>)
+            if constexpr (!std::same_as<Err, void>)
                 parent.promise().return_value(res.err());
             else if constexpr (requires { parent.promise().return_void(); })
                 parent.promise().return_void();
@@ -572,7 +630,7 @@ namespace sys
             if constexpr (requires { parent.promise().continuation.resume(); })
                 parent.promise().continuation.resume();
         }
-        _inline_always constexpr T await_resume() const noexcept(std::is_same_v<T, void>) { return res.move(); }
+        _inline_always constexpr T await_resume() const noexcept(std::same_as<T, void>) { return res.move(); }
         /// @endcond
 
         friend struct sys::result<T, Err>;

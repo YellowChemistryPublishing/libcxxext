@@ -529,11 +529,7 @@ namespace sys
             return ret;
         }
 
-        friend void swap(string& a, string& b) noexcept
-        {
-            using std::swap;
-            swap(a.str, b.str);
-        }
+        friend void swap(string& a, string& b) noexcept(noexcept(std::swap(a.str, b.str))) { std::swap(a.str, b.str); }
 
         template <ICharacter U>
         friend class string;

@@ -75,10 +75,10 @@ TEST_CASE("Once actually guards under contention.", "[sys.Threading][once]")
     std::atomic<int> readyCount = 0;
     std::atomic_flag flag = ATOMIC_FLAG_INIT;
 
-    std::vector<sys::thread_handle> threads;
+    std::vector<sys::thread> threads;
     for (sz i = 0_uz; i < numThreads; i++)
     {
-        threads.emplace_back(sys::thread_handle::ctor([&]
+        threads.emplace_back(sys::thread::ctor([&]
         {
             ++readyCount;
             while (!flag.test(std::memory_order_acquire))
@@ -109,7 +109,7 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
     std::atomic_flag started = ATOMIC_FLAG_INIT;
     std::atomic_flag done = ATOMIC_FLAG_INIT;
 
-    const sys::thread_handle thread = sys::thread_handle::ctor([&]
+    const sys::thread thread = sys::thread::ctor([&]
     {
         o.call_once([&]
         {
@@ -124,7 +124,7 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
     CHECK_FALSE(o.is_completed());
 
     std::atomic_flag waitFinished = ATOMIC_FLAG_INIT;
-    const sys::thread_handle waiterThread = sys::thread_handle::ctor([&]
+    const sys::thread waiterThread = sys::thread::ctor([&]
     {
         o.wait();
         o.wait(); // Should return immediately.
@@ -144,12 +144,12 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-TEST_CASE("Once correctly handles sys::result return types.", "[sys.Threading][once]")
+TEST_CASE("Once correctly handles `sys::result<...>` return types.", "[sys.Threading][once]")
 {
     sys::once o;
     i32 count = 0_i32;
 
-    auto func = [&](const bool succeed) -> sys::result<i64, i32>
+    const auto func = [&](const bool succeed) -> sys::result<i64, i32>
     {
         ++count;
         return succeed ? sys::result<i64, i32>(100_i64) : sys::result<i64, i32>(42_i32); // NOLINT(readability-magic-numbers)
@@ -164,6 +164,40 @@ TEST_CASE("Once correctly handles sys::result return types.", "[sys.Threading][o
     auto res2 = o.call_once(func, false);
     CHECK_FALSE(res2);
     CHECK(res2.err() == 42_i32);
+    CHECK_FALSE(o.is_completed());
+    CHECK(count == 2_i32);
+
+    auto res3 = o.call_once(func, true);
+    CHECK(res3);
+    CHECK(o.is_completed());
+    CHECK(count == 3_i32);
+
+    auto res4 = o.call_once(func, false);
+    CHECK(res4);
+    CHECK(o.is_completed());
+    CHECK(count == 3_i32);
+}
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
+TEST_CASE("Once correctly handles void-as-error result types.", "[sys.Threading][once]")
+{
+    sys::once o;
+    i32 count = 0_i32;
+
+    const auto func = [&](const bool succeed) -> sys::result<void>
+    {
+        ++count;
+        return succeed ? sys::result<void>() : sys::result<void>(nullptr);
+    };
+
+    auto res1 = o.call_once(func, false);
+    CHECK_FALSE(res1);
+    CHECK(!res1);
+    CHECK_FALSE(o.is_completed());
+    CHECK(count == 1_i32);
+
+    auto res2 = o.call_once(func, false);
+    CHECK_FALSE(res2);
+    CHECK(!res2);
     CHECK_FALSE(o.is_completed());
     CHECK(count == 2_i32);
 

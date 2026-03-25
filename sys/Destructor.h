@@ -16,7 +16,7 @@ namespace sys
     struct destructor final
     {
         /// @brief Construct with a cleanup function.
-        /* NOLINT(hicpp-explicit-conversions) */ destructor(Func&& func) noexcept : func(std::move(func)) { }
+        /* NOLINT(hicpp-explicit-conversions) */ destructor(Func&& func) noexcept(noexcept(Func(std::move(func)))) : func(std::move(func)) { }
         destructor(const destructor&) = delete;
         destructor(destructor&&) = delete;
         ~destructor() { this->func(); }
@@ -37,9 +37,10 @@ namespace sys
     struct optional_destructor final
     {
         /// @brief Construct with a cleanup function.
-        /* NOLINT(hicpp-explicit-conversions) */ optional_destructor(Func&& func) noexcept : func(std::move(func)) { }
+        /* NOLINT(hicpp-explicit-conversions) */ optional_destructor(Func&& func) noexcept(noexcept(Func(std::move(func)))) : func(std::move(func)) { }
         optional_destructor(const optional_destructor&) = delete;
-        optional_destructor(optional_destructor&& other) noexcept : func(std::move(other.func)), execute(other.execute)
+        optional_destructor(optional_destructor&& other) noexcept(noexcept(Func(std::move(other.func))) && noexcept(other.func.~Func())) :
+            func(std::move(other.func)), execute(other.execute)
         {
             if (other.execute)
             {
@@ -57,7 +58,7 @@ namespace sys
         }
 
         optional_destructor& operator=(const optional_destructor&) = delete;
-        optional_destructor& operator=(optional_destructor&& other) noexcept
+        optional_destructor& operator=(optional_destructor&& other) noexcept(noexcept(this->func = std::move(other.func)) && noexcept(other.func.~Func()))
         {
             if (this != &other) [[likely]]
             {
@@ -74,7 +75,7 @@ namespace sys
 
         /// @brief Mark this `sys::destructor<...>` as no-op.
         /// @warning `unsafe` because you may only call this once.
-        void release(unsafe) noexcept
+        void release(unsafe) noexcept(noexcept(this->func.~Func()))
         {
             this->func.~Func();
             this->execute = false;

@@ -8,32 +8,32 @@
 
 #include <module/sys.Threading>
 
-TEST_CASE("Threads run code.", "[sys.Threading][thread_handle]")
+TEST_CASE("Threads run code.", "[sys.Threading][thread]")
 {
     bool done = false;
-    sys::thread_handle thread = sys::thread_handle::ctor([&] { done = true; }).move();
+    sys::thread thread = sys::thread::ctor([&] { done = true; }).move();
 
     REQUIRE(thread.join());
     CHECK_FALSE(thread.joinable());
     CHECK(done);
 }
 
-TEST_CASE("Thread joining returns value.", "[sys.Threading][thread_handle]")
+TEST_CASE("Thread joining returns value.", "[sys.Threading][thread]")
 {
-    sys::thread_handle thread = sys::thread_handle::ctor([]() -> int { return 42 /* NOLINT(readability-magic-numbers) */; }).move();
+    sys::thread thread = sys::thread::ctor([]() -> int { return 42 /* NOLINT(readability-magic-numbers) */; }).move();
     CHECK(thread.join().move() == 42);
 }
 
-TEST_CASE("Thread handle is movable.", "[sys.Threading][thread_handle]")
+TEST_CASE("Thread handle is movable.", "[sys.Threading][thread]")
 {
-    sys::thread_handle t1 = sys::thread_handle::ctor([] { }).move();
+    sys::thread t1 = sys::thread::ctor([] { }).move();
     CHECK(t1.joinable());
 
-    sys::thread_handle t2 = std::move(t1);
+    sys::thread t2 = std::move(t1);
     CHECK_FALSE(t1.joinable()); // NOLINT(bugprone-use-after-move)
     CHECK(t2.joinable());
 
-    sys::thread_handle t3;
+    sys::thread t3;
     t3 = std::move(t2);
     CHECK_FALSE(t2.joinable()); // NOLINT(bugprone-use-after-move)
     CHECK(t3.joinable());
@@ -44,12 +44,12 @@ TEST_CASE("Thread handle joins on destruction.", "[sys.Threading][thread]")
     bool done = false;
 
     {
-        const sys::thread_handle thread = sys::thread_handle::ctor([&]
+        const sys::thread thread = sys::thread::ctor([&]
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
             done = true;
         }).move();
-    } // Joinable `sys::thread_handle` joins on destruction.
+    } // Joinable `sys::thread` joins on destruction.
 
     CHECK(done);
 }
@@ -59,7 +59,7 @@ TEST_CASE("Thread handle can be detached.", "[sys.Threading][thread]")
     std::atomic_flag done = ATOMIC_FLAG_INIT;
 
     {
-        sys::thread_handle thread = sys::thread_handle::ctor([&]
+        sys::thread thread = sys::thread::ctor([&]
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
             done.test_and_set();
@@ -82,14 +82,14 @@ static int global_thread_func()
 
 TEST_CASE("Thread can take func ref/ptr.", "[sys.Threading][thread]")
 {
-    sys::thread_handle thread = sys::thread_handle::ctor(global_thread_func).move();
+    sys::thread thread = sys::thread::ctor(global_thread_func).move();
     CHECK(thread.join().move() == 123);
     CHECK(func_invoked);
 }
 
 TEST_CASE("Exception doesn't obliterate program.", "[sys.Threading][thread]")
 {
-    sys::thread_handle thread = sys::thread_handle::ctor([]
+    sys::thread thread = sys::thread::ctor([]
     {
         throw 42; // NOLINT(hicpp-exception-baseclass, readability-magic-numbers)
     }).move();

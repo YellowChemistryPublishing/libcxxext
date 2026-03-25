@@ -66,7 +66,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<i16> res2 = std::move(res1);
 
     CHECK_FALSE(_as(bool, res1)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
-    CHECK(!!res1);           // NOLINT(clang-analyzer-cplusplus.Move)
+    CHECK(!!res1);                // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res2);
     CHECK(!!res2);
     CHECK(res2.move() == 1_i16);
@@ -75,7 +75,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<i16&, i16> res3 = val;
     sys::result<i16&, i16> res4 = std::move(res3);
     CHECK_FALSE(_as(bool, res3)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
-    CHECK(!!res3);           // NOLINT(clang-analyzer-cplusplus.Move)
+    CHECK(!!res3);                // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res4);
     CHECK(!!res4);
     CHECK(std::addressof(res4.move()) == std::addressof(val));
@@ -83,7 +83,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<void, i16> res5 = 3_i16;
     sys::result<void, i16> res6 = std::move(res5);
     CHECK_FALSE(_as(bool, res5)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
-    CHECK(!!res5);           // NOLINT(clang-analyzer-cplusplus.Move)
+    CHECK(!!res5);                // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK_FALSE(_as(bool, res6));
     CHECK_FALSE(res6);
     CHECK(res6.err() == 3_i16);
@@ -91,7 +91,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<i16, std::string> res7 = 4_i16;
     sys::result<i16, std::string> res8 = std::move(res7);
     CHECK_FALSE(_as(bool, res7)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
-    CHECK(!!res7);           // NOLINT(clang-analyzer-cplusplus.Move)
+    CHECK(!!res7);                // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res8);
     CHECK(!!res8);
     CHECK(res8.move() == 4_i16);
@@ -170,6 +170,22 @@ TEST_CASE("Can convert result to unit-result.", "[sys][result]")
     CHECK_FALSE(_as(sys::result<i64>, sys::result<i64>(nullptr)));
     CHECK_FALSE(_as(sys::result<i64>, sys::result<i64, i32>(23_i32)));
     CHECK(_as(sys::result<i64>, sys::result<i64, i32>(23_i64)).move() == 23_i64);
+}
+
+TEST_CASE("Pointer result (analogous to any other nullable-value result) works correctly.", "[sys][result]")
+{
+    sys::result<int*> res = nullptr;
+    CHECK_FALSE(res);
+    CHECK(!res);
+    CHECK(res.move_or(nullptr) == nullptr);
+
+    int i = 0;
+    res = sys::result<int*>(&i);
+    CHECK(res);
+    CHECK(res.move() == &i);
+
+    res = sys::result<int*>(&i);
+    CHECK(res.transform([](sys::result<int*>&& p) -> int { return *std::move(p).move(); }) == 0);
 }
 
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

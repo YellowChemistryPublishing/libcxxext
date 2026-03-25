@@ -22,6 +22,7 @@
 #include <meta/Builtin.h>      // IWYU pragma: export
 #include <meta/Container.h>    // IWYU pragma: export
 #include <meta/Function.h>     // IWYU pragma: export
+#include <meta/Nullable.h>     // IWYU pragma: export
 #include <meta/Properties.h>   // IWYU pragma: export
 #include <meta/Type.h>         // IWYU pragma: export
 #include <meta/TypeSwitch.h>   // IWYU pragma: export
