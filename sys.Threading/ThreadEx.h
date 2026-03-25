@@ -96,7 +96,60 @@ namespace sys
         static result<thread, threading_error> ctor(Func&& func) noexcept(noexcept(auto(std::forward<Func>(func)())))
         requires requires {
             { func() };
-        };
+        }
+        {
+            thrd_t th {};
+
+            storage_type<Func> f = [&] noexcept
+            {
+                if constexpr (!thread::is_global_func<Func>())
+                    return new(std::nothrow) std::decay_t<Func>(std::forward<Func>(func)); // NOLINT(cppcoreguidelines-owning-memory)
+                else
+                    return func;
+            }();
+            if constexpr (thread::is_global_func<Func>())
+                _retif(threading_error::invalid_argument, !f);
+            else
+                _retif(threading_error::oom, !f);
+
+            sys::optional_destructor releaseFunc = [&] noexcept
+            {
+                if constexpr (!thread::is_global_func<Func>())
+                    delete f; // NOLINT(cppcoreguidelines-owning-memory)
+            };
+
+            if (thrd_create(&th, [](void* arg) noexcept(noexcept(func())) -> int
+            {
+                int ret = 0;
+                std::decay_t<Func> func = [&]()
+                {
+                    if constexpr (!thread::is_global_func<Func>())
+                        return *(_as(std::decay_t<Func>*, arg));
+                    else
+                        return _asr(std::decay_t<Func>, arg);
+                }();
+
+                try
+                {
+                    if constexpr (requires {
+                                      { func() } -> std::convertible_to<int>;
+                                  })
+                        ret = _as(int, func());
+                    else
+                        (void)func();
+                }
+                catch (...)
+                {
+                    return sys::bsentinel<int>();
+                }
+
+                return ret;
+            }, _asr(void*, f)) != thrd_success)
+                return threading_error::init_failed;
+
+            releaseFunc.release(unsafe());
+            return thread(th, false, unsafe());
+        }
 
         /// @brief Whether this thread is joinable.
         [[nodiscard]] explicit operator bool() const noexcept { return this->joinable(); }
@@ -124,65 +177,6 @@ namespace sys
             this->is_ref = true;
         }
     };
-
-    template <typename Func>
-    inline result<thread, threading_error> thread::ctor(Func&& func) noexcept(noexcept(auto(std::forward<Func>(func)())))
-    requires requires {
-        { func() };
-    }
-    {
-        thrd_t th {};
-
-        storage_type<Func> f = [&] noexcept
-        {
-            if constexpr (!thread::is_global_func<Func>())
-                return new(std::nothrow) std::decay_t<Func>(std::forward<Func>(func)); // NOLINT(cppcoreguidelines-owning-memory)
-            else
-                return func;
-        }();
-        if constexpr (thread::is_global_func<Func>())
-            _retif(threading_error::invalid_argument, !f);
-        else
-            _retif(threading_error::oom, !f);
-
-        sys::optional_destructor releaseFunc = [&] noexcept
-        {
-            if constexpr (!thread::is_global_func<Func>())
-                delete f; // NOLINT(cppcoreguidelines-owning-memory)
-        };
-
-        if (thrd_create(&th, [](void* arg) noexcept(noexcept(func())) -> int
-        {
-            int ret = 0;
-            std::decay_t<Func> func = [&]()
-            {
-                if constexpr (!thread::is_global_func<Func>())
-                    return *(_as(std::decay_t<Func>*, arg));
-                else
-                    return _asr(std::decay_t<Func>, arg);
-            }();
-
-            try
-            {
-                if constexpr (requires {
-                                  { func() } -> std::convertible_to<int>;
-                              })
-                    ret = _as(int, func());
-                else
-                    (void)func();
-            }
-            catch (...)
-            {
-                return sys::bsentinel<int>();
-            }
-
-            return ret;
-        }, _asr(void*, f)) != thrd_success)
-            return threading_error::init_failed;
-
-        releaseFunc.release(unsafe());
-        return thread(th, false, unsafe());
-    }
 
     /// @brief Obtains a handle to the current thread.
     inline thread thread_current() noexcept { return { thrd_current(), true, unsafe() }; }

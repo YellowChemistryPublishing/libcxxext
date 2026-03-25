@@ -12,6 +12,8 @@
 
 namespace sys
 {
+    class cond_var;
+
     template <bool IsRecursive>
     class ordinary_mutex final
     {
@@ -44,7 +46,7 @@ namespace sys
             _retif(threading_error::init_failed,
                    !this->o.call_once([&]() noexcept -> sys::result<void>
             {
-                _retif(nullptr, mtx_init(&this->mut, _as(unsigned, mtx_plain) | _as(unsigned, IsRecursive ? mtx_recursive : 0)) != thrd_success);
+                _retif(nullptr, mtx_init(&this->mut, _as(unsigned, mtx_plain) | _as(unsigned, mtx_timed) | _as(unsigned, IsRecursive ? mtx_recursive : 0)) != thrd_success);
                 return {};
             }));
 
@@ -53,21 +55,24 @@ namespace sys
         }
     public:
         ordinary_mutex() noexcept = default;
-        ordinary_mutex(const ordinary_mutex&) = delete;
+        ordinary_mutex(const ordinary_mutex&) noexcept = delete;
         ordinary_mutex(ordinary_mutex&&) noexcept = delete;
         ~ordinary_mutex() noexcept
         {
-            if (this->o.is_completed())
+            if (this->o.is_completed()) [[likely]]
                 mtx_destroy(&this->mut);
         }
 
-        ordinary_mutex& operator=(const ordinary_mutex&) = delete;
+        ordinary_mutex& operator=(const ordinary_mutex&) noexcept = delete;
         ordinary_mutex& operator=(ordinary_mutex&&) noexcept = delete;
 
         /// @brief Lock and obtain a lock guard for this mutex.
         result<guard, threading_error> lock() noexcept { return this->lock<&mtx_lock>(unsafe()); }
         /// @brief Try to lock this mutex and obtain a lock guard for it, if possible.
         result<guard, threading_error> try_lock() noexcept { return this->lock<&mtx_trylock>(unsafe()); }
+        // TODO(halloimdragon): `try_lock_for(...)`.
+
+        friend class sys::cond_var;
     };
 
     using mutex = ordinary_mutex<false>;
