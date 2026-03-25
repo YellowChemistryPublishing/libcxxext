@@ -96,4 +96,48 @@ TEST_CASE("Exception doesn't obliterate program.", "[sys.Threading][thread]")
     CHECK(thread.join().move() == sys::bsentinel<int>());
 }
 
+TEST_CASE("Obtain current thread and id.", "[sys.Threading][thread]")
+{
+    const sys::thread cur = sys::thread_current();
+    CHECK_FALSE(cur.joinable());
+
+    const sys::thread_id id1 = cur.id();
+    const sys::thread_id id2 = sys::thread_current().id();
+    CHECK(id1 == id2);
+    CHECK_FALSE(id1 == sys::thread_id(nullptr));
+
+    sys::thread t = sys::thread::ctor([] { return 42 /* NOLINT(readability-magic-numbers) */; }).move();
+    CHECK(t.joinable());
+    CHECK_FALSE(t.id() == id1);
+
+    REQUIRE(t.join());
+}
+
+TEST_CASE("Yield current thread.", "[sys.Threading][thread]")
+{
+    sys::thread_yield();
+
+    std::atomic_flag done = ATOMIC_FLAG_INIT;
+    sys::thread t = sys::thread::ctor([&]
+    {
+        while (!done.test())
+            sys::thread_yield();
+    }).move();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
+    done.test_and_set();
+    REQUIRE(t.join());
+}
+
+TEST_CASE("Exit current thread.", "[sys.Threading][thread]")
+{
+    sys::thread t = sys::thread::ctor([]
+    {
+        sys::thread_exit(123 /* NOLINT(readability-magic-numbers) */);
+        REQUIRE(false);
+    }).move();
+
+    CHECK(t.join().move() == 123 /* NOLINT(readability-magic-numbers) */);
+}
+
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

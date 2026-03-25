@@ -21,7 +21,7 @@ namespace sys
         sys::result<void, threading_error> try_init() noexcept
         {
             _retif(threading_error::init_failed,
-                   this->o.call_once([&]() noexcept -> sys::result<void>
+                   !this->o.call_once([&]() noexcept -> sys::result<void>
             {
                 _retif(nullptr, cnd_init(&this->cond) != thrd_success);
                 return {};

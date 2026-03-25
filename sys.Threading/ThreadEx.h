@@ -19,7 +19,7 @@ namespace sys
     class thread;
 
     /// @brief Opaque, non-owning identifier for a thread, or `nullptr`.
-    /// @see For more information on thread IDs, see [Rust Docs](https://doc.rust-lang.org/std/thread/struct.ThreadId.html).
+    /// @see For more information on thread ids, see [Rust Docs](https://doc.rust-lang.org/std/thread/struct.ThreadId.html).
     struct thread_id
     {
     private:
