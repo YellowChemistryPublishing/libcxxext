@@ -26,7 +26,7 @@ namespace sys
     concept IBuiltinInteger = IBuiltinIntegerSigned<T> || IBuiltinIntegerUnsigned<T>;
     /// @brief Built-in floating-point type.
     template <typename T>
-    concept IBuiltinFloatingPoint = std::same_as<T, float> || std::same_as<T, double> || std::same_as<T, long double>;
+    concept IBuiltinFloatingPoint = std::same_as<T, float> || std::same_as<T, double> || std::same_as<T, long double /* NOLINT(google-runtime-float) */>;
     /// @brief Built-in numeric type.
     template <typename T>
     concept IBuiltinNumeric = IBuiltinInteger<T> || IBuiltinFloatingPoint<T>;

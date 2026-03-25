@@ -1,4 +1,4 @@
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -54,4 +54,4 @@ TEST_CASE("Non-powers-of-two round up.", "[sys][nr2ixx][i64]")
 }
 TEST_CASE("Zero gives zero.", "[sys][nr2ixx][i64]") { CHECK(sys::nr2i64(0_i64) == 0_i64); }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

@@ -2,7 +2,7 @@
 #include <string_view>
 #include <utility>
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)
 
 #include <CompilerWarnings.h>
 _nowarn_begin_conv_comp();
@@ -170,4 +170,4 @@ TEST_CASE("String Format Specifiers", "[sys.Text][string][format]")
     CHECK(std::format("{:.3}", sys::str(u8"pumpkin")) == "pum");
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)

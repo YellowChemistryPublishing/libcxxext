@@ -3,6 +3,7 @@
 /// @file
 
 #include <atomic>
+#include <concepts>
 #include <utility>
 
 #include <Destructor.h>
@@ -60,8 +61,8 @@ namespace sys
         /// @brief Calls `func` with `args...`, ensuring only one functor passed to `.call_once(...)` is ever run.
         /// @note If an exception is thrown, this `sys::once` can be called again.
         template <typename Func, typename... Args>
+        requires (!meta::type<decltype(std::declval<Func>()(std::declval<Args &&>()...))>::template is_from<result>())
         void call_once(Func&& func, Args&&... args) noexcept(noexcept(func(std::forward<Args>(args)...)))
-        requires (!meta::type<decltype(func(args...))>::template is_from<result>())
         {
             if (this->pre_call())
                 return;
@@ -72,20 +73,25 @@ namespace sys
             this->initialized.test_and_set(std::memory_order_release);
         }
 
-        /// @brief Calls `func` with `args...`, ensuring only one functor passed to `.call_once(...)` is ever run.
+        /// @see `sys::once::call_once(Func&& func, Args&&... args)`
         /// @return If `func(args...)` produces a `sys::result<T, Err>`, on failure, an `Err` is produced, otherwise nothing.
         /// @note If an exception is thrown, this `sys::once` can be called again.
         template <typename Func, typename... Args>
-        sys::result<void, decltype(std::declval<Func>()(std::declval<Args&&>()...).err())> call_once(Func&& func,
-                                                                                                     Args&&... args) noexcept(noexcept(func(std::forward<Args>(args)...)))
-        requires (meta::type<decltype(func(args...))>::template is_from<result>())
+        requires (meta::type<decltype(std::declval<Func>()(std::declval<Args &&>()...))>::template is_from<result>())
+        sys::result<void, typename decltype(std::declval<Func>()(std::declval<Args&&>()...))::err_type> call_once(Func&& func, Args&&... args) noexcept(
+            noexcept(func(std::forward<Args>(args)...)))
         {
             if (this->pre_call())
                 return {};
 
             const sys::destructor releaseBusy = [&] noexcept { this->busy.clear(std::memory_order_release); };
             if (auto res = std::forward<Func>(func)(std::forward<Args>(args)...); !res)
-                return res.err();
+            {
+                if constexpr (!std::same_as<typename decltype(std::declval<Func>()(std::declval<Args&&>()...))::err_type, void>)
+                    return res.err();
+                else
+                    return nullptr;
+            }
 
             this->initialized.test_and_set(std::memory_order_release);
             return {};

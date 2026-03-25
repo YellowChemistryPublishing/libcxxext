@@ -2,7 +2,7 @@
 #include <string>
 #include <tuple>
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -10,7 +10,6 @@
 
 namespace
 {
-
     struct append_receiver
     {
         int val = 0; // NOLINT(misc-non-private-member-variables-in-classes)
@@ -188,8 +187,9 @@ using sys::meta::type_switch, sys::meta::type_switch_cases, sys::meta::type_case
 static_assert(type_switch_cases<type_case<std::same_as<int, int>, int>, type_case<std::same_as<int, int>, bool>>::count_returns() == 2uz);
 static_assert(type_switch_cases<type_case<std::same_as<int, bool>, int>, type_case<std::same_as<bool, int>, bool>>::count_returns() == 0uz);
 
-static_assert(
-    std::same_as<type_switch<type_case<std::same_as<size_t, wchar_t>, long double>, type_case<std::same_as<int, int>, int>, type_case<std::same_as<int, float>, float>>, int>);
+static_assert(std::same_as<type_switch<type_case<std::same_as<size_t, wchar_t>, long double /* NOLINT(google-runtime-float) */>, type_case<std::same_as<int, int>, int>,
+                                       type_case<std::same_as<int, float>, float>>,
+                           int>);
 static_assert(std::same_as<type_switch<type_case<std::same_as<float, double>, float>, type_case<false, bool>, type_case<true, void>>, void>);
 
 // ================================================================================
@@ -201,7 +201,7 @@ TEST_CASE("`sys::meta::append_to` works for `std::vector<...>`.", "[sys][traits]
     std::vector<int> vec;
     sys::meta::generic_container_adaptor(vec).append_back(1);
     CHECK(vec.size() == 1);
-    CHECK(vec[0] == 1);
+    CHECK(vec[0] == 1); // NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access)
 }
 TEST_CASE("`sys::meta::append_to` works for `std::string`.", "[sys][traits][meta][append_to]")
 {
@@ -231,4 +231,4 @@ static_assert(std::same_as<sys::meta::replace_cv<int, volatile float&>, volatile
 static_assert(std::same_as<sys::meta::replace_cv<int, const volatile float&>, const volatile int>);
 static_assert(std::same_as<sys::meta::replace_cv<int, const float&&>, const int>);
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

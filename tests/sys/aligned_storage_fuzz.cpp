@@ -7,7 +7,7 @@ _nowarn_begin_deprecated();
 _nowarn_begin_conv_comp();
 _nowarn_begin_unreachable();
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 #include <rapidcheck.h>
@@ -28,4 +28,4 @@ TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_stora
     });
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

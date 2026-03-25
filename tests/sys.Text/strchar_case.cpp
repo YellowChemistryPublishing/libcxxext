@@ -1,4 +1,4 @@
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -157,4 +157,4 @@ TEST_CASE("Folding is Context Independent", "[sys.Text][string][fold]")
     CHECK(sys::str(u8"ΑΣ").fold() == u8"ασ");
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

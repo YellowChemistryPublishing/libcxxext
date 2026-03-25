@@ -2,7 +2,7 @@
 #include <chrono>
 #include <thread>
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -96,4 +96,4 @@ TEST_CASE("Exception doesn't obliterate program.", "[sys.Threading][thread]")
     CHECK(thread.join().move() == sys::bsentinel<int>());
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

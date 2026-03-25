@@ -107,7 +107,7 @@ namespace sys
                 delete f; // NOLINT(cppcoreguidelines-owning-memory)
         };
 
-        if (thrd_create(&th, [](void* arg) -> int
+        if (thrd_create(&th, [](void* arg) noexcept(noexcept(func())) -> int
         {
             int ret = 0;
             std::decay_t<Func> func = [&]()

@@ -2,7 +2,7 @@
 #include <string>
 #include <string_view>
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -19,7 +19,7 @@ TEST_CASE("Constructing with a value works.", "[sys][result]")
 TEST_CASE("Constructing with an error works.", "[sys][result]")
 {
     sys::result<i32, std::string_view> res("error_msg");
-    CHECK(!res);
+    CHECK_FALSE(res);
     CHECK(res.err() == "error_msg");
 }
 TEST_CASE("Move semantics work correctly.", "[sys][result]")
@@ -38,7 +38,7 @@ TEST_CASE("Swap works correctly.", "[sys][result]")
     using std::swap;
     swap(res1, res2);
 
-    CHECK(!res1);
+    CHECK_FALSE(res1);
     CHECK(res2);
     CHECK(res2.move() == 1_i32);
     CHECK(res1.err() == "err");
@@ -50,12 +50,12 @@ TEST_CASE("Constructing any unit-valued-result works.", "[sys][result][unit]")
     CHECK(res1);
     CHECK(res1.move() == 789_i32);
 
-    CHECK(!sys::result<i32, void>(nullptr));
+    CHECK_FALSE(sys::result<i32, void>(nullptr));
 
     CHECK(sys::result<void, i32>());
 
     sys::result<void, i32> res2 = 789_i32; // NOLINT(readability-magic-numbers)
-    CHECK(!res2);
+    CHECK_FALSE(res2);
     CHECK(res2.err() == 789_i32);
 }
 
@@ -65,7 +65,7 @@ TEST_CASE("Move semantics are sensible.")
     sys::result<i16> res1 = 1_i16;
     sys::result<i16> res2 = std::move(res1);
 
-    CHECK(!_as(bool, res1)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
+    CHECK_FALSE(_as(bool, res1)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK(!!res1);           // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res2);
     CHECK(!!res2);
@@ -74,7 +74,7 @@ TEST_CASE("Move semantics are sensible.")
     i16 val = 2_i16;
     sys::result<i16&, i16> res3 = val;
     sys::result<i16&, i16> res4 = std::move(res3);
-    CHECK(!_as(bool, res3)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
+    CHECK_FALSE(_as(bool, res3)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK(!!res3);           // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res4);
     CHECK(!!res4);
@@ -82,15 +82,15 @@ TEST_CASE("Move semantics are sensible.")
 
     sys::result<void, i16> res5 = 3_i16;
     sys::result<void, i16> res6 = std::move(res5);
-    CHECK(!_as(bool, res5)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
+    CHECK_FALSE(_as(bool, res5)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK(!!res5);           // NOLINT(clang-analyzer-cplusplus.Move)
-    CHECK(!_as(bool, res6));
-    CHECK(!res6);
+    CHECK_FALSE(_as(bool, res6));
+    CHECK_FALSE(res6);
     CHECK(res6.err() == 3_i16);
 
     sys::result<i16, std::string> res7 = 4_i16;
     sys::result<i16, std::string> res8 = std::move(res7);
-    CHECK(!_as(bool, res7)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
+    CHECK_FALSE(_as(bool, res7)); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK(!!res7);           // NOLINT(clang-analyzer-cplusplus.Move)
     CHECK(res8);
     CHECK(!!res8);
@@ -120,20 +120,20 @@ TEST_CASE("Macros work with unit-result in non-template context.", "[sys][result
     };
 
     CHECK(testUnitFunc(true).move() == 11_i16);
-    CHECK(!testUnitFunc(false));
+    CHECK_FALSE(testUnitFunc(false));
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Value/error type semantics are correct.", "[sys][result]")
 {
     CHECK([]() -> sys::result<void> { return {}; }());
-    CHECK(![]() -> sys::result<void> { return nullptr; }());
+    CHECK_FALSE([]() -> sys::result<void> { return nullptr; }());
     CHECK([]() -> sys::result<i32, i32> { return 4_i32; }().move() == 4_i32);
     CHECK([]() -> sys::result<i32, i32> { return { sys::error_tag(), 4_i32 }; }().err() == 4_i32);
     CHECK([]() -> sys::result<i32> { return 4_i32; }().move() == 4_i32);
     CHECK([]() -> sys::result<i32> { return nullptr; }().move_or(-1_i32) == -1_i32);
     CHECK([]() -> sys::result<void, i32> { return {}; }());
-    CHECK(![]() -> sys::result<void, i32> { return 4_i32; }());
+    CHECK_FALSE([]() -> sys::result<void, i32> { return 4_i32; }());
 
     CHECK([]() -> sys::result<std::string, const char*> { return "hallo"; }().move() == "hallo");
     CHECK(std::string_view([]() -> sys::result<std::string, const char*> { return _as(const char*, "hallo"); }().err()) == "hallo");
@@ -166,10 +166,10 @@ TEST_CASE("Can transform result to any value.", "[sys][result][transform]")
 TEST_CASE("Can convert result to unit-result.", "[sys][result]")
 {
     CHECK(_as(sys::result<void>, sys::result<void>()));
-    CHECK(!_as(sys::result<void>, sys::result<void, i32>(4_i32)));
-    CHECK(!_as(sys::result<i64>, sys::result<i64>(nullptr)));
-    CHECK(!_as(sys::result<i64>, sys::result<i64, i32>(23_i32)));
+    CHECK_FALSE(_as(sys::result<void>, sys::result<void, i32>(4_i32)));
+    CHECK_FALSE(_as(sys::result<i64>, sys::result<i64>(nullptr)));
+    CHECK_FALSE(_as(sys::result<i64>, sys::result<i64, i32>(23_i32)));
     CHECK(_as(sys::result<i64>, sys::result<i64, i32>(23_i64)).move() == 23_i64);
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

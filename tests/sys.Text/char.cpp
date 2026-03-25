@@ -1,4 +1,5 @@
-// NOLINTBEGIN(misc-include-cleaner, readability-magic-numbers, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, cppcoreguidelines-pro-bounds-pointer-arithmetic,
+// hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)
 
 #include <catch2/catch_all.hpp>
 
@@ -149,4 +150,5 @@ TEST_CASE("Write UTF-16", "[sys.Text][ch][write_codepoint]")
     CHECK(out[0] == 0xFFFD);
 }
 
-// NOLINTEND(misc-include-cleaner, readability-magic-numbers, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
+// NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, cppcoreguidelines-pro-bounds-pointer-arithmetic,
+// hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)

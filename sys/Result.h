@@ -80,6 +80,9 @@ namespace sys::internal
         static_assert(!meta::type<std::remove_cvref_t<T>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
         static_assert(!meta::type<std::remove_cvref_t<Err>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
 
+        using ok_type = T;
+        using err_type = Err;
+
         /// @brief Whether the result is good.
         constexpr explicit operator bool() const noexcept { return this->downcast().status == result_status::ok; }
         /// @brief Whether the result is bad.

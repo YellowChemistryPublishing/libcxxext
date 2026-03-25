@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -82,7 +82,7 @@ static_assert(sys::IBuiltinInteger<unsigned long long>);
 // Rejects floating-point types.
 static_assert(!sys::IBuiltinInteger<float>);
 static_assert(!sys::IBuiltinInteger<double>);
-static_assert(!sys::IBuiltinInteger<long double>);
+static_assert(!sys::IBuiltinInteger<long double /* NOLINT(google-runtime-float) */>);
 
 // Rejects other types.
 static_assert(!sys::IBuiltinInteger<bool>);
@@ -96,7 +96,7 @@ static_assert(!sys::IBuiltinInteger<std::string>);
 // Accepts floating-point types.
 static_assert(sys::IBuiltinFloatingPoint<float>);
 static_assert(sys::IBuiltinFloatingPoint<double>);
-static_assert(sys::IBuiltinFloatingPoint<long double>);
+static_assert(sys::IBuiltinFloatingPoint<long double /* NOLINT(google-runtime-float) */>);
 
 // Rejects integer types.
 static_assert(!sys::IBuiltinFloatingPoint<int>);
@@ -117,7 +117,7 @@ static_assert(sys::IBuiltinNumeric<signed int>);
 static_assert(sys::IBuiltinNumeric<unsigned long>);
 static_assert(sys::IBuiltinNumeric<float>);
 static_assert(sys::IBuiltinNumeric<double>);
-static_assert(sys::IBuiltinNumeric<long double>);
+static_assert(sys::IBuiltinNumeric<long double /* NOLINT(google-runtime-float) */>);
 
 // Rejects non-numeric types.
 static_assert(!sys::IBuiltinNumeric<bool>);
@@ -302,4 +302,4 @@ static_assert(sys::IFunc<test_functor, int(int, float)>);
 static_assert(!sys::IFunc<test_functor, void()>);
 
 // NOLINTEND(google-runtime-int)
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

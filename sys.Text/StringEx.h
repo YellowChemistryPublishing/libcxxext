@@ -50,8 +50,8 @@ namespace sys
             char32_t nextCp = U'\0';
             for (ssz i = ssz(codepoints.size()) - 1_z; i >= 0_z; i--)
             {
-                const char32_t c = codepoints[sz(i)];
-                lookahead_casing_context& lctx = ret[sz(i)];
+                const char32_t c = codepoints[sz(i)] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */;
+                lookahead_casing_context& lctx = ret[sz(i)] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */;
                 lctx.followed_by_cased = followedByCased;
                 lctx.more_above = nextCp != U'\0' && internal::dchar_ccc(nextCp) == canonical_combining_class::above;
                 lctx.before_dot = beforeDot;
@@ -133,8 +133,8 @@ namespace sys
             forward_casing_context fctx;
             for (sz i = 0_uz; i < sz(codepoints.size()); i++)
             {
-                const char32_t c = codepoints[i];
-                const lookahead_casing_context& lctx = lookaheads[i];
+                const char32_t c = codepoints[i] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */;
+                const lookahead_casing_context& lctx = lookaheads[i] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */;
 
                 char32_t conv[3];
                 sz convSize = 0_uz;

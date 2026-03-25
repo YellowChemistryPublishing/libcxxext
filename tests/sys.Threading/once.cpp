@@ -4,13 +4,14 @@
 #include <thread>
 #include <vector>
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
 #include <module/sys>
 #include <module/sys.Threading>
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Once executes exactly once sequentially.", "[sys.Threading][once]")
 {
     sys::once o;
@@ -142,4 +143,39 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
     CHECK(o.is_completed());
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
+TEST_CASE("Once correctly handles sys::result return types.", "[sys.Threading][once]")
+{
+    sys::once o;
+    i32 count = 0_i32;
+
+    auto func = [&](const bool succeed) -> sys::result<i64, i32>
+    {
+        ++count;
+        return succeed ? sys::result<i64, i32>(100_i64) : sys::result<i64, i32>(42_i32); // NOLINT(readability-magic-numbers)
+    };
+
+    auto res1 = o.call_once(func, false);
+    CHECK_FALSE(res1);
+    CHECK(res1.err() == 42_i32);
+    CHECK_FALSE(o.is_completed());
+    CHECK(count == 1_i32);
+
+    auto res2 = o.call_once(func, false);
+    CHECK_FALSE(res2);
+    CHECK(res2.err() == 42_i32);
+    CHECK_FALSE(o.is_completed());
+    CHECK(count == 2_i32);
+
+    auto res3 = o.call_once(func, true);
+    CHECK(res3);
+    CHECK(o.is_completed());
+    CHECK(count == 3_i32);
+
+    auto res4 = o.call_once(func, false);
+    CHECK(res4);
+    CHECK(o.is_completed());
+    CHECK(count == 3_i32);
+}
+
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

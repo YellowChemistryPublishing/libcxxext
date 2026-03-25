@@ -10,6 +10,7 @@
 #include <FloatingPoint.h>     // IWYU pragma: export
 #include <LanguageSupport.h>   // IWYU pragma: export
 #include <Numeric.h>           // IWYU pragma: export
+#include <Option.h>            // IWYU pragma: export
 #include <Platform.h>          // IWYU pragma: export
 #include <RecurringTemplate.h> // IWYU pragma: export
 #include <Result.h>            // IWYU pragma: export

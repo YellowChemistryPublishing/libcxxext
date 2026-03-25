@@ -1,6 +1,6 @@
 #include <cstdint>
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -37,4 +37,4 @@ TEST_CASE("Casting out of range returns empty result.", "[sys][numeric_cast]")
     CHECK_FALSE(sys::bnumeric_cast<int8_t>(128));  // NOLINT(readability-magic-numbers)
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

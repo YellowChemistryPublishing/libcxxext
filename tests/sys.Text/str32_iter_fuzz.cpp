@@ -1,4 +1,4 @@
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <CompilerWarnings.h>
 _nowarn_begin_conv_comp();
@@ -37,4 +37,4 @@ TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fu
     });
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

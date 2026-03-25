@@ -1,4 +1,4 @@
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -31,4 +31,4 @@ TEST_CASE("Correctly extract low byte.", "[sys][xfxx]")
     CHECK(sys::lbfs16(i16(-32768)) == 0x00_u8);
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

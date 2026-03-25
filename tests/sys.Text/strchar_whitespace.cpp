@@ -1,4 +1,4 @@
-// NOLINTBEGIN(misc-include-cleaner, readability-magic-numbers, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)
 
 #include <catch2/catch_all.hpp>
 
@@ -71,4 +71,4 @@ TEST_CASE("Pathological Trimming Cases", "[sys.Text][string][trim]")
     CHECK(sys::str(u8"").trim().empty());
 }
 
-// NOLINTEND(misc-include-cleaner, readability-magic-numbers, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
+// NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)

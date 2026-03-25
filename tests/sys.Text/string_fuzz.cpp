@@ -1,6 +1,6 @@
 #include <vector>
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <CompilerWarnings.h>
 _nowarn_begin_conv_comp();
@@ -98,4 +98,4 @@ TEST_CASE("Trim reduces size or stays same.", "[fuzz][sys.Text][string]")
     });
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

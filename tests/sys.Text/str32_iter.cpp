@@ -1,7 +1,7 @@
 #include <CompilerWarnings.h>
 _nowarn_begin_conv_comp();
 
-// NOLINTBEGIN(misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)
 
 #include <catch2/catch_all.hpp>
 
@@ -98,4 +98,4 @@ TEST_CASE("Dereference Stability", "[sys.Text][codepoint_iter]")
     CHECK(*it == U'A');
 }
 
-// NOLINTEND(misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)

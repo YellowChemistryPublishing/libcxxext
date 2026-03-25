@@ -1,4 +1,4 @@
-// NOLINTBEGIN(misc-include-cleaner, readability-magic-numbers, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)
 
 #include <CompilerWarnings.h>
 _nowarn_begin_conv_comp();
@@ -89,4 +89,4 @@ TEST_CASE("Arbitrary UTF-16 sequence decode never crashes.", "[fuzz][sys.Text][c
     });
 }
 
-// NOLINTEND(misc-include-cleaner, readability-magic-numbers, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay)
+// NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)

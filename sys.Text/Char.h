@@ -119,7 +119,10 @@ namespace sys
             sz size_bytes;
         };
     private:
-        static consteval codepoint_data read_codepoint_fail() noexcept { return codepoint_data { .c = ch::replacement<char32_t>()[0], .size_bytes = 1_uz }; }
+        static consteval codepoint_data read_codepoint_fail() noexcept
+        {
+            return codepoint_data { .c = ch::replacement<char32_t>()[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */, .size_bytes = 1_uz };
+        }
     public:
         // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic, readability-magic-numbers)
 
@@ -129,18 +132,18 @@ namespace sys
         /// @pre `range.empty() == false`
         static constexpr codepoint_data read_codepoint(const std::span<const char32_t> range, unsafe) noexcept
         {
-            const u32 ret = _as(u32::underlying_type, range[0]);
+            const u32 ret = _as(u32::underlying_type, range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
             _retif(ch::read_codepoint_fail(), !ch::is_scalar(_as(char32_t, ret)));
             return codepoint_data { .c = _as(char32_t, ret), .size_bytes = 1_uz };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, unsafe)`
         static constexpr codepoint_data read_codepoint(const std::span<const char16_t> range, unsafe) noexcept
         {
-            const u32 lead = _as(u32::underlying_type, range[0]);
+            const u32 lead = _as(u32::underlying_type, range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
             _retif((codepoint_data { .c = _as(char32_t, lead), .size_bytes = 1_uz }), !ch::is_surrogate(_as(char32_t, lead))); // BMP
             _retif(ch::read_codepoint_fail(), !ch::is_high_surrogate(_as(char32_t, lead)) || range.size() < 2uz);
 
-            const u32 trail = _as(u32::underlying_type, range[1]);
+            const u32 trail = _as(u32::underlying_type, range[1] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
             _retif(ch::read_codepoint_fail(), !ch::is_low_surrogate(_as(char32_t, trail)));
 
             return codepoint_data { .c = _as(char32_t, 0x10000_u32 + ((lead - 0xD800_u32) << 10_u32) + (trail - 0xDC00_u32)), .size_bytes = 2_uz };
@@ -148,7 +151,7 @@ namespace sys
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, unsafe)`
         static constexpr codepoint_data read_codepoint(const std::span<const char8_t> range, unsafe) noexcept // NOLINT(readability-function-cognitive-complexity)
         {
-            u32 ret = _as(u32::underlying_type, range[0]);
+            u32 ret = _as(u32::underlying_type, range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
             _retif((codepoint_data { .c = _as(char32_t, ret), .size_bytes = 1_uz }), ret < 0x80_u32); // 1-byte sequence, fast path.
 
             sz len = 0_uz;
@@ -173,7 +176,7 @@ namespace sys
 
             for (sz i = 1_uz; i < len; i++)
             {
-                const u32 bi = _as(u32::underlying_type, range[i]);
+                const u32 bi = _as(u32::underlying_type, range[i] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
                 _retif(ch::read_codepoint_fail(), !ch::is_continuation(_as(char8_t, bi)));
                 ret = (ret << 6_u32) | (bi & 0x3F_u32);
             }
@@ -206,7 +209,8 @@ namespace sys
         static constexpr sz write_codepoint(char32_t c, char32_t out[], unsafe) noexcept
         {
             const u32 ret = _as(u32::underlying_type, c);
-            out[0] = ch::is_scalar(_as(char32_t, ret)) ? _as(char32_t, ret) : ch::replacement<char32_t>()[0];
+            out[0] =
+                ch::is_scalar(_as(char32_t, ret)) ? _as(char32_t, ret) : ch::replacement<char32_t>()[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */;
             return 1_uz;
         }
         /// @see `sys::ch::write_codepoint(char32_t, char32_t[], unsafe)`
