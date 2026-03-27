@@ -21,7 +21,7 @@ Checks: >
 
     -misc-use-anonymous-namespace,
 
-    -modernize-avoid-c-arrays, -modernize-use-auto, -modernize-use-trailing-return-type,
+    -modernize-avoid-c-arrays, -modernize-use-auto,
 
     -performance-unnecessary-value-param,
 
@@ -31,6 +31,10 @@ Checks: >
     -readability-isolate-declaration, -readability-named-parameter, -readability-uppercase-literal-suffix, readability-identifier-naming
 
 CheckOptions:
+    - key: modernize-use-trailing-return-type.TransformFunctions
+      value: false
+    - key: modernize-use-trailing-return-type.TransformLambdas
+      value: all
     - key: readability-identifier-naming.ClassCase
       value: lower_case
     - key: readability-identifier-naming.StructCase
@@ -69,90 +73,5 @@ CheckOptions:
       value: lower_case
     - key: readability-identifier-naming.MacroDefinitionPrefix
       value: "_"
-
-    # Custom Checks!
-    - key: sys-static-no-instance-fields.Query
-      value: >
-          fieldDecl(
-            hasAncestor(
-              cxxRecordDecl(
-                isDefinition(),
-                hasComment("\\[\\[[^]]*sys::static[^]]*\\]\\]")
-              )
-            ),
-            unless(isStaticDataMember())
-          )
-    - key: sys-static-no-instance-methods.Query
-      value: >
-          cxxMethodDecl(
-            hasAncestor(
-              cxxRecordDecl(
-                isDefinition(),
-                hasComment("\\[\\[[^]]*sys::static[^]]*\\]\\]")
-              )
-            ),
-            unless(isStatic()),
-            unless(cxxConstructorDecl()),
-            unless(cxxDestructorDecl())
-          )
-    - key: sys-static-no-constructors.Query
-      value: >
-          cxxConstructorDecl(
-            hasAncestor(
-              cxxRecordDecl(
-                isDefinition(),
-                hasComment("\\[\\[[^]]*sys::static[^]]*\\]\\]")
-              )
-            ),
-            unless(isDeleted())
-          )
-    - key: sys-static-no-destructor.Query
-      value: >
-          cxxDestructorDecl(
-            hasAncestor(
-              cxxRecordDecl(
-                isDefinition(),
-                hasComment("\\[\\[[^]]*sys::static[^]]*\\]\\]")
-              )
-            ),
-            unless(isDeleted())
-          )
-    - key: sys-static-no-assign.Query
-      value: >
-          cxxMethodDecl(
-            hasAncestor(
-              cxxRecordDecl(
-                isDefinition(),
-                hasComment("\\[\\[[^]]*sys::static[^]]*\\]\\]")
-              )
-            ),
-            anyOf(
-              isCopyAssignmentOperator(),
-              isMoveAssignmentOperator()
-            ),
-            unless(isDeleted())
-          )
-    - key: sys-static-is-type-attribute.Query
-      value: >
-          decl(
-            hasComment("\\[\\[[^]]*sys::static[^]]*\\]\\]"),
-            unless(cxxRecordDecl())
-          )
-    - key: sys-static-not-marked-but-probably-should-be.Query
-      value: >
-          cxxRecordDecl(
-            isDefinition(),
-            unless(hasComment("\\[\\[[^]]*sys::static[^]]*\\]\\]")),
-
-            # No instance fields.
-            unless(has(fieldDecl(unless(isStaticDataMember())))),
-
-            # No instance methods.
-            unless(has(cxxMethodDecl(
-              unless(isStatic()),
-              unless(cxxConstructorDecl()),
-              unless(cxxDestructorDecl())
-            )))
-          )
 
 WarningsAsErrors: "*,-readability-function-cognitive-complexity"

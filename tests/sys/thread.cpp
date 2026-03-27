@@ -11,7 +11,7 @@
 TEST_CASE("Threads run code.", "[sys.Threading][thread]")
 {
     bool done = false;
-    sys::managed_thread t = sys::managed_thread::ctor([&] { done = true; }).move();
+    sys::managed_thread t = sys::managed_thread::ctor([&]() -> void { done = true; }).move();
 
     CHECK(t.joinable());
     REQUIRE(t.join());
@@ -27,7 +27,7 @@ TEST_CASE("Thread joining returns value.", "[sys.Threading][thread]")
 
 TEST_CASE("Thread handle is movable.", "[sys.Threading][thread]")
 {
-    sys::managed_thread t1 = sys::managed_thread::ctor([] { }).move();
+    sys::managed_thread t1 = sys::managed_thread::ctor([]() -> void { }).move();
     CHECK(t1.joinable());
 
     sys::managed_thread t2 = std::move(t1);
@@ -45,7 +45,7 @@ TEST_CASE("Thread handle joins on destruction.", "[sys.Threading][thread]")
     bool done = false;
 
     {
-        const sys::managed_thread t = sys::managed_thread::ctor([&]
+        const sys::managed_thread t = sys::managed_thread::ctor([&]() -> void
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
             done = true;
@@ -60,7 +60,7 @@ TEST_CASE("Thread handle can be detached.", "[sys.Threading][thread]")
     std::atomic_flag done = ATOMIC_FLAG_INIT;
 
     {
-        sys::managed_thread t = sys::managed_thread::ctor([&]
+        sys::managed_thread t = sys::managed_thread::ctor([&]() -> void
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
             done.test_and_set();
@@ -90,7 +90,7 @@ TEST_CASE("Thread can take func ref/ptr.", "[sys.Threading][thread]")
 
 TEST_CASE("Exception doesn't obliterate program.", "[sys.Threading][thread]")
 {
-    sys::managed_thread t = sys::managed_thread::ctor([]
+    sys::managed_thread t = sys::managed_thread::ctor([]() -> void
     {
         throw 42; // NOLINT(hicpp-exception-baseclass, readability-magic-numbers)
     }).move();
@@ -106,7 +106,7 @@ TEST_CASE("Obtain current thread and id.", "[sys.Threading][thread]")
     CHECK(id1 == id2);
     CHECK_FALSE(id1 == sys::thread_id(nullptr));
 
-    sys::managed_thread t = sys::managed_thread::ctor([] { return 42 /* NOLINT(readability-magic-numbers) */; }).move();
+    sys::managed_thread t = sys::managed_thread::ctor([]() -> int { return 42 /* NOLINT(readability-magic-numbers) */; }).move();
     CHECK(t.joinable());
     CHECK_FALSE(t.thread().id() == id1);
 
@@ -118,7 +118,7 @@ TEST_CASE("Yield current thread.", "[sys.Threading][thread]")
     sys::thread_yield();
 
     std::atomic_flag done = ATOMIC_FLAG_INIT;
-    sys::managed_thread t = sys::managed_thread::ctor([&]
+    sys::managed_thread t = sys::managed_thread::ctor([&]() -> void
     {
         while (!done.test())
             sys::thread_yield();
@@ -131,7 +131,7 @@ TEST_CASE("Yield current thread.", "[sys.Threading][thread]")
 
 TEST_CASE("Exit current thread.", "[sys.Threading][thread]")
 {
-    sys::managed_thread t = sys::managed_thread::ctor([]
+    sys::managed_thread t = sys::managed_thread::ctor([]() -> void
     {
         sys::thread_exit(123 /* NOLINT(readability-magic-numbers) */);
         REQUIRE(false);

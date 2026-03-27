@@ -12,9 +12,8 @@
 namespace sys::meta
 {
     /// @brief Metadata for parameter pack `Pack...`.
-    /// @note Static class.
     template <typename... Pack>
-    struct parameter_pack final : meta_type
+    struct /* [[sys::static]] */ parameter_pack final : meta_type
     {
         using tuple = std::tuple<Pack...>;
 
@@ -30,9 +29,8 @@ namespace sys::meta
     };
 
     /// @brief Metadata for some type.
-    /// @note Static class.
     template <typename T>
-    struct type final : meta_type
+    struct /* [[sys::static]] */ type final : meta_type
     {
     private:
         template <typename, template <typename...> class>

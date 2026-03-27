@@ -2,8 +2,10 @@
 
 /// @file
 
+#define NOMINMAX 1
 #include <tinycthread.h>
 #include <utility>
+#undef NOMINMAX
 
 #include <LanguageSupport.h>
 #include <Once.h>

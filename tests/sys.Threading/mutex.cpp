@@ -41,7 +41,7 @@ TEST_CASE("Mutex actually guards under contention.", "[sys.Threading][mutex]")
 
     for (i32 i = 0; i < numThreads; i++)
     {
-        threads.emplace_back(sys::managed_thread::ctor([&]
+        threads.emplace_back(sys::managed_thread::ctor([&]() -> void
         {
             for (i32 j = 0; j < incrementsPerThread; j++)
             {

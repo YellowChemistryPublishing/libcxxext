@@ -16,7 +16,14 @@ namespace sys::meta
     public:
         constexpr /* NOLINT(hicpp-explicit-conversions) */ generic_nullable_adaptor(T& ref) noexcept : ref(ref) { }
 
-        [[nodiscard]] constexpr bool is_null() const
+        [[nodiscard]] constexpr bool is_null()
+        requires requires {
+            { _as(bool, this->ref) } -> std::same_as<bool>;
+        } || requires {
+            { this->ref } -> std::convertible_to<bool>;
+        } || requires {
+            { this->ref != nullptr } -> std::convertible_to<bool>;
+        }
         {
             if constexpr (requires {
                               { _as(bool, this->ref) } -> std::same_as<bool>;
@@ -30,8 +37,8 @@ namespace sys::meta
                                    { this->ref != nullptr } -> std::convertible_to<bool>;
                                })
                 return !(this->ref != nullptr);
-            else if constexpr (requires { requires false; })
-            { }
+            else
+                std::unreachable();
         }
     };
 } // namespace sys::meta

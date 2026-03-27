@@ -12,63 +12,56 @@ namespace sys::meta
 {
     /// @internal
     /// @brief Metadata has `const` attribute.
-    /// @note Static class.
     template <bool Value>
-    struct is_const_prop : meta_type
+    struct /* [[sys::static]] */ is_const_prop : meta_type
     {
         static consteval bool is_const() { return Value; }
     };
     /// @internal
     /// @brief Metadata has `volatile` attribute.
-    /// @note Static class.
     template <bool Value>
-    struct is_volatile_prop : meta_type
+    struct /* [[sys::static]] */ is_volatile_prop : meta_type
     {
         static consteval bool is_volatile() { return Value; }
     };
     /// @internal
     /// @brief Metadata is lvalue reference attribute.
-    /// @note Static class.
     template <bool Value>
-    struct is_lvalue_ref_prop : meta_type
+    struct /* [[sys::static]] */ is_lvalue_ref_prop : meta_type
     {
         static consteval bool is_lvalue_ref() { return Value; }
     };
     /// @internal
     /// @brief Metadata is rvalue reference attribute.
-    /// @note Static class.
     template <bool Value>
-    struct is_rvalue_ref_prop : meta_type
+    struct /* [[sys::static]] */ is_rvalue_ref_prop : meta_type
     {
         static consteval bool is_rvalue_ref() { return Value; }
     };
     /// @internal
     /// @brief Metadata has `noexcept` attribute.
-    /// @note Static class.
     template <bool Value>
-    struct is_noexcept_prop : meta_type
+    struct /* [[sys::static]] */ is_noexcept_prop : meta_type
     {
         static consteval bool is_noexcept() { return Value; }
     };
     /// @internal
     /// @brief Metadata is member function attribute.
-    /// @note Static class.
     template <bool Value>
-    struct is_member_func_prop : meta_type
+    struct /* [[sys::static]] */ is_member_func_prop : meta_type
     {
         static consteval bool is_member_func() { return Value; }
     };
 
     /// @brief Metadata for some function signature `T`.
-    /// @note Static class.
     template <typename T = void, typename... Args>
-    struct function_signature : is_valid_prop<false>,
-                                is_const_prop<false>,
-                                is_volatile_prop<false>,
-                                is_lvalue_ref_prop<false>,
-                                is_rvalue_ref_prop<false>,
-                                is_noexcept_prop<false>,
-                                is_member_func_prop<false>
+    struct /* [[sys::static]] */ function_signature : is_valid_prop<false>,
+                                                      is_const_prop<false>,
+                                                      is_volatile_prop<false>,
+                                                      is_lvalue_ref_prop<false>,
+                                                      is_rvalue_ref_prop<false>,
+                                                      is_noexcept_prop<false>,
+                                                      is_member_func_prop<false>
     {
         using return_type = T;
         using arguments = std::tuple<Args...>;

@@ -259,10 +259,8 @@ namespace sys
         [[nodiscard]] constexpr integer operator+() const noexcept { return *this; }
         /// @note Be warned that the negation of a signed `integer<...>::lowest()` is not UB but instead `integer<...>::highest()`.
         [[nodiscard]] constexpr integer operator-() const noexcept
+        requires (std::is_signed_v<For>) // Unsigned negation is intentionally disallowed.
         {
-            if constexpr (std::is_unsigned_v<For>)
-                []<bool Flag = false>() { static_assert(Flag, "Unsigned negation is intentionally disallowed."); }();
-
             if (**this == std::numeric_limits<For>::lowest()) [[unlikely]]
                 return integer(std::numeric_limits<For>::max());
             else [[likely]]

@@ -24,7 +24,7 @@
     auto _ppcat(_result, __LINE__) = res_xval;                 \
     if (!_ppcat(_result, __LINE__))                            \
     {                                                          \
-        return [](auto&& res)                                  \
+        return [](auto&& res) -> auto                          \
         {                                                      \
             if constexpr (requires { res.err(); })             \
                 return std::forward<decltype(res)>(res).err(); \
@@ -39,7 +39,7 @@
     auto _ppcat(_result, __LINE__) = res_xval;                 \
     if (!_ppcat(_result, __LINE__))                            \
     {                                                          \
-        co_return [](auto&& res)                               \
+        co_return [](auto&& res) -> auto                       \
         {                                                      \
             if constexpr (requires { res.err(); })             \
                 return std::forward<decltype(res)>(res).err(); \
@@ -633,7 +633,7 @@ namespace sys
         _inline_always constexpr T await_resume() const noexcept(std::same_as<T, void>) { return res.move(); }
         /// @endcond
 
-        friend struct sys::result<T, Err>;
+        friend class sys::result<T, Err>;
     private:
         result<T, Err>& res; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
     };

@@ -1,6 +1,8 @@
 #pragma once
 
+#define NOMINMAX 1
 #include <tinycthread.h>
+#undef NOMINMAX
 
 #include <LanguageSupport.h>
 #include <Once.h>

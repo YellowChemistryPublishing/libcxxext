@@ -158,9 +158,9 @@ TEST_CASE("Value type can be reference.", "[sys][result]")
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Can transform result to any value.", "[sys][result][transform]")
 {
-    CHECK(sys::result<i64>(nullptr).transform([](sys::result<i64>&& res) { return res ? std::move(res).move() : 24_i64; }) == 24_i64);
-    CHECK(sys::result<i64, i32>(23_i32).transform([](sys::result<i64, i32>&& res) { return res ? std::move(res).move() : 24_i64; }) == 24_i64);
-    CHECK(sys::result<i64, i32>(23_i64).transform([](sys::result<i64, i32>&& res) { return res ? std::move(res).move() : 24_i64; }) == 23_i64);
+    CHECK(sys::result<i64>(nullptr).transform([](sys::result<i64>&& res) -> i64 { return std::move(res).move_or(24_i64); }) == 24_i64);
+    CHECK(sys::result<i64, i32>(23_i32).transform([](sys::result<i64, i32>&& res) -> i64 { return std::move(res).move_or(24_i64); }) == 24_i64);
+    CHECK(sys::result<i64, i32>(23_i64).transform([](sys::result<i64, i32>&& res) -> i64 { return std::move(res).move_or(24_i64); }) == 23_i64);
 }
 
 TEST_CASE("Can convert result to unit-result.", "[sys][result]")

@@ -18,11 +18,11 @@ TEST_CASE("Once executes exactly once sequentially.", "[sys.Threading][once]")
     i32 counter = 0_i32;
 
     CHECK_FALSE(o.is_completed());
-    CHECK_NOTHROW(o.call_once([&] { ++counter; }));
+    CHECK_NOTHROW(o.call_once([&]() -> void { ++counter; }));
     CHECK(o.is_completed());
     CHECK(counter == 1_i32);
 
-    CHECK_NOTHROW(o.call_once([&] { ++counter; }));
+    CHECK_NOTHROW(o.call_once([&]() -> void { ++counter; }));
     CHECK(counter == 1_i32);
     CHECK(o.is_completed());
 }
@@ -32,7 +32,7 @@ TEST_CASE("Once correctly forwards arguments.", "[sys.Threading][once]")
     sys::once o;
     i32 res = 0_i32;
 
-    o.call_once([&](const i32 a, const i32 b)
+    o.call_once([&](const i32 a, const i32 b) -> void
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
         res = a + b;
@@ -47,7 +47,7 @@ TEST_CASE("Once handles exceptions and allows retry.", "[sys.Threading][once]")
     sys::once o;
     i32 count = 0_i32;
 
-    auto func = [&]
+    auto func = [&]() -> i32
     {
         if (++count == 1_i32)
             throw std::runtime_error("uh oh");
@@ -78,13 +78,13 @@ TEST_CASE("Once actually guards under contention.", "[sys.Threading][once]")
     std::vector<sys::managed_thread> threads;
     for (sz i = 0_uz; i < numThreads; i++)
     {
-        threads.emplace_back(sys::managed_thread::ctor([&]
+        threads.emplace_back(sys::managed_thread::ctor([&]() -> void
         {
             ++readyCount;
             while (!flag.test(std::memory_order_acquire))
                 sys::thread_yield();
 
-            o.call_once([&]
+            o.call_once([&]() -> void
             {
                 std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
                 ++runCount;
@@ -109,9 +109,9 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
     std::atomic_flag started = ATOMIC_FLAG_INIT;
     std::atomic_flag done = ATOMIC_FLAG_INIT;
 
-    const sys::managed_thread thread = sys::managed_thread::ctor([&]
+    const sys::managed_thread thread = sys::managed_thread::ctor([&]() -> void
     {
-        o.call_once([&]
+        o.call_once([&]() -> void
         {
             started.test_and_set(std::memory_order_release);
             while (!done.test(std::memory_order_acquire))
@@ -124,7 +124,7 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
     CHECK_FALSE(o.is_completed());
 
     std::atomic_flag waitFinished = ATOMIC_FLAG_INIT;
-    const sys::managed_thread waiterThread = sys::managed_thread::ctor([&]
+    const sys::managed_thread waiterThread = sys::managed_thread::ctor([&]() -> void
     {
         o.wait();
         o.wait(); // Should return immediately.

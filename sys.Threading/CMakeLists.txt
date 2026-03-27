@@ -9,7 +9,7 @@ if(NOT TARGET sys.Threading)
 
     file(GLOB SYS_THREAD_HEADERS CONFIGURE_DEPENDS "*.h")
 
-    add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE})
+    add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} src.cpp)
     target_libcxxext_common_config(sys.Threading)
     target_sources(sys.Threading PRIVATE
         FILE_SET HEADERS

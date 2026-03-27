@@ -43,7 +43,7 @@ function(target_lint_clang_tidy TARGET_NAME)
 
         add_custom_target(lint_cxx_${TARGET_NAME}
             COMMAND
-            "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../workflows/scripts/wrap_clang_tidy.py" "${RUN_CLANG_TIDY}"
+            "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../workflows/scripts/wrap_clang_tidy.py" "${RUN_CLANG_TIDY}" --experimental-custom-checks
             $<LIST:TRANSFORM,$<LIST:TRANSFORM,$<LIST:FILTER,$<TARGET_PROPERTY:${TARGET_NAME},SOURCES>,EXCLUDE,.*cmake_pch\.hxx.*>,PREPEND,\">,APPEND,\"> ${CLANG_TIDY_EXTRA_TOOL_ARGS}
             --
             -x c++ "-std=c++$<IF:$<BOOL:$<TARGET_PROPERTY:${TARGET_NAME},CXX_STANDARD>>,$<TARGET_PROPERTY:${TARGET_NAME},CXX_STANDARD>,${CMAKE_CXX_STANDARD}>"

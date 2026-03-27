@@ -277,14 +277,14 @@ static_assert(!sys::IAppendable<float>);
 // ================================================================================
 
 // Matches stateless lambdas.
-static_assert(sys::IFunc<decltype([](int x) { return x; }), int(int)>);
+static_assert(sys::IFunc<decltype([](int x) -> int { return x; }), int(int)>);
 
 // Matches stateful lambdas.
-static_assert([]
+static_assert([]() -> bool
 {
     const int magicValue = 5;
     const int y = magicValue;
-    auto l = [](int x) { return x + y; };
+    auto l = [](int x) -> int { return x + y; };
     return sys::IFunc<decltype(l), int(int)>;
 }());
 

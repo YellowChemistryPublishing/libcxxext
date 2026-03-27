@@ -20,7 +20,7 @@ _nowarn_end_deprecated();
 
 TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_storage]")
 {
-    rc::check("Aligned storage writes match input data.", [](const std::array<int64_t, 1024uz>& val /* NOLINT(readability-magic-numbers) */)
+    rc::check("Aligned storage writes match input data.", [](const std::array<int64_t, 1024uz>& val /* NOLINT(readability-magic-numbers) */) -> void
     {
         sys::aligned_storage<std::array<int64_t, 1024uz /* NOLINT(readability-magic-numbers) */>> storage;
         std::memcpy(storage.data(), &val, sizeof(val));

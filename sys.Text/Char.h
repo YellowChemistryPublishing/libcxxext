@@ -18,7 +18,6 @@
 namespace sys
 {
     /// @brief Character traits.
-    /// @note Static class.
     class ch final
     {
     public:

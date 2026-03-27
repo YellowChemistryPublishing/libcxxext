@@ -18,7 +18,8 @@ _nowarn_end_deprecated();
 
 TEST_CASE("`i16` => `lsb` + `msb` => `i16` is an invariant.", "[fuzz][sys][xfxx]")
 {
-    rc::check("`i16` => `lsb` + `msb` => `i16` is an invariant.", [](const int16_t val) { RC_ASSERT(sys::s16fb2(sys::hbfs16(i16(val)), sys::lbfs16(i16(val))) == i16(val)); });
+    rc::check("`i16` => `lsb` + `msb` => `i16` is an invariant.",
+              [](const int16_t val) -> void { RC_ASSERT(sys::s16fb2(sys::hbfs16(i16(val)), sys::lbfs16(i16(val))) == i16(val)); });
 }
 
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

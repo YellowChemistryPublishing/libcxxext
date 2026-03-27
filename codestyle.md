@@ -24,8 +24,8 @@ Please don't let constructors silently fail! Instead, include the static member 
 
 Documenting functions using the doxygen syntax in comments is highly recommended for production code. (Non-Enum) Types must be additionally annotated with
 ``/// @note Pass `byval`.``, ``/// @note Pass `byref`.``, or ``/// @note Pass `byptr`.`` indicating whether a type is best passed as `T`, `(const) T&`, or `(const) T* (const)`.
-Types that act as static classes must be annotated with `/// @note Static class.`. The only mandatory field for production code is an `@attention Lifetime assumptions!` clause on
-functions, with a `cpp` block highlighting the lifetime requirements of non-trivial parameters.
+Types that act as static classes must be annotated with the comment attribute `[[sys::static]]`. The only mandatory field for production code is an
+`@attention Lifetime assumptions!` clause on functions, with a `cpp` block highlighting the lifetime requirements of non-trivial parameters.
 
 Any error checking passed up to a caller must be administered with short-circuiting guards. `_(co)retif(val, cond)` will return `val` iff. `cond` evaluates to `true`.
 `_res_mov(co)ret(out, res_xval)` will use in assignment the `sys::result<...>` object from `res_xval`, returning its error via `sys::result<...>::err()` in the error case, or

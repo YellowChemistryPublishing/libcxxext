@@ -2,12 +2,14 @@
 
 /// @file
 
+#define NOMINMAX 1
 #include <concepts>
 #include <cstddef>
 #include <new>
 #include <tinycthread.h>
 #include <type_traits>
 #include <utility>
+#undef NOMINMAX
 
 #include <Destructor.h>
 #include <LanguageSupport.h>
@@ -48,10 +50,11 @@ namespace sys
     public:
         using internal::nullable_value_result<thread_id>::nullable_value_result;
         using internal::nullable_value_result<thread_id>::operator=;
+
+        /* NOLINT(hicpp-explicit-conversions) */ result(std::nullptr_t) noexcept : internal::nullable_value_result<thread_id>(nullptr) { }
     };
 
     class managed_thread;
-
     thread thread_current() noexcept;
 
     class thread final
@@ -134,7 +137,7 @@ namespace sys
         {
             thrd_t th {};
 
-            storage_type<Func> f = [&] noexcept
+            storage_type<Func> f = [&]() noexcept -> storage_type<Func>
             {
                 if constexpr (!managed_thread::is_global_func<Func>())
                     return new(std::nothrow) std::decay_t<Func>(std::forward<Func>(func)); // NOLINT(cppcoreguidelines-owning-memory)
@@ -146,7 +149,7 @@ namespace sys
             else
                 _retif(threading_error::oom, !f);
 
-            sys::optional_destructor releaseFunc = [&] noexcept
+            sys::optional_destructor releaseFunc = [&]() noexcept -> void
             {
                 if constexpr (!managed_thread::is_global_func<Func>())
                     delete f; // NOLINT(cppcoreguidelines-owning-memory)
@@ -155,7 +158,7 @@ namespace sys
             if (thrd_create(&th, [](void* arg) noexcept(noexcept(func())) -> int
             {
                 int ret = 0;
-                std::decay_t<Func> func = [&]()
+                std::decay_t<Func> func = [&]() -> std::decay_t<Func>
                 {
                     if constexpr (!managed_thread::is_global_func<Func>())
                         return *(_as(std::decay_t<Func>*, arg));
@@ -165,9 +168,7 @@ namespace sys
 
                 try
                 {
-                    if constexpr (requires {
-                                      { func() } -> std::convertible_to<int>;
-                                  })
+                    if constexpr (std::convertible_to<std::invoke_result_t<std::decay_t<Func>>, int>)
                         ret = _as(int, func());
                     else
                         (void)func();

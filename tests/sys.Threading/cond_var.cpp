@@ -14,7 +14,7 @@ TEST_CASE("Condition variable wait / signal.", "[sys.Threading][cond_var]")
     sys::mutex mtx;
     bool ready = false;
 
-    sys::managed_thread t = sys::managed_thread::ctor([&]
+    sys::managed_thread t = sys::managed_thread::ctor([&]() -> void
     {
         const auto gRes = mtx.lock();
         REQUIRE(gRes);
@@ -45,7 +45,7 @@ TEST_CASE("Condition variable broadcast wakes everyone.", "[sys.Threading][cond_
     std::vector<sys::managed_thread> waiters;
     for (i32 i = 0; i < numWaiters; ++i)
     {
-        waiters.emplace_back(sys::managed_thread::ctor([&]
+        waiters.emplace_back(sys::managed_thread::ctor([&]() -> void
         {
             const auto gRes = mtx.lock();
             REQUIRE(gRes);
@@ -77,7 +77,7 @@ TEST_CASE("Condition variable lazy initialization internally under contention.",
     std::vector<sys::managed_thread> threads;
 
     for (i32 i = 0; i < numThreads; ++i)
-        threads.emplace_back(sys::managed_thread::ctor([&] { REQUIRE(cv.notify_one()); }).move());
+        threads.emplace_back(sys::managed_thread::ctor([&]() -> void { REQUIRE(cv.notify_one()); }).move());
 
     threads.clear();
 }
