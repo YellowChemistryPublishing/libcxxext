@@ -6,6 +6,9 @@
 #include <tinycthread.h>
 #include <utility>
 #undef NOMINMAX
+#ifdef call_once
+#undef call_once
+#endif
 
 #include <LanguageSupport.h>
 #include <Once.h>

@@ -1,8 +1,13 @@
 #pragma once
 
+/// @file
+
 #define NOMINMAX 1
 #include <tinycthread.h>
 #undef NOMINMAX
+#ifdef call_once
+#undef call_once
+#endif
 
 #include <LanguageSupport.h>
 #include <Once.h>

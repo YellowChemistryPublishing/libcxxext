@@ -22,17 +22,21 @@ namespace sys::meta
 
         /// @brief Check whether an empty-queryable `this->range` is empty.
         [[nodiscard]] constexpr bool empty() const
+        requires requires { this->range.empty(); } || requires { std::size(this->range); }
         {
             if constexpr (requires { this->range.empty(); })
                 return this->range.empty();
             else if constexpr (requires { std::size(this->range); })
                 return std::size(this->range) == _as(decltype(std::size(this->range)), 0);
-            else if constexpr (requires { requires false; })
-            { }
         }
         /// @brief (Potentially) inplace construct and append an element to an appendable `this->range`.
         template <typename... Args>
         constexpr void append_back(Args&&... args)
+        requires (requires { this->range.emplace_back(std::forward<Args>(args)...); } || requires { this->range.push_back(std::forward<Args>(args)...); } ||
+                  requires { this->range.push(std::forward<Args>(args)...); } || requires { this->range.append(std::forward<Args>(args)...); } || requires {
+                      requires sizeof...(Args) > 0;
+                      (this->range << ... << std::forward<Args>(args));
+                  })
         {
             if constexpr (requires { this->range.emplace_back(std::forward<Args>(args)...); })
                 this->range.emplace_back(std::forward<Args>(args)...);
@@ -42,10 +46,11 @@ namespace sys::meta
                 this->range.push(std::forward<Args>(args)...);
             else if constexpr (requires { this->range.append(std::forward<Args>(args)...); })
                 this->range.append(std::forward<Args>(args)...);
-            else if constexpr (requires { (this->range << ... << std::forward<Args>(args)); })
+            else if constexpr (requires {
+                                   requires sizeof...(Args) > 0;
+                                   (this->range << ... << std::forward<Args>(args));
+                               })
                 (this->range << ... << std::forward<Args>(args));
-            else if constexpr (requires { requires false; })
-            { }
         }
     };
 } // namespace sys::meta
@@ -83,7 +88,6 @@ namespace sys
     /// @brief Whether `T` can be appended to.
     template <typename T, typename... U>
     concept IAppendable = requires(T range) {
-        requires (sizeof...(U) > 0);
-        meta::generic_container_adaptor(range).append_back(std::declval<U>()...);
+        { meta::generic_container_adaptor(range).append_back(std::declval<U>()...) } -> std::same_as<void>;
     };
 } // namespace sys

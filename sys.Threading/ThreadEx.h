@@ -10,6 +10,9 @@
 #include <type_traits>
 #include <utility>
 #undef NOMINMAX
+#ifdef call_once
+#undef call_once
+#endif
 
 #include <Destructor.h>
 #include <LanguageSupport.h>
