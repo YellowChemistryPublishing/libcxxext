@@ -2,7 +2,7 @@
 
 /// @file
 
-#define NOMINMAX 1
+#define NOMINMAX 1 // NOLINT(readability-identifier-naming)
 #include <tinycthread.h>
 #include <utility>
 #undef NOMINMAX

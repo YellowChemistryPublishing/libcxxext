@@ -28,6 +28,8 @@ namespace sys::meta
                 return this->range.empty();
             else if constexpr (requires { std::size(this->range); })
                 return std::size(this->range) == _as(decltype(std::size(this->range)), 0);
+            else
+                std::unreachable();
         }
         /// @brief (Potentially) inplace construct and append an element to an appendable `this->range`.
         template <typename... Args>
@@ -51,6 +53,8 @@ namespace sys::meta
                                    (this->range << ... << std::forward<Args>(args));
                                })
                 (this->range << ... << std::forward<Args>(args));
+            else
+                std::unreachable();
         }
     };
 } // namespace sys::meta
