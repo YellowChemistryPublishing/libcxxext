@@ -3,6 +3,7 @@
 #include <concepts>
 #include <cstddef>
 #include <type_traits>
+#include <utility>
 
 namespace sys
 {
@@ -81,15 +82,15 @@ namespace sys
         INothrowSwappable<T> && INothrowDestructible<T> && requires(T p, std::nullptr_t np) {
             { T(np) } noexcept;
             { p = np } noexcept;
-            { p == T() } noexcept -> IBooleanTestable;
-            { p != T() } noexcept -> IBooleanTestable;
-            { p == np } noexcept -> IBooleanTestable;
-            { p != np } noexcept -> IBooleanTestable;
-            { np == p } noexcept -> IBooleanTestable;
-            { np != p } noexcept -> IBooleanTestable;
+            { p == T() } noexcept -> IBooleanTestable<>;
+            { p != T() } noexcept -> IBooleanTestable<>;
+            { p == np } noexcept -> IBooleanTestable<>;
+            { p != np } noexcept -> IBooleanTestable<>;
+            { np == p } noexcept -> IBooleanTestable<>;
+            { np != p } noexcept -> IBooleanTestable<>;
         };
     template <typename T, typename... Args>
-    concept IFunctionObject = std::is_object_v<T> && requires(T f, Args... args) { f(std::forward<Args>(args)...); };
+    concept IFunctionObject = std::is_object_v<T> && requires(T f, Args... args) { f(args...); };
     template <typename T, typename Key>
     concept IHash = IFunctionObject<T> && ICopyConstructible<T> && IDestructible<T> && requires(T h, const Key k) {
         { h(k) } -> std::same_as<size_t>;

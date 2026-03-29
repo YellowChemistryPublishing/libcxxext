@@ -129,15 +129,4 @@ TEST_CASE("Yield current thread.", "[sys.Threading][thread]")
     REQUIRE(t.join());
 }
 
-TEST_CASE("Exit current thread.", "[sys.Threading][thread]")
-{
-    sys::managed_thread t = sys::managed_thread::ctor([]() -> void
-    {
-        sys::thread_exit(123 /* NOLINT(readability-magic-numbers) */);
-        REQUIRE(false);
-    }).move();
-
-    CHECK(t.join().move() == 123 /* NOLINT(readability-magic-numbers) */);
-}
-
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

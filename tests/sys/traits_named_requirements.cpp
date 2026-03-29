@@ -1,4 +1,3 @@
-#include <exception>
 #include <memory>
 
 #include <module/sys>

@@ -19,6 +19,7 @@
 #include <Numeric.h>
 #include <Result.h>
 #include <ThreadingErrors.h>
+#include <meta/NamedRequirements.h>
 
 namespace sys
 {
@@ -26,13 +27,13 @@ namespace sys
 
     /// @brief Opaque, non-owning identifier for a thread, or `nullptr`.
     /// @details
-    /// Implements `std::is_nothrow_copy_constructible_v`, `std::is_nothrow_move_constructible_v`, `std::is_nothrow_copy_assignable_v`, `std::is_nothrow_move_assignable_v`,
-    /// `std::is_nothrow_destructible_v`, `std::equality_comparable`.
+    /// Implements `sys::INothrowCopyConstructible`, `sys::INothrowMoveConstructible`, `sys::INothrowCopyAssignable`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`,
+    /// `sys::IBooleanTestable`, `sys::INothrowEqualityComparable`, `sys::INothrowSwappable`.
     /// @see
     /// For more information on thread ids, see
     /// [Rust Docs](https://doc.rust-lang.org/std/thread/struct.ThreadId.html),
     /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/thread/id.html).
-    struct thread_id
+    struct [[nodiscard]] thread_id final
     {
     private:
         thrd_t th {};
@@ -43,20 +44,29 @@ namespace sys
         /// @brief Construct an empty thread id.
         /* NOLINT(hicpp-explicit-conversions) */ thread_id(std::nullptr_t) noexcept { }
         thread_id(const thread_id&) noexcept = default;
-        thread_id(thread_id&&) noexcept = default;
+        thread_id(thread_id&& other) noexcept { swap(*this, other); }
         ~thread_id() noexcept = default;
 
         thread_id& operator=(const thread_id&) noexcept = default;
-        thread_id& operator=(thread_id&&) noexcept = default;
+        thread_id& operator=(thread_id&& other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
 
-        /// @brief Whether this thread id is valid.
+        /// @brief Whether this thread id is valid (i.e. non-empty).
         [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
         [[nodiscard]] friend bool operator==(const thread_id& a, const thread_id& b) noexcept { return thrd_equal(a.th, b.th); }
+
+        friend void swap(thread_id& a, thread_id& b) noexcept { std::swap(a.th, b.th); }
 
         friend class sys::thread;
     };
 
     /// @brief Nullable-value specialization for `sys::result<thread_id, void>`.
+    /// @details
+    /// Implements `sys::INothrowCopyConstructible`, `sys::INothrowMoveConstructible`, `sys::INothrowCopyAssignable`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`,
+    /// `sys::IBooleanTestable`, `sys::INothrowEqualityComparable`, `sys::INothrowSwappable`.
     template <>
     class [[nodiscard]] result<thread_id, void> final : public internal::nullable_value_result<thread_id>
     {
@@ -73,13 +83,13 @@ namespace sys
 
     /// @brief Encapsulates the information about a running thread, or `nullptr`.
     /// @details
-    /// Implements `std::is_nothrow_copy_constructible_v`, `std::is_nothrow_move_constructible_v`, `std::is_nothrow_copy_assignable_v`, `std::is_nothrow_move_assignable_v`,
-    /// `std::is_nothrow_destructible_v`, `std::boolean_testable`.
+    /// Implements `sys::INothrowMoveConstructible`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`, `sys::IBooleanTestable`, `sys::INothrowEqualityComparable`,
+    /// `sys::INothrowSwappable`.
     /// @see
     /// For more information about thread handles, see
     /// [Rust Docs](https://doc.rust-lang.org/std/thread/struct.Thread.html),
     /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/thread.html).
-    class thread final
+    class [[nodiscard]] thread final
     {
         thrd_t th {};
 
@@ -99,39 +109,31 @@ namespace sys
             return *this;
         }
 
-        /// @brief Whether this thread is valid.
+        /// @brief Whether this thread is valid (i.e. non-empty).
         [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
         /// @brief Obtain the id of this thread.
         [[nodiscard]] thread_id id() const noexcept { return { this->th, unsafe() }; }
 
-        /// @brief Swap two `sys::thread`.
-        friend void swap(thread& a, thread& b) noexcept { std::swap(a.th, b.th); }
         friend thread sys::thread_current() noexcept;
+        friend void swap(thread& a, thread& b) noexcept { std::swap(a.th, b.th); }
 
         friend class sys::managed_thread;
     };
 
     /// @brief Obtains a handle to the current thread.
-    inline thread thread_current() noexcept { return { thrd_current(), unsafe() }; }
+    [[nodiscard]] inline thread thread_current() noexcept { return { thrd_current(), unsafe() }; }
 
     /// @brief Yields the current thread.
     inline void thread_yield() noexcept { thrd_yield(); }
 
-    /// @brief Exits the current thread with the given return code.
-    [[noreturn]] inline void thread_exit(const int ret) noexcept
-    {
-        thrd_exit(ret);
-        std::unreachable();
-    }
-
     /// @brief A spun-off thread lifetime that is joined upon destruction.
     /// @details
-    /// Implements `std::is_nothrow_move_constructible_v`, `std::is_nothrow_move_assignable_v`, `std::is_nothrow_destructible_v`, `std::boolean_testable`.
+    /// Implements `sys::INothrowMoveConstructible`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`, `sys::IBooleanTestable`.
     /// @see
     /// For more information about joining thread handles, see
     /// [Rust Docs](https://doc.rust-lang.org/std/thread/struct.JoinHandle.html),
     /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/jthread.html).
-    class managed_thread final
+    class [[nodiscard]] managed_thread final
     {
         /// @brief Checks if `Func` could be the type of a global function.
         template <typename Func>
@@ -171,14 +173,12 @@ namespace sys
         /// If `func()` throws, the result of `.join()` is `sys::bsentinel<int>()`.
         /// Otherwise, `.join()` returns `0`.
         template <typename Func>
-        static result<managed_thread, threading_error> ctor(Func&& func) noexcept(noexcept(func()))
-        requires requires {
-            { func() };
-        }
+        requires IFunctionObject<std::decay_t<Func>> && INothrowDestructible<std::decay_t<Func>>
+        static result<managed_thread, threading_error> ctor(Func&& func) noexcept(noexcept(std::decay_t<Func>(std::declval<Func&&>())))
         {
             thrd_t th {};
 
-            storage_type<Func> f = [&]() noexcept -> storage_type<Func>
+            storage_type<Func> f = [&]() noexcept(noexcept(std::decay_t<Func>(std::declval<Func&&>()))) -> storage_type<Func>
             {
                 if constexpr (!managed_thread::is_global_func<Func>())
                     return new(std::nothrow) std::decay_t<Func>(std::forward<Func>(func)); // NOLINT(cppcoreguidelines-owning-memory)
@@ -227,7 +227,7 @@ namespace sys
             return managed_thread(th, unsafe());
         }
 
-        /// @brief Whether this managed thread is valid.
+        /// @brief Whether this managed thread is valid (i.e. non-empty).
         [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
         /// @brief Whether this managed thread is joinable.
         [[nodiscard]] bool joinable() const noexcept { return this->th != thrd_t {} && !thrd_equal(this->th, thrd_current()); }
@@ -255,7 +255,6 @@ namespace sys
             this->th = thrd_t {};
         }
 
-        /// @brief Swap two `sys::managed_thread`.
         friend void swap(managed_thread& a, managed_thread& b) noexcept { std::swap(a.th, b.th); }
     };
 } // namespace sys
