@@ -118,7 +118,11 @@ namespace sys
     inline void thread_yield() noexcept { thrd_yield(); }
 
     /// @brief Exits the current thread with the given return code.
-    inline void thread_exit(const int ret) noexcept { thrd_exit(ret); }
+    [[noreturn]] inline void thread_exit(const int ret) noexcept
+    {
+        thrd_exit(ret);
+        std::unreachable();
+    }
 
     /// @brief A spun-off thread lifetime that is joined upon destruction.
     /// @details
@@ -167,7 +171,7 @@ namespace sys
         /// If `func()` throws, the result of `.join()` is `sys::bsentinel<int>()`.
         /// Otherwise, `.join()` returns `0`.
         template <typename Func>
-        static result<managed_thread, threading_error> ctor(Func&& func) noexcept(noexcept(auto(std::forward<Func>(func)())))
+        static result<managed_thread, threading_error> ctor(Func&& func) noexcept(noexcept(func()))
         requires requires {
             { func() };
         }
