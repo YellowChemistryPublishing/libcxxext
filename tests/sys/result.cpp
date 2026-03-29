@@ -175,7 +175,7 @@ TEST_CASE("Can convert result to unit-result.", "[sys][result]")
 
 TEST_CASE("Pointer result (analogous to any other nullable-value result) works correctly.", "[sys][result]")
 {
-    sys::internal::nullable_value_result<int*> res = nullptr;
+    sys::result<int*> res = nullptr;
     CHECK_FALSE(res);
     CHECK(!res);
     CHECK(res.move_or(nullptr) == nullptr);
