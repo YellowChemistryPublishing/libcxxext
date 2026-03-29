@@ -43,5 +43,4 @@ namespace sys
     /// @brief Whether `T` is a character type.
     template <typename T>
     concept ICharacter = std::same_as<T, char> || std::same_as<T, wchar_t> || IUnicodeCharacter<T>;
-
 } // namespace sys

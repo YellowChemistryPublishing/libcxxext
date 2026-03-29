@@ -30,19 +30,21 @@ namespace sys
         private:
             mtx_t* mut = nullptr;
         public:
+            constexpr guard() noexcept = default;
             /// @warning `unsafe` because `mut` must be locked.
             explicit guard(mtx_t& mut, unsafe) noexcept : mut(&mut) { }
             guard(const guard&) = delete;
-            guard(guard&& other) noexcept : mut(std::exchange(other.mut, nullptr)) { }
+            guard(guard&& other) noexcept { swap(*this, other); }
             ~guard() noexcept { _contract_assert(!this->mut || mtx_unlock(this->mut) == thrd_success, "If this happens we're genuinely cooked."); }
 
             guard& operator=(const guard&) = delete;
             guard& operator=(guard&& other) noexcept
             {
-                _contract_assert(!this->mut || mtx_unlock(this->mut) == thrd_success, "If this happens we're genuinely cooked.");
-                this->mut = std::exchange(other.mut, nullptr);
+                swap(*this, other);
                 return *this;
             }
+
+            friend void swap(guard& a, guard& b) noexcept { std::swap(a.mut, b.mut); }
         };
     private:
         template <int (*DoLock)(mtx_t*)>

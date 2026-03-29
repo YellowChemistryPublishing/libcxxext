@@ -2,7 +2,7 @@
     "checks":  [
         { "name": "check:cppconf", "script": "workflows/cppconf.py", "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-c=${config}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
         { "name": "check:cppbuild", "script": "workflows/cppbuild.py", "with": ["-m=${target_arch}", "-p=${run_on}", "-cl=${compiler_name}", "-c=${config}", "-gen=${gen}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
-        { "name": "check:cppfmt", "script": "workflows/cppfmt.py", "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/)).*\\.(h|inl|cpp)$"] },
+        { "name": "check:cppfmt", "script": "workflows/cppfmt.py", "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/|tinycthread/)).*\\.(h|inl|c|cpp)$"] },
         { "name": "check:cpplint", "script": "workflows/cpplint.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
         { "name": "check:cpptest", "script": "workflows/cpptest.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
         { "name": "check:cppcov", "script": "workflows/cppcov.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|(sys[\\.A-Za-z]*))/"] },

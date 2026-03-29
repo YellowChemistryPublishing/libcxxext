@@ -74,4 +74,5 @@ CheckOptions:
     - key: readability-identifier-naming.MacroDefinitionPrefix
       value: "_"
 
-WarningsAsErrors: "*,-readability-function-cognitive-complexity"
+WarningsAsErrors: "*,-readability-function-cognitive-complexity,-modernize-use-trailing-return-type"
+#                                                               ^ Remove when we upgrade runners from `clang-tidy-19`, which doesn't obey our check config on this.

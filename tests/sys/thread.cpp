@@ -34,7 +34,7 @@ TEST_CASE("Thread handle is movable.", "[sys.Threading][thread]")
     CHECK_FALSE(t1.joinable()); // NOLINT(bugprone-use-after-move)
     CHECK(t2.joinable());
 
-    sys::managed_thread t3;
+    sys::managed_thread t3 = nullptr;
     t3 = std::move(t2);
     CHECK_FALSE(t2.joinable()); // NOLINT(bugprone-use-after-move)
     CHECK(t3.joinable());

@@ -25,7 +25,13 @@ namespace sys
     class thread;
 
     /// @brief Opaque, non-owning identifier for a thread, or `nullptr`.
-    /// @see For more information on thread ids, see [Rust Docs](https://doc.rust-lang.org/std/thread/struct.ThreadId.html).
+    /// @details
+    /// Implements `std::is_nothrow_copy_constructible_v`, `std::is_nothrow_move_constructible_v`, `std::is_nothrow_copy_assignable_v`, `std::is_nothrow_move_assignable_v`,
+    /// `std::is_nothrow_destructible_v`, `std::equality_comparable`.
+    /// @see
+    /// For more information on thread ids, see
+    /// [Rust Docs](https://doc.rust-lang.org/std/thread/struct.ThreadId.html),
+    /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/thread/id.html).
     struct thread_id
     {
     private:
@@ -34,6 +40,7 @@ namespace sys
         /// @warning `unsafe` because `th` must be initialized and running, or empty.
         thread_id(const thrd_t th, unsafe) noexcept : th(th) { }
     public:
+        /// @brief Construct an empty thread id.
         /* NOLINT(hicpp-explicit-conversions) */ thread_id(std::nullptr_t) noexcept { }
         thread_id(const thread_id&) noexcept = default;
         thread_id(thread_id&&) noexcept = default;
@@ -47,6 +54,7 @@ namespace sys
         friend class sys::thread;
     };
 
+    /// @brief Nullable-value specialization for `sys::result<thread_id, void>`.
     template <>
     class [[nodiscard]] result<thread_id, void> final : public internal::nullable_value_result<thread_id>
     {
@@ -54,12 +62,21 @@ namespace sys
         using internal::nullable_value_result<thread_id>::nullable_value_result;
         using internal::nullable_value_result<thread_id>::operator=;
 
+        /// @brief Construct an error result.
         /* NOLINT(hicpp-explicit-conversions) */ result(std::nullptr_t) noexcept : internal::nullable_value_result<thread_id>(nullptr) { }
     };
 
     class managed_thread;
     thread thread_current() noexcept;
 
+    /// @brief Encapsulates the information about a running thread, or `nullptr`.
+    /// @details
+    /// Implements `std::is_nothrow_copy_constructible_v`, `std::is_nothrow_move_constructible_v`, `std::is_nothrow_copy_assignable_v`, `std::is_nothrow_move_assignable_v`,
+    /// `std::is_nothrow_destructible_v`, `std::boolean_testable`.
+    /// @see
+    /// For more information about thread handles, see
+    /// [Rust Docs](https://doc.rust-lang.org/std/thread/struct.Thread.html),
+    /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/thread.html).
     class thread final
     {
         thrd_t th {};
@@ -67,8 +84,8 @@ namespace sys
         /// @warning `unsafe` because `th` must be initialized and running, or empty.
         thread(const thrd_t th, unsafe) noexcept : th(th) { }
     public:
-        /// @brief Empty, non-joinable.
-        thread() noexcept = default;
+        /// @brief Construct an empty thread handle.
+        /* NOLINT(hicpp-explicit-conversions) */ thread(std::nullptr_t) noexcept { }
         thread(const thread&) noexcept = delete;
         thread(thread&& other) noexcept { swap(*this, other); }
         ~thread() noexcept = default;
@@ -82,8 +99,10 @@ namespace sys
 
         /// @brief Whether this thread is valid.
         [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
+        /// @brief Obtain the id of this thread.
         [[nodiscard]] thread_id id() const noexcept { return { this->th, unsafe() }; }
 
+        /// @brief Swap two `sys::thread`.
         friend void swap(thread& a, thread& b) noexcept { std::swap(a.th, b.th); }
         friend thread sys::thread_current() noexcept;
 
@@ -99,6 +118,13 @@ namespace sys
     /// @brief Exits the current thread with the given return code.
     inline void thread_exit(const int ret) noexcept { thrd_exit(ret); }
 
+    /// @brief A spun-off thread lifetime that is joined upon destruction.
+    /// @details
+    /// Implements `std::is_nothrow_move_constructible_v`, `std::is_nothrow_move_assignable_v`, `std::is_nothrow_destructible_v`, `std::boolean_testable`.
+    /// @see
+    /// For more information about joining thread handles, see
+    /// [Rust Docs](https://doc.rust-lang.org/std/thread/struct.JoinHandle.html),
+    /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/jthread.html).
     class managed_thread final
     {
         /// @brief Checks if `Func` could be the type of a global function.
@@ -115,7 +141,8 @@ namespace sys
         /// @warning `unsafe` because `th` must be initialized and running.
         managed_thread(const thrd_t th, unsafe) noexcept : th(th) { }
     public:
-        managed_thread() noexcept = default;
+        /// @brief Construct an empty managed thread.
+        /* NOLINT(hicpp-explicit-conversions) */ managed_thread(std::nullptr_t) noexcept { }
         managed_thread(const managed_thread&) noexcept = delete;
         managed_thread(managed_thread&& other) noexcept { swap(*this, other); }
         ~managed_thread() noexcept
@@ -132,6 +159,11 @@ namespace sys
         }
 
         /// @brief Trampoline off a `sys::managed_thread` executing `func`.
+        /// @details
+        /// If `func()` returns exactly `int`, its successful invocation produces `.join() == func()`.
+        /// If the thread executing `func()` exits via `sys::thread_exit(x)`, then `.join() == x`.
+        /// If `func()` throws, the result of `.join()` is `sys::bsentinel<int>()`.
+        /// Otherwise, `.join()` returns `0`.
         template <typename Func>
         static result<managed_thread, threading_error> ctor(Func&& func) noexcept(noexcept(auto(std::forward<Func>(func)())))
         requires requires {
@@ -191,10 +223,13 @@ namespace sys
 
         /// @brief Whether this managed thread is valid.
         [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
+        /// @brief Whether this managed thread is joinable.
         [[nodiscard]] bool joinable() const noexcept { return this->th != thrd_t {} && !thrd_equal(this->th, thrd_current()); }
 
+        /// @brief Obtain information about this thread.
         [[nodiscard]] thread thread() const noexcept { return { this->th, unsafe() }; }
 
+        /// @brief Block-and-wait for this thread to complete execution, and obtain its exit code.
         result<sys::integer<int>, threading_error> join() noexcept
         {
             _retif(threading_error::invalid_operation, !this->joinable());
@@ -205,6 +240,7 @@ namespace sys
             this->th = thrd_t {};
             return res;
         }
+        /// @brief Release ownership of the thread.
         void detach() noexcept
         {
             _retif(, !this->joinable());
@@ -213,6 +249,7 @@ namespace sys
             this->th = thrd_t {};
         }
 
+        /// @brief Swap two `sys::managed_thread`.
         friend void swap(managed_thread& a, managed_thread& b) noexcept { std::swap(a.th, b.th); }
     };
 } // namespace sys
