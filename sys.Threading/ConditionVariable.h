@@ -4,7 +4,7 @@
 
 #define NOMINMAX 1 // NOLINT(readability-identifier-naming)
 #include <tinycthread.h>
-#undef NOMINMAX
+#undef NOMINMAX // NOLINT(misc-include-cleaner): Spurious.
 #ifdef call_once
 #undef call_once
 #endif

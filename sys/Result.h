@@ -87,7 +87,7 @@ namespace sys::internal
         /// @brief Whether the result is good.
         constexpr explicit operator bool() const noexcept { return this->downcast().status == result_status::ok; }
         /// @brief Whether the result is bad.
-        /// @note We abuse operator overloading to make it so that both `operator bool()` and `operator!()` are false for an empty result!
+        /// @note We abuse operator overloading to make it so that both `operator bool()` and `operator!()` are `false` for an empty result!
         constexpr bool operator!() const noexcept { return this->downcast().status == result_status::error; }
 
         /// @brief Apply `func(*this)` and return its output.

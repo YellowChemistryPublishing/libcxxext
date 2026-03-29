@@ -87,16 +87,16 @@ EXTRACT_LOCAL_CLASSES   = YES
 EXTRACT_LOCAL_METHODS   = YES
 EXTRACT_ANON_NSPACES    = NO
 RESOLVE_UNNAMED_PARAMS  = YES
-HIDE_UNDOC_MEMBERS      = NO
+HIDE_UNDOC_MEMBERS      = YES
 HIDE_UNDOC_CLASSES      = NO
-HIDE_UNDOC_NAMESPACES   = YES
+HIDE_UNDOC_NAMESPACES   = NO
 HIDE_FRIEND_COMPOUNDS   = YES
 HIDE_IN_BODY_DOCS       = NO
 INTERNAL_DOCS           = YES
 CASE_SENSE_NAMES        = YES
 HIDE_SCOPE_NAMES        = NO
 HIDE_COMPOUND_REFERENCE = NO
-SHOW_HEADERFILE         = YES
+SHOW_HEADERFILE         = NO
 SHOW_INCLUDE_FILES      = NO
 SHOW_GROUPED_MEMB_INC   = YES
 FORCE_LOCAL_INCLUDES    = NO
@@ -165,7 +165,8 @@ EXCLUDE                 = install \
                           tests \
                           Catch2 \
                           rapidcheck \
-                          doxygen-awesome-css
+                          doxygen-awesome-css \
+                          tinycthread
 EXCLUDE_SYMLINKS        = NO
 EXCLUDE_PATTERNS        = */*build/*
 EXCLUDE_SYMBOLS         =

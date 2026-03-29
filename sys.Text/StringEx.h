@@ -549,7 +549,7 @@ namespace sys
 
 /// @brief `std::formatter<...>` specialization for `sys::string<...>`.
 template <sys::ICharacter T, sys::ICharacter FormatChar>
-struct std::formatter<sys::string<T>, FormatChar> : std::formatter<std::basic_string_view<FormatChar>, FormatChar>
+struct /* NOLINT(bugprone-std-namespace-modification) */ std::formatter<sys::string<T>, FormatChar> : std::formatter<std::basic_string_view<FormatChar>, FormatChar>
 {
     /// @brief Formats a `sys::string<T>` as a `std::basic_string_view<FormatChar>`.
     template <typename FormatContext>

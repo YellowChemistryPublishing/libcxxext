@@ -40,7 +40,7 @@ def install(*, host_platform: str) -> None:
 
 
 def cmd(*, cl_name: str) -> List[str]:
-    extra_args = []
+    extra_args = ["--gcov-ignore-parse-errors", "negative_hits.warn"]
     if cl_name == "clang" or cl_name == "gcc":
         extra_args += [
             "--gcov-executable",

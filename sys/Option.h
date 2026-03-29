@@ -1,5 +1,7 @@
 #pragma once
 
+/// @file
+
 #include <concepts>
 #include <type_traits>
 

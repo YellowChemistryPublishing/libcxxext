@@ -21,12 +21,19 @@
 /// @{
 
 // NOLINTBEGIN(google-runtime-int)
+/// @brief Alias for `unsigned char`.
 using byte = unsigned char;
+/// @brief Alias for `signed char`.
 using sbyte = signed char;
+/// @brief Alias for `unsigned short`.
 using ushort = unsigned short;
+/// @brief Alias for `unsigned int`.
 using uint = unsigned int;
+/// @brief Alias for `unsigned long`.
 using ulong = unsigned long;
+/// @brief Alias for `long long`.
 using llong = long long;
+/// @brief Alias for `unsigned long long`.
 using ullong = unsigned long long;
 // NOLINTEND(google-runtime-int)
 
@@ -333,17 +340,27 @@ namespace sys
 /// @note Pass `byval`.
 /// @{
 
+/// @brief Fixed-width, signed integer of at least 8 bits.
 using i8 = ::sys::integer<int_least8_t>;
+/// @brief Fixed-width, signed integer of at least 16 bits.
 using i16 = ::sys::integer<int_least16_t>;
+/// @brief Fixed-width, signed integer of at least 32 bits.
 using i32 = ::sys::integer<int_least32_t>;
+/// @brief Fixed-width, signed integer of at least 64 bits.
 using i64 = ::sys::integer<int_least64_t>;
 
+/// @brief Fixed-width, unsigned integer of at least 8 bits.
 using u8 = ::sys::integer<uint_least8_t>;
+/// @brief Fixed-width, unsigned integer of at least 16 bits.
 using u16 = ::sys::integer<uint_least16_t>;
+/// @brief Fixed-width, unsigned integer of at least 32 bits.
 using u32 = ::sys::integer<uint_least32_t>;
+/// @brief Fixed-width, unsigned integer of at least 64 bits.
 using u64 = ::sys::integer<uint_least64_t>;
 
+/// @brief Unsigned size type.
 using sz = ::sys::integer<size_t>;
+/// @brief Signed size type.
 using ssz = ::sys::integer<ptrdiff_t>;
 
 /// @}

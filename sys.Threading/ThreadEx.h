@@ -9,11 +9,12 @@
 #include <tinycthread.h>
 #include <type_traits>
 #include <utility>
-#undef NOMINMAX
+#undef NOMINMAX // NOLINT(misc-include-cleaner): Spurious.
 #ifdef call_once
 #undef call_once
 #endif
 
+#include <CompilerWarnings.h>
 #include <Destructor.h>
 #include <LanguageSupport.h>
 #include <Numeric.h>
@@ -196,10 +197,11 @@ namespace sys
                     delete f; // NOLINT(cppcoreguidelines-owning-memory)
             };
 
+            _nowarn_begin_one_msvc(4702);
             if (thrd_create(&th, [](void* arg) noexcept -> int
             {
                 int ret = 0;
-                std::decay_t<Func> func = [&]() -> std::decay_t<Func>
+                std::decay_t<Func> func = [&]() noexcept -> std::decay_t<Func>
                 {
                     if constexpr (!managed_thread::is_global_func<Func>())
                         return *(_as(std::decay_t<Func>*, arg));
@@ -222,6 +224,7 @@ namespace sys
                 return ret;
             }, _asr(void*, f)) != thrd_success)
                 return threading_error::init_failed;
+            _nowarn_end_msvc();
 
             releaseFunc.release(unsafe());
             return managed_thread(th, unsafe());
