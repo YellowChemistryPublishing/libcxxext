@@ -12,6 +12,9 @@
 
 namespace sys::meta
 {
+    template <typename...>
+    inline constexpr bool dependent_false = false;
+
     template <typename T>
     struct generic_container_adaptor
     {
@@ -21,16 +24,15 @@ namespace sys::meta
         constexpr /* NOLINT(hicpp-explicit-conversions) */ generic_container_adaptor(T& range) noexcept : range(range) { }
 
         /// @brief Check whether an empty-queryable `this->range` is empty.
-        [[nodiscard]] constexpr bool empty() const
-        requires requires { this->range.empty(); } || requires { std::size(this->range); }
+        [[nodiscard]] constexpr bool empty(this auto&& _this)
+        requires (requires { _this.range.empty(); } || requires { std::size(_this.range); })
         {
-            if constexpr (requires { this->range.empty(); })
-                return this->range.empty();
-            else if constexpr (requires { std::size(this->range); })
-                return std::size(this->range) == _as(decltype(std::size(this->range)), 0);
-            else
-                std::unreachable();
+            if constexpr (requires { _this.range.empty(); })
+                return _this.range.empty();
+            else if constexpr (requires { std::size(_this.range); })
+                return std::size(_this.range) == _as(decltype(std::size(_this.range)), 0);
         }
+        [[nodiscard]] constexpr bool empty(this auto&&) = delete;
         /// @brief (Potentially) inplace construct and append an element to an appendable `this->range`.
         template <typename... Args>
         constexpr void append_back(Args&&... args)
@@ -53,9 +55,8 @@ namespace sys::meta
                                    (this->range << ... << std::forward<Args>(args));
                                })
                 (this->range << ... << std::forward<Args>(args));
-            else
-                std::unreachable();
         }
+        constexpr void append_back(this auto&&) = delete;
     };
 } // namespace sys::meta
 

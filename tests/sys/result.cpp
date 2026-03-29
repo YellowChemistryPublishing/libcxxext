@@ -1,3 +1,4 @@
+#include <Result.h>
 #include <memory>
 #include <string>
 #include <string_view>
@@ -174,7 +175,7 @@ TEST_CASE("Can convert result to unit-result.", "[sys][result]")
 
 TEST_CASE("Pointer result (analogous to any other nullable-value result) works correctly.", "[sys][result]")
 {
-    sys::result<int*> res = nullptr;
+    sys::internal::nullable_value_result<int*> res = nullptr;
     CHECK_FALSE(res);
     CHECK(!res);
     CHECK(res.move_or(nullptr) == nullptr);

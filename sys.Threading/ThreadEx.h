@@ -49,6 +49,8 @@ namespace sys
         thread_id& operator=(const thread_id&) noexcept = default;
         thread_id& operator=(thread_id&&) noexcept = default;
 
+        /// @brief Whether this thread id is valid.
+        [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
         [[nodiscard]] friend bool operator==(const thread_id& a, const thread_id& b) noexcept { return thrd_equal(a.th, b.th); }
 
         friend class sys::thread;
@@ -190,7 +192,7 @@ namespace sys
                     delete f; // NOLINT(cppcoreguidelines-owning-memory)
             };
 
-            if (thrd_create(&th, [](void* arg) noexcept(noexcept(func())) -> int
+            if (thrd_create(&th, [](void* arg) noexcept -> int
             {
                 int ret = 0;
                 std::decay_t<Func> func = [&]() -> std::decay_t<Func>

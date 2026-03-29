@@ -2,12 +2,11 @@
 
 /// @file
 
-#include <cassert>         // NOLINT(misc-include-cleaner)
-#include <cstdint>         // NOLINT(misc-include-cleaner)
-#include <cstdio>          // NOLINT(misc-include-cleaner)
-#include <exception>       // NOLINT(misc-include-cleaner)
-#include <print>           // NOLINT(misc-include-cleaner)
-#include <source_location> // NOLINT(misc-include-cleaner)
+#include <cassert>   // NOLINT(misc-include-cleaner)
+#include <cstdint>   // NOLINT(misc-include-cleaner)
+#include <cstdio>    // NOLINT(misc-include-cleaner)
+#include <exception> // NOLINT(misc-include-cleaner)
+#include <print>     // NOLINT(misc-include-cleaner)
 
 #include <Platform.h>
 

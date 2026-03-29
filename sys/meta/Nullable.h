@@ -2,7 +2,6 @@
 
 #include <concepts>
 #include <type_traits>
-#include <utility>
 
 #include <LanguageSupport.h>
 
@@ -17,29 +16,28 @@ namespace sys::meta
     public:
         constexpr /* NOLINT(hicpp-explicit-conversions) */ generic_nullable_adaptor(T& ref) noexcept : ref(ref) { }
 
-        [[nodiscard]] constexpr bool is_null()
+        [[nodiscard]] constexpr bool is_null(this auto&& _this)
         requires requires {
-            { _as(bool, this->ref) } -> std::same_as<bool>;
+            { _as(bool, _this.ref) } -> std::same_as<bool>;
         } || requires {
-            { this->ref } -> std::convertible_to<bool>;
+            { _this.ref } -> std::convertible_to<bool>;
         } || requires {
-            { this->ref != nullptr } -> std::convertible_to<bool>;
+            { _this.ref != nullptr } -> std::convertible_to<bool>;
         }
         {
             if constexpr (requires {
-                              { _as(bool, this->ref) } -> std::same_as<bool>;
+                              { _as(bool, _this.ref) } -> std::same_as<bool>;
                           })
-                return !_as(bool, this->ref);
+                return !_as(bool, _this.ref);
             else if constexpr (requires {
-                                   { this->ref } -> std::convertible_to<bool>;
+                                   { _this.ref } -> std::convertible_to<bool>;
                                })
-                return !this->ref;
+                return !_this.ref;
             else if constexpr (requires {
-                                   { this->ref != nullptr } -> std::convertible_to<bool>;
+                                   { _this.ref != nullptr } -> std::convertible_to<bool>;
                                })
-                return !(this->ref != nullptr);
-            else
-                std::unreachable();
+                return !(_this.ref != nullptr);
         }
+        [[nodiscard]] constexpr bool is_null(this auto&&) = delete;
     };
 } // namespace sys::meta

@@ -563,9 +563,10 @@ namespace sys::internal
     }
     class [[nodiscard]] nullable_value_result : public internal::result_b<result, T, void>
     {
-        T value;
+        T value {};
     public:
         template <typename... Args>
+        requires (sizeof...(Args) > 0uz)
         constexpr /* NOLINT(hicpp-explicit-conversions) */ nullable_value_result(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...))) :
             value(std::forward<Args>(args)...)
         { }
@@ -597,7 +598,11 @@ namespace sys::internal
             return std::move(this->value);
         }
 
-        friend void swap(nullable_value_result& a, nullable_value_result& b) noexcept(noexcept(std::swap(a.value, b.value))) { std::swap(a.value, b.value); }
+        friend void swap(nullable_value_result& a, nullable_value_result& b) noexcept(noexcept(std::swap(a.value, b.value)))
+        {
+            using std::swap;
+            swap(a.value, b.value);
+        }
     };
 } // namespace sys::internal
 
@@ -607,6 +612,8 @@ namespace sys
     class [[nodiscard]] result<T*, void> final : public internal::nullable_value_result<T*>
     {
     public:
+        result() = delete;
+
         using internal::nullable_value_result<T*>::nullable_value_result;
         using internal::nullable_value_result<T*>::operator=;
     };
