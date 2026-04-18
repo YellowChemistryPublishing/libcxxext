@@ -14,11 +14,16 @@
 
 namespace sys
 {
-    /// @brief A thread-safe one-time initialization primitive.
+    /// @ingroup sys_threading
+    /// @brief A thread-safe, one-time initialization primitive.
     /// @details
     /// This class ensures that for any `sys::once`, only one function passed to `.call_once(...)` is ever run, even when called by multiple threads.
     ///
     /// Implements `sys::INothrowDefaultConstructible`, `sys::INothrowDestructible`.
+    /// @see
+    /// For more information on `sys::once`, see
+    /// [Rust Docs](https://doc.rust-lang.org/std/sync/struct.Once.html),
+    /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/call_once.html).
     class once final
     {
         std::atomic_flag initialized;
@@ -49,10 +54,10 @@ namespace sys
         once& operator=(const once&) noexcept = delete;
         once& operator=(once&&) noexcept = delete;
 
-        /// @brief Checks if a function has been successfully executed.
+        /// @brief Checks if exactly one `.call_once(...)` has successfully completed.
         [[nodiscard]] bool is_completed() const noexcept { return this->initialized.test(std::memory_order_acquire); }
 
-        /// @brief Waits until a function has been fully executed, or returns immediately if already done.
+        /// @brief Waits until exactly one `.call_once(...)` has successfully completed, or returns immediately if already completed.
         void wait() noexcept
         {
             if (this->is_completed()) [[likely]]
@@ -64,10 +69,9 @@ namespace sys
             this->busy.clear(std::memory_order_release);
         }
 
-        /// @brief Calls `func` with `args...`, ensuring only one functor passed to `.call_once(...)` is ever run.
-        /// @note If an exception is thrown, this `sys::once` can be called again.
+        /// @brief Calls `func(args...)`, ensuring only one functor passed to `.call_once(...)` is ever run.
+        /// @note If an exception is thrown, this `sys::once` is not consumed, and remains incomplete.
         template <typename Func, typename... Args>
-        requires (!meta::type<std::invoke_result_t<Func, Args && ...>>::template is_from<result>())
         void call_once(Func&& func, Args&&... args) noexcept(noexcept(func(std::forward<Args>(args)...)))
         {
             if (this->pre_call())
@@ -79,9 +83,11 @@ namespace sys
             this->initialized.test_and_set(std::memory_order_release);
         }
 
+        /// @overload
+        /// @return If `func(args...)` produces a `sys::result<T, Err>`, on failure, an `Err` is produced and this `sys::once` is not consumed, otherwise nothing, and this
+        /// `sys::once` is marked as completed.
+        /// @note If an exception is thrown, this `sys::once` is not consumed, and remains incomplete.
         /// @see `sys::once::call_once(Func&& func, Args&&... args)`
-        /// @return If `func(args...)` produces a `sys::result<T, Err>`, on failure, an `Err` is produced, otherwise nothing.
-        /// @note If an exception is thrown, this `sys::once` can be called again.
         template <typename Func, typename... Args>
         requires (meta::type<std::invoke_result_t<Func, Args && ...>>::template is_from<result>())
         sys::result<void, typename std::invoke_result_t<Func, Args&&...>::err_type> call_once(Func&& func, Args&&... args) noexcept(noexcept(func(std::forward<Args>(args)...)))

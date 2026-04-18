@@ -34,6 +34,7 @@ def main(argv: List[str]) -> None:
                 namespace sys::internal
                 {
                     /// @internal
+                    /// @ingroup sys_internal
                     constexpr bool dchar_is_ws(const char32_t c) noexcept
                     {
                         switch (c)

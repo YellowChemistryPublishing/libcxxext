@@ -69,22 +69,26 @@ def main() -> None:
                 """\
                 // NOLINTBEGIN(modernize-macro-to-enum)
 
-                /// @addtogroup compiler_warnings
-                /// @{
-
                 """
             )
         )
 
         for mname in sorted(macro_to_warns.keys()):
             warn = macro_to_warns[mname]
-            f.write(f'#define _clwarn_gcc_{mname} "{warn}"\n')
+            f.write(
+                dedent(
+                    f"""\
+                    /// @def _clwarn_gcc_{mname}
+                    /// @ingroup compiler_warnings
+                    /// @brief GCC warning flag string `{warn}`.
+                    #define _clwarn_gcc_{mname} "{warn}"
+                    """
+                )
+            )
 
         f.write(
             dedent(
                 """\
-
-                /// @}
 
                 // NOLINTEND(modernize-macro-to-enum)
                 """

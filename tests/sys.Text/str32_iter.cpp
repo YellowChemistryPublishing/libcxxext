@@ -1,7 +1,7 @@
-#include <CompilerWarnings.h>
-_nowarn_begin_conv_comp();
-
 // NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)
+#include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
+_nowarn_begin_conv_comp();
 
 #include <catch2/catch_all.hpp>
 
@@ -9,6 +9,7 @@ _nowarn_begin_conv_comp();
 #include <module/sys.Text>
 
 _nowarn_end_conv_comp();
+_nowarn_end_gcc();
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("UTF-8 Iteration (Valid)", "[sys.Text][codepoint_iter]")

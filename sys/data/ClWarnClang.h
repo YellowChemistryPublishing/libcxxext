@@ -6,1155 +6,4617 @@
 
 // NOLINTBEGIN(modernize-macro-to-enum)
 
-/// @addtogroup compiler_warnings
-/// @{
-
+/// @def _clwarn_clang_aarch64_sme_attributes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Waarch64-sme-attributes`.
 #define _clwarn_clang_aarch64_sme_attributes "-Waarch64-sme-attributes"
+/// @def _clwarn_clang_abi
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wabi`.
 #define _clwarn_clang_abi "-Wabi"
+/// @def _clwarn_clang_absolute_value
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wabsolute-value`.
 #define _clwarn_clang_absolute_value "-Wabsolute-value"
+/// @def _clwarn_clang_abstract_final_class
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wabstract-final-class`.
 #define _clwarn_clang_abstract_final_class "-Wabstract-final-class"
+/// @def _clwarn_clang_abstract_vbase_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wabstract-vbase-init`.
 #define _clwarn_clang_abstract_vbase_init "-Wabstract-vbase-init"
+/// @def _clwarn_clang_address
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Waddress`.
 #define _clwarn_clang_address "-Waddress"
+/// @def _clwarn_clang_address_of_packed_member
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Waddress-of-packed-member`.
 #define _clwarn_clang_address_of_packed_member "-Waddress-of-packed-member"
+/// @def _clwarn_clang_address_of_temporary
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Waddress-of-temporary`.
 #define _clwarn_clang_address_of_temporary "-Waddress-of-temporary"
+/// @def _clwarn_clang_aggregate_return
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Waggregate-return`.
 #define _clwarn_clang_aggregate_return "-Waggregate-return"
+/// @def _clwarn_clang_aix_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Waix-compat`.
 #define _clwarn_clang_aix_compat "-Waix-compat"
+/// @def _clwarn_clang_alias_template_in_declaration_name
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Walias-template-in-declaration-name`.
 #define _clwarn_clang_alias_template_in_declaration_name "-Walias-template-in-declaration-name"
+/// @def _clwarn_clang_align_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Walign-mismatch`.
 #define _clwarn_clang_align_mismatch "-Walign-mismatch"
+/// @def _clwarn_clang_all
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wall`.
 #define _clwarn_clang_all "-Wall"
+/// @def _clwarn_clang_alloc_size
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Walloc-size`.
 #define _clwarn_clang_alloc_size "-Walloc-size"
+/// @def _clwarn_clang_alloca
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Walloca`.
 #define _clwarn_clang_alloca "-Walloca"
+/// @def _clwarn_clang_alloca_with_align_alignof
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Walloca-with-align-alignof`.
 #define _clwarn_clang_alloca_with_align_alignof "-Walloca-with-align-alignof"
+/// @def _clwarn_clang_always_inline_coroutine
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Walways-inline-coroutine`.
 #define _clwarn_clang_always_inline_coroutine "-Walways-inline-coroutine"
+/// @def _clwarn_clang_ambiguous_delete
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wambiguous-delete`.
 #define _clwarn_clang_ambiguous_delete "-Wambiguous-delete"
+/// @def _clwarn_clang_ambiguous_ellipsis
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wambiguous-ellipsis`.
 #define _clwarn_clang_ambiguous_ellipsis "-Wambiguous-ellipsis"
+/// @def _clwarn_clang_ambiguous_macro
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wambiguous-macro`.
 #define _clwarn_clang_ambiguous_macro "-Wambiguous-macro"
+/// @def _clwarn_clang_ambiguous_member_template
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wambiguous-member-template`.
 #define _clwarn_clang_ambiguous_member_template "-Wambiguous-member-template"
+/// @def _clwarn_clang_ambiguous_reversed_operator
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wambiguous-reversed-operator`.
 #define _clwarn_clang_ambiguous_reversed_operator "-Wambiguous-reversed-operator"
+/// @def _clwarn_clang_amdgpu_unguarded_builtin_usage
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wamdgpu-unguarded-builtin-usage`.
+#define _clwarn_clang_amdgpu_unguarded_builtin_usage "-Wamdgpu-unguarded-builtin-usage"
+/// @def _clwarn_clang_amdgpu_wait_event_mask
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wamdgpu-wait-event-mask`.
 #define _clwarn_clang_amdgpu_wait_event_mask "-Wamdgpu-wait-event-mask"
+/// @def _clwarn_clang_analyzer_incompatible_plugin
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wanalyzer-incompatible-plugin`.
 #define _clwarn_clang_analyzer_incompatible_plugin "-Wanalyzer-incompatible-plugin"
+/// @def _clwarn_clang_android_unversioned_fallback
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wandroid-unversioned-fallback`.
 #define _clwarn_clang_android_unversioned_fallback "-Wandroid-unversioned-fallback"
+/// @def _clwarn_clang_anon_enum_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wanon-enum-enum-conversion`.
 #define _clwarn_clang_anon_enum_enum_conversion "-Wanon-enum-enum-conversion"
+/// @def _clwarn_clang_anonymous_pack_parens
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wanonymous-pack-parens`.
 #define _clwarn_clang_anonymous_pack_parens "-Wanonymous-pack-parens"
+/// @def _clwarn_clang_apinotes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wapinotes`.
 #define _clwarn_clang_apinotes "-Wapinotes"
+/// @def _clwarn_clang_arc
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warc`.
 #define _clwarn_clang_arc "-Warc"
+/// @def _clwarn_clang_arc_bridge_casts_disallowed_in_nonarc
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warc-bridge-casts-disallowed-in-nonarc`.
 #define _clwarn_clang_arc_bridge_casts_disallowed_in_nonarc "-Warc-bridge-casts-disallowed-in-nonarc"
+/// @def _clwarn_clang_arc_maybe_repeated_use_of_weak
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warc-maybe-repeated-use-of-weak`.
 #define _clwarn_clang_arc_maybe_repeated_use_of_weak "-Warc-maybe-repeated-use-of-weak"
+/// @def _clwarn_clang_arc_non_pod_memaccess
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warc-non-pod-memaccess`.
 #define _clwarn_clang_arc_non_pod_memaccess "-Warc-non-pod-memaccess"
+/// @def _clwarn_clang_arc_performselector_leaks
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warc-performSelector-leaks`.
 #define _clwarn_clang_arc_performselector_leaks "-Warc-performSelector-leaks"
+/// @def _clwarn_clang_arc_repeated_use_of_weak
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warc-repeated-use-of-weak`.
 #define _clwarn_clang_arc_repeated_use_of_weak "-Warc-repeated-use-of-weak"
+/// @def _clwarn_clang_arc_retain_cycles
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warc-retain-cycles`.
 #define _clwarn_clang_arc_retain_cycles "-Warc-retain-cycles"
+/// @def _clwarn_clang_arc_unsafe_retained_assign
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warc-unsafe-retained-assign`.
 #define _clwarn_clang_arc_unsafe_retained_assign "-Warc-unsafe-retained-assign"
+/// @def _clwarn_clang_argument_outside_range
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wargument-outside-range`.
 #define _clwarn_clang_argument_outside_range "-Wargument-outside-range"
+/// @def _clwarn_clang_argument_undefined_behaviour
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wargument-undefined-behaviour`.
 #define _clwarn_clang_argument_undefined_behaviour "-Wargument-undefined-behaviour"
+/// @def _clwarn_clang_arm_interrupt_save_fp_no_vfp_unit
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warm-interrupt-save-fp-no-vfp-unit`.
 #define _clwarn_clang_arm_interrupt_save_fp_no_vfp_unit "-Warm-interrupt-save-fp-no-vfp-unit"
+/// @def _clwarn_clang_arm_interrupt_vfp_clobber
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warm-interrupt-vfp-clobber`.
 #define _clwarn_clang_arm_interrupt_vfp_clobber "-Warm-interrupt-vfp-clobber"
+/// @def _clwarn_clang_array_bounds
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warray-bounds`.
 #define _clwarn_clang_array_bounds "-Warray-bounds"
+/// @def _clwarn_clang_array_bounds_pointer_arithmetic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warray-bounds-pointer-arithmetic`.
 #define _clwarn_clang_array_bounds_pointer_arithmetic "-Warray-bounds-pointer-arithmetic"
+/// @def _clwarn_clang_array_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warray-compare`.
 #define _clwarn_clang_array_compare "-Warray-compare"
+/// @def _clwarn_clang_array_compare_cxx26
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warray-compare-cxx26`.
 #define _clwarn_clang_array_compare_cxx26 "-Warray-compare-cxx26"
+/// @def _clwarn_clang_array_parameter
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Warray-parameter`.
 #define _clwarn_clang_array_parameter "-Warray-parameter"
+/// @def _clwarn_clang_asm
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wasm`.
 #define _clwarn_clang_asm "-Wasm"
+/// @def _clwarn_clang_asm_operand_widths
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wasm-operand-widths`.
 #define _clwarn_clang_asm_operand_widths "-Wasm-operand-widths"
+/// @def _clwarn_clang_assign_enum
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wassign-enum`.
 #define _clwarn_clang_assign_enum "-Wassign-enum"
+/// @def _clwarn_clang_assume
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wassume`.
 #define _clwarn_clang_assume "-Wassume"
+/// @def _clwarn_clang_at_protocol
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wat-protocol`.
 #define _clwarn_clang_at_protocol "-Wat-protocol"
+/// @def _clwarn_clang_atimport_in_framework_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Watimport-in-framework-header`.
 #define _clwarn_clang_atimport_in_framework_header "-Watimport-in-framework-header"
+/// @def _clwarn_clang_atomic_access
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Watomic-access`.
 #define _clwarn_clang_atomic_access "-Watomic-access"
+/// @def _clwarn_clang_atomic_alignment
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Watomic-alignment`.
 #define _clwarn_clang_atomic_alignment "-Watomic-alignment"
+/// @def _clwarn_clang_atomic_implicit_seq_cst
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Watomic-implicit-seq-cst`.
 #define _clwarn_clang_atomic_implicit_seq_cst "-Watomic-implicit-seq-cst"
+/// @def _clwarn_clang_atomic_memory_ordering
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Watomic-memory-ordering`.
 #define _clwarn_clang_atomic_memory_ordering "-Watomic-memory-ordering"
+/// @def _clwarn_clang_atomic_properties
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Watomic-properties`.
 #define _clwarn_clang_atomic_properties "-Watomic-properties"
+/// @def _clwarn_clang_atomic_property_with_user_defined_accessor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Watomic-property-with-user-defined-accessor`.
 #define _clwarn_clang_atomic_property_with_user_defined_accessor "-Watomic-property-with-user-defined-accessor"
+/// @def _clwarn_clang_attribute_packed_for_bitfield
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wattribute-packed-for-bitfield`.
 #define _clwarn_clang_attribute_packed_for_bitfield "-Wattribute-packed-for-bitfield"
+/// @def _clwarn_clang_attribute_preprocessor_tokens
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wattribute-preprocessor-tokens`.
 #define _clwarn_clang_attribute_preprocessor_tokens "-Wattribute-preprocessor-tokens"
+/// @def _clwarn_clang_attribute_statement
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wattribute-statement`.
 #define _clwarn_clang_attribute_statement "-Wattribute-statement"
+/// @def _clwarn_clang_attribute_warning
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wattribute-warning`.
 #define _clwarn_clang_attribute_warning "-Wattribute-warning"
+/// @def _clwarn_clang_attributes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wattributes`.
 #define _clwarn_clang_attributes "-Wattributes"
+/// @def _clwarn_clang_auto_decl_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wauto-decl-extensions`.
 #define _clwarn_clang_auto_decl_extensions "-Wauto-decl-extensions"
+/// @def _clwarn_clang_auto_disable_vptr_sanitizer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wauto-disable-vptr-sanitizer`.
 #define _clwarn_clang_auto_disable_vptr_sanitizer "-Wauto-disable-vptr-sanitizer"
+/// @def _clwarn_clang_auto_import
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wauto-import`.
 #define _clwarn_clang_auto_import "-Wauto-import"
+/// @def _clwarn_clang_auto_storage_class
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wauto-storage-class`.
 #define _clwarn_clang_auto_storage_class "-Wauto-storage-class"
+/// @def _clwarn_clang_auto_var_id
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wauto-var-id`.
 #define _clwarn_clang_auto_var_id "-Wauto-var-id"
+/// @def _clwarn_clang_availability
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wavailability`.
 #define _clwarn_clang_availability "-Wavailability"
+/// @def _clwarn_clang_avr_rtlib_linking_quirks
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wavr-rtlib-linking-quirks`.
 #define _clwarn_clang_avr_rtlib_linking_quirks "-Wavr-rtlib-linking-quirks"
+/// @def _clwarn_clang_backend_plugin
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbackend-plugin`.
 #define _clwarn_clang_backend_plugin "-Wbackend-plugin"
+/// @def _clwarn_clang_backslash_newline_escape
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbackslash-newline-escape`.
 #define _clwarn_clang_backslash_newline_escape "-Wbackslash-newline-escape"
+/// @def _clwarn_clang_bad_function_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbad-function-cast`.
 #define _clwarn_clang_bad_function_cast "-Wbad-function-cast"
+/// @def _clwarn_clang_binary_literal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbinary-literal`.
 #define _clwarn_clang_binary_literal "-Wbinary-literal"
+/// @def _clwarn_clang_bind_to_temporary_copy
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbind-to-temporary-copy`.
 #define _clwarn_clang_bind_to_temporary_copy "-Wbind-to-temporary-copy"
+/// @def _clwarn_clang_bit_int_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbit-int-extension`.
 #define _clwarn_clang_bit_int_extension "-Wbit-int-extension"
+/// @def _clwarn_clang_bitfield_constant_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbitfield-constant-conversion`.
 #define _clwarn_clang_bitfield_constant_conversion "-Wbitfield-constant-conversion"
+/// @def _clwarn_clang_bitfield_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbitfield-enum-conversion`.
 #define _clwarn_clang_bitfield_enum_conversion "-Wbitfield-enum-conversion"
+/// @def _clwarn_clang_bitfield_width
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbitfield-width`.
 #define _clwarn_clang_bitfield_width "-Wbitfield-width"
+/// @def _clwarn_clang_bitwise_conditional_parentheses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbitwise-conditional-parentheses`.
 #define _clwarn_clang_bitwise_conditional_parentheses "-Wbitwise-conditional-parentheses"
+/// @def _clwarn_clang_bitwise_instead_of_logical
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbitwise-instead-of-logical`.
 #define _clwarn_clang_bitwise_instead_of_logical "-Wbitwise-instead-of-logical"
+/// @def _clwarn_clang_bitwise_op_parentheses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbitwise-op-parentheses`.
 #define _clwarn_clang_bitwise_op_parentheses "-Wbitwise-op-parentheses"
+/// @def _clwarn_clang_block_capture_autoreleasing
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wblock-capture-autoreleasing`.
 #define _clwarn_clang_block_capture_autoreleasing "-Wblock-capture-autoreleasing"
+/// @def _clwarn_clang_bool_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbool-conversion`.
 #define _clwarn_clang_bool_conversion "-Wbool-conversion"
+/// @def _clwarn_clang_bool_conversions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbool-conversions`.
 #define _clwarn_clang_bool_conversions "-Wbool-conversions"
+/// @def _clwarn_clang_bool_operation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbool-operation`.
 #define _clwarn_clang_bool_operation "-Wbool-operation"
+/// @def _clwarn_clang_bounds_safety_counted_by_elt_type_unknown_size
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbounds-safety-counted-by-elt-type-unknown-size`.
 #define _clwarn_clang_bounds_safety_counted_by_elt_type_unknown_size "-Wbounds-safety-counted-by-elt-type-unknown-size"
+/// @def _clwarn_clang_braced_scalar_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbraced-scalar-init`.
 #define _clwarn_clang_braced_scalar_init "-Wbraced-scalar-init"
+/// @def _clwarn_clang_branch_protection
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbranch-protection`.
 #define _clwarn_clang_branch_protection "-Wbranch-protection"
+/// @def _clwarn_clang_bridge_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbridge-cast`.
 #define _clwarn_clang_bridge_cast "-Wbridge-cast"
+/// @def _clwarn_clang_builtin_assume_aligned_alignment
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbuiltin-assume-aligned-alignment`.
 #define _clwarn_clang_builtin_assume_aligned_alignment "-Wbuiltin-assume-aligned-alignment"
+/// @def _clwarn_clang_builtin_macro_redefined
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbuiltin-macro-redefined`.
 #define _clwarn_clang_builtin_macro_redefined "-Wbuiltin-macro-redefined"
+/// @def _clwarn_clang_builtin_memcpy_chk_size
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbuiltin-memcpy-chk-size`.
 #define _clwarn_clang_builtin_memcpy_chk_size "-Wbuiltin-memcpy-chk-size"
+/// @def _clwarn_clang_builtin_requires_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wbuiltin-requires-header`.
 #define _clwarn_clang_builtin_requires_header "-Wbuiltin-requires-header"
+/// @def _clwarn_clang_c11_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc11-extensions`.
 #define _clwarn_clang_c11_extensions "-Wc11-extensions"
+/// @def _clwarn_clang_c23_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc23-compat`.
 #define _clwarn_clang_c23_compat "-Wc23-compat"
+/// @def _clwarn_clang_c23_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc23-extensions`.
 #define _clwarn_clang_c23_extensions "-Wc23-extensions"
+/// @def _clwarn_clang_c2x_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc2x-compat`.
 #define _clwarn_clang_c2x_compat "-Wc2x-compat"
+/// @def _clwarn_clang_c2x_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc2x-extensions`.
 #define _clwarn_clang_c2x_extensions "-Wc2x-extensions"
+/// @def _clwarn_clang_c2y_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc2y-extensions`.
 #define _clwarn_clang_c2y_extensions "-Wc2y-extensions"
+/// @def _clwarn_clang_c99_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc99-compat`.
 #define _clwarn_clang_c99_compat "-Wc99-compat"
+/// @def _clwarn_clang_c99_designator
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc99-designator`.
 #define _clwarn_clang_c99_designator "-Wc99-designator"
+/// @def _clwarn_clang_c99_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc99-extensions`.
 #define _clwarn_clang_c99_extensions "-Wc99-extensions"
+/// @def _clwarn_clang_c_attribute_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc-attribute-extension`.
 #define _clwarn_clang_c_attribute_extension "-Wc-attribute-extension"
+/// @def _clwarn_clang_call_to_pure_virtual_from_ctor_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcall-to-pure-virtual-from-ctor-dtor`.
 #define _clwarn_clang_call_to_pure_virtual_from_ctor_dtor "-Wcall-to-pure-virtual-from-ctor-dtor"
+/// @def _clwarn_clang_called_once_parameter
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcalled-once-parameter`.
 #define _clwarn_clang_called_once_parameter "-Wcalled-once-parameter"
+/// @def _clwarn_clang_cast_align
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcast-align`.
 #define _clwarn_clang_cast_align "-Wcast-align"
+/// @def _clwarn_clang_cast_calling_convention
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcast-calling-convention`.
 #define _clwarn_clang_cast_calling_convention "-Wcast-calling-convention"
+/// @def _clwarn_clang_cast_function_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcast-function-type`.
 #define _clwarn_clang_cast_function_type "-Wcast-function-type"
+/// @def _clwarn_clang_cast_function_type_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcast-function-type-mismatch`.
 #define _clwarn_clang_cast_function_type_mismatch "-Wcast-function-type-mismatch"
+/// @def _clwarn_clang_cast_function_type_strict
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcast-function-type-strict`.
 #define _clwarn_clang_cast_function_type_strict "-Wcast-function-type-strict"
+/// @def _clwarn_clang_cast_of_sel_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcast-of-sel-type`.
 #define _clwarn_clang_cast_of_sel_type "-Wcast-of-sel-type"
+/// @def _clwarn_clang_cast_qual
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcast-qual`.
 #define _clwarn_clang_cast_qual "-Wcast-qual"
+/// @def _clwarn_clang_cast_qual_unrelated
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcast-qual-unrelated`.
 #define _clwarn_clang_cast_qual_unrelated "-Wcast-qual-unrelated"
+/// @def _clwarn_clang_cfi_unchecked_callee
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcfi-unchecked-callee`.
 #define _clwarn_clang_cfi_unchecked_callee "-Wcfi-unchecked-callee"
+/// @def _clwarn_clang_cfstring_literal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-WCFString-literal`.
 #define _clwarn_clang_cfstring_literal "-WCFString-literal"
+/// @def _clwarn_clang_char_align
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wchar-align`.
 #define _clwarn_clang_char_align "-Wchar-align"
+/// @def _clwarn_clang_char_subscripts
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wchar-subscripts`.
 #define _clwarn_clang_char_subscripts "-Wchar-subscripts"
+/// @def _clwarn_clang_character_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcharacter-conversion`.
 #define _clwarn_clang_character_conversion "-Wcharacter-conversion"
+/// @def _clwarn_clang_cl4
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-WCL4`.
 #define _clwarn_clang_cl4 "-WCL4"
+/// @def _clwarn_clang_clang_cl_pch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wclang-cl-pch`.
 #define _clwarn_clang_clang_cl_pch "-Wclang-cl-pch"
+/// @def _clwarn_clang_class_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wclass-conversion`.
 #define _clwarn_clang_class_conversion "-Wclass-conversion"
+/// @def _clwarn_clang_class_varargs
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wclass-varargs`.
 #define _clwarn_clang_class_varargs "-Wclass-varargs"
+/// @def _clwarn_clang_cmse_union_leak
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcmse-union-leak`.
 #define _clwarn_clang_cmse_union_leak "-Wcmse-union-leak"
+/// @def _clwarn_clang_comma
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcomma`.
 #define _clwarn_clang_comma "-Wcomma"
+/// @def _clwarn_clang_comment
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcomment`.
 #define _clwarn_clang_comment "-Wcomment"
+/// @def _clwarn_clang_comments
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcomments`.
 #define _clwarn_clang_comments "-Wcomments"
+/// @def _clwarn_clang_compare_distinct_pointer_types
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcompare-distinct-pointer-types`.
 #define _clwarn_clang_compare_distinct_pointer_types "-Wcompare-distinct-pointer-types"
+/// @def _clwarn_clang_completion_handler
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcompletion-handler`.
 #define _clwarn_clang_completion_handler "-Wcompletion-handler"
+/// @def _clwarn_clang_complex_component_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcomplex-component-init`.
 #define _clwarn_clang_complex_component_init "-Wcomplex-component-init"
+/// @def _clwarn_clang_compound_token_split
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcompound-token-split`.
 #define _clwarn_clang_compound_token_split "-Wcompound-token-split"
+/// @def _clwarn_clang_compound_token_split_by_macro
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcompound-token-split-by-macro`.
 #define _clwarn_clang_compound_token_split_by_macro "-Wcompound-token-split-by-macro"
+/// @def _clwarn_clang_compound_token_split_by_space
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcompound-token-split-by-space`.
 #define _clwarn_clang_compound_token_split_by_space "-Wcompound-token-split-by-space"
+/// @def _clwarn_clang_conditional_type_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconditional-type-mismatch`.
 #define _clwarn_clang_conditional_type_mismatch "-Wconditional-type-mismatch"
+/// @def _clwarn_clang_conditional_uninitialized
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconditional-uninitialized`.
 #define _clwarn_clang_conditional_uninitialized "-Wconditional-uninitialized"
+/// @def _clwarn_clang_config_macros
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconfig-macros`.
 #define _clwarn_clang_config_macros "-Wconfig-macros"
+/// @def _clwarn_clang_constant_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconstant-conversion`.
 #define _clwarn_clang_constant_conversion "-Wconstant-conversion"
+/// @def _clwarn_clang_constant_evaluated
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconstant-evaluated`.
 #define _clwarn_clang_constant_evaluated "-Wconstant-evaluated"
+/// @def _clwarn_clang_constant_logical_operand
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconstant-logical-operand`.
 #define _clwarn_clang_constant_logical_operand "-Wconstant-logical-operand"
+/// @def _clwarn_clang_constexpr_not_const
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconstexpr-not-const`.
 #define _clwarn_clang_constexpr_not_const "-Wconstexpr-not-const"
+/// @def _clwarn_clang_consumed
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconsumed`.
 #define _clwarn_clang_consumed "-Wconsumed"
+/// @def _clwarn_clang_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconversion`.
 #define _clwarn_clang_conversion "-Wconversion"
+/// @def _clwarn_clang_conversion_null
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wconversion-null`.
 #define _clwarn_clang_conversion_null "-Wconversion-null"
+/// @def _clwarn_clang_coro_non_aligned_allocation_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcoro-non-aligned-allocation-function`.
 #define _clwarn_clang_coro_non_aligned_allocation_function "-Wcoro-non-aligned-allocation-function"
+/// @def _clwarn_clang_coro_type_aware_allocation_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcoro-type-aware-allocation-function`.
 #define _clwarn_clang_coro_type_aware_allocation_function "-Wcoro-type-aware-allocation-function"
+/// @def _clwarn_clang_coroutine
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcoroutine`.
 #define _clwarn_clang_coroutine "-Wcoroutine"
+/// @def _clwarn_clang_coroutine_missing_unhandled_exception
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcoroutine-missing-unhandled-exception`.
 #define _clwarn_clang_coroutine_missing_unhandled_exception "-Wcoroutine-missing-unhandled-exception"
+/// @def _clwarn_clang_covered_switch_default
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcovered-switch-default`.
 #define _clwarn_clang_covered_switch_default "-Wcovered-switch-default"
+/// @def _clwarn_clang_cpp
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcpp`.
 #define _clwarn_clang_cpp "-Wcpp"
+/// @def _clwarn_clang_cstring_format_directive
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcstring-format-directive`.
 #define _clwarn_clang_cstring_format_directive "-Wcstring-format-directive"
+/// @def _clwarn_clang_ctad_maybe_unsupported
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wctad-maybe-unsupported`.
 #define _clwarn_clang_ctad_maybe_unsupported "-Wctad-maybe-unsupported"
+/// @def _clwarn_clang_ctor_dtor_privacy
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wctor-dtor-privacy`.
 #define _clwarn_clang_ctor_dtor_privacy "-Wctor-dtor-privacy"
+/// @def _clwarn_clang_ctu
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wctu`.
 #define _clwarn_clang_ctu "-Wctu"
+/// @def _clwarn_clang_cuda_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcuda-compat`.
 #define _clwarn_clang_cuda_compat "-Wcuda-compat"
+/// @def _clwarn_clang_custom_atomic_properties
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcustom-atomic-properties`.
 #define _clwarn_clang_custom_atomic_properties "-Wcustom-atomic-properties"
+/// @def _clwarn_clang_cxx0x_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++0x-compat`.
 #define _clwarn_clang_cxx0x_compat "-Wc++0x-compat"
+/// @def _clwarn_clang_cxx0x_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++0x-extensions`.
 #define _clwarn_clang_cxx0x_extensions "-Wc++0x-extensions"
+/// @def _clwarn_clang_cxx0x_narrowing
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++0x-narrowing`.
 #define _clwarn_clang_cxx0x_narrowing "-Wc++0x-narrowing"
+/// @def _clwarn_clang_cxx11_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-compat`.
 #define _clwarn_clang_cxx11_compat "-Wc++11-compat"
+/// @def _clwarn_clang_cxx11_compat_deprecated_writable_strings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-compat-deprecated-writable-strings`.
 #define _clwarn_clang_cxx11_compat_deprecated_writable_strings "-Wc++11-compat-deprecated-writable-strings"
+/// @def _clwarn_clang_cxx11_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-compat-pedantic`.
 #define _clwarn_clang_cxx11_compat_pedantic "-Wc++11-compat-pedantic"
+/// @def _clwarn_clang_cxx11_compat_reserved_user_defined_literal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-compat-reserved-user-defined-literal`.
 #define _clwarn_clang_cxx11_compat_reserved_user_defined_literal "-Wc++11-compat-reserved-user-defined-literal"
+/// @def _clwarn_clang_cxx11_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-extensions`.
 #define _clwarn_clang_cxx11_extensions "-Wc++11-extensions"
+/// @def _clwarn_clang_cxx11_extra_semi
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-extra-semi`.
 #define _clwarn_clang_cxx11_extra_semi "-Wc++11-extra-semi"
+/// @def _clwarn_clang_cxx11_inline_namespace
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-inline-namespace`.
 #define _clwarn_clang_cxx11_inline_namespace "-Wc++11-inline-namespace"
+/// @def _clwarn_clang_cxx11_long_long
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-long-long`.
 #define _clwarn_clang_cxx11_long_long "-Wc++11-long-long"
+/// @def _clwarn_clang_cxx11_narrowing
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-narrowing`.
 #define _clwarn_clang_cxx11_narrowing "-Wc++11-narrowing"
+/// @def _clwarn_clang_cxx11_narrowing_const_reference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++11-narrowing-const-reference`.
 #define _clwarn_clang_cxx11_narrowing_const_reference "-Wc++11-narrowing-const-reference"
+/// @def _clwarn_clang_cxx14_attribute_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++14-attribute-extensions`.
 #define _clwarn_clang_cxx14_attribute_extensions "-Wc++14-attribute-extensions"
+/// @def _clwarn_clang_cxx14_binary_literal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++14-binary-literal`.
 #define _clwarn_clang_cxx14_binary_literal "-Wc++14-binary-literal"
+/// @def _clwarn_clang_cxx14_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++14-compat`.
 #define _clwarn_clang_cxx14_compat "-Wc++14-compat"
+/// @def _clwarn_clang_cxx14_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++14-compat-pedantic`.
 #define _clwarn_clang_cxx14_compat_pedantic "-Wc++14-compat-pedantic"
+/// @def _clwarn_clang_cxx14_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++14-extensions`.
 #define _clwarn_clang_cxx14_extensions "-Wc++14-extensions"
+/// @def _clwarn_clang_cxx17_attribute_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++17-attribute-extensions`.
 #define _clwarn_clang_cxx17_attribute_extensions "-Wc++17-attribute-extensions"
+/// @def _clwarn_clang_cxx17_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++17-compat`.
 #define _clwarn_clang_cxx17_compat "-Wc++17-compat"
+/// @def _clwarn_clang_cxx17_compat_mangling
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++17-compat-mangling`.
 #define _clwarn_clang_cxx17_compat_mangling "-Wc++17-compat-mangling"
+/// @def _clwarn_clang_cxx17_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++17-compat-pedantic`.
 #define _clwarn_clang_cxx17_compat_pedantic "-Wc++17-compat-pedantic"
+/// @def _clwarn_clang_cxx17_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++17-extensions`.
 #define _clwarn_clang_cxx17_extensions "-Wc++17-extensions"
+/// @def _clwarn_clang_cxx1y_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++1y-extensions`.
 #define _clwarn_clang_cxx1y_extensions "-Wc++1y-extensions"
+/// @def _clwarn_clang_cxx1z_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++1z-compat`.
 #define _clwarn_clang_cxx1z_compat "-Wc++1z-compat"
+/// @def _clwarn_clang_cxx1z_compat_mangling
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++1z-compat-mangling`.
 #define _clwarn_clang_cxx1z_compat_mangling "-Wc++1z-compat-mangling"
+/// @def _clwarn_clang_cxx1z_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++1z-extensions`.
 #define _clwarn_clang_cxx1z_extensions "-Wc++1z-extensions"
+/// @def _clwarn_clang_cxx20_attribute_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++20-attribute-extensions`.
 #define _clwarn_clang_cxx20_attribute_extensions "-Wc++20-attribute-extensions"
+/// @def _clwarn_clang_cxx20_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++20-compat`.
 #define _clwarn_clang_cxx20_compat "-Wc++20-compat"
+/// @def _clwarn_clang_cxx20_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++20-compat-pedantic`.
 #define _clwarn_clang_cxx20_compat_pedantic "-Wc++20-compat-pedantic"
+/// @def _clwarn_clang_cxx20_designator
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++20-designator`.
 #define _clwarn_clang_cxx20_designator "-Wc++20-designator"
+/// @def _clwarn_clang_cxx20_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++20-extensions`.
 #define _clwarn_clang_cxx20_extensions "-Wc++20-extensions"
+/// @def _clwarn_clang_cxx23_attribute_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++23-attribute-extensions`.
 #define _clwarn_clang_cxx23_attribute_extensions "-Wc++23-attribute-extensions"
+/// @def _clwarn_clang_cxx23_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++23-compat`.
 #define _clwarn_clang_cxx23_compat "-Wc++23-compat"
+/// @def _clwarn_clang_cxx23_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++23-extensions`.
 #define _clwarn_clang_cxx23_extensions "-Wc++23-extensions"
+/// @def _clwarn_clang_cxx23_lambda_attributes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++23-lambda-attributes`.
 #define _clwarn_clang_cxx23_lambda_attributes "-Wc++23-lambda-attributes"
+/// @def _clwarn_clang_cxx26_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++26-extensions`.
 #define _clwarn_clang_cxx26_extensions "-Wc++26-extensions"
+/// @def _clwarn_clang_cxx2a_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++2a-compat`.
 #define _clwarn_clang_cxx2a_compat "-Wc++2a-compat"
+/// @def _clwarn_clang_cxx2a_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++2a-compat-pedantic`.
 #define _clwarn_clang_cxx2a_compat_pedantic "-Wc++2a-compat-pedantic"
+/// @def _clwarn_clang_cxx2a_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++2a-extensions`.
 #define _clwarn_clang_cxx2a_extensions "-Wc++2a-extensions"
+/// @def _clwarn_clang_cxx2b_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++2b-extensions`.
 #define _clwarn_clang_cxx2b_extensions "-Wc++2b-extensions"
+/// @def _clwarn_clang_cxx2c_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++2c-compat`.
 #define _clwarn_clang_cxx2c_compat "-Wc++2c-compat"
+/// @def _clwarn_clang_cxx2c_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++2c-extensions`.
 #define _clwarn_clang_cxx2c_extensions "-Wc++2c-extensions"
+/// @def _clwarn_clang_cxx98_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-compat`.
 #define _clwarn_clang_cxx98_compat "-Wc++98-compat"
+/// @def _clwarn_clang_cxx98_compat_bind_to_temporary_copy
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-compat-bind-to-temporary-copy`.
 #define _clwarn_clang_cxx98_compat_bind_to_temporary_copy "-Wc++98-compat-bind-to-temporary-copy"
+/// @def _clwarn_clang_cxx98_compat_extra_semi
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-compat-extra-semi`.
 #define _clwarn_clang_cxx98_compat_extra_semi "-Wc++98-compat-extra-semi"
+/// @def _clwarn_clang_cxx98_compat_local_type_template_args
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-compat-local-type-template-args`.
 #define _clwarn_clang_cxx98_compat_local_type_template_args "-Wc++98-compat-local-type-template-args"
+/// @def _clwarn_clang_cxx98_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-compat-pedantic`.
 #define _clwarn_clang_cxx98_compat_pedantic "-Wc++98-compat-pedantic"
+/// @def _clwarn_clang_cxx98_compat_unnamed_type_template_args
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-compat-unnamed-type-template-args`.
 #define _clwarn_clang_cxx98_compat_unnamed_type_template_args "-Wc++98-compat-unnamed-type-template-args"
+/// @def _clwarn_clang_cxx98_cxx11_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-c++11-compat`.
 #define _clwarn_clang_cxx98_cxx11_compat "-Wc++98-c++11-compat"
+/// @def _clwarn_clang_cxx98_cxx11_compat_binary_literal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-c++11-compat-binary-literal`.
 #define _clwarn_clang_cxx98_cxx11_compat_binary_literal "-Wc++98-c++11-compat-binary-literal"
+/// @def _clwarn_clang_cxx98_cxx11_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-c++11-compat-pedantic`.
 #define _clwarn_clang_cxx98_cxx11_compat_pedantic "-Wc++98-c++11-compat-pedantic"
+/// @def _clwarn_clang_cxx98_cxx11_cxx14_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-c++11-c++14-compat`.
 #define _clwarn_clang_cxx98_cxx11_cxx14_compat "-Wc++98-c++11-c++14-compat"
+/// @def _clwarn_clang_cxx98_cxx11_cxx14_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-c++11-c++14-compat-pedantic`.
 #define _clwarn_clang_cxx98_cxx11_cxx14_compat_pedantic "-Wc++98-c++11-c++14-compat-pedantic"
+/// @def _clwarn_clang_cxx98_cxx11_cxx14_cxx17_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-c++11-c++14-c++17-compat`.
 #define _clwarn_clang_cxx98_cxx11_cxx14_cxx17_compat "-Wc++98-c++11-c++14-c++17-compat"
+/// @def _clwarn_clang_cxx98_cxx11_cxx14_cxx17_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++98-c++11-c++14-c++17-compat-pedantic`.
 #define _clwarn_clang_cxx98_cxx11_cxx14_cxx17_compat_pedantic "-Wc++98-c++11-c++14-c++17-compat-pedantic"
+/// @def _clwarn_clang_cxx_attribute_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wcxx-attribute-extension`.
 #define _clwarn_clang_cxx_attribute_extension "-Wcxx-attribute-extension"
+/// @def _clwarn_clang_cxx_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++-compat`.
 #define _clwarn_clang_cxx_compat "-Wc++-compat"
+/// @def _clwarn_clang_cxx_hidden_decl
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++-hidden-decl`.
 #define _clwarn_clang_cxx_hidden_decl "-Wc++-hidden-decl"
+/// @def _clwarn_clang_cxx_keyword
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++-keyword`.
 #define _clwarn_clang_cxx_keyword "-Wc++-keyword"
+/// @def _clwarn_clang_cxx_unterminated_string_initialization
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wc++-unterminated-string-initialization`.
 #define _clwarn_clang_cxx_unterminated_string_initialization "-Wc++-unterminated-string-initialization"
+/// @def _clwarn_clang_dangling
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdangling`.
 #define _clwarn_clang_dangling "-Wdangling"
+/// @def _clwarn_clang_dangling_assignment
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdangling-assignment`.
 #define _clwarn_clang_dangling_assignment "-Wdangling-assignment"
+/// @def _clwarn_clang_dangling_assignment_gsl
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdangling-assignment-gsl`.
 #define _clwarn_clang_dangling_assignment_gsl "-Wdangling-assignment-gsl"
+/// @def _clwarn_clang_dangling_capture
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdangling-capture`.
 #define _clwarn_clang_dangling_capture "-Wdangling-capture"
+/// @def _clwarn_clang_dangling_else
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdangling-else`.
 #define _clwarn_clang_dangling_else "-Wdangling-else"
+/// @def _clwarn_clang_dangling_field
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdangling-field`.
 #define _clwarn_clang_dangling_field "-Wdangling-field"
+/// @def _clwarn_clang_dangling_gsl
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdangling-gsl`.
 #define _clwarn_clang_dangling_gsl "-Wdangling-gsl"
+/// @def _clwarn_clang_dangling_initializer_list
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdangling-initializer-list`.
 #define _clwarn_clang_dangling_initializer_list "-Wdangling-initializer-list"
+/// @def _clwarn_clang_darwin_sdk_settings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdarwin-sdk-settings`.
 #define _clwarn_clang_darwin_sdk_settings "-Wdarwin-sdk-settings"
+/// @def _clwarn_clang_date_time
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdate-time`.
 #define _clwarn_clang_date_time "-Wdate-time"
+/// @def _clwarn_clang_dealloc_in_category
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdealloc-in-category`.
 #define _clwarn_clang_dealloc_in_category "-Wdealloc-in-category"
+/// @def _clwarn_clang_debug_compression_unavailable
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdebug-compression-unavailable`.
 #define _clwarn_clang_debug_compression_unavailable "-Wdebug-compression-unavailable"
+/// @def _clwarn_clang_declaration_after_statement
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeclaration-after-statement`.
 #define _clwarn_clang_declaration_after_statement "-Wdeclaration-after-statement"
+/// @def _clwarn_clang_decls_in_multiple_modules
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdecls-in-multiple-modules`.
 #define _clwarn_clang_decls_in_multiple_modules "-Wdecls-in-multiple-modules"
+/// @def _clwarn_clang_default_const_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdefault-const-init`.
 #define _clwarn_clang_default_const_init "-Wdefault-const-init"
+/// @def _clwarn_clang_default_const_init_field
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdefault-const-init-field`.
 #define _clwarn_clang_default_const_init_field "-Wdefault-const-init-field"
+/// @def _clwarn_clang_default_const_init_field_unsafe
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdefault-const-init-field-unsafe`.
 #define _clwarn_clang_default_const_init_field_unsafe "-Wdefault-const-init-field-unsafe"
+/// @def _clwarn_clang_default_const_init_unsafe
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdefault-const-init-unsafe`.
 #define _clwarn_clang_default_const_init_unsafe "-Wdefault-const-init-unsafe"
+/// @def _clwarn_clang_default_const_init_var
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdefault-const-init-var`.
 #define _clwarn_clang_default_const_init_var "-Wdefault-const-init-var"
+/// @def _clwarn_clang_default_const_init_var_unsafe
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdefault-const-init-var-unsafe`.
 #define _clwarn_clang_default_const_init_var_unsafe "-Wdefault-const-init-var-unsafe"
+/// @def _clwarn_clang_defaulted_function_deleted
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdefaulted-function-deleted`.
 #define _clwarn_clang_defaulted_function_deleted "-Wdefaulted-function-deleted"
+/// @def _clwarn_clang_delayed_template_parsing_in_cxx20
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdelayed-template-parsing-in-cxx20`.
 #define _clwarn_clang_delayed_template_parsing_in_cxx20 "-Wdelayed-template-parsing-in-cxx20"
+/// @def _clwarn_clang_delegating_ctor_cycles
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdelegating-ctor-cycles`.
 #define _clwarn_clang_delegating_ctor_cycles "-Wdelegating-ctor-cycles"
+/// @def _clwarn_clang_delete_abstract_non_virtual_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdelete-abstract-non-virtual-dtor`.
 #define _clwarn_clang_delete_abstract_non_virtual_dtor "-Wdelete-abstract-non-virtual-dtor"
+/// @def _clwarn_clang_delete_incomplete
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdelete-incomplete`.
 #define _clwarn_clang_delete_incomplete "-Wdelete-incomplete"
+/// @def _clwarn_clang_delete_non_abstract_non_virtual_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdelete-non-abstract-non-virtual-dtor`.
 #define _clwarn_clang_delete_non_abstract_non_virtual_dtor "-Wdelete-non-abstract-non-virtual-dtor"
+/// @def _clwarn_clang_delete_non_virtual_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdelete-non-virtual-dtor`.
 #define _clwarn_clang_delete_non_virtual_dtor "-Wdelete-non-virtual-dtor"
+/// @def _clwarn_clang_delimited_escape_sequence_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdelimited-escape-sequence-extension`.
 #define _clwarn_clang_delimited_escape_sequence_extension "-Wdelimited-escape-sequence-extension"
+/// @def _clwarn_clang_deprecate_lax_vec_conv_all
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecate-lax-vec-conv-all`.
 #define _clwarn_clang_deprecate_lax_vec_conv_all "-Wdeprecate-lax-vec-conv-all"
+/// @def _clwarn_clang_deprecated
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated`.
 #define _clwarn_clang_deprecated "-Wdeprecated"
+/// @def _clwarn_clang_deprecated_altivec_src_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-altivec-src-compat`.
 #define _clwarn_clang_deprecated_altivec_src_compat "-Wdeprecated-altivec-src-compat"
+/// @def _clwarn_clang_deprecated_anon_enum_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-anon-enum-enum-conversion`.
 #define _clwarn_clang_deprecated_anon_enum_enum_conversion "-Wdeprecated-anon-enum-enum-conversion"
+/// @def _clwarn_clang_deprecated_array_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-array-compare`.
 #define _clwarn_clang_deprecated_array_compare "-Wdeprecated-array-compare"
+/// @def _clwarn_clang_deprecated_attributes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-attributes`.
 #define _clwarn_clang_deprecated_attributes "-Wdeprecated-attributes"
+/// @def _clwarn_clang_deprecated_builtins
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-builtins`.
 #define _clwarn_clang_deprecated_builtins "-Wdeprecated-builtins"
+/// @def _clwarn_clang_deprecated_comma_subscript
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-comma-subscript`.
 #define _clwarn_clang_deprecated_comma_subscript "-Wdeprecated-comma-subscript"
+/// @def _clwarn_clang_deprecated_copy
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-copy`.
 #define _clwarn_clang_deprecated_copy "-Wdeprecated-copy"
+/// @def _clwarn_clang_deprecated_copy_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-copy-dtor`.
 #define _clwarn_clang_deprecated_copy_dtor "-Wdeprecated-copy-dtor"
+/// @def _clwarn_clang_deprecated_copy_with_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-copy-with-dtor`.
 #define _clwarn_clang_deprecated_copy_with_dtor "-Wdeprecated-copy-with-dtor"
+/// @def _clwarn_clang_deprecated_copy_with_user_provided_copy
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-copy-with-user-provided-copy`.
 #define _clwarn_clang_deprecated_copy_with_user_provided_copy "-Wdeprecated-copy-with-user-provided-copy"
+/// @def _clwarn_clang_deprecated_copy_with_user_provided_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-copy-with-user-provided-dtor`.
 #define _clwarn_clang_deprecated_copy_with_user_provided_dtor "-Wdeprecated-copy-with-user-provided-dtor"
+/// @def _clwarn_clang_deprecated_coroutine
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-coroutine`.
 #define _clwarn_clang_deprecated_coroutine "-Wdeprecated-coroutine"
+/// @def _clwarn_clang_deprecated_declarations
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-declarations`.
 #define _clwarn_clang_deprecated_declarations "-Wdeprecated-declarations"
+/// @def _clwarn_clang_deprecated_declarations_switch_case
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-declarations-switch-case`.
 #define _clwarn_clang_deprecated_declarations_switch_case "-Wdeprecated-declarations-switch-case"
+/// @def _clwarn_clang_deprecated_dynamic_exception_spec
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-dynamic-exception-spec`.
 #define _clwarn_clang_deprecated_dynamic_exception_spec "-Wdeprecated-dynamic-exception-spec"
+/// @def _clwarn_clang_deprecated_enum_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-enum-compare`.
 #define _clwarn_clang_deprecated_enum_compare "-Wdeprecated-enum-compare"
+/// @def _clwarn_clang_deprecated_enum_compare_conditional
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-enum-compare-conditional`.
 #define _clwarn_clang_deprecated_enum_compare_conditional "-Wdeprecated-enum-compare-conditional"
+/// @def _clwarn_clang_deprecated_enum_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-enum-enum-conversion`.
 #define _clwarn_clang_deprecated_enum_enum_conversion "-Wdeprecated-enum-enum-conversion"
+/// @def _clwarn_clang_deprecated_enum_float_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-enum-float-conversion`.
 #define _clwarn_clang_deprecated_enum_float_conversion "-Wdeprecated-enum-float-conversion"
+/// @def _clwarn_clang_deprecated_implementations
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-implementations`.
 #define _clwarn_clang_deprecated_implementations "-Wdeprecated-implementations"
+/// @def _clwarn_clang_deprecated_increment_bool
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-increment-bool`.
 #define _clwarn_clang_deprecated_increment_bool "-Wdeprecated-increment-bool"
+/// @def _clwarn_clang_deprecated_literal_operator
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-literal-operator`.
 #define _clwarn_clang_deprecated_literal_operator "-Wdeprecated-literal-operator"
+/// @def _clwarn_clang_deprecated_missing_comma_variadic_parameter
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-missing-comma-variadic-parameter`.
 #define _clwarn_clang_deprecated_missing_comma_variadic_parameter "-Wdeprecated-missing-comma-variadic-parameter"
+/// @def _clwarn_clang_deprecated_module_dot_map
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-module-dot-map`.
 #define _clwarn_clang_deprecated_module_dot_map "-Wdeprecated-module-dot-map"
+/// @def _clwarn_clang_deprecated_non_prototype
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-non-prototype`.
 #define _clwarn_clang_deprecated_non_prototype "-Wdeprecated-non-prototype"
+/// @def _clwarn_clang_deprecated_objc_isa_usage
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-objc-isa-usage`.
 #define _clwarn_clang_deprecated_objc_isa_usage "-Wdeprecated-objc-isa-usage"
+/// @def _clwarn_clang_deprecated_objc_pointer_introspection
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-objc-pointer-introspection`.
 #define _clwarn_clang_deprecated_objc_pointer_introspection "-Wdeprecated-objc-pointer-introspection"
+/// @def _clwarn_clang_deprecated_objc_pointer_introspection_performselector
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-objc-pointer-introspection-performSelector`.
 #define _clwarn_clang_deprecated_objc_pointer_introspection_performselector "-Wdeprecated-objc-pointer-introspection-performSelector"
+/// @def _clwarn_clang_deprecated_octal_literals
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-octal-literals`.
 #define _clwarn_clang_deprecated_octal_literals "-Wdeprecated-octal-literals"
+/// @def _clwarn_clang_deprecated_ofast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-ofast`.
 #define _clwarn_clang_deprecated_ofast "-Wdeprecated-ofast"
+/// @def _clwarn_clang_deprecated_pragma
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-pragma`.
 #define _clwarn_clang_deprecated_pragma "-Wdeprecated-pragma"
+/// @def _clwarn_clang_deprecated_redundant_constexpr_static_def
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-redundant-constexpr-static-def`.
 #define _clwarn_clang_deprecated_redundant_constexpr_static_def "-Wdeprecated-redundant-constexpr-static-def"
+/// @def _clwarn_clang_deprecated_register
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-register`.
 #define _clwarn_clang_deprecated_register "-Wdeprecated-register"
+/// @def _clwarn_clang_deprecated_this_capture
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-this-capture`.
 #define _clwarn_clang_deprecated_this_capture "-Wdeprecated-this-capture"
+/// @def _clwarn_clang_deprecated_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-type`.
 #define _clwarn_clang_deprecated_type "-Wdeprecated-type"
+/// @def _clwarn_clang_deprecated_volatile
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-volatile`.
 #define _clwarn_clang_deprecated_volatile "-Wdeprecated-volatile"
+/// @def _clwarn_clang_deprecated_writable_strings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdeprecated-writable-strings`.
 #define _clwarn_clang_deprecated_writable_strings "-Wdeprecated-writable-strings"
+/// @def _clwarn_clang_direct_ivar_access
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdirect-ivar-access`.
 #define _clwarn_clang_direct_ivar_access "-Wdirect-ivar-access"
+/// @def _clwarn_clang_disabled_macro_expansion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdisabled-macro-expansion`.
 #define _clwarn_clang_disabled_macro_expansion "-Wdisabled-macro-expansion"
+/// @def _clwarn_clang_disabled_optimization
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdisabled-optimization`.
 #define _clwarn_clang_disabled_optimization "-Wdisabled-optimization"
+/// @def _clwarn_clang_discard_qual
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdiscard-qual`.
 #define _clwarn_clang_discard_qual "-Wdiscard-qual"
+/// @def _clwarn_clang_distributed_object_modifiers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdistributed-object-modifiers`.
 #define _clwarn_clang_distributed_object_modifiers "-Wdistributed-object-modifiers"
+/// @def _clwarn_clang_div_by_zero
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdiv-by-zero`.
 #define _clwarn_clang_div_by_zero "-Wdiv-by-zero"
+/// @def _clwarn_clang_division_by_zero
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdivision-by-zero`.
 #define _clwarn_clang_division_by_zero "-Wdivision-by-zero"
+/// @def _clwarn_clang_dll_attribute_on_redeclaration
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdll-attribute-on-redeclaration`.
 #define _clwarn_clang_dll_attribute_on_redeclaration "-Wdll-attribute-on-redeclaration"
+/// @def _clwarn_clang_dllexport_explicit_instantiation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdllexport-explicit-instantiation`.
 #define _clwarn_clang_dllexport_explicit_instantiation "-Wdllexport-explicit-instantiation"
+/// @def _clwarn_clang_dllexport_explicit_instantiation_decl
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdllexport-explicit-instantiation-decl`.
 #define _clwarn_clang_dllexport_explicit_instantiation_decl "-Wdllexport-explicit-instantiation-decl"
+/// @def _clwarn_clang_dllimport_static_field_def
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdllimport-static-field-def`.
 #define _clwarn_clang_dllimport_static_field_def "-Wdllimport-static-field-def"
+/// @def _clwarn_clang_documentation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdocumentation`.
 #define _clwarn_clang_documentation "-Wdocumentation"
+/// @def _clwarn_clang_documentation_deprecated_sync
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdocumentation-deprecated-sync`.
 #define _clwarn_clang_documentation_deprecated_sync "-Wdocumentation-deprecated-sync"
+/// @def _clwarn_clang_documentation_html
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdocumentation-html`.
 #define _clwarn_clang_documentation_html "-Wdocumentation-html"
+/// @def _clwarn_clang_documentation_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdocumentation-pedantic`.
 #define _clwarn_clang_documentation_pedantic "-Wdocumentation-pedantic"
+/// @def _clwarn_clang_documentation_unknown_command
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdocumentation-unknown-command`.
 #define _clwarn_clang_documentation_unknown_command "-Wdocumentation-unknown-command"
+/// @def _clwarn_clang_dollar_in_identifier_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdollar-in-identifier-extension`.
 #define _clwarn_clang_dollar_in_identifier_extension "-Wdollar-in-identifier-extension"
+/// @def _clwarn_clang_double_promotion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdouble-promotion`.
 #define _clwarn_clang_double_promotion "-Wdouble-promotion"
+/// @def _clwarn_clang_dtor_name
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdtor-name`.
 #define _clwarn_clang_dtor_name "-Wdtor-name"
+/// @def _clwarn_clang_dtor_typedef
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdtor-typedef`.
 #define _clwarn_clang_dtor_typedef "-Wdtor-typedef"
+/// @def _clwarn_clang_duplicate_decl_specifier
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wduplicate-decl-specifier`.
 #define _clwarn_clang_duplicate_decl_specifier "-Wduplicate-decl-specifier"
+/// @def _clwarn_clang_duplicate_enum
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wduplicate-enum`.
 #define _clwarn_clang_duplicate_enum "-Wduplicate-enum"
+/// @def _clwarn_clang_duplicate_method_arg
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wduplicate-method-arg`.
 #define _clwarn_clang_duplicate_method_arg "-Wduplicate-method-arg"
+/// @def _clwarn_clang_duplicate_method_match
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wduplicate-method-match`.
 #define _clwarn_clang_duplicate_method_match "-Wduplicate-method-match"
+/// @def _clwarn_clang_duplicate_protocol
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wduplicate-protocol`.
 #define _clwarn_clang_duplicate_protocol "-Wduplicate-protocol"
+/// @def _clwarn_clang_dxil_validation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdxil-validation`.
 #define _clwarn_clang_dxil_validation "-Wdxil-validation"
+/// @def _clwarn_clang_dynamic_class_memaccess
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdynamic-class-memaccess`.
 #define _clwarn_clang_dynamic_class_memaccess "-Wdynamic-class-memaccess"
+/// @def _clwarn_clang_dynamic_exception_spec
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wdynamic-exception-spec`.
 #define _clwarn_clang_dynamic_exception_spec "-Wdynamic-exception-spec"
+/// @def _clwarn_clang_eager_load_cxx_named_modules
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Weager-load-cxx-named-modules`.
 #define _clwarn_clang_eager_load_cxx_named_modules "-Weager-load-cxx-named-modules"
+/// @def _clwarn_clang_effcxx
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Weffc++`.
 #define _clwarn_clang_effcxx "-Weffc++"
+/// @def _clwarn_clang_elaborated_enum_base
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Welaborated-enum-base`.
 #define _clwarn_clang_elaborated_enum_base "-Welaborated-enum-base"
+/// @def _clwarn_clang_elaborated_enum_class
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Welaborated-enum-class`.
 #define _clwarn_clang_elaborated_enum_class "-Welaborated-enum-class"
+/// @def _clwarn_clang_embedded_directive
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wembedded-directive`.
 #define _clwarn_clang_embedded_directive "-Wembedded-directive"
+/// @def _clwarn_clang_empty_body
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wempty-body`.
 #define _clwarn_clang_empty_body "-Wempty-body"
+/// @def _clwarn_clang_empty_decomposition
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wempty-decomposition`.
 #define _clwarn_clang_empty_decomposition "-Wempty-decomposition"
+/// @def _clwarn_clang_empty_init_stmt
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wempty-init-stmt`.
 #define _clwarn_clang_empty_init_stmt "-Wempty-init-stmt"
+/// @def _clwarn_clang_empty_translation_unit
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wempty-translation-unit`.
 #define _clwarn_clang_empty_translation_unit "-Wempty-translation-unit"
+/// @def _clwarn_clang_encode_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wencode-type`.
 #define _clwarn_clang_encode_type "-Wencode-type"
+/// @def _clwarn_clang_endif_labels
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wendif-labels`.
 #define _clwarn_clang_endif_labels "-Wendif-labels"
+/// @def _clwarn_clang_enum_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wenum-compare`.
 #define _clwarn_clang_enum_compare "-Wenum-compare"
+/// @def _clwarn_clang_enum_compare_conditional
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wenum-compare-conditional`.
 #define _clwarn_clang_enum_compare_conditional "-Wenum-compare-conditional"
+/// @def _clwarn_clang_enum_compare_switch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wenum-compare-switch`.
 #define _clwarn_clang_enum_compare_switch "-Wenum-compare-switch"
+/// @def _clwarn_clang_enum_compare_typo
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wenum-compare-typo`.
 #define _clwarn_clang_enum_compare_typo "-Wenum-compare-typo"
+/// @def _clwarn_clang_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wenum-conversion`.
 #define _clwarn_clang_enum_conversion "-Wenum-conversion"
+/// @def _clwarn_clang_enum_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wenum-enum-conversion`.
 #define _clwarn_clang_enum_enum_conversion "-Wenum-enum-conversion"
+/// @def _clwarn_clang_enum_float_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wenum-float-conversion`.
 #define _clwarn_clang_enum_float_conversion "-Wenum-float-conversion"
+/// @def _clwarn_clang_enum_too_large
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wenum-too-large`.
 #define _clwarn_clang_enum_too_large "-Wenum-too-large"
+/// @def _clwarn_clang_exceptions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexceptions`.
 #define _clwarn_clang_exceptions "-Wexceptions"
+/// @def _clwarn_clang_excess_initializers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexcess-initializers`.
 #define _clwarn_clang_excess_initializers "-Wexcess-initializers"
+/// @def _clwarn_clang_excessive_regsave
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexcessive-regsave`.
 #define _clwarn_clang_excessive_regsave "-Wexcessive-regsave"
+/// @def _clwarn_clang_exit_time_destructors
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexit-time-destructors`.
 #define _clwarn_clang_exit_time_destructors "-Wexit-time-destructors"
+/// @def _clwarn_clang_expansion_to_defined
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexpansion-to-defined`.
 #define _clwarn_clang_expansion_to_defined "-Wexpansion-to-defined"
+/// @def _clwarn_clang_experimental_header_units
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexperimental-header-units`.
 #define _clwarn_clang_experimental_header_units "-Wexperimental-header-units"
+/// @def _clwarn_clang_experimental_option
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexperimental-option`.
 #define _clwarn_clang_experimental_option "-Wexperimental-option"
+/// @def _clwarn_clang_explicit_initialize_call
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexplicit-initialize-call`.
 #define _clwarn_clang_explicit_initialize_call "-Wexplicit-initialize-call"
+/// @def _clwarn_clang_explicit_ownership_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexplicit-ownership-type`.
 #define _clwarn_clang_explicit_ownership_type "-Wexplicit-ownership-type"
+/// @def _clwarn_clang_explicit_specialization_storage_class
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexplicit-specialization-storage-class`.
 #define _clwarn_clang_explicit_specialization_storage_class "-Wexplicit-specialization-storage-class"
+/// @def _clwarn_clang_export_unnamed
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wexport-unnamed`.
 #define _clwarn_clang_export_unnamed "-Wexport-unnamed"
+/// @def _clwarn_clang_ext_cxx_type_aware_allocators
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wext-cxx-type-aware-allocators`.
 #define _clwarn_clang_ext_cxx_type_aware_allocators "-Wext-cxx-type-aware-allocators"
+/// @def _clwarn_clang_extern_c_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextern-c-compat`.
 #define _clwarn_clang_extern_c_compat "-Wextern-c-compat"
+/// @def _clwarn_clang_extern_initializer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextern-initializer`.
 #define _clwarn_clang_extern_initializer "-Wextern-initializer"
+/// @def _clwarn_clang_extra
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextra`.
 #define _clwarn_clang_extra "-Wextra"
+/// @def _clwarn_clang_extra_qualification
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextra-qualification`.
 #define _clwarn_clang_extra_qualification "-Wextra-qualification"
+/// @def _clwarn_clang_extra_semi
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextra-semi`.
 #define _clwarn_clang_extra_semi "-Wextra-semi"
+/// @def _clwarn_clang_extra_semi_stmt
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextra-semi-stmt`.
 #define _clwarn_clang_extra_semi_stmt "-Wextra-semi-stmt"
+/// @def _clwarn_clang_extra_tokens
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextra-tokens`.
 #define _clwarn_clang_extra_tokens "-Wextra-tokens"
+/// @def _clwarn_clang_extractapi_misuse
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextractapi-misuse`.
 #define _clwarn_clang_extractapi_misuse "-Wextractapi-misuse"
+/// @def _clwarn_clang_extraneous_template_head
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wextraneous-template-head`.
 #define _clwarn_clang_extraneous_template_head "-Wextraneous-template-head"
+/// @def _clwarn_clang_final_dtor_non_final_class
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfinal-dtor-non-final-class`.
 #define _clwarn_clang_final_dtor_non_final_class "-Wfinal-dtor-non-final-class"
+/// @def _clwarn_clang_final_macro
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfinal-macro`.
 #define _clwarn_clang_final_macro "-Wfinal-macro"
+/// @def _clwarn_clang_fixed_point_overflow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfixed-point-overflow`.
 #define _clwarn_clang_fixed_point_overflow "-Wfixed-point-overflow"
+/// @def _clwarn_clang_flag_enum
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wflag-enum`.
 #define _clwarn_clang_flag_enum "-Wflag-enum"
+/// @def _clwarn_clang_flexible_array_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wflexible-array-extensions`.
 #define _clwarn_clang_flexible_array_extensions "-Wflexible-array-extensions"
+/// @def _clwarn_clang_float_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfloat-conversion`.
 #define _clwarn_clang_float_conversion "-Wfloat-conversion"
+/// @def _clwarn_clang_float_equal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfloat-equal`.
 #define _clwarn_clang_float_equal "-Wfloat-equal"
+/// @def _clwarn_clang_float_overflow_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfloat-overflow-conversion`.
 #define _clwarn_clang_float_overflow_conversion "-Wfloat-overflow-conversion"
+/// @def _clwarn_clang_float_zero_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfloat-zero-conversion`.
 #define _clwarn_clang_float_zero_conversion "-Wfloat-zero-conversion"
+/// @def _clwarn_clang_for_loop_analysis
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfor-loop-analysis`.
 #define _clwarn_clang_for_loop_analysis "-Wfor-loop-analysis"
+/// @def _clwarn_clang_format
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat`.
 #define _clwarn_clang_format "-Wformat"
+/// @def _clwarn_clang_format_extra_args
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-extra-args`.
 #define _clwarn_clang_format_extra_args "-Wformat-extra-args"
+/// @def _clwarn_clang_format_insufficient_args
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-insufficient-args`.
 #define _clwarn_clang_format_insufficient_args "-Wformat-insufficient-args"
+/// @def _clwarn_clang_format_invalid_specifier
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-invalid-specifier`.
 #define _clwarn_clang_format_invalid_specifier "-Wformat-invalid-specifier"
+/// @def _clwarn_clang_format_non_iso
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-non-iso`.
 #define _clwarn_clang_format_non_iso "-Wformat-non-iso"
+/// @def _clwarn_clang_format_nonliteral
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-nonliteral`.
 #define _clwarn_clang_format_nonliteral "-Wformat-nonliteral"
+/// @def _clwarn_clang_format_overflow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-overflow`.
 #define _clwarn_clang_format_overflow "-Wformat-overflow"
+/// @def _clwarn_clang_format_overflow_non_kprintf
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-overflow-non-kprintf`.
 #define _clwarn_clang_format_overflow_non_kprintf "-Wformat-overflow-non-kprintf"
+/// @def _clwarn_clang_format_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-pedantic`.
 #define _clwarn_clang_format_pedantic "-Wformat-pedantic"
+/// @def _clwarn_clang_format_security
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-security`.
 #define _clwarn_clang_format_security "-Wformat-security"
+/// @def _clwarn_clang_format_signedness
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-signedness`.
 #define _clwarn_clang_format_signedness "-Wformat-signedness"
+/// @def _clwarn_clang_format_truncation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-truncation`.
 #define _clwarn_clang_format_truncation "-Wformat-truncation"
+/// @def _clwarn_clang_format_truncation_non_kprintf
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-truncation-non-kprintf`.
 #define _clwarn_clang_format_truncation_non_kprintf "-Wformat-truncation-non-kprintf"
+/// @def _clwarn_clang_format_type_confusion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-type-confusion`.
 #define _clwarn_clang_format_type_confusion "-Wformat-type-confusion"
+/// @def _clwarn_clang_format_y2k
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-y2k`.
 #define _clwarn_clang_format_y2k "-Wformat-y2k"
+/// @def _clwarn_clang_format_zero_length
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wformat-zero-length`.
 #define _clwarn_clang_format_zero_length "-Wformat-zero-length"
+/// @def _clwarn_clang_fortify_source
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfortify-source`.
 #define _clwarn_clang_fortify_source "-Wfortify-source"
+/// @def _clwarn_clang_four_char_constants
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfour-char-constants`.
 #define _clwarn_clang_four_char_constants "-Wfour-char-constants"
+/// @def _clwarn_clang_frame_address
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wframe-address`.
 #define _clwarn_clang_frame_address "-Wframe-address"
+/// @def _clwarn_clang_frame_larger_than
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wframe-larger-than`.
 #define _clwarn_clang_frame_larger_than "-Wframe-larger-than"
+/// @def _clwarn_clang_framework_include_private_from_public
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wframework-include-private-from-public`.
 #define _clwarn_clang_framework_include_private_from_public "-Wframework-include-private-from-public"
+/// @def _clwarn_clang_free_nonheap_object
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfree-nonheap-object`.
 #define _clwarn_clang_free_nonheap_object "-Wfree-nonheap-object"
+/// @def _clwarn_clang_friend_enum
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfriend-enum`.
 #define _clwarn_clang_friend_enum "-Wfriend-enum"
+/// @def _clwarn_clang_function_def_in_objc_container
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfunction-def-in-objc-container`.
 #define _clwarn_clang_function_def_in_objc_container "-Wfunction-def-in-objc-container"
+/// @def _clwarn_clang_function_effect_redeclarations
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfunction-effect-redeclarations`.
 #define _clwarn_clang_function_effect_redeclarations "-Wfunction-effect-redeclarations"
+/// @def _clwarn_clang_function_effects
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfunction-effects`.
 #define _clwarn_clang_function_effects "-Wfunction-effects"
+/// @def _clwarn_clang_function_multiversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfunction-multiversion`.
 #define _clwarn_clang_function_multiversion "-Wfunction-multiversion"
+/// @def _clwarn_clang_fuse_ld_path
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfuse-ld-path`.
 #define _clwarn_clang_fuse_ld_path "-Wfuse-ld-path"
+/// @def _clwarn_clang_future_attribute_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfuture-attribute-extensions`.
 #define _clwarn_clang_future_attribute_extensions "-Wfuture-attribute-extensions"
+/// @def _clwarn_clang_future_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wfuture-compat`.
 #define _clwarn_clang_future_compat "-Wfuture-compat"
+/// @def _clwarn_clang_gcc_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgcc-compat`.
 #define _clwarn_clang_gcc_compat "-Wgcc-compat"
+/// @def _clwarn_clang_gcc_install_dir_libstdcxx
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgcc-install-dir-libstdcxx`.
 #define _clwarn_clang_gcc_install_dir_libstdcxx "-Wgcc-install-dir-libstdcxx"
+/// @def _clwarn_clang_global_constructors
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wglobal-constructors`.
 #define _clwarn_clang_global_constructors "-Wglobal-constructors"
+/// @def _clwarn_clang_global_isel
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wglobal-isel`.
 #define _clwarn_clang_global_isel "-Wglobal-isel"
+/// @def _clwarn_clang_gnu
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu`.
 #define _clwarn_clang_gnu "-Wgnu"
+/// @def _clwarn_clang_gnu_alignof_expression
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-alignof-expression`.
 #define _clwarn_clang_gnu_alignof_expression "-Wgnu-alignof-expression"
+/// @def _clwarn_clang_gnu_anonymous_struct
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-anonymous-struct`.
 #define _clwarn_clang_gnu_anonymous_struct "-Wgnu-anonymous-struct"
+/// @def _clwarn_clang_gnu_array_member_paren_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-array-member-paren-init`.
 #define _clwarn_clang_gnu_array_member_paren_init "-Wgnu-array-member-paren-init"
+/// @def _clwarn_clang_gnu_auto_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-auto-type`.
 #define _clwarn_clang_gnu_auto_type "-Wgnu-auto-type"
+/// @def _clwarn_clang_gnu_binary_literal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-binary-literal`.
 #define _clwarn_clang_gnu_binary_literal "-Wgnu-binary-literal"
+/// @def _clwarn_clang_gnu_case_range
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-case-range`.
 #define _clwarn_clang_gnu_case_range "-Wgnu-case-range"
+/// @def _clwarn_clang_gnu_complex_integer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-complex-integer`.
 #define _clwarn_clang_gnu_complex_integer "-Wgnu-complex-integer"
+/// @def _clwarn_clang_gnu_compound_literal_initializer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-compound-literal-initializer`.
 #define _clwarn_clang_gnu_compound_literal_initializer "-Wgnu-compound-literal-initializer"
+/// @def _clwarn_clang_gnu_conditional_omitted_operand
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-conditional-omitted-operand`.
 #define _clwarn_clang_gnu_conditional_omitted_operand "-Wgnu-conditional-omitted-operand"
+/// @def _clwarn_clang_gnu_designator
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-designator`.
 #define _clwarn_clang_gnu_designator "-Wgnu-designator"
+/// @def _clwarn_clang_gnu_empty_initializer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-empty-initializer`.
 #define _clwarn_clang_gnu_empty_initializer "-Wgnu-empty-initializer"
+/// @def _clwarn_clang_gnu_empty_struct
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-empty-struct`.
 #define _clwarn_clang_gnu_empty_struct "-Wgnu-empty-struct"
+/// @def _clwarn_clang_gnu_flexible_array_initializer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-flexible-array-initializer`.
 #define _clwarn_clang_gnu_flexible_array_initializer "-Wgnu-flexible-array-initializer"
+/// @def _clwarn_clang_gnu_flexible_array_union_member
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-flexible-array-union-member`.
 #define _clwarn_clang_gnu_flexible_array_union_member "-Wgnu-flexible-array-union-member"
+/// @def _clwarn_clang_gnu_folding_constant
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-folding-constant`.
 #define _clwarn_clang_gnu_folding_constant "-Wgnu-folding-constant"
+/// @def _clwarn_clang_gnu_imaginary_constant
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-imaginary-constant`.
 #define _clwarn_clang_gnu_imaginary_constant "-Wgnu-imaginary-constant"
+/// @def _clwarn_clang_gnu_include_next
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-include-next`.
 #define _clwarn_clang_gnu_include_next "-Wgnu-include-next"
+/// @def _clwarn_clang_gnu_inline_cpp_without_extern
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-inline-cpp-without-extern`.
 #define _clwarn_clang_gnu_inline_cpp_without_extern "-Wgnu-inline-cpp-without-extern"
+/// @def _clwarn_clang_gnu_label_as_value
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-label-as-value`.
 #define _clwarn_clang_gnu_label_as_value "-Wgnu-label-as-value"
+/// @def _clwarn_clang_gnu_line_marker
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-line-marker`.
 #define _clwarn_clang_gnu_line_marker "-Wgnu-line-marker"
+/// @def _clwarn_clang_gnu_null_pointer_arithmetic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-null-pointer-arithmetic`.
 #define _clwarn_clang_gnu_null_pointer_arithmetic "-Wgnu-null-pointer-arithmetic"
+/// @def _clwarn_clang_gnu_offsetof_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-offsetof-extensions`.
 #define _clwarn_clang_gnu_offsetof_extensions "-Wgnu-offsetof-extensions"
+/// @def _clwarn_clang_gnu_pointer_arith
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-pointer-arith`.
 #define _clwarn_clang_gnu_pointer_arith "-Wgnu-pointer-arith"
+/// @def _clwarn_clang_gnu_redeclared_enum
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-redeclared-enum`.
 #define _clwarn_clang_gnu_redeclared_enum "-Wgnu-redeclared-enum"
+/// @def _clwarn_clang_gnu_statement_expression
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-statement-expression`.
 #define _clwarn_clang_gnu_statement_expression "-Wgnu-statement-expression"
+/// @def _clwarn_clang_gnu_statement_expression_from_macro_expansion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-statement-expression-from-macro-expansion`.
 #define _clwarn_clang_gnu_statement_expression_from_macro_expansion "-Wgnu-statement-expression-from-macro-expansion"
+/// @def _clwarn_clang_gnu_static_float_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-static-float-init`.
 #define _clwarn_clang_gnu_static_float_init "-Wgnu-static-float-init"
+/// @def _clwarn_clang_gnu_string_literal_operator_template
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-string-literal-operator-template`.
 #define _clwarn_clang_gnu_string_literal_operator_template "-Wgnu-string-literal-operator-template"
+/// @def _clwarn_clang_gnu_union_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-union-cast`.
 #define _clwarn_clang_gnu_union_cast "-Wgnu-union-cast"
+/// @def _clwarn_clang_gnu_variable_sized_type_not_at_end
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-variable-sized-type-not-at-end`.
 #define _clwarn_clang_gnu_variable_sized_type_not_at_end "-Wgnu-variable-sized-type-not-at-end"
+/// @def _clwarn_clang_gnu_zero_line_directive
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-zero-line-directive`.
 #define _clwarn_clang_gnu_zero_line_directive "-Wgnu-zero-line-directive"
+/// @def _clwarn_clang_gnu_zero_variadic_macro_arguments
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgnu-zero-variadic-macro-arguments`.
 #define _clwarn_clang_gnu_zero_variadic_macro_arguments "-Wgnu-zero-variadic-macro-arguments"
+/// @def _clwarn_clang_gpu_maybe_wrong_side
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgpu-maybe-wrong-side`.
 #define _clwarn_clang_gpu_maybe_wrong_side "-Wgpu-maybe-wrong-side"
+/// @def _clwarn_clang_groupshared_initializer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wgroupshared-initializer`.
+#define _clwarn_clang_groupshared_initializer "-Wgroupshared-initializer"
+/// @def _clwarn_clang_header_guard
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wheader-guard`.
 #define _clwarn_clang_header_guard "-Wheader-guard"
+/// @def _clwarn_clang_header_hygiene
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wheader-hygiene`.
 #define _clwarn_clang_header_hygiene "-Wheader-hygiene"
+/// @def _clwarn_clang_higher_precision_for_complex_division
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whigher-precision-for-complex-division`.
 #define _clwarn_clang_higher_precision_for_complex_division "-Whigher-precision-for-complex-division"
+/// @def _clwarn_clang_hip_omp_target_directives
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whip-omp-target-directives`.
 #define _clwarn_clang_hip_omp_target_directives "-Whip-omp-target-directives"
+/// @def _clwarn_clang_hip_only
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whip-only`.
 #define _clwarn_clang_hip_only "-Whip-only"
+/// @def _clwarn_clang_hlsl_202y_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whlsl-202y-extensions`.
 #define _clwarn_clang_hlsl_202y_extensions "-Whlsl-202y-extensions"
+/// @def _clwarn_clang_hlsl_availability
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whlsl-availability`.
 #define _clwarn_clang_hlsl_availability "-Whlsl-availability"
+/// @def _clwarn_clang_hlsl_dxc_compatability
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whlsl-dxc-compatability`.
 #define _clwarn_clang_hlsl_dxc_compatability "-Whlsl-dxc-compatability"
+/// @def _clwarn_clang_hlsl_explicit_binding
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whlsl-explicit-binding`.
+#define _clwarn_clang_hlsl_explicit_binding "-Whlsl-explicit-binding"
+/// @def _clwarn_clang_hlsl_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whlsl-extensions`.
 #define _clwarn_clang_hlsl_extensions "-Whlsl-extensions"
+/// @def _clwarn_clang_hlsl_implicit_binding
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Whlsl-implicit-binding`.
 #define _clwarn_clang_hlsl_implicit_binding "-Whlsl-implicit-binding"
+/// @def _clwarn_clang_idiomatic_parentheses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Widiomatic-parentheses`.
 #define _clwarn_clang_idiomatic_parentheses "-Widiomatic-parentheses"
+/// @def _clwarn_clang_ignored_attributes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-attributes`.
 #define _clwarn_clang_ignored_attributes "-Wignored-attributes"
+/// @def _clwarn_clang_ignored_availability_without_sdk_settings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-availability-without-sdk-settings`.
 #define _clwarn_clang_ignored_availability_without_sdk_settings "-Wignored-availability-without-sdk-settings"
+/// @def _clwarn_clang_ignored_base_class_qualifiers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-base-class-qualifiers`.
 #define _clwarn_clang_ignored_base_class_qualifiers "-Wignored-base-class-qualifiers"
+/// @def _clwarn_clang_ignored_gch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-gch`.
 #define _clwarn_clang_ignored_gch "-Wignored-gch"
+/// @def _clwarn_clang_ignored_optimization_argument
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-optimization-argument`.
 #define _clwarn_clang_ignored_optimization_argument "-Wignored-optimization-argument"
+/// @def _clwarn_clang_ignored_pragma_intrinsic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-pragma-intrinsic`.
 #define _clwarn_clang_ignored_pragma_intrinsic "-Wignored-pragma-intrinsic"
+/// @def _clwarn_clang_ignored_pragma_optimize
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-pragma-optimize`.
 #define _clwarn_clang_ignored_pragma_optimize "-Wignored-pragma-optimize"
+/// @def _clwarn_clang_ignored_pragmas
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-pragmas`.
 #define _clwarn_clang_ignored_pragmas "-Wignored-pragmas"
+/// @def _clwarn_clang_ignored_qualifiers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-qualifiers`.
 #define _clwarn_clang_ignored_qualifiers "-Wignored-qualifiers"
+/// @def _clwarn_clang_ignored_reference_qualifiers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wignored-reference-qualifiers`.
 #define _clwarn_clang_ignored_reference_qualifiers "-Wignored-reference-qualifiers"
+/// @def _clwarn_clang_implicit
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit`.
 #define _clwarn_clang_implicit "-Wimplicit"
+/// @def _clwarn_clang_implicit_atomic_properties
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-atomic-properties`.
 #define _clwarn_clang_implicit_atomic_properties "-Wimplicit-atomic-properties"
+/// @def _clwarn_clang_implicit_const_int_float_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-const-int-float-conversion`.
 #define _clwarn_clang_implicit_const_int_float_conversion "-Wimplicit-const-int-float-conversion"
+/// @def _clwarn_clang_implicit_conversion_floating_point_to_bool
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-conversion-floating-point-to-bool`.
 #define _clwarn_clang_implicit_conversion_floating_point_to_bool "-Wimplicit-conversion-floating-point-to-bool"
+/// @def _clwarn_clang_implicit_enum_enum_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-enum-enum-cast`.
 #define _clwarn_clang_implicit_enum_enum_cast "-Wimplicit-enum-enum-cast"
+/// @def _clwarn_clang_implicit_exception_spec_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-exception-spec-mismatch`.
 #define _clwarn_clang_implicit_exception_spec_mismatch "-Wimplicit-exception-spec-mismatch"
+/// @def _clwarn_clang_implicit_fallthrough
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-fallthrough`.
 #define _clwarn_clang_implicit_fallthrough "-Wimplicit-fallthrough"
+/// @def _clwarn_clang_implicit_fallthrough_per_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-fallthrough-per-function`.
 #define _clwarn_clang_implicit_fallthrough_per_function "-Wimplicit-fallthrough-per-function"
+/// @def _clwarn_clang_implicit_fixed_point_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-fixed-point-conversion`.
 #define _clwarn_clang_implicit_fixed_point_conversion "-Wimplicit-fixed-point-conversion"
+/// @def _clwarn_clang_implicit_float_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-float-conversion`.
 #define _clwarn_clang_implicit_float_conversion "-Wimplicit-float-conversion"
+/// @def _clwarn_clang_implicit_function_declaration
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-function-declaration`.
 #define _clwarn_clang_implicit_function_declaration "-Wimplicit-function-declaration"
+/// @def _clwarn_clang_implicit_int
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-int`.
 #define _clwarn_clang_implicit_int "-Wimplicit-int"
+/// @def _clwarn_clang_implicit_int_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-int-conversion`.
 #define _clwarn_clang_implicit_int_conversion "-Wimplicit-int-conversion"
+/// @def _clwarn_clang_implicit_int_conversion_on_negation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-int-conversion-on-negation`.
 #define _clwarn_clang_implicit_int_conversion_on_negation "-Wimplicit-int-conversion-on-negation"
+/// @def _clwarn_clang_implicit_int_enum_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-int-enum-cast`.
 #define _clwarn_clang_implicit_int_enum_cast "-Wimplicit-int-enum-cast"
+/// @def _clwarn_clang_implicit_int_float_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-int-float-conversion`.
 #define _clwarn_clang_implicit_int_float_conversion "-Wimplicit-int-float-conversion"
+/// @def _clwarn_clang_implicit_overflow_behavior_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-overflow-behavior-conversion`.
 #define _clwarn_clang_implicit_overflow_behavior_conversion "-Wimplicit-overflow-behavior-conversion"
+/// @def _clwarn_clang_implicit_overflow_behavior_conversion_assignment
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-overflow-behavior-conversion-assignment`.
 #define _clwarn_clang_implicit_overflow_behavior_conversion_assignment "-Wimplicit-overflow-behavior-conversion-assignment"
+/// @def _clwarn_clang_implicit_overflow_behavior_conversion_assignment_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-overflow-behavior-conversion-assignment-pedantic`.
 #define _clwarn_clang_implicit_overflow_behavior_conversion_assignment_pedantic "-Wimplicit-overflow-behavior-conversion-assignment-pedantic"
+/// @def _clwarn_clang_implicit_overflow_behavior_conversion_function_boundary
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-overflow-behavior-conversion-function-boundary`.
 #define _clwarn_clang_implicit_overflow_behavior_conversion_function_boundary "-Wimplicit-overflow-behavior-conversion-function-boundary"
+/// @def _clwarn_clang_implicit_overflow_behavior_conversion_function_boundary_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-overflow-behavior-conversion-function-boundary-pedantic`.
 #define _clwarn_clang_implicit_overflow_behavior_conversion_function_boundary_pedantic "-Wimplicit-overflow-behavior-conversion-function-boundary-pedantic"
+/// @def _clwarn_clang_implicit_overflow_behavior_conversion_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-overflow-behavior-conversion-pedantic`.
 #define _clwarn_clang_implicit_overflow_behavior_conversion_pedantic "-Wimplicit-overflow-behavior-conversion-pedantic"
+/// @def _clwarn_clang_implicit_retain_self
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-retain-self`.
 #define _clwarn_clang_implicit_retain_self "-Wimplicit-retain-self"
+/// @def _clwarn_clang_implicit_void_ptr_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicit-void-ptr-cast`.
 #define _clwarn_clang_implicit_void_ptr_cast "-Wimplicit-void-ptr-cast"
+/// @def _clwarn_clang_implicitly_unsigned_literal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimplicitly-unsigned-literal`.
 #define _clwarn_clang_implicitly_unsigned_literal "-Wimplicitly-unsigned-literal"
+/// @def _clwarn_clang_import
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimport`.
 #define _clwarn_clang_import "-Wimport"
+/// @def _clwarn_clang_import_implementation_partition_unit_in_interface_unit
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimport-implementation-partition-unit-in-interface-unit`.
 #define _clwarn_clang_import_implementation_partition_unit_in_interface_unit "-Wimport-implementation-partition-unit-in-interface-unit"
+/// @def _clwarn_clang_import_preprocessor_directive_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wimport-preprocessor-directive-pedantic`.
 #define _clwarn_clang_import_preprocessor_directive_pedantic "-Wimport-preprocessor-directive-pedantic"
+/// @def _clwarn_clang_inaccessible_base
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winaccessible-base`.
 #define _clwarn_clang_inaccessible_base "-Winaccessible-base"
+/// @def _clwarn_clang_include_angled_in_module_purview
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winclude-angled-in-module-purview`.
 #define _clwarn_clang_include_angled_in_module_purview "-Winclude-angled-in-module-purview"
+/// @def _clwarn_clang_include_next_absolute_path
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winclude-next-absolute-path`.
 #define _clwarn_clang_include_next_absolute_path "-Winclude-next-absolute-path"
+/// @def _clwarn_clang_include_next_outside_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winclude-next-outside-header`.
 #define _clwarn_clang_include_next_outside_header "-Winclude-next-outside-header"
+/// @def _clwarn_clang_incompatible_exception_spec
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-exception-spec`.
 #define _clwarn_clang_incompatible_exception_spec "-Wincompatible-exception-spec"
+/// @def _clwarn_clang_incompatible_function_pointer_types
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-function-pointer-types`.
 #define _clwarn_clang_incompatible_function_pointer_types "-Wincompatible-function-pointer-types"
+/// @def _clwarn_clang_incompatible_function_pointer_types_strict
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-function-pointer-types-strict`.
 #define _clwarn_clang_incompatible_function_pointer_types_strict "-Wincompatible-function-pointer-types-strict"
+/// @def _clwarn_clang_incompatible_library_redeclaration
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-library-redeclaration`.
 #define _clwarn_clang_incompatible_library_redeclaration "-Wincompatible-library-redeclaration"
+/// @def _clwarn_clang_incompatible_ms_pragma_section
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-ms-pragma-section`.
 #define _clwarn_clang_incompatible_ms_pragma_section "-Wincompatible-ms-pragma-section"
+/// @def _clwarn_clang_incompatible_ms_struct
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-ms-struct`.
 #define _clwarn_clang_incompatible_ms_struct "-Wincompatible-ms-struct"
+/// @def _clwarn_clang_incompatible_pointer_types
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-pointer-types`.
 #define _clwarn_clang_incompatible_pointer_types "-Wincompatible-pointer-types"
+/// @def _clwarn_clang_incompatible_pointer_types_discards_overflow_behavior
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-pointer-types-discards-overflow-behavior`.
 #define _clwarn_clang_incompatible_pointer_types_discards_overflow_behavior "-Wincompatible-pointer-types-discards-overflow-behavior"
+/// @def _clwarn_clang_incompatible_pointer_types_discards_qualifiers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-pointer-types-discards-qualifiers`.
 #define _clwarn_clang_incompatible_pointer_types_discards_qualifiers "-Wincompatible-pointer-types-discards-qualifiers"
+/// @def _clwarn_clang_incompatible_property_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-property-type`.
 #define _clwarn_clang_incompatible_property_type "-Wincompatible-property-type"
+/// @def _clwarn_clang_incompatible_sysroot
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincompatible-sysroot`.
 #define _clwarn_clang_incompatible_sysroot "-Wincompatible-sysroot"
+/// @def _clwarn_clang_incomplete_framework_module_declaration
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincomplete-framework-module-declaration`.
 #define _clwarn_clang_incomplete_framework_module_declaration "-Wincomplete-framework-module-declaration"
+/// @def _clwarn_clang_incomplete_implementation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincomplete-implementation`.
 #define _clwarn_clang_incomplete_implementation "-Wincomplete-implementation"
+/// @def _clwarn_clang_incomplete_module
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincomplete-module`.
 #define _clwarn_clang_incomplete_module "-Wincomplete-module"
+/// @def _clwarn_clang_incomplete_setjmp_declaration
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincomplete-setjmp-declaration`.
 #define _clwarn_clang_incomplete_setjmp_declaration "-Wincomplete-setjmp-declaration"
+/// @def _clwarn_clang_incomplete_umbrella
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincomplete-umbrella`.
 #define _clwarn_clang_incomplete_umbrella "-Wincomplete-umbrella"
+/// @def _clwarn_clang_inconsistent_dllimport
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winconsistent-dllimport`.
 #define _clwarn_clang_inconsistent_dllimport "-Winconsistent-dllimport"
+/// @def _clwarn_clang_inconsistent_missing_destructor_override
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winconsistent-missing-destructor-override`.
 #define _clwarn_clang_inconsistent_missing_destructor_override "-Winconsistent-missing-destructor-override"
+/// @def _clwarn_clang_inconsistent_missing_override
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winconsistent-missing-override`.
 #define _clwarn_clang_inconsistent_missing_override "-Winconsistent-missing-override"
+/// @def _clwarn_clang_increment_bool
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wincrement-bool`.
 #define _clwarn_clang_increment_bool "-Wincrement-bool"
+/// @def _clwarn_clang_independentclass_attribute
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-WIndependentClass-attribute`.
 #define _clwarn_clang_independentclass_attribute "-WIndependentClass-attribute"
+/// @def _clwarn_clang_infinite_recursion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winfinite-recursion`.
 #define _clwarn_clang_infinite_recursion "-Winfinite-recursion"
+/// @def _clwarn_clang_init_priority_reserved
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winit-priority-reserved`.
 #define _clwarn_clang_init_priority_reserved "-Winit-priority-reserved"
+/// @def _clwarn_clang_init_self
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winit-self`.
 #define _clwarn_clang_init_self "-Winit-self"
+/// @def _clwarn_clang_initializer_overrides
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winitializer-overrides`.
 #define _clwarn_clang_initializer_overrides "-Winitializer-overrides"
+/// @def _clwarn_clang_injected_class_name
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winjected-class-name`.
 #define _clwarn_clang_injected_class_name "-Winjected-class-name"
+/// @def _clwarn_clang_inline
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winline`.
 #define _clwarn_clang_inline "-Winline"
+/// @def _clwarn_clang_inline_asm
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winline-asm`.
 #define _clwarn_clang_inline_asm "-Winline-asm"
+/// @def _clwarn_clang_inline_namespace_reopened_noninline
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winline-namespace-reopened-noninline`.
 #define _clwarn_clang_inline_namespace_reopened_noninline "-Winline-namespace-reopened-noninline"
+/// @def _clwarn_clang_inline_new_delete
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winline-new-delete`.
 #define _clwarn_clang_inline_new_delete "-Winline-new-delete"
+/// @def _clwarn_clang_installapi_violation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winstallapi-violation`.
 #define _clwarn_clang_installapi_violation "-Winstallapi-violation"
+/// @def _clwarn_clang_instantiation_after_specialization
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winstantiation-after-specialization`.
 #define _clwarn_clang_instantiation_after_specialization "-Winstantiation-after-specialization"
+/// @def _clwarn_clang_int_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wint-conversion`.
 #define _clwarn_clang_int_conversion "-Wint-conversion"
+/// @def _clwarn_clang_int_conversions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wint-conversions`.
 #define _clwarn_clang_int_conversions "-Wint-conversions"
+/// @def _clwarn_clang_int_in_bool_context
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wint-in-bool-context`.
 #define _clwarn_clang_int_in_bool_context "-Wint-in-bool-context"
+/// @def _clwarn_clang_int_to_pointer_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wint-to-pointer-cast`.
 #define _clwarn_clang_int_to_pointer_cast "-Wint-to-pointer-cast"
+/// @def _clwarn_clang_int_to_void_pointer_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wint-to-void-pointer-cast`.
 #define _clwarn_clang_int_to_void_pointer_cast "-Wint-to-void-pointer-cast"
+/// @def _clwarn_clang_integer_overflow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winteger-overflow`.
 #define _clwarn_clang_integer_overflow "-Winteger-overflow"
+/// @def _clwarn_clang_invalid_command_line_argument
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-command-line-argument`.
 #define _clwarn_clang_invalid_command_line_argument "-Winvalid-command-line-argument"
+/// @def _clwarn_clang_invalid_constexpr
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-constexpr`.
 #define _clwarn_clang_invalid_constexpr "-Winvalid-constexpr"
+/// @def _clwarn_clang_invalid_feature_combination
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-feature-combination`.
 #define _clwarn_clang_invalid_feature_combination "-Winvalid-feature-combination"
+/// @def _clwarn_clang_invalid_gnu_asm_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-gnu-asm-cast`.
 #define _clwarn_clang_invalid_gnu_asm_cast "-Winvalid-gnu-asm-cast"
+/// @def _clwarn_clang_invalid_iboutlet
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-iboutlet`.
 #define _clwarn_clang_invalid_iboutlet "-Winvalid-iboutlet"
+/// @def _clwarn_clang_invalid_initializer_from_system_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-initializer-from-system-header`.
 #define _clwarn_clang_invalid_initializer_from_system_header "-Winvalid-initializer-from-system-header"
+/// @def _clwarn_clang_invalid_ios_deployment_target
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-ios-deployment-target`.
 #define _clwarn_clang_invalid_ios_deployment_target "-Winvalid-ios-deployment-target"
+/// @def _clwarn_clang_invalid_no_builtin_names
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-no-builtin-names`.
 #define _clwarn_clang_invalid_no_builtin_names "-Winvalid-no-builtin-names"
+/// @def _clwarn_clang_invalid_noreturn
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-noreturn`.
 #define _clwarn_clang_invalid_noreturn "-Winvalid-noreturn"
+/// @def _clwarn_clang_invalid_offsetof
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-offsetof`.
 #define _clwarn_clang_invalid_offsetof "-Winvalid-offsetof"
+/// @def _clwarn_clang_invalid_or_nonexistent_directory
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-or-nonexistent-directory`.
 #define _clwarn_clang_invalid_or_nonexistent_directory "-Winvalid-or-nonexistent-directory"
+/// @def _clwarn_clang_invalid_partial_specialization
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-partial-specialization`.
 #define _clwarn_clang_invalid_partial_specialization "-Winvalid-partial-specialization"
+/// @def _clwarn_clang_invalid_pch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-pch`.
 #define _clwarn_clang_invalid_pch "-Winvalid-pch"
+/// @def _clwarn_clang_invalid_pp_token
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-pp-token`.
 #define _clwarn_clang_invalid_pp_token "-Winvalid-pp-token"
+/// @def _clwarn_clang_invalid_source_encoding
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-source-encoding`.
 #define _clwarn_clang_invalid_source_encoding "-Winvalid-source-encoding"
+/// @def _clwarn_clang_invalid_specialization
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-specialization`.
 #define _clwarn_clang_invalid_specialization "-Winvalid-specialization"
+/// @def _clwarn_clang_invalid_static_assert_message
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-static-assert-message`.
 #define _clwarn_clang_invalid_static_assert_message "-Winvalid-static-assert-message"
+/// @def _clwarn_clang_invalid_token_paste
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-token-paste`.
 #define _clwarn_clang_invalid_token_paste "-Winvalid-token-paste"
+/// @def _clwarn_clang_invalid_unevaluated_string
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-unevaluated-string`.
 #define _clwarn_clang_invalid_unevaluated_string "-Winvalid-unevaluated-string"
+/// @def _clwarn_clang_invalid_utf8
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-utf8`.
 #define _clwarn_clang_invalid_utf8 "-Winvalid-utf8"
+/// @def _clwarn_clang_invalid_version_availability
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Winvalid-version-availability`.
 #define _clwarn_clang_invalid_version_availability "-Winvalid-version-availability"
+/// @def _clwarn_clang_jump_misses_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wjump-misses-init`.
 #define _clwarn_clang_jump_misses_init "-Wjump-misses-init"
+/// @def _clwarn_clang_jump_seh_finally
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wjump-seh-finally`.
 #define _clwarn_clang_jump_seh_finally "-Wjump-seh-finally"
+/// @def _clwarn_clang_keyword_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wkeyword-compat`.
 #define _clwarn_clang_keyword_compat "-Wkeyword-compat"
+/// @def _clwarn_clang_keyword_macro
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wkeyword-macro`.
 #define _clwarn_clang_keyword_macro "-Wkeyword-macro"
+/// @def _clwarn_clang_knr_promoted_parameter
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wknr-promoted-parameter`.
 #define _clwarn_clang_knr_promoted_parameter "-Wknr-promoted-parameter"
+/// @def _clwarn_clang_language_extension_token
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlanguage-extension-token`.
 #define _clwarn_clang_language_extension_token "-Wlanguage-extension-token"
+/// @def _clwarn_clang_large_by_value_copy
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlarge-by-value-copy`.
 #define _clwarn_clang_large_by_value_copy "-Wlarge-by-value-copy"
+/// @def _clwarn_clang_legacy_constant_register_binding
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlegacy-constant-register-binding`.
 #define _clwarn_clang_legacy_constant_register_binding "-Wlegacy-constant-register-binding"
+/// @def _clwarn_clang_liblto
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wliblto`.
 #define _clwarn_clang_liblto "-Wliblto"
+/// @def _clwarn_clang_lifetime_safety
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety`.
 #define _clwarn_clang_lifetime_safety "-Wlifetime-safety"
+/// @def _clwarn_clang_lifetime_safety_all
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-all`.
 #define _clwarn_clang_lifetime_safety_all "-Wlifetime-safety-all"
+/// @def _clwarn_clang_lifetime_safety_cross_tu_suggestions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-cross-tu-suggestions`.
 #define _clwarn_clang_lifetime_safety_cross_tu_suggestions "-Wlifetime-safety-cross-tu-suggestions"
+/// @def _clwarn_clang_lifetime_safety_dangling_field
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-dangling-field`.
 #define _clwarn_clang_lifetime_safety_dangling_field "-Wlifetime-safety-dangling-field"
+/// @def _clwarn_clang_lifetime_safety_dangling_field_moved
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-dangling-field-moved`.
 #define _clwarn_clang_lifetime_safety_dangling_field_moved "-Wlifetime-safety-dangling-field-moved"
+/// @def _clwarn_clang_lifetime_safety_dangling_global
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-dangling-global`.
+#define _clwarn_clang_lifetime_safety_dangling_global "-Wlifetime-safety-dangling-global"
+/// @def _clwarn_clang_lifetime_safety_dangling_global_moved
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-dangling-global-moved`.
+#define _clwarn_clang_lifetime_safety_dangling_global_moved "-Wlifetime-safety-dangling-global-moved"
+/// @def _clwarn_clang_lifetime_safety_intra_tu_suggestions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-intra-tu-suggestions`.
 #define _clwarn_clang_lifetime_safety_intra_tu_suggestions "-Wlifetime-safety-intra-tu-suggestions"
+/// @def _clwarn_clang_lifetime_safety_invalidation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-invalidation`.
 #define _clwarn_clang_lifetime_safety_invalidation "-Wlifetime-safety-invalidation"
+/// @def _clwarn_clang_lifetime_safety_noescape
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-noescape`.
 #define _clwarn_clang_lifetime_safety_noescape "-Wlifetime-safety-noescape"
+/// @def _clwarn_clang_lifetime_safety_permissive
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-permissive`.
 #define _clwarn_clang_lifetime_safety_permissive "-Wlifetime-safety-permissive"
+/// @def _clwarn_clang_lifetime_safety_return_stack_addr
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-return-stack-addr`.
 #define _clwarn_clang_lifetime_safety_return_stack_addr "-Wlifetime-safety-return-stack-addr"
+/// @def _clwarn_clang_lifetime_safety_return_stack_addr_moved
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-return-stack-addr-moved`.
 #define _clwarn_clang_lifetime_safety_return_stack_addr_moved "-Wlifetime-safety-return-stack-addr-moved"
+/// @def _clwarn_clang_lifetime_safety_strict
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-strict`.
 #define _clwarn_clang_lifetime_safety_strict "-Wlifetime-safety-strict"
+/// @def _clwarn_clang_lifetime_safety_suggestions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-suggestions`.
 #define _clwarn_clang_lifetime_safety_suggestions "-Wlifetime-safety-suggestions"
+/// @def _clwarn_clang_lifetime_safety_use_after_scope
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-use-after-scope`.
 #define _clwarn_clang_lifetime_safety_use_after_scope "-Wlifetime-safety-use-after-scope"
+/// @def _clwarn_clang_lifetime_safety_use_after_scope_moved
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-use-after-scope-moved`.
 #define _clwarn_clang_lifetime_safety_use_after_scope_moved "-Wlifetime-safety-use-after-scope-moved"
+/// @def _clwarn_clang_lifetime_safety_validations
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlifetime-safety-validations`.
 #define _clwarn_clang_lifetime_safety_validations "-Wlifetime-safety-validations"
+/// @def _clwarn_clang_linker_warnings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlinker-warnings`.
 #define _clwarn_clang_linker_warnings "-Wlinker-warnings"
+/// @def _clwarn_clang_literal_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wliteral-conversion`.
 #define _clwarn_clang_literal_conversion "-Wliteral-conversion"
+/// @def _clwarn_clang_literal_range
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wliteral-range`.
 #define _clwarn_clang_literal_range "-Wliteral-range"
+/// @def _clwarn_clang_local_type_template_args
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlocal-type-template-args`.
 #define _clwarn_clang_local_type_template_args "-Wlocal-type-template-args"
+/// @def _clwarn_clang_logical_not_parentheses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlogical-not-parentheses`.
 #define _clwarn_clang_logical_not_parentheses "-Wlogical-not-parentheses"
+/// @def _clwarn_clang_logical_op_parentheses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlogical-op-parentheses`.
 #define _clwarn_clang_logical_op_parentheses "-Wlogical-op-parentheses"
+/// @def _clwarn_clang_long_long
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wlong-long`.
 #define _clwarn_clang_long_long "-Wlong-long"
+/// @def _clwarn_clang_loop_analysis
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wloop-analysis`.
 #define _clwarn_clang_loop_analysis "-Wloop-analysis"
+/// @def _clwarn_clang_macro_redefined
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmacro-redefined`.
 #define _clwarn_clang_macro_redefined "-Wmacro-redefined"
+/// @def _clwarn_clang_main
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmain`.
 #define _clwarn_clang_main "-Wmain"
+/// @def _clwarn_clang_main_attached_to_named_module
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmain-attached-to-named-module`.
 #define _clwarn_clang_main_attached_to_named_module "-Wmain-attached-to-named-module"
+/// @def _clwarn_clang_main_return_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmain-return-type`.
 #define _clwarn_clang_main_return_type "-Wmain-return-type"
+/// @def _clwarn_clang_malformed_warning_check
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmalformed-warning-check`.
 #define _clwarn_clang_malformed_warning_check "-Wmalformed-warning-check"
+/// @def _clwarn_clang_many_braces_around_scalar_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmany-braces-around-scalar-init`.
 #define _clwarn_clang_many_braces_around_scalar_init "-Wmany-braces-around-scalar-init"
+/// @def _clwarn_clang_math_errno_enabled_with_veclib
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmath-errno-enabled-with-veclib`.
 #define _clwarn_clang_math_errno_enabled_with_veclib "-Wmath-errno-enabled-with-veclib"
+/// @def _clwarn_clang_mathematical_notation_identifier_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmathematical-notation-identifier-extension`.
 #define _clwarn_clang_mathematical_notation_identifier_extension "-Wmathematical-notation-identifier-extension"
+/// @def _clwarn_clang_matrix_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmatrix-conversion`.
 #define _clwarn_clang_matrix_conversion "-Wmatrix-conversion"
+/// @def _clwarn_clang_matrix_conversions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmatrix-conversions`.
 #define _clwarn_clang_matrix_conversions "-Wmatrix-conversions"
+/// @def _clwarn_clang_max_tokens
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmax-tokens`.
 #define _clwarn_clang_max_tokens "-Wmax-tokens"
+/// @def _clwarn_clang_max_unsigned_zero
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmax-unsigned-zero`.
 #define _clwarn_clang_max_unsigned_zero "-Wmax-unsigned-zero"
+/// @def _clwarn_clang_memset_transposed_args
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmemset-transposed-args`.
 #define _clwarn_clang_memset_transposed_args "-Wmemset-transposed-args"
+/// @def _clwarn_clang_memsize_comparison
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmemsize-comparison`.
 #define _clwarn_clang_memsize_comparison "-Wmemsize-comparison"
+/// @def _clwarn_clang_method_signatures
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmethod-signatures`.
 #define _clwarn_clang_method_signatures "-Wmethod-signatures"
+/// @def _clwarn_clang_microsoft
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft`.
 #define _clwarn_clang_microsoft "-Wmicrosoft"
+/// @def _clwarn_clang_microsoft_abstract
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-abstract`.
 #define _clwarn_clang_microsoft_abstract "-Wmicrosoft-abstract"
+/// @def _clwarn_clang_microsoft_anon_tag
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-anon-tag`.
 #define _clwarn_clang_microsoft_anon_tag "-Wmicrosoft-anon-tag"
+/// @def _clwarn_clang_microsoft_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-cast`.
 #define _clwarn_clang_microsoft_cast "-Wmicrosoft-cast"
+/// @def _clwarn_clang_microsoft_charize
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-charize`.
 #define _clwarn_clang_microsoft_charize "-Wmicrosoft-charize"
+/// @def _clwarn_clang_microsoft_comment_paste
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-comment-paste`.
 #define _clwarn_clang_microsoft_comment_paste "-Wmicrosoft-comment-paste"
+/// @def _clwarn_clang_microsoft_const_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-const-init`.
 #define _clwarn_clang_microsoft_const_init "-Wmicrosoft-const-init"
+/// @def _clwarn_clang_microsoft_cpp_macro
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-cpp-macro`.
 #define _clwarn_clang_microsoft_cpp_macro "-Wmicrosoft-cpp-macro"
+/// @def _clwarn_clang_microsoft_default_arg_redefinition
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-default-arg-redefinition`.
 #define _clwarn_clang_microsoft_default_arg_redefinition "-Wmicrosoft-default-arg-redefinition"
+/// @def _clwarn_clang_microsoft_drectve_section
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-drectve-section`.
 #define _clwarn_clang_microsoft_drectve_section "-Wmicrosoft-drectve-section"
+/// @def _clwarn_clang_microsoft_empty_enum
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-empty-enum`.
 #define _clwarn_clang_microsoft_empty_enum "-Wmicrosoft-empty-enum"
+/// @def _clwarn_clang_microsoft_end_of_file
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-end-of-file`.
 #define _clwarn_clang_microsoft_end_of_file "-Wmicrosoft-end-of-file"
+/// @def _clwarn_clang_microsoft_enum_forward_reference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-enum-forward-reference`.
 #define _clwarn_clang_microsoft_enum_forward_reference "-Wmicrosoft-enum-forward-reference"
+/// @def _clwarn_clang_microsoft_enum_value
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-enum-value`.
 #define _clwarn_clang_microsoft_enum_value "-Wmicrosoft-enum-value"
+/// @def _clwarn_clang_microsoft_exception_spec
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-exception-spec`.
 #define _clwarn_clang_microsoft_exception_spec "-Wmicrosoft-exception-spec"
+/// @def _clwarn_clang_microsoft_exists
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-exists`.
 #define _clwarn_clang_microsoft_exists "-Wmicrosoft-exists"
+/// @def _clwarn_clang_microsoft_explicit_constructor_call
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-explicit-constructor-call`.
 #define _clwarn_clang_microsoft_explicit_constructor_call "-Wmicrosoft-explicit-constructor-call"
+/// @def _clwarn_clang_microsoft_extra_qualification
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-extra-qualification`.
 #define _clwarn_clang_microsoft_extra_qualification "-Wmicrosoft-extra-qualification"
+/// @def _clwarn_clang_microsoft_fixed_enum
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-fixed-enum`.
 #define _clwarn_clang_microsoft_fixed_enum "-Wmicrosoft-fixed-enum"
+/// @def _clwarn_clang_microsoft_flexible_array
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-flexible-array`.
 #define _clwarn_clang_microsoft_flexible_array "-Wmicrosoft-flexible-array"
+/// @def _clwarn_clang_microsoft_goto
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-goto`.
 #define _clwarn_clang_microsoft_goto "-Wmicrosoft-goto"
+/// @def _clwarn_clang_microsoft_inaccessible_base
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-inaccessible-base`.
 #define _clwarn_clang_microsoft_inaccessible_base "-Wmicrosoft-inaccessible-base"
+/// @def _clwarn_clang_microsoft_include
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-include`.
 #define _clwarn_clang_microsoft_include "-Wmicrosoft-include"
+/// @def _clwarn_clang_microsoft_init_from_predefined
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-init-from-predefined`.
 #define _clwarn_clang_microsoft_init_from_predefined "-Wmicrosoft-init-from-predefined"
+/// @def _clwarn_clang_microsoft_inline_on_non_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-inline-on-non-function`.
 #define _clwarn_clang_microsoft_inline_on_non_function "-Wmicrosoft-inline-on-non-function"
+/// @def _clwarn_clang_microsoft_mutable_reference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-mutable-reference`.
 #define _clwarn_clang_microsoft_mutable_reference "-Wmicrosoft-mutable-reference"
+/// @def _clwarn_clang_microsoft_pure_definition
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-pure-definition`.
 #define _clwarn_clang_microsoft_pure_definition "-Wmicrosoft-pure-definition"
+/// @def _clwarn_clang_microsoft_redeclare_static
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-redeclare-static`.
 #define _clwarn_clang_microsoft_redeclare_static "-Wmicrosoft-redeclare-static"
+/// @def _clwarn_clang_microsoft_sealed
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-sealed`.
 #define _clwarn_clang_microsoft_sealed "-Wmicrosoft-sealed"
+/// @def _clwarn_clang_microsoft_string_literal_from_predefined
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-string-literal-from-predefined`.
 #define _clwarn_clang_microsoft_string_literal_from_predefined "-Wmicrosoft-string-literal-from-predefined"
+/// @def _clwarn_clang_microsoft_template
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-template`.
 #define _clwarn_clang_microsoft_template "-Wmicrosoft-template"
+/// @def _clwarn_clang_microsoft_template_shadow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-template-shadow`.
 #define _clwarn_clang_microsoft_template_shadow "-Wmicrosoft-template-shadow"
+/// @def _clwarn_clang_microsoft_union_member_reference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-union-member-reference`.
 #define _clwarn_clang_microsoft_union_member_reference "-Wmicrosoft-union-member-reference"
+/// @def _clwarn_clang_microsoft_unqualified_friend
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-unqualified-friend`.
 #define _clwarn_clang_microsoft_unqualified_friend "-Wmicrosoft-unqualified-friend"
+/// @def _clwarn_clang_microsoft_using_decl
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-using-decl`.
 #define _clwarn_clang_microsoft_using_decl "-Wmicrosoft-using-decl"
+/// @def _clwarn_clang_microsoft_void_pseudo_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmicrosoft-void-pseudo-dtor`.
 #define _clwarn_clang_microsoft_void_pseudo_dtor "-Wmicrosoft-void-pseudo-dtor"
+/// @def _clwarn_clang_misexpect
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmisexpect`.
 #define _clwarn_clang_misexpect "-Wmisexpect"
+/// @def _clwarn_clang_misleading_indentation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmisleading-indentation`.
 #define _clwarn_clang_misleading_indentation "-Wmisleading-indentation"
+/// @def _clwarn_clang_mismatched_new_delete
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmismatched-new-delete`.
 #define _clwarn_clang_mismatched_new_delete "-Wmismatched-new-delete"
+/// @def _clwarn_clang_mismatched_parameter_types
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmismatched-parameter-types`.
 #define _clwarn_clang_mismatched_parameter_types "-Wmismatched-parameter-types"
+/// @def _clwarn_clang_mismatched_return_types
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmismatched-return-types`.
 #define _clwarn_clang_mismatched_return_types "-Wmismatched-return-types"
+/// @def _clwarn_clang_mismatched_tags
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmismatched-tags`.
 #define _clwarn_clang_mismatched_tags "-Wmismatched-tags"
+/// @def _clwarn_clang_missing_braces
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-braces`.
 #define _clwarn_clang_missing_braces "-Wmissing-braces"
+/// @def _clwarn_clang_missing_constinit
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-constinit`.
 #define _clwarn_clang_missing_constinit "-Wmissing-constinit"
+/// @def _clwarn_clang_missing_declarations
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-declarations`.
 #define _clwarn_clang_missing_declarations "-Wmissing-declarations"
+/// @def _clwarn_clang_missing_designated_field_initializers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-designated-field-initializers`.
 #define _clwarn_clang_missing_designated_field_initializers "-Wmissing-designated-field-initializers"
+/// @def _clwarn_clang_missing_exception_spec
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-exception-spec`.
 #define _clwarn_clang_missing_exception_spec "-Wmissing-exception-spec"
+/// @def _clwarn_clang_missing_field_initializers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-field-initializers`.
 #define _clwarn_clang_missing_field_initializers "-Wmissing-field-initializers"
+/// @def _clwarn_clang_missing_format_attribute
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-format-attribute`.
 #define _clwarn_clang_missing_format_attribute "-Wmissing-format-attribute"
+/// @def _clwarn_clang_missing_include_dirs
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-include-dirs`.
 #define _clwarn_clang_missing_include_dirs "-Wmissing-include-dirs"
+/// @def _clwarn_clang_missing_method_return_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-method-return-type`.
 #define _clwarn_clang_missing_method_return_type "-Wmissing-method-return-type"
+/// @def _clwarn_clang_missing_multilib
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-multilib`.
 #define _clwarn_clang_missing_multilib "-Wmissing-multilib"
+/// @def _clwarn_clang_missing_noescape
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-noescape`.
 #define _clwarn_clang_missing_noescape "-Wmissing-noescape"
+/// @def _clwarn_clang_missing_noreturn
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-noreturn`.
 #define _clwarn_clang_missing_noreturn "-Wmissing-noreturn"
+/// @def _clwarn_clang_missing_prototype_for_cc
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-prototype-for-cc`.
 #define _clwarn_clang_missing_prototype_for_cc "-Wmissing-prototype-for-cc"
+/// @def _clwarn_clang_missing_prototypes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-prototypes`.
 #define _clwarn_clang_missing_prototypes "-Wmissing-prototypes"
+/// @def _clwarn_clang_missing_selector_name
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-selector-name`.
 #define _clwarn_clang_missing_selector_name "-Wmissing-selector-name"
+/// @def _clwarn_clang_missing_sysroot
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-sysroot`.
 #define _clwarn_clang_missing_sysroot "-Wmissing-sysroot"
+/// @def _clwarn_clang_missing_template_arg_list_after_template_kw
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-template-arg-list-after-template-kw`.
 #define _clwarn_clang_missing_template_arg_list_after_template_kw "-Wmissing-template-arg-list-after-template-kw"
+/// @def _clwarn_clang_missing_variable_declarations
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmissing-variable-declarations`.
 #define _clwarn_clang_missing_variable_declarations "-Wmissing-variable-declarations"
+/// @def _clwarn_clang_misspelled_assumption
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmisspelled-assumption`.
 #define _clwarn_clang_misspelled_assumption "-Wmisspelled-assumption"
+/// @def _clwarn_clang_mix_packoffset
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmix-packoffset`.
 #define _clwarn_clang_mix_packoffset "-Wmix-packoffset"
+/// @def _clwarn_clang_module_conflict
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmodule-conflict`.
 #define _clwarn_clang_module_conflict "-Wmodule-conflict"
+/// @def _clwarn_clang_module_file_config_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmodule-file-config-mismatch`.
 #define _clwarn_clang_module_file_config_mismatch "-Wmodule-file-config-mismatch"
+/// @def _clwarn_clang_module_file_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmodule-file-extension`.
 #define _clwarn_clang_module_file_extension "-Wmodule-file-extension"
+/// @def _clwarn_clang_module_file_mapping_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmodule-file-mapping-mismatch`.
 #define _clwarn_clang_module_file_mapping_mismatch "-Wmodule-file-mapping-mismatch"
+/// @def _clwarn_clang_module_import_in_extern_c
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmodule-import-in-extern-c`.
 #define _clwarn_clang_module_import_in_extern_c "-Wmodule-import-in-extern-c"
+/// @def _clwarn_clang_module_map_path_outside_directory
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmodule-map-path-outside-directory`.
+#define _clwarn_clang_module_map_path_outside_directory "-Wmodule-map-path-outside-directory"
+/// @def _clwarn_clang_modules_ambiguous_internal_linkage
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmodules-ambiguous-internal-linkage`.
 #define _clwarn_clang_modules_ambiguous_internal_linkage "-Wmodules-ambiguous-internal-linkage"
+/// @def _clwarn_clang_modules_import_nested_redundant
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmodules-import-nested-redundant`.
 #define _clwarn_clang_modules_import_nested_redundant "-Wmodules-import-nested-redundant"
+/// @def _clwarn_clang_most
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmost`.
 #define _clwarn_clang_most "-Wmost"
+/// @def _clwarn_clang_move
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmove`.
 #define _clwarn_clang_move "-Wmove"
+/// @def _clwarn_clang_ms_bitfield_padding
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wms-bitfield-padding`.
 #define _clwarn_clang_ms_bitfield_padding "-Wms-bitfield-padding"
+/// @def _clwarn_clang_msvc_include
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmsvc-include`.
 #define _clwarn_clang_msvc_include "-Wmsvc-include"
+/// @def _clwarn_clang_msvc_not_found
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmsvc-not-found`.
 #define _clwarn_clang_msvc_not_found "-Wmsvc-not-found"
+/// @def _clwarn_clang_multi_gpu
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmulti-gpu`.
 #define _clwarn_clang_multi_gpu "-Wmulti-gpu"
+/// @def _clwarn_clang_multichar
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmultichar`.
 #define _clwarn_clang_multichar "-Wmultichar"
+/// @def _clwarn_clang_multilib_not_found
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmultilib-not-found`.
 #define _clwarn_clang_multilib_not_found "-Wmultilib-not-found"
+/// @def _clwarn_clang_multiple_move_vbase
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wmultiple-move-vbase`.
 #define _clwarn_clang_multiple_move_vbase "-Wmultiple-move-vbase"
+/// @def _clwarn_clang_nan_infinity_disabled
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnan-infinity-disabled`.
 #define _clwarn_clang_nan_infinity_disabled "-Wnan-infinity-disabled"
+/// @def _clwarn_clang_narrowing
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnarrowing`.
 #define _clwarn_clang_narrowing "-Wnarrowing"
+/// @def _clwarn_clang_nested_anon_types
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnested-anon-types`.
 #define _clwarn_clang_nested_anon_types "-Wnested-anon-types"
+/// @def _clwarn_clang_nested_externs
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnested-externs`.
 #define _clwarn_clang_nested_externs "-Wnested-externs"
+/// @def _clwarn_clang_new_returns_null
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnew-returns-null`.
 #define _clwarn_clang_new_returns_null "-Wnew-returns-null"
+/// @def _clwarn_clang_newline_eof
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnewline-eof`.
 #define _clwarn_clang_newline_eof "-Wnewline-eof"
+/// @def _clwarn_clang_noderef
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnoderef`.
 #define _clwarn_clang_noderef "-Wnoderef"
+/// @def _clwarn_clang_noexcept_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnoexcept-type`.
 #define _clwarn_clang_noexcept_type "-Wnoexcept-type"
+/// @def _clwarn_clang_non_c_typedef_for_linkage
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnon-c-typedef-for-linkage`.
 #define _clwarn_clang_non_c_typedef_for_linkage "-Wnon-c-typedef-for-linkage"
+/// @def _clwarn_clang_non_gcc
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnon-gcc`.
 #define _clwarn_clang_non_gcc "-Wnon-gcc"
+/// @def _clwarn_clang_non_literal_null_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnon-literal-null-conversion`.
 #define _clwarn_clang_non_literal_null_conversion "-Wnon-literal-null-conversion"
+/// @def _clwarn_clang_non_modular_include_in_framework_module
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnon-modular-include-in-framework-module`.
 #define _clwarn_clang_non_modular_include_in_framework_module "-Wnon-modular-include-in-framework-module"
+/// @def _clwarn_clang_non_modular_include_in_module
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnon-modular-include-in-module`.
 #define _clwarn_clang_non_modular_include_in_module "-Wnon-modular-include-in-module"
+/// @def _clwarn_clang_non_pod_varargs
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnon-pod-varargs`.
 #define _clwarn_clang_non_pod_varargs "-Wnon-pod-varargs"
+/// @def _clwarn_clang_non_power_of_two_alignment
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnon-power-of-two-alignment`.
 #define _clwarn_clang_non_power_of_two_alignment "-Wnon-power-of-two-alignment"
+/// @def _clwarn_clang_non_virtual_dtor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnon-virtual-dtor`.
 #define _clwarn_clang_non_virtual_dtor "-Wnon-virtual-dtor"
+/// @def _clwarn_clang_nonnull
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnonnull`.
 #define _clwarn_clang_nonnull "-Wnonnull"
+/// @def _clwarn_clang_nonportable_cfstrings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnonportable-cfstrings`.
 #define _clwarn_clang_nonportable_cfstrings "-Wnonportable-cfstrings"
+/// @def _clwarn_clang_nonportable_include_path
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnonportable-include-path`.
 #define _clwarn_clang_nonportable_include_path "-Wnonportable-include-path"
+/// @def _clwarn_clang_nonportable_private_apinotes_path
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnonportable-private-apinotes-path`.
 #define _clwarn_clang_nonportable_private_apinotes_path "-Wnonportable-private-apinotes-path"
+/// @def _clwarn_clang_nonportable_private_system_apinotes_path
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnonportable-private-system-apinotes-path`.
 #define _clwarn_clang_nonportable_private_system_apinotes_path "-Wnonportable-private-system-apinotes-path"
+/// @def _clwarn_clang_nonportable_sycl
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnonportable-sycl`.
 #define _clwarn_clang_nonportable_sycl "-Wnonportable-sycl"
+/// @def _clwarn_clang_nonportable_system_include_path
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnonportable-system-include-path`.
 #define _clwarn_clang_nonportable_system_include_path "-Wnonportable-system-include-path"
+/// @def _clwarn_clang_nonportable_vector_initialization
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnonportable-vector-initialization`.
 #define _clwarn_clang_nonportable_vector_initialization "-Wnonportable-vector-initialization"
+/// @def _clwarn_clang_nontrivial_memaccess
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnontrivial-memaccess`.
 #define _clwarn_clang_nontrivial_memaccess "-Wnontrivial-memaccess"
+/// @def _clwarn_clang_nontrivial_memcall
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnontrivial-memcall`.
 #define _clwarn_clang_nontrivial_memcall "-Wnontrivial-memcall"
+/// @def _clwarn_clang_nrvo
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnrvo`.
 #define _clwarn_clang_nrvo "-Wnrvo"
+/// @def _clwarn_clang_nsconsumed_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnsconsumed-mismatch`.
 #define _clwarn_clang_nsconsumed_mismatch "-Wnsconsumed-mismatch"
+/// @def _clwarn_clang_nsobject_attribute
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-WNSObject-attribute`.
 #define _clwarn_clang_nsobject_attribute "-WNSObject-attribute"
+/// @def _clwarn_clang_nsreturns_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnsreturns-mismatch`.
 #define _clwarn_clang_nsreturns_mismatch "-Wnsreturns-mismatch"
+/// @def _clwarn_clang_null_arithmetic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnull-arithmetic`.
 #define _clwarn_clang_null_arithmetic "-Wnull-arithmetic"
+/// @def _clwarn_clang_null_character
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnull-character`.
 #define _clwarn_clang_null_character "-Wnull-character"
+/// @def _clwarn_clang_null_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnull-conversion`.
 #define _clwarn_clang_null_conversion "-Wnull-conversion"
+/// @def _clwarn_clang_null_dereference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnull-dereference`.
 #define _clwarn_clang_null_dereference "-Wnull-dereference"
+/// @def _clwarn_clang_null_pointer_arithmetic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnull-pointer-arithmetic`.
 #define _clwarn_clang_null_pointer_arithmetic "-Wnull-pointer-arithmetic"
+/// @def _clwarn_clang_null_pointer_subtraction
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnull-pointer-subtraction`.
 #define _clwarn_clang_null_pointer_subtraction "-Wnull-pointer-subtraction"
+/// @def _clwarn_clang_nullability
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnullability`.
 #define _clwarn_clang_nullability "-Wnullability"
+/// @def _clwarn_clang_nullability_completeness
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnullability-completeness`.
 #define _clwarn_clang_nullability_completeness "-Wnullability-completeness"
+/// @def _clwarn_clang_nullability_completeness_on_arrays
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnullability-completeness-on-arrays`.
 #define _clwarn_clang_nullability_completeness_on_arrays "-Wnullability-completeness-on-arrays"
+/// @def _clwarn_clang_nullability_declspec
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnullability-declspec`.
 #define _clwarn_clang_nullability_declspec "-Wnullability-declspec"
+/// @def _clwarn_clang_nullability_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnullability-extension`.
 #define _clwarn_clang_nullability_extension "-Wnullability-extension"
+/// @def _clwarn_clang_nullability_inferred_on_nested_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnullability-inferred-on-nested-type`.
 #define _clwarn_clang_nullability_inferred_on_nested_type "-Wnullability-inferred-on-nested-type"
+/// @def _clwarn_clang_nullable_to_nonnull_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnullable-to-nonnull-conversion`.
 #define _clwarn_clang_nullable_to_nonnull_conversion "-Wnullable-to-nonnull-conversion"
+/// @def _clwarn_clang_nvcc_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wnvcc-compat`.
 #define _clwarn_clang_nvcc_compat "-Wnvcc-compat"
+/// @def _clwarn_clang_objc_autosynthesis_property_ivar_name_match
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-autosynthesis-property-ivar-name-match`.
 #define _clwarn_clang_objc_autosynthesis_property_ivar_name_match "-Wobjc-autosynthesis-property-ivar-name-match"
+/// @def _clwarn_clang_objc_bool_constant_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-bool-constant-conversion`.
 #define _clwarn_clang_objc_bool_constant_conversion "-Wobjc-bool-constant-conversion"
+/// @def _clwarn_clang_objc_boxing
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-boxing`.
 #define _clwarn_clang_objc_boxing "-Wobjc-boxing"
+/// @def _clwarn_clang_objc_circular_container
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-circular-container`.
 #define _clwarn_clang_objc_circular_container "-Wobjc-circular-container"
+/// @def _clwarn_clang_objc_cocoa_api
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-cocoa-api`.
 #define _clwarn_clang_objc_cocoa_api "-Wobjc-cocoa-api"
+/// @def _clwarn_clang_objc_designated_initializers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-designated-initializers`.
 #define _clwarn_clang_objc_designated_initializers "-Wobjc-designated-initializers"
+/// @def _clwarn_clang_objc_dictionary_duplicate_keys
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-dictionary-duplicate-keys`.
 #define _clwarn_clang_objc_dictionary_duplicate_keys "-Wobjc-dictionary-duplicate-keys"
+/// @def _clwarn_clang_objc_duplicate_category_definition
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-duplicate-category-definition`.
 #define _clwarn_clang_objc_duplicate_category_definition "-Wobjc-duplicate-category-definition"
+/// @def _clwarn_clang_objc_flexible_array
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-flexible-array`.
 #define _clwarn_clang_objc_flexible_array "-Wobjc-flexible-array"
+/// @def _clwarn_clang_objc_forward_class_redefinition
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-forward-class-redefinition`.
 #define _clwarn_clang_objc_forward_class_redefinition "-Wobjc-forward-class-redefinition"
+/// @def _clwarn_clang_objc_interface_ivars
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-interface-ivars`.
 #define _clwarn_clang_objc_interface_ivars "-Wobjc-interface-ivars"
+/// @def _clwarn_clang_objc_literal_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-literal-compare`.
 #define _clwarn_clang_objc_literal_compare "-Wobjc-literal-compare"
+/// @def _clwarn_clang_objc_literal_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-literal-conversion`.
 #define _clwarn_clang_objc_literal_conversion "-Wobjc-literal-conversion"
+/// @def _clwarn_clang_objc_macro_redefinition
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-macro-redefinition`.
 #define _clwarn_clang_objc_macro_redefinition "-Wobjc-macro-redefinition"
+/// @def _clwarn_clang_objc_messaging_id
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-messaging-id`.
 #define _clwarn_clang_objc_messaging_id "-Wobjc-messaging-id"
+/// @def _clwarn_clang_objc_method_access
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-method-access`.
 #define _clwarn_clang_objc_method_access "-Wobjc-method-access"
+/// @def _clwarn_clang_objc_missing_property_synthesis
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-missing-property-synthesis`.
 #define _clwarn_clang_objc_missing_property_synthesis "-Wobjc-missing-property-synthesis"
+/// @def _clwarn_clang_objc_missing_super_calls
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-missing-super-calls`.
 #define _clwarn_clang_objc_missing_super_calls "-Wobjc-missing-super-calls"
+/// @def _clwarn_clang_objc_multiple_method_names
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-multiple-method-names`.
 #define _clwarn_clang_objc_multiple_method_names "-Wobjc-multiple-method-names"
+/// @def _clwarn_clang_objc_noncopy_retain_block_property
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-noncopy-retain-block-property`.
 #define _clwarn_clang_objc_noncopy_retain_block_property "-Wobjc-noncopy-retain-block-property"
+/// @def _clwarn_clang_objc_nonunified_exceptions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-nonunified-exceptions`.
 #define _clwarn_clang_objc_nonunified_exceptions "-Wobjc-nonunified-exceptions"
+/// @def _clwarn_clang_objc_property_assign_on_object_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-property-assign-on-object-type`.
 #define _clwarn_clang_objc_property_assign_on_object_type "-Wobjc-property-assign-on-object-type"
+/// @def _clwarn_clang_objc_property_implementation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-property-implementation`.
 #define _clwarn_clang_objc_property_implementation "-Wobjc-property-implementation"
+/// @def _clwarn_clang_objc_property_implicit_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-property-implicit-mismatch`.
 #define _clwarn_clang_objc_property_implicit_mismatch "-Wobjc-property-implicit-mismatch"
+/// @def _clwarn_clang_objc_property_matches_cocoa_ownership_rule
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-property-matches-cocoa-ownership-rule`.
 #define _clwarn_clang_objc_property_matches_cocoa_ownership_rule "-Wobjc-property-matches-cocoa-ownership-rule"
+/// @def _clwarn_clang_objc_property_no_attribute
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-property-no-attribute`.
 #define _clwarn_clang_objc_property_no_attribute "-Wobjc-property-no-attribute"
+/// @def _clwarn_clang_objc_property_synthesis
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-property-synthesis`.
 #define _clwarn_clang_objc_property_synthesis "-Wobjc-property-synthesis"
+/// @def _clwarn_clang_objc_protocol_method_implementation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-protocol-method-implementation`.
 #define _clwarn_clang_objc_protocol_method_implementation "-Wobjc-protocol-method-implementation"
+/// @def _clwarn_clang_objc_protocol_property_synthesis
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-protocol-property-synthesis`.
 #define _clwarn_clang_objc_protocol_property_synthesis "-Wobjc-protocol-property-synthesis"
+/// @def _clwarn_clang_objc_protocol_qualifiers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-protocol-qualifiers`.
 #define _clwarn_clang_objc_protocol_qualifiers "-Wobjc-protocol-qualifiers"
+/// @def _clwarn_clang_objc_readonly_with_setter_property
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-readonly-with-setter-property`.
 #define _clwarn_clang_objc_readonly_with_setter_property "-Wobjc-readonly-with-setter-property"
+/// @def _clwarn_clang_objc_redundant_api_use
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-redundant-api-use`.
 #define _clwarn_clang_objc_redundant_api_use "-Wobjc-redundant-api-use"
+/// @def _clwarn_clang_objc_redundant_literal_use
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-redundant-literal-use`.
 #define _clwarn_clang_objc_redundant_literal_use "-Wobjc-redundant-literal-use"
+/// @def _clwarn_clang_objc_root_class
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-root-class`.
 #define _clwarn_clang_objc_root_class "-Wobjc-root-class"
+/// @def _clwarn_clang_objc_signed_char_bool
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-signed-char-bool`.
 #define _clwarn_clang_objc_signed_char_bool "-Wobjc-signed-char-bool"
+/// @def _clwarn_clang_objc_signed_char_bool_implicit_float_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-signed-char-bool-implicit-float-conversion`.
 #define _clwarn_clang_objc_signed_char_bool_implicit_float_conversion "-Wobjc-signed-char-bool-implicit-float-conversion"
+/// @def _clwarn_clang_objc_signed_char_bool_implicit_int_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-signed-char-bool-implicit-int-conversion`.
 #define _clwarn_clang_objc_signed_char_bool_implicit_int_conversion "-Wobjc-signed-char-bool-implicit-int-conversion"
+/// @def _clwarn_clang_objc_string_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-string-compare`.
 #define _clwarn_clang_objc_string_compare "-Wobjc-string-compare"
+/// @def _clwarn_clang_objc_string_concatenation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-string-concatenation`.
 #define _clwarn_clang_objc_string_concatenation "-Wobjc-string-concatenation"
+/// @def _clwarn_clang_objc_unsafe_perform_selector
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wobjc-unsafe-perform-selector`.
 #define _clwarn_clang_objc_unsafe_perform_selector "-Wobjc-unsafe-perform-selector"
+/// @def _clwarn_clang_octal_prefix_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woctal-prefix-extension`.
 #define _clwarn_clang_octal_prefix_extension "-Woctal-prefix-extension"
+/// @def _clwarn_clang_odr
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wodr`.
 #define _clwarn_clang_odr "-Wodr"
+/// @def _clwarn_clang_old_style_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wold-style-cast`.
 #define _clwarn_clang_old_style_cast "-Wold-style-cast"
+/// @def _clwarn_clang_old_style_definition
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wold-style-definition`.
 #define _clwarn_clang_old_style_definition "-Wold-style-definition"
+/// @def _clwarn_clang_openacc
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenacc`.
 #define _clwarn_clang_openacc "-Wopenacc"
+/// @def _clwarn_clang_openacc_cache_var_inside_loop
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenacc-cache-var-inside-loop`.
 #define _clwarn_clang_openacc_cache_var_inside_loop "-Wopenacc-cache-var-inside-loop"
+/// @def _clwarn_clang_openacc_confusing_routine_name
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenacc-confusing-routine-name`.
 #define _clwarn_clang_openacc_confusing_routine_name "-Wopenacc-confusing-routine-name"
+/// @def _clwarn_clang_openacc_deprecated_clause_alias
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenacc-deprecated-clause-alias`.
 #define _clwarn_clang_openacc_deprecated_clause_alias "-Wopenacc-deprecated-clause-alias"
+/// @def _clwarn_clang_openacc_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenacc-extension`.
 #define _clwarn_clang_openacc_extension "-Wopenacc-extension"
+/// @def _clwarn_clang_openacc_self_if_potential_conflict
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenacc-self-if-potential-conflict`.
 #define _clwarn_clang_openacc_self_if_potential_conflict "-Wopenacc-self-if-potential-conflict"
+/// @def _clwarn_clang_openacc_var_lacks_operation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenacc-var-lacks-operation`.
 #define _clwarn_clang_openacc_var_lacks_operation "-Wopenacc-var-lacks-operation"
+/// @def _clwarn_clang_openacc_var_non_const_array
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenacc-var-non-const-array`.
 #define _clwarn_clang_openacc_var_non_const_array "-Wopenacc-var-non-const-array"
+/// @def _clwarn_clang_opencl_unsupported_rgba
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopencl-unsupported-rgba`.
 #define _clwarn_clang_opencl_unsupported_rgba "-Wopencl-unsupported-rgba"
+/// @def _clwarn_clang_openmp
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp`.
 #define _clwarn_clang_openmp "-Wopenmp"
+/// @def _clwarn_clang_openmp_51_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp-51-extensions`.
 #define _clwarn_clang_openmp_51_extensions "-Wopenmp-51-extensions"
+/// @def _clwarn_clang_openmp_clauses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp-clauses`.
 #define _clwarn_clang_openmp_clauses "-Wopenmp-clauses"
+/// @def _clwarn_clang_openmp_extensions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp-extensions`.
 #define _clwarn_clang_openmp_extensions "-Wopenmp-extensions"
+/// @def _clwarn_clang_openmp_future
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp-future`.
 #define _clwarn_clang_openmp_future "-Wopenmp-future"
+/// @def _clwarn_clang_openmp_loop_form
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp-loop-form`.
 #define _clwarn_clang_openmp_loop_form "-Wopenmp-loop-form"
+/// @def _clwarn_clang_openmp_mapping
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp-mapping`.
 #define _clwarn_clang_openmp_mapping "-Wopenmp-mapping"
+/// @def _clwarn_clang_openmp_target
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp-target`.
 #define _clwarn_clang_openmp_target "-Wopenmp-target"
+/// @def _clwarn_clang_openmp_target_exception
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wopenmp-target-exception`.
 #define _clwarn_clang_openmp_target_exception "-Wopenmp-target-exception"
+/// @def _clwarn_clang_option_ignored
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woption-ignored`.
 #define _clwarn_clang_option_ignored "-Woption-ignored"
+/// @def _clwarn_clang_ordered_compare_function_pointers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wordered-compare-function-pointers`.
 #define _clwarn_clang_ordered_compare_function_pointers "-Wordered-compare-function-pointers"
+/// @def _clwarn_clang_out_of_line_declaration
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wout-of-line-declaration`.
 #define _clwarn_clang_out_of_line_declaration "-Wout-of-line-declaration"
+/// @def _clwarn_clang_out_of_scope_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wout-of-scope-function`.
 #define _clwarn_clang_out_of_scope_function "-Wout-of-scope-function"
+/// @def _clwarn_clang_over_aligned
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wover-aligned`.
 #define _clwarn_clang_over_aligned "-Wover-aligned"
+/// @def _clwarn_clang_overflow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverflow`.
 #define _clwarn_clang_overflow "-Woverflow"
+/// @def _clwarn_clang_overflow_behavior_attribute_ignored
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverflow-behavior-attribute-ignored`.
 #define _clwarn_clang_overflow_behavior_attribute_ignored "-Woverflow-behavior-attribute-ignored"
+/// @def _clwarn_clang_overflow_behavior_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverflow-behavior-conversion`.
 #define _clwarn_clang_overflow_behavior_conversion "-Woverflow-behavior-conversion"
+/// @def _clwarn_clang_overlength_strings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverlength-strings`.
 #define _clwarn_clang_overlength_strings "-Woverlength-strings"
+/// @def _clwarn_clang_overloaded_shift_op_parentheses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverloaded-shift-op-parentheses`.
 #define _clwarn_clang_overloaded_shift_op_parentheses "-Woverloaded-shift-op-parentheses"
+/// @def _clwarn_clang_overloaded_virtual
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverloaded-virtual`.
 #define _clwarn_clang_overloaded_virtual "-Woverloaded-virtual"
+/// @def _clwarn_clang_override_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverride-init`.
 #define _clwarn_clang_override_init "-Woverride-init"
+/// @def _clwarn_clang_override_module
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverride-module`.
 #define _clwarn_clang_override_module "-Woverride-module"
+/// @def _clwarn_clang_overriding_complex_range
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverriding-complex-range`.
 #define _clwarn_clang_overriding_complex_range "-Woverriding-complex-range"
+/// @def _clwarn_clang_overriding_deployment_version
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverriding-deployment-version`.
 #define _clwarn_clang_overriding_deployment_version "-Woverriding-deployment-version"
+/// @def _clwarn_clang_overriding_method_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverriding-method-mismatch`.
 #define _clwarn_clang_overriding_method_mismatch "-Woverriding-method-mismatch"
+/// @def _clwarn_clang_overriding_option
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Woverriding-option`.
 #define _clwarn_clang_overriding_option "-Woverriding-option"
+/// @def _clwarn_clang_packed
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpacked`.
 #define _clwarn_clang_packed "-Wpacked"
+/// @def _clwarn_clang_packed_non_pod
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpacked-non-pod`.
 #define _clwarn_clang_packed_non_pod "-Wpacked-non-pod"
+/// @def _clwarn_clang_padded
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpadded`.
 #define _clwarn_clang_padded "-Wpadded"
+/// @def _clwarn_clang_padded_bitfield
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpadded-bitfield`.
 #define _clwarn_clang_padded_bitfield "-Wpadded-bitfield"
+/// @def _clwarn_clang_parentheses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wparentheses`.
 #define _clwarn_clang_parentheses "-Wparentheses"
+/// @def _clwarn_clang_parentheses_equality
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wparentheses-equality`.
 #define _clwarn_clang_parentheses_equality "-Wparentheses-equality"
+/// @def _clwarn_clang_partial_availability
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpartial-availability`.
 #define _clwarn_clang_partial_availability "-Wpartial-availability"
+/// @def _clwarn_clang_pass_failed
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpass-failed`.
 #define _clwarn_clang_pass_failed "-Wpass-failed"
+/// @def _clwarn_clang_pch_date_time
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpch-date-time`.
 #define _clwarn_clang_pch_date_time "-Wpch-date-time"
+/// @def _clwarn_clang_pch_vfs_diff
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpch-vfs-diff`.
 #define _clwarn_clang_pch_vfs_diff "-Wpch-vfs-diff"
+/// @def _clwarn_clang_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpedantic`.
 #define _clwarn_clang_pedantic "-Wpedantic"
+/// @def _clwarn_clang_pedantic_core_features
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpedantic-core-features`.
 #define _clwarn_clang_pedantic_core_features "-Wpedantic-core-features"
+/// @def _clwarn_clang_pedantic_macros
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpedantic-macros`.
 #define _clwarn_clang_pedantic_macros "-Wpedantic-macros"
+/// @def _clwarn_clang_perf_constraint_implies_noexcept
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wperf-constraint-implies-noexcept`.
 #define _clwarn_clang_perf_constraint_implies_noexcept "-Wperf-constraint-implies-noexcept"
+/// @def _clwarn_clang_pessimizing_move
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpessimizing-move`.
 #define _clwarn_clang_pessimizing_move "-Wpessimizing-move"
+/// @def _clwarn_clang_pgo_coverage
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpgo-coverage`.
 #define _clwarn_clang_pgo_coverage "-Wpgo-coverage"
+/// @def _clwarn_clang_pointer_arith
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpointer-arith`.
 #define _clwarn_clang_pointer_arith "-Wpointer-arith"
+/// @def _clwarn_clang_pointer_bool_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpointer-bool-conversion`.
 #define _clwarn_clang_pointer_bool_conversion "-Wpointer-bool-conversion"
+/// @def _clwarn_clang_pointer_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpointer-compare`.
 #define _clwarn_clang_pointer_compare "-Wpointer-compare"
+/// @def _clwarn_clang_pointer_integer_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpointer-integer-compare`.
 #define _clwarn_clang_pointer_integer_compare "-Wpointer-integer-compare"
+/// @def _clwarn_clang_pointer_sign
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpointer-sign`.
 #define _clwarn_clang_pointer_sign "-Wpointer-sign"
+/// @def _clwarn_clang_pointer_to_enum_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpointer-to-enum-cast`.
 #define _clwarn_clang_pointer_to_enum_cast "-Wpointer-to-enum-cast"
+/// @def _clwarn_clang_pointer_to_int_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpointer-to-int-cast`.
 #define _clwarn_clang_pointer_to_int_cast "-Wpointer-to-int-cast"
+/// @def _clwarn_clang_pointer_type_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpointer-type-mismatch`.
 #define _clwarn_clang_pointer_type_mismatch "-Wpointer-type-mismatch"
+/// @def _clwarn_clang_poison_system_directories
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpoison-system-directories`.
 #define _clwarn_clang_poison_system_directories "-Wpoison-system-directories"
+/// @def _clwarn_clang_potentially_direct_selector
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpotentially-direct-selector`.
 #define _clwarn_clang_potentially_direct_selector "-Wpotentially-direct-selector"
+/// @def _clwarn_clang_potentially_evaluated_expression
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpotentially-evaluated-expression`.
 #define _clwarn_clang_potentially_evaluated_expression "-Wpotentially-evaluated-expression"
+/// @def _clwarn_clang_pragma_clang_attribute
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpragma-clang-attribute`.
 #define _clwarn_clang_pragma_clang_attribute "-Wpragma-clang-attribute"
+/// @def _clwarn_clang_pragma_messages
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-W#pragma-messages`.
 #define _clwarn_clang_pragma_messages "-W#pragma-messages"
+/// @def _clwarn_clang_pragma_once_outside_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpragma-once-outside-header`.
 #define _clwarn_clang_pragma_once_outside_header "-Wpragma-once-outside-header"
+/// @def _clwarn_clang_pragma_pack
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpragma-pack`.
 #define _clwarn_clang_pragma_pack "-Wpragma-pack"
+/// @def _clwarn_clang_pragma_pack_suspicious_include
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpragma-pack-suspicious-include`.
 #define _clwarn_clang_pragma_pack_suspicious_include "-Wpragma-pack-suspicious-include"
+/// @def _clwarn_clang_pragma_system_header_outside_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpragma-system-header-outside-header`.
 #define _clwarn_clang_pragma_system_header_outside_header "-Wpragma-system-header-outside-header"
+/// @def _clwarn_clang_pragmas
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpragmas`.
 #define _clwarn_clang_pragmas "-Wpragmas"
+/// @def _clwarn_clang_pre_c11_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c11-compat`.
 #define _clwarn_clang_pre_c11_compat "-Wpre-c11-compat"
+/// @def _clwarn_clang_pre_c11_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c11-compat-pedantic`.
 #define _clwarn_clang_pre_c11_compat_pedantic "-Wpre-c11-compat-pedantic"
+/// @def _clwarn_clang_pre_c23_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c23-compat`.
 #define _clwarn_clang_pre_c23_compat "-Wpre-c23-compat"
+/// @def _clwarn_clang_pre_c23_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c23-compat-pedantic`.
 #define _clwarn_clang_pre_c23_compat_pedantic "-Wpre-c23-compat-pedantic"
+/// @def _clwarn_clang_pre_c2x_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c2x-compat`.
 #define _clwarn_clang_pre_c2x_compat "-Wpre-c2x-compat"
+/// @def _clwarn_clang_pre_c2x_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c2x-compat-pedantic`.
 #define _clwarn_clang_pre_c2x_compat_pedantic "-Wpre-c2x-compat-pedantic"
+/// @def _clwarn_clang_pre_c2y_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c2y-compat`.
 #define _clwarn_clang_pre_c2y_compat "-Wpre-c2y-compat"
+/// @def _clwarn_clang_pre_c2y_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c2y-compat-pedantic`.
 #define _clwarn_clang_pre_c2y_compat_pedantic "-Wpre-c2y-compat-pedantic"
+/// @def _clwarn_clang_pre_cxx14_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++14-compat`.
 #define _clwarn_clang_pre_cxx14_compat "-Wpre-c++14-compat"
+/// @def _clwarn_clang_pre_cxx14_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++14-compat-pedantic`.
 #define _clwarn_clang_pre_cxx14_compat_pedantic "-Wpre-c++14-compat-pedantic"
+/// @def _clwarn_clang_pre_cxx17_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++17-compat`.
 #define _clwarn_clang_pre_cxx17_compat "-Wpre-c++17-compat"
+/// @def _clwarn_clang_pre_cxx17_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++17-compat-pedantic`.
 #define _clwarn_clang_pre_cxx17_compat_pedantic "-Wpre-c++17-compat-pedantic"
+/// @def _clwarn_clang_pre_cxx20_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++20-compat`.
 #define _clwarn_clang_pre_cxx20_compat "-Wpre-c++20-compat"
+/// @def _clwarn_clang_pre_cxx20_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++20-compat-pedantic`.
 #define _clwarn_clang_pre_cxx20_compat_pedantic "-Wpre-c++20-compat-pedantic"
+/// @def _clwarn_clang_pre_cxx23_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++23-compat`.
 #define _clwarn_clang_pre_cxx23_compat "-Wpre-c++23-compat"
+/// @def _clwarn_clang_pre_cxx23_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++23-compat-pedantic`.
 #define _clwarn_clang_pre_cxx23_compat_pedantic "-Wpre-c++23-compat-pedantic"
+/// @def _clwarn_clang_pre_cxx26_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++26-compat`.
 #define _clwarn_clang_pre_cxx26_compat "-Wpre-c++26-compat"
+/// @def _clwarn_clang_pre_cxx26_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++26-compat-pedantic`.
 #define _clwarn_clang_pre_cxx26_compat_pedantic "-Wpre-c++26-compat-pedantic"
+/// @def _clwarn_clang_pre_cxx2c_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++2c-compat`.
 #define _clwarn_clang_pre_cxx2c_compat "-Wpre-c++2c-compat"
+/// @def _clwarn_clang_pre_cxx2c_compat_pedantic
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-c++2c-compat-pedantic`.
 #define _clwarn_clang_pre_cxx2c_compat_pedantic "-Wpre-c++2c-compat-pedantic"
+/// @def _clwarn_clang_pre_openmp_51_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpre-openmp-51-compat`.
 #define _clwarn_clang_pre_openmp_51_compat "-Wpre-openmp-51-compat"
+/// @def _clwarn_clang_predefined_identifier_outside_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpredefined-identifier-outside-function`.
 #define _clwarn_clang_predefined_identifier_outside_function "-Wpredefined-identifier-outside-function"
+/// @def _clwarn_clang_preferred_type_bitfield_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpreferred-type-bitfield-enum-conversion`.
 #define _clwarn_clang_preferred_type_bitfield_enum_conversion "-Wpreferred-type-bitfield-enum-conversion"
+/// @def _clwarn_clang_preferred_type_bitfield_width
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpreferred-type-bitfield-width`.
 #define _clwarn_clang_preferred_type_bitfield_width "-Wpreferred-type-bitfield-width"
+/// @def _clwarn_clang_private_extern
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wprivate-extern`.
 #define _clwarn_clang_private_extern "-Wprivate-extern"
+/// @def _clwarn_clang_private_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wprivate-header`.
 #define _clwarn_clang_private_header "-Wprivate-header"
+/// @def _clwarn_clang_private_module
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wprivate-module`.
 #define _clwarn_clang_private_module "-Wprivate-module"
+/// @def _clwarn_clang_profile_instr_missing
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wprofile-instr-missing`.
 #define _clwarn_clang_profile_instr_missing "-Wprofile-instr-missing"
+/// @def _clwarn_clang_profile_instr_out_of_date
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wprofile-instr-out-of-date`.
 #define _clwarn_clang_profile_instr_out_of_date "-Wprofile-instr-out-of-date"
+/// @def _clwarn_clang_profile_instr_unprofiled
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wprofile-instr-unprofiled`.
 #define _clwarn_clang_profile_instr_unprofiled "-Wprofile-instr-unprofiled"
+/// @def _clwarn_clang_property_access_dot_syntax
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wproperty-access-dot-syntax`.
 #define _clwarn_clang_property_access_dot_syntax "-Wproperty-access-dot-syntax"
+/// @def _clwarn_clang_property_attribute_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wproperty-attribute-mismatch`.
 #define _clwarn_clang_property_attribute_mismatch "-Wproperty-attribute-mismatch"
+/// @def _clwarn_clang_protocol
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wprotocol`.
 #define _clwarn_clang_protocol "-Wprotocol"
+/// @def _clwarn_clang_protocol_property_synthesis_ambiguity
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wprotocol-property-synthesis-ambiguity`.
 #define _clwarn_clang_protocol_property_synthesis_ambiguity "-Wprotocol-property-synthesis-ambiguity"
+/// @def _clwarn_clang_psabi
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wpsabi`.
 #define _clwarn_clang_psabi "-Wpsabi"
+/// @def _clwarn_clang_ptrauth_null_pointers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wptrauth-null-pointers`.
 #define _clwarn_clang_ptrauth_null_pointers "-Wptrauth-null-pointers"
+/// @def _clwarn_clang_qualified_void_return_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wqualified-void-return-type`.
 #define _clwarn_clang_qualified_void_return_type "-Wqualified-void-return-type"
+/// @def _clwarn_clang_quoted_include_in_framework_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wquoted-include-in-framework-header`.
 #define _clwarn_clang_quoted_include_in_framework_header "-Wquoted-include-in-framework-header"
+/// @def _clwarn_clang_range_loop_analysis
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wrange-loop-analysis`.
 #define _clwarn_clang_range_loop_analysis "-Wrange-loop-analysis"
+/// @def _clwarn_clang_range_loop_bind_reference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wrange-loop-bind-reference`.
 #define _clwarn_clang_range_loop_bind_reference "-Wrange-loop-bind-reference"
+/// @def _clwarn_clang_range_loop_construct
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wrange-loop-construct`.
 #define _clwarn_clang_range_loop_construct "-Wrange-loop-construct"
+/// @def _clwarn_clang_read_only_types
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wread-only-types`.
 #define _clwarn_clang_read_only_types "-Wread-only-types"
+/// @def _clwarn_clang_readonly_iboutlet_property
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreadonly-iboutlet-property`.
 #define _clwarn_clang_readonly_iboutlet_property "-Wreadonly-iboutlet-property"
+/// @def _clwarn_clang_receiver_expr
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreceiver-expr`.
 #define _clwarn_clang_receiver_expr "-Wreceiver-expr"
+/// @def _clwarn_clang_receiver_forward_class
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreceiver-forward-class`.
 #define _clwarn_clang_receiver_forward_class "-Wreceiver-forward-class"
+/// @def _clwarn_clang_redeclared_class_member
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wredeclared-class-member`.
 #define _clwarn_clang_redeclared_class_member "-Wredeclared-class-member"
+/// @def _clwarn_clang_reduced_bmi_output_overrided
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreduced-bmi-output-overrided`.
 #define _clwarn_clang_reduced_bmi_output_overrided "-Wreduced-bmi-output-overrided"
+/// @def _clwarn_clang_redundant_attribute
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wredundant-attribute`.
 #define _clwarn_clang_redundant_attribute "-Wredundant-attribute"
+/// @def _clwarn_clang_redundant_consteval_if
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wredundant-consteval-if`.
 #define _clwarn_clang_redundant_consteval_if "-Wredundant-consteval-if"
+/// @def _clwarn_clang_redundant_decls
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wredundant-decls`.
 #define _clwarn_clang_redundant_decls "-Wredundant-decls"
+/// @def _clwarn_clang_redundant_move
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wredundant-move`.
 #define _clwarn_clang_redundant_move "-Wredundant-move"
+/// @def _clwarn_clang_redundant_parens
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wredundant-parens`.
 #define _clwarn_clang_redundant_parens "-Wredundant-parens"
+/// @def _clwarn_clang_reference_tu_local_entity_in_other_tu
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreference-tu-local-entity-in-other-tu`.
 #define _clwarn_clang_reference_tu_local_entity_in_other_tu "-Wreference-tu-local-entity-in-other-tu"
+/// @def _clwarn_clang_register
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wregister`.
 #define _clwarn_clang_register "-Wregister"
+/// @def _clwarn_clang_reinterpret_base_class
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreinterpret-base-class`.
 #define _clwarn_clang_reinterpret_base_class "-Wreinterpret-base-class"
+/// @def _clwarn_clang_reorder
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreorder`.
 #define _clwarn_clang_reorder "-Wreorder"
+/// @def _clwarn_clang_reorder_ctor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreorder-ctor`.
 #define _clwarn_clang_reorder_ctor "-Wreorder-ctor"
+/// @def _clwarn_clang_reorder_init_list
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreorder-init-list`.
 #define _clwarn_clang_reorder_init_list "-Wreorder-init-list"
+/// @def _clwarn_clang_requires_super_attribute
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wrequires-super-attribute`.
 #define _clwarn_clang_requires_super_attribute "-Wrequires-super-attribute"
+/// @def _clwarn_clang_reserved_attribute_identifier
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreserved-attribute-identifier`.
 #define _clwarn_clang_reserved_attribute_identifier "-Wreserved-attribute-identifier"
+/// @def _clwarn_clang_reserved_id_macro
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreserved-id-macro`.
 #define _clwarn_clang_reserved_id_macro "-Wreserved-id-macro"
+/// @def _clwarn_clang_reserved_identifier
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreserved-identifier`.
 #define _clwarn_clang_reserved_identifier "-Wreserved-identifier"
+/// @def _clwarn_clang_reserved_macro_identifier
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreserved-macro-identifier`.
 #define _clwarn_clang_reserved_macro_identifier "-Wreserved-macro-identifier"
+/// @def _clwarn_clang_reserved_module_identifier
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreserved-module-identifier`.
 #define _clwarn_clang_reserved_module_identifier "-Wreserved-module-identifier"
+/// @def _clwarn_clang_reserved_user_defined_literal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreserved-user-defined-literal`.
 #define _clwarn_clang_reserved_user_defined_literal "-Wreserved-user-defined-literal"
+/// @def _clwarn_clang_restrict_expansion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wrestrict-expansion`.
 #define _clwarn_clang_restrict_expansion "-Wrestrict-expansion"
+/// @def _clwarn_clang_retained_language_linkage
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wretained-language-linkage`.
 #define _clwarn_clang_retained_language_linkage "-Wretained-language-linkage"
+/// @def _clwarn_clang_return_local_addr
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreturn-local-addr`.
 #define _clwarn_clang_return_local_addr "-Wreturn-local-addr"
+/// @def _clwarn_clang_return_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreturn-mismatch`.
 #define _clwarn_clang_return_mismatch "-Wreturn-mismatch"
+/// @def _clwarn_clang_return_stack_address
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreturn-stack-address`.
 #define _clwarn_clang_return_stack_address "-Wreturn-stack-address"
+/// @def _clwarn_clang_return_std_move
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreturn-std-move`.
 #define _clwarn_clang_return_std_move "-Wreturn-std-move"
+/// @def _clwarn_clang_return_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreturn-type`.
 #define _clwarn_clang_return_type "-Wreturn-type"
+/// @def _clwarn_clang_return_type_c_linkage
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wreturn-type-c-linkage`.
 #define _clwarn_clang_return_type_c_linkage "-Wreturn-type-c-linkage"
+/// @def _clwarn_clang_rewrite_not_bool
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wrewrite-not-bool`.
 #define _clwarn_clang_rewrite_not_bool "-Wrewrite-not-bool"
+/// @def _clwarn_clang_riscv_be_experimental
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wriscv-be-experimental`.
 #define _clwarn_clang_riscv_be_experimental "-Wriscv-be-experimental"
+/// @def _clwarn_clang_rtti
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wrtti`.
 #define _clwarn_clang_rtti "-Wrtti"
+/// @def _clwarn_clang_sarif_format_unstable
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsarif-format-unstable`.
 #define _clwarn_clang_sarif_format_unstable "-Wsarif-format-unstable"
+/// @def _clwarn_clang_scalable_static_analysis_framework
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wscalable-static-analysis-framework`.
+#define _clwarn_clang_scalable_static_analysis_framework "-Wscalable-static-analysis-framework"
+/// @def _clwarn_clang_section
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsection`.
 #define _clwarn_clang_section "-Wsection"
+/// @def _clwarn_clang_selector
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wselector`.
 #define _clwarn_clang_selector "-Wselector"
+/// @def _clwarn_clang_selector_type_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wselector-type-mismatch`.
 #define _clwarn_clang_selector_type_mismatch "-Wselector-type-mismatch"
+/// @def _clwarn_clang_self_assign
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wself-assign`.
 #define _clwarn_clang_self_assign "-Wself-assign"
+/// @def _clwarn_clang_self_assign_field
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wself-assign-field`.
 #define _clwarn_clang_self_assign_field "-Wself-assign-field"
+/// @def _clwarn_clang_self_assign_overloaded
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wself-assign-overloaded`.
 #define _clwarn_clang_self_assign_overloaded "-Wself-assign-overloaded"
+/// @def _clwarn_clang_self_move
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wself-move`.
 #define _clwarn_clang_self_move "-Wself-move"
+/// @def _clwarn_clang_semicolon_before_method_body
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsemicolon-before-method-body`.
 #define _clwarn_clang_semicolon_before_method_body "-Wsemicolon-before-method-body"
+/// @def _clwarn_clang_sentinel
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsentinel`.
 #define _clwarn_clang_sentinel "-Wsentinel"
+/// @def _clwarn_clang_sequence_point
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsequence-point`.
 #define _clwarn_clang_sequence_point "-Wsequence-point"
+/// @def _clwarn_clang_serialized_diagnostics
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wserialized-diagnostics`.
 #define _clwarn_clang_serialized_diagnostics "-Wserialized-diagnostics"
+/// @def _clwarn_clang_shadow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshadow`.
 #define _clwarn_clang_shadow "-Wshadow"
+/// @def _clwarn_clang_shadow_all
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshadow-all`.
 #define _clwarn_clang_shadow_all "-Wshadow-all"
+/// @def _clwarn_clang_shadow_field
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshadow-field`.
 #define _clwarn_clang_shadow_field "-Wshadow-field"
+/// @def _clwarn_clang_shadow_field_in_constructor
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshadow-field-in-constructor`.
 #define _clwarn_clang_shadow_field_in_constructor "-Wshadow-field-in-constructor"
+/// @def _clwarn_clang_shadow_field_in_constructor_modified
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshadow-field-in-constructor-modified`.
 #define _clwarn_clang_shadow_field_in_constructor_modified "-Wshadow-field-in-constructor-modified"
+/// @def _clwarn_clang_shadow_header
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshadow-header`.
 #define _clwarn_clang_shadow_header "-Wshadow-header"
+/// @def _clwarn_clang_shadow_ivar
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshadow-ivar`.
 #define _clwarn_clang_shadow_ivar "-Wshadow-ivar"
+/// @def _clwarn_clang_shadow_uncaptured_local
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshadow-uncaptured-local`.
 #define _clwarn_clang_shadow_uncaptured_local "-Wshadow-uncaptured-local"
+/// @def _clwarn_clang_shift_bool
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshift-bool`.
 #define _clwarn_clang_shift_bool "-Wshift-bool"
+/// @def _clwarn_clang_shift_count_negative
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshift-count-negative`.
 #define _clwarn_clang_shift_count_negative "-Wshift-count-negative"
+/// @def _clwarn_clang_shift_count_overflow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshift-count-overflow`.
 #define _clwarn_clang_shift_count_overflow "-Wshift-count-overflow"
+/// @def _clwarn_clang_shift_negative_value
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshift-negative-value`.
 #define _clwarn_clang_shift_negative_value "-Wshift-negative-value"
+/// @def _clwarn_clang_shift_op_parentheses
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshift-op-parentheses`.
 #define _clwarn_clang_shift_op_parentheses "-Wshift-op-parentheses"
+/// @def _clwarn_clang_shift_overflow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshift-overflow`.
 #define _clwarn_clang_shift_overflow "-Wshift-overflow"
+/// @def _clwarn_clang_shift_sign_overflow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshift-sign-overflow`.
 #define _clwarn_clang_shift_sign_overflow "-Wshift-sign-overflow"
+/// @def _clwarn_clang_shorten_64_to_32
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wshorten-64-to-32`.
 #define _clwarn_clang_shorten_64_to_32 "-Wshorten-64-to-32"
+/// @def _clwarn_clang_sign_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsign-compare`.
 #define _clwarn_clang_sign_compare "-Wsign-compare"
+/// @def _clwarn_clang_sign_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsign-conversion`.
 #define _clwarn_clang_sign_conversion "-Wsign-conversion"
+/// @def _clwarn_clang_sign_promo
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsign-promo`.
 #define _clwarn_clang_sign_promo "-Wsign-promo"
+/// @def _clwarn_clang_signed_enum_bitfield
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsigned-enum-bitfield`.
 #define _clwarn_clang_signed_enum_bitfield "-Wsigned-enum-bitfield"
+/// @def _clwarn_clang_signed_unsigned_wchar
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsigned-unsigned-wchar`.
 #define _clwarn_clang_signed_unsigned_wchar "-Wsigned-unsigned-wchar"
+/// @def _clwarn_clang_simdlen
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsimdlen`.
 #define _clwarn_clang_simdlen "-Wsimdlen"
+/// @def _clwarn_clang_single_bit_bitfield_constant_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsingle-bit-bitfield-constant-conversion`.
 #define _clwarn_clang_single_bit_bitfield_constant_conversion "-Wsingle-bit-bitfield-constant-conversion"
+/// @def _clwarn_clang_sizeof_array_argument
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsizeof-array-argument`.
 #define _clwarn_clang_sizeof_array_argument "-Wsizeof-array-argument"
+/// @def _clwarn_clang_sizeof_array_decay
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsizeof-array-decay`.
 #define _clwarn_clang_sizeof_array_decay "-Wsizeof-array-decay"
+/// @def _clwarn_clang_sizeof_array_div
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsizeof-array-div`.
 #define _clwarn_clang_sizeof_array_div "-Wsizeof-array-div"
+/// @def _clwarn_clang_sizeof_pointer_div
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsizeof-pointer-div`.
 #define _clwarn_clang_sizeof_pointer_div "-Wsizeof-pointer-div"
+/// @def _clwarn_clang_sizeof_pointer_memaccess
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsizeof-pointer-memaccess`.
 #define _clwarn_clang_sizeof_pointer_memaccess "-Wsizeof-pointer-memaccess"
+/// @def _clwarn_clang_slash_u_filename
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wslash-u-filename`.
 #define _clwarn_clang_slash_u_filename "-Wslash-u-filename"
+/// @def _clwarn_clang_slh_asm_goto
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wslh-asm-goto`.
 #define _clwarn_clang_slh_asm_goto "-Wslh-asm-goto"
+/// @def _clwarn_clang_sometimes_uninitialized
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsometimes-uninitialized`.
 #define _clwarn_clang_sometimes_uninitialized "-Wsometimes-uninitialized"
+/// @def _clwarn_clang_source_mgr
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsource-mgr`.
 #define _clwarn_clang_source_mgr "-Wsource-mgr"
+/// @def _clwarn_clang_source_uses_openacc
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsource-uses-openacc`.
 #define _clwarn_clang_source_uses_openacc "-Wsource-uses-openacc"
+/// @def _clwarn_clang_source_uses_openmp
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsource-uses-openmp`.
 #define _clwarn_clang_source_uses_openmp "-Wsource-uses-openmp"
+/// @def _clwarn_clang_spir_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wspir-compat`.
 #define _clwarn_clang_spir_compat "-Wspir-compat"
+/// @def _clwarn_clang_spirv_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wspirv-compat`.
 #define _clwarn_clang_spirv_compat "-Wspirv-compat"
+/// @def _clwarn_clang_stack_exhausted
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstack-exhausted`.
 #define _clwarn_clang_stack_exhausted "-Wstack-exhausted"
+/// @def _clwarn_clang_stack_protector
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstack-protector`.
 #define _clwarn_clang_stack_protector "-Wstack-protector"
+/// @def _clwarn_clang_static_float_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstatic-float-init`.
 #define _clwarn_clang_static_float_init "-Wstatic-float-init"
+/// @def _clwarn_clang_static_in_inline
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstatic-in-inline`.
 #define _clwarn_clang_static_in_inline "-Wstatic-in-inline"
+/// @def _clwarn_clang_static_inline_explicit_instantiation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstatic-inline-explicit-instantiation`.
 #define _clwarn_clang_static_inline_explicit_instantiation "-Wstatic-inline-explicit-instantiation"
+/// @def _clwarn_clang_static_local_in_inline
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstatic-local-in-inline`.
 #define _clwarn_clang_static_local_in_inline "-Wstatic-local-in-inline"
+/// @def _clwarn_clang_static_self_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstatic-self-init`.
 #define _clwarn_clang_static_self_init "-Wstatic-self-init"
+/// @def _clwarn_clang_stdlibcxx_not_found
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstdlibcxx-not-found`.
 #define _clwarn_clang_stdlibcxx_not_found "-Wstdlibcxx-not-found"
+/// @def _clwarn_clang_strict_aliasing
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstrict-aliasing`.
 #define _clwarn_clang_strict_aliasing "-Wstrict-aliasing"
+/// @def _clwarn_clang_strict_overflow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstrict-overflow`.
 #define _clwarn_clang_strict_overflow "-Wstrict-overflow"
+/// @def _clwarn_clang_strict_potentially_direct_selector
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstrict-potentially-direct-selector`.
 #define _clwarn_clang_strict_potentially_direct_selector "-Wstrict-potentially-direct-selector"
+/// @def _clwarn_clang_strict_primary_template_shadow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstrict-primary-template-shadow`.
 #define _clwarn_clang_strict_primary_template_shadow "-Wstrict-primary-template-shadow"
+/// @def _clwarn_clang_strict_prototypes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstrict-prototypes`.
 #define _clwarn_clang_strict_prototypes "-Wstrict-prototypes"
+/// @def _clwarn_clang_strict_selector_match
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstrict-selector-match`.
 #define _clwarn_clang_strict_selector_match "-Wstrict-selector-match"
+/// @def _clwarn_clang_string_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstring-compare`.
 #define _clwarn_clang_string_compare "-Wstring-compare"
+/// @def _clwarn_clang_string_concatenation
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstring-concatenation`.
 #define _clwarn_clang_string_concatenation "-Wstring-concatenation"
+/// @def _clwarn_clang_string_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstring-conversion`.
 #define _clwarn_clang_string_conversion "-Wstring-conversion"
+/// @def _clwarn_clang_string_plus_char
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstring-plus-char`.
 #define _clwarn_clang_string_plus_char "-Wstring-plus-char"
+/// @def _clwarn_clang_string_plus_int
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstring-plus-int`.
 #define _clwarn_clang_string_plus_int "-Wstring-plus-int"
+/// @def _clwarn_clang_strlcpy_strlcat_size
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstrlcpy-strlcat-size`.
 #define _clwarn_clang_strlcpy_strlcat_size "-Wstrlcpy-strlcat-size"
+/// @def _clwarn_clang_strncat_size
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wstrncat-size`.
 #define _clwarn_clang_strncat_size "-Wstrncat-size"
+/// @def _clwarn_clang_suggest_destructor_override
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsuggest-destructor-override`.
 #define _clwarn_clang_suggest_destructor_override "-Wsuggest-destructor-override"
+/// @def _clwarn_clang_suggest_override
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsuggest-override`.
 #define _clwarn_clang_suggest_override "-Wsuggest-override"
+/// @def _clwarn_clang_super_class_method_mismatch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsuper-class-method-mismatch`.
 #define _clwarn_clang_super_class_method_mismatch "-Wsuper-class-method-mismatch"
+/// @def _clwarn_clang_suspicious_bzero
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsuspicious-bzero`.
 #define _clwarn_clang_suspicious_bzero "-Wsuspicious-bzero"
+/// @def _clwarn_clang_suspicious_memaccess
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsuspicious-memaccess`.
 #define _clwarn_clang_suspicious_memaccess "-Wsuspicious-memaccess"
+/// @def _clwarn_clang_swift_name_attribute
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wswift-name-attribute`.
 #define _clwarn_clang_swift_name_attribute "-Wswift-name-attribute"
+/// @def _clwarn_clang_switch
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wswitch`.
 #define _clwarn_clang_switch "-Wswitch"
+/// @def _clwarn_clang_switch_bool
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wswitch-bool`.
 #define _clwarn_clang_switch_bool "-Wswitch-bool"
+/// @def _clwarn_clang_switch_default
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wswitch-default`.
 #define _clwarn_clang_switch_default "-Wswitch-default"
+/// @def _clwarn_clang_switch_enum
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wswitch-enum`.
 #define _clwarn_clang_switch_enum "-Wswitch-enum"
+/// @def _clwarn_clang_sync_alignment
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsync-alignment`.
 #define _clwarn_clang_sync_alignment "-Wsync-alignment"
+/// @def _clwarn_clang_sync_fetch_and_nand_semantics_changed
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsync-fetch-and-nand-semantics-changed`.
 #define _clwarn_clang_sync_fetch_and_nand_semantics_changed "-Wsync-fetch-and-nand-semantics-changed"
+/// @def _clwarn_clang_synth
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wsynth`.
 #define _clwarn_clang_synth "-Wsynth"
+/// @def _clwarn_clang_target_clones_mixed_specifiers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtarget-clones-mixed-specifiers`.
 #define _clwarn_clang_target_clones_mixed_specifiers "-Wtarget-clones-mixed-specifiers"
+/// @def _clwarn_clang_tautological_bitwise_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-bitwise-compare`.
 #define _clwarn_clang_tautological_bitwise_compare "-Wtautological-bitwise-compare"
+/// @def _clwarn_clang_tautological_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-compare`.
 #define _clwarn_clang_tautological_compare "-Wtautological-compare"
+/// @def _clwarn_clang_tautological_constant_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-constant-compare`.
 #define _clwarn_clang_tautological_constant_compare "-Wtautological-constant-compare"
+/// @def _clwarn_clang_tautological_constant_in_range_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-constant-in-range-compare`.
 #define _clwarn_clang_tautological_constant_in_range_compare "-Wtautological-constant-in-range-compare"
+/// @def _clwarn_clang_tautological_constant_out_of_range_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-constant-out-of-range-compare`.
 #define _clwarn_clang_tautological_constant_out_of_range_compare "-Wtautological-constant-out-of-range-compare"
+/// @def _clwarn_clang_tautological_negation_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-negation-compare`.
 #define _clwarn_clang_tautological_negation_compare "-Wtautological-negation-compare"
+/// @def _clwarn_clang_tautological_objc_bool_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-objc-bool-compare`.
 #define _clwarn_clang_tautological_objc_bool_compare "-Wtautological-objc-bool-compare"
+/// @def _clwarn_clang_tautological_overlap_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-overlap-compare`.
 #define _clwarn_clang_tautological_overlap_compare "-Wtautological-overlap-compare"
+/// @def _clwarn_clang_tautological_pointer_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-pointer-compare`.
 #define _clwarn_clang_tautological_pointer_compare "-Wtautological-pointer-compare"
+/// @def _clwarn_clang_tautological_type_limit_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-type-limit-compare`.
 #define _clwarn_clang_tautological_type_limit_compare "-Wtautological-type-limit-compare"
+/// @def _clwarn_clang_tautological_undefined_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-undefined-compare`.
 #define _clwarn_clang_tautological_undefined_compare "-Wtautological-undefined-compare"
+/// @def _clwarn_clang_tautological_unsigned_char_zero_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-unsigned-char-zero-compare`.
 #define _clwarn_clang_tautological_unsigned_char_zero_compare "-Wtautological-unsigned-char-zero-compare"
+/// @def _clwarn_clang_tautological_unsigned_enum_zero_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-unsigned-enum-zero-compare`.
 #define _clwarn_clang_tautological_unsigned_enum_zero_compare "-Wtautological-unsigned-enum-zero-compare"
+/// @def _clwarn_clang_tautological_unsigned_zero_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-unsigned-zero-compare`.
 #define _clwarn_clang_tautological_unsigned_zero_compare "-Wtautological-unsigned-zero-compare"
+/// @def _clwarn_clang_tautological_value_range_compare
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtautological-value-range-compare`.
 #define _clwarn_clang_tautological_value_range_compare "-Wtautological-value-range-compare"
+/// @def _clwarn_clang_tcb_enforcement
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtcb-enforcement`.
 #define _clwarn_clang_tcb_enforcement "-Wtcb-enforcement"
+/// @def _clwarn_clang_template_in_declaration_name
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtemplate-in-declaration-name`.
 #define _clwarn_clang_template_in_declaration_name "-Wtemplate-in-declaration-name"
+/// @def _clwarn_clang_tentative_definition_array
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtentative-definition-array`.
 #define _clwarn_clang_tentative_definition_array "-Wtentative-definition-array"
+/// @def _clwarn_clang_tentative_definition_compat
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtentative-definition-compat`.
 #define _clwarn_clang_tentative_definition_compat "-Wtentative-definition-compat"
+/// @def _clwarn_clang_tentative_definition_incomplete_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtentative-definition-incomplete-type`.
 #define _clwarn_clang_tentative_definition_incomplete_type "-Wtentative-definition-incomplete-type"
+/// @def _clwarn_clang_thread_safety
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety`.
 #define _clwarn_clang_thread_safety "-Wthread-safety"
+/// @def _clwarn_clang_thread_safety_analysis
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-analysis`.
 #define _clwarn_clang_thread_safety_analysis "-Wthread-safety-analysis"
+/// @def _clwarn_clang_thread_safety_attributes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-attributes`.
 #define _clwarn_clang_thread_safety_attributes "-Wthread-safety-attributes"
+/// @def _clwarn_clang_thread_safety_beta
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-beta`.
 #define _clwarn_clang_thread_safety_beta "-Wthread-safety-beta"
+/// @def _clwarn_clang_thread_safety_negative
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-negative`.
 #define _clwarn_clang_thread_safety_negative "-Wthread-safety-negative"
+/// @def _clwarn_clang_thread_safety_pointer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-pointer`.
 #define _clwarn_clang_thread_safety_pointer "-Wthread-safety-pointer"
+/// @def _clwarn_clang_thread_safety_precise
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-precise`.
 #define _clwarn_clang_thread_safety_precise "-Wthread-safety-precise"
+/// @def _clwarn_clang_thread_safety_reference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-reference`.
 #define _clwarn_clang_thread_safety_reference "-Wthread-safety-reference"
+/// @def _clwarn_clang_thread_safety_reference_return
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-reference-return`.
 #define _clwarn_clang_thread_safety_reference_return "-Wthread-safety-reference-return"
+/// @def _clwarn_clang_thread_safety_verbose
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wthread-safety-verbose`.
 #define _clwarn_clang_thread_safety_verbose "-Wthread-safety-verbose"
+/// @def _clwarn_clang_trigraphs
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtrigraphs`.
 #define _clwarn_clang_trigraphs "-Wtrigraphs"
+/// @def _clwarn_clang_trivial_auto_var_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtrivial-auto-var-init`.
 #define _clwarn_clang_trivial_auto_var_init "-Wtrivial-auto-var-init"
+/// @def _clwarn_clang_tu_local_entity_exposure
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-WTU-local-entity-exposure`.
 #define _clwarn_clang_tu_local_entity_exposure "-WTU-local-entity-exposure"
+/// @def _clwarn_clang_type_limits
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtype-limits`.
 #define _clwarn_clang_type_limits "-Wtype-limits"
+/// @def _clwarn_clang_type_safety
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtype-safety`.
 #define _clwarn_clang_type_safety "-Wtype-safety"
+/// @def _clwarn_clang_typedef_redefinition
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtypedef-redefinition`.
 #define _clwarn_clang_typedef_redefinition "-Wtypedef-redefinition"
+/// @def _clwarn_clang_typename_missing
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wtypename-missing`.
 #define _clwarn_clang_typename_missing "-Wtypename-missing"
+/// @def _clwarn_clang_unable_to_open_stats_file
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunable-to-open-stats-file`.
 #define _clwarn_clang_unable_to_open_stats_file "-Wunable-to-open-stats-file"
+/// @def _clwarn_clang_unaligned_access
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunaligned-access`.
 #define _clwarn_clang_unaligned_access "-Wunaligned-access"
+/// @def _clwarn_clang_unaligned_qualifier_implicit_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunaligned-qualifier-implicit-cast`.
 #define _clwarn_clang_unaligned_qualifier_implicit_cast "-Wunaligned-qualifier-implicit-cast"
+/// @def _clwarn_clang_unavailable_declarations
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunavailable-declarations`.
 #define _clwarn_clang_unavailable_declarations "-Wunavailable-declarations"
+/// @def _clwarn_clang_undeclared_selector
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundeclared-selector`.
 #define _clwarn_clang_undeclared_selector "-Wundeclared-selector"
+/// @def _clwarn_clang_undef
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundef`.
 #define _clwarn_clang_undef "-Wundef"
+/// @def _clwarn_clang_undef_prefix
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundef-prefix`.
 #define _clwarn_clang_undef_prefix "-Wundef-prefix"
+/// @def _clwarn_clang_undef_true
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundef-true`.
 #define _clwarn_clang_undef_true "-Wundef-true"
+/// @def _clwarn_clang_undefined_arm_za
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-arm-za`.
 #define _clwarn_clang_undefined_arm_za "-Wundefined-arm-za"
+/// @def _clwarn_clang_undefined_arm_zt0
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-arm-zt0`.
 #define _clwarn_clang_undefined_arm_zt0 "-Wundefined-arm-zt0"
+/// @def _clwarn_clang_undefined_bool_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-bool-conversion`.
 #define _clwarn_clang_undefined_bool_conversion "-Wundefined-bool-conversion"
+/// @def _clwarn_clang_undefined_func_template
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-func-template`.
 #define _clwarn_clang_undefined_func_template "-Wundefined-func-template"
+/// @def _clwarn_clang_undefined_inline
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-inline`.
 #define _clwarn_clang_undefined_inline "-Wundefined-inline"
+/// @def _clwarn_clang_undefined_internal
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-internal`.
 #define _clwarn_clang_undefined_internal "-Wundefined-internal"
+/// @def _clwarn_clang_undefined_internal_type
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-internal-type`.
 #define _clwarn_clang_undefined_internal_type "-Wundefined-internal-type"
+/// @def _clwarn_clang_undefined_reinterpret_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-reinterpret-cast`.
 #define _clwarn_clang_undefined_reinterpret_cast "-Wundefined-reinterpret-cast"
+/// @def _clwarn_clang_undefined_var_template
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wundefined-var-template`.
 #define _clwarn_clang_undefined_var_template "-Wundefined-var-template"
+/// @def _clwarn_clang_underaligned_exception_object
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunderaligned-exception-object`.
 #define _clwarn_clang_underaligned_exception_object "-Wunderaligned-exception-object"
+/// @def _clwarn_clang_underlying_atomic_qualifier_ignored
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunderlying-atomic-qualifier-ignored`.
 #define _clwarn_clang_underlying_atomic_qualifier_ignored "-Wunderlying-atomic-qualifier-ignored"
+/// @def _clwarn_clang_underlying_cv_qualifier_ignored
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunderlying-cv-qualifier-ignored`.
 #define _clwarn_clang_underlying_cv_qualifier_ignored "-Wunderlying-cv-qualifier-ignored"
+/// @def _clwarn_clang_unevaluated_expression
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunevaluated-expression`.
 #define _clwarn_clang_unevaluated_expression "-Wunevaluated-expression"
+/// @def _clwarn_clang_unguarded_availability
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunguarded-availability`.
 #define _clwarn_clang_unguarded_availability "-Wunguarded-availability"
+/// @def _clwarn_clang_unguarded_availability_new
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunguarded-availability-new`.
 #define _clwarn_clang_unguarded_availability_new "-Wunguarded-availability-new"
+/// @def _clwarn_clang_unicode
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunicode`.
 #define _clwarn_clang_unicode "-Wunicode"
+/// @def _clwarn_clang_unicode_homoglyph
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunicode-homoglyph`.
 #define _clwarn_clang_unicode_homoglyph "-Wunicode-homoglyph"
+/// @def _clwarn_clang_unicode_whitespace
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunicode-whitespace`.
 #define _clwarn_clang_unicode_whitespace "-Wunicode-whitespace"
+/// @def _clwarn_clang_unicode_zero_width
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunicode-zero-width`.
 #define _clwarn_clang_unicode_zero_width "-Wunicode-zero-width"
+/// @def _clwarn_clang_uninitialized
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wuninitialized`.
 #define _clwarn_clang_uninitialized "-Wuninitialized"
+/// @def _clwarn_clang_uninitialized_const_pointer
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wuninitialized-const-pointer`.
 #define _clwarn_clang_uninitialized_const_pointer "-Wuninitialized-const-pointer"
+/// @def _clwarn_clang_uninitialized_const_reference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wuninitialized-const-reference`.
 #define _clwarn_clang_uninitialized_const_reference "-Wuninitialized-const-reference"
+/// @def _clwarn_clang_uninitialized_explicit_init
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wuninitialized-explicit-init`.
 #define _clwarn_clang_uninitialized_explicit_init "-Wuninitialized-explicit-init"
+/// @def _clwarn_clang_unique_object_duplication
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunique-object-duplication`.
 #define _clwarn_clang_unique_object_duplication "-Wunique-object-duplication"
+/// @def _clwarn_clang_unknown_acc_extension_clause
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-acc-extension-clause`.
 #define _clwarn_clang_unknown_acc_extension_clause "-Wunknown-acc-extension-clause"
+/// @def _clwarn_clang_unknown_argument
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-argument`.
 #define _clwarn_clang_unknown_argument "-Wunknown-argument"
+/// @def _clwarn_clang_unknown_assumption
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-assumption`.
 #define _clwarn_clang_unknown_assumption "-Wunknown-assumption"
+/// @def _clwarn_clang_unknown_attributes
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-attributes`.
 #define _clwarn_clang_unknown_attributes "-Wunknown-attributes"
+/// @def _clwarn_clang_unknown_cuda_version
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-cuda-version`.
 #define _clwarn_clang_unknown_cuda_version "-Wunknown-cuda-version"
+/// @def _clwarn_clang_unknown_directives
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-directives`.
 #define _clwarn_clang_unknown_directives "-Wunknown-directives"
+/// @def _clwarn_clang_unknown_escape_sequence
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-escape-sequence`.
 #define _clwarn_clang_unknown_escape_sequence "-Wunknown-escape-sequence"
+/// @def _clwarn_clang_unknown_pragmas
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-pragmas`.
 #define _clwarn_clang_unknown_pragmas "-Wunknown-pragmas"
+/// @def _clwarn_clang_unknown_sanitizers
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-sanitizers`.
 #define _clwarn_clang_unknown_sanitizers "-Wunknown-sanitizers"
+/// @def _clwarn_clang_unknown_warning_option
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunknown-warning-option`.
 #define _clwarn_clang_unknown_warning_option "-Wunknown-warning-option"
+/// @def _clwarn_clang_unnamed_type_template_args
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunnamed-type-template-args`.
 #define _clwarn_clang_unnamed_type_template_args "-Wunnamed-type-template-args"
+/// @def _clwarn_clang_unnecessary_virtual_specifier
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunnecessary-virtual-specifier`.
 #define _clwarn_clang_unnecessary_virtual_specifier "-Wunnecessary-virtual-specifier"
+/// @def _clwarn_clang_unneeded_internal_declaration
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunneeded-internal-declaration`.
 #define _clwarn_clang_unneeded_internal_declaration "-Wunneeded-internal-declaration"
+/// @def _clwarn_clang_unneeded_member_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunneeded-member-function`.
 #define _clwarn_clang_unneeded_member_function "-Wunneeded-member-function"
+/// @def _clwarn_clang_unqualified_std_cast_call
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunqualified-std-cast-call`.
 #define _clwarn_clang_unqualified_std_cast_call "-Wunqualified-std-cast-call"
+/// @def _clwarn_clang_unreachable_code
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunreachable-code`.
 #define _clwarn_clang_unreachable_code "-Wunreachable-code"
+/// @def _clwarn_clang_unreachable_code_aggressive
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunreachable-code-aggressive`.
 #define _clwarn_clang_unreachable_code_aggressive "-Wunreachable-code-aggressive"
+/// @def _clwarn_clang_unreachable_code_break
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunreachable-code-break`.
 #define _clwarn_clang_unreachable_code_break "-Wunreachable-code-break"
+/// @def _clwarn_clang_unreachable_code_fallthrough
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunreachable-code-fallthrough`.
 #define _clwarn_clang_unreachable_code_fallthrough "-Wunreachable-code-fallthrough"
+/// @def _clwarn_clang_unreachable_code_generic_assoc
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunreachable-code-generic-assoc`.
 #define _clwarn_clang_unreachable_code_generic_assoc "-Wunreachable-code-generic-assoc"
+/// @def _clwarn_clang_unreachable_code_loop_increment
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunreachable-code-loop-increment`.
 #define _clwarn_clang_unreachable_code_loop_increment "-Wunreachable-code-loop-increment"
+/// @def _clwarn_clang_unreachable_code_return
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunreachable-code-return`.
 #define _clwarn_clang_unreachable_code_return "-Wunreachable-code-return"
+/// @def _clwarn_clang_unsafe_buffer_usage
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsafe-buffer-usage`.
 #define _clwarn_clang_unsafe_buffer_usage "-Wunsafe-buffer-usage"
+/// @def _clwarn_clang_unsafe_buffer_usage_in_container
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsafe-buffer-usage-in-container`.
 #define _clwarn_clang_unsafe_buffer_usage_in_container "-Wunsafe-buffer-usage-in-container"
+/// @def _clwarn_clang_unsafe_buffer_usage_in_format_attr_call
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsafe-buffer-usage-in-format-attr-call`.
 #define _clwarn_clang_unsafe_buffer_usage_in_format_attr_call "-Wunsafe-buffer-usage-in-format-attr-call"
+/// @def _clwarn_clang_unsafe_buffer_usage_in_libc_call
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsafe-buffer-usage-in-libc-call`.
 #define _clwarn_clang_unsafe_buffer_usage_in_libc_call "-Wunsafe-buffer-usage-in-libc-call"
+/// @def _clwarn_clang_unsafe_buffer_usage_in_static_sized_array
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsafe-buffer-usage-in-static-sized-array`.
 #define _clwarn_clang_unsafe_buffer_usage_in_static_sized_array "-Wunsafe-buffer-usage-in-static-sized-array"
+/// @def _clwarn_clang_unsafe_buffer_usage_in_unique_ptr_array_access
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsafe-buffer-usage-in-unique-ptr-array-access`.
 #define _clwarn_clang_unsafe_buffer_usage_in_unique_ptr_array_access "-Wunsafe-buffer-usage-in-unique-ptr-array-access"
+/// @def _clwarn_clang_unsequenced
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsequenced`.
 #define _clwarn_clang_unsequenced "-Wunsequenced"
+/// @def _clwarn_clang_unsupported_abi
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-abi`.
 #define _clwarn_clang_unsupported_abi "-Wunsupported-abi"
+/// @def _clwarn_clang_unsupported_abs
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-abs`.
 #define _clwarn_clang_unsupported_abs "-Wunsupported-abs"
+/// @def _clwarn_clang_unsupported_availability_guard
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-availability-guard`.
 #define _clwarn_clang_unsupported_availability_guard "-Wunsupported-availability-guard"
+/// @def _clwarn_clang_unsupported_cb
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-cb`.
 #define _clwarn_clang_unsupported_cb "-Wunsupported-cb"
+/// @def _clwarn_clang_unsupported_dll_base_class_template
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-dll-base-class-template`.
 #define _clwarn_clang_unsupported_dll_base_class_template "-Wunsupported-dll-base-class-template"
+/// @def _clwarn_clang_unsupported_floating_point_opt
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-floating-point-opt`.
 #define _clwarn_clang_unsupported_floating_point_opt "-Wunsupported-floating-point-opt"
+/// @def _clwarn_clang_unsupported_friend
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-friend`.
 #define _clwarn_clang_unsupported_friend "-Wunsupported-friend"
+/// @def _clwarn_clang_unsupported_gpopt
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-gpopt`.
 #define _clwarn_clang_unsupported_gpopt "-Wunsupported-gpopt"
+/// @def _clwarn_clang_unsupported_nan
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-nan`.
 #define _clwarn_clang_unsupported_nan "-Wunsupported-nan"
+/// @def _clwarn_clang_unsupported_target_opt
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-target-opt`.
 #define _clwarn_clang_unsupported_target_opt "-Wunsupported-target-opt"
+/// @def _clwarn_clang_unsupported_visibility
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunsupported-visibility`.
 #define _clwarn_clang_unsupported_visibility "-Wunsupported-visibility"
+/// @def _clwarn_clang_unterminated_string_initialization
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunterminated-string-initialization`.
 #define _clwarn_clang_unterminated_string_initialization "-Wunterminated-string-initialization"
+/// @def _clwarn_clang_unusable_partial_specialization
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunusable-partial-specialization`.
 #define _clwarn_clang_unusable_partial_specialization "-Wunusable-partial-specialization"
+/// @def _clwarn_clang_unused
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused`.
 #define _clwarn_clang_unused "-Wunused"
+/// @def _clwarn_clang_unused_argument
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-argument`.
 #define _clwarn_clang_unused_argument "-Wunused-argument"
+/// @def _clwarn_clang_unused_but_set_global
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-but-set-global`.
+#define _clwarn_clang_unused_but_set_global "-Wunused-but-set-global"
+/// @def _clwarn_clang_unused_but_set_parameter
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-but-set-parameter`.
 #define _clwarn_clang_unused_but_set_parameter "-Wunused-but-set-parameter"
+/// @def _clwarn_clang_unused_but_set_variable
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-but-set-variable`.
 #define _clwarn_clang_unused_but_set_variable "-Wunused-but-set-variable"
+/// @def _clwarn_clang_unused_command_line_argument
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-command-line-argument`.
 #define _clwarn_clang_unused_command_line_argument "-Wunused-command-line-argument"
+/// @def _clwarn_clang_unused_comparison
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-comparison`.
 #define _clwarn_clang_unused_comparison "-Wunused-comparison"
+/// @def _clwarn_clang_unused_const_variable
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-const-variable`.
 #define _clwarn_clang_unused_const_variable "-Wunused-const-variable"
+/// @def _clwarn_clang_unused_exception_parameter
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-exception-parameter`.
 #define _clwarn_clang_unused_exception_parameter "-Wunused-exception-parameter"
+/// @def _clwarn_clang_unused_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-function`.
 #define _clwarn_clang_unused_function "-Wunused-function"
+/// @def _clwarn_clang_unused_getter_return_value
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-getter-return-value`.
 #define _clwarn_clang_unused_getter_return_value "-Wunused-getter-return-value"
+/// @def _clwarn_clang_unused_label
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-label`.
 #define _clwarn_clang_unused_label "-Wunused-label"
+/// @def _clwarn_clang_unused_lambda_capture
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-lambda-capture`.
 #define _clwarn_clang_unused_lambda_capture "-Wunused-lambda-capture"
+/// @def _clwarn_clang_unused_local_typedef
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-local-typedef`.
 #define _clwarn_clang_unused_local_typedef "-Wunused-local-typedef"
+/// @def _clwarn_clang_unused_local_typedefs
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-local-typedefs`.
 #define _clwarn_clang_unused_local_typedefs "-Wunused-local-typedefs"
+/// @def _clwarn_clang_unused_macros
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-macros`.
 #define _clwarn_clang_unused_macros "-Wunused-macros"
+/// @def _clwarn_clang_unused_member_function
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-member-function`.
 #define _clwarn_clang_unused_member_function "-Wunused-member-function"
+/// @def _clwarn_clang_unused_parameter
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-parameter`.
 #define _clwarn_clang_unused_parameter "-Wunused-parameter"
+/// @def _clwarn_clang_unused_private_field
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-private-field`.
 #define _clwarn_clang_unused_private_field "-Wunused-private-field"
+/// @def _clwarn_clang_unused_property_ivar
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-property-ivar`.
 #define _clwarn_clang_unused_property_ivar "-Wunused-property-ivar"
+/// @def _clwarn_clang_unused_result
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-result`.
 #define _clwarn_clang_unused_result "-Wunused-result"
+/// @def _clwarn_clang_unused_template
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-template`.
 #define _clwarn_clang_unused_template "-Wunused-template"
+/// @def _clwarn_clang_unused_value
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-value`.
 #define _clwarn_clang_unused_value "-Wunused-value"
+/// @def _clwarn_clang_unused_variable
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-variable`.
 #define _clwarn_clang_unused_variable "-Wunused-variable"
+/// @def _clwarn_clang_unused_volatile_lvalue
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wunused-volatile-lvalue`.
 #define _clwarn_clang_unused_volatile_lvalue "-Wunused-volatile-lvalue"
+/// @def _clwarn_clang_used_but_marked_unused
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wused-but-marked-unused`.
 #define _clwarn_clang_used_but_marked_unused "-Wused-but-marked-unused"
+/// @def _clwarn_clang_user_defined_literals
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wuser-defined-literals`.
 #define _clwarn_clang_user_defined_literals "-Wuser-defined-literals"
+/// @def _clwarn_clang_user_defined_warnings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wuser-defined-warnings`.
 #define _clwarn_clang_user_defined_warnings "-Wuser-defined-warnings"
+/// @def _clwarn_clang_varargs
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvarargs`.
 #define _clwarn_clang_varargs "-Wvarargs"
+/// @def _clwarn_clang_variadic_macro_arguments_omitted
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvariadic-macro-arguments-omitted`.
 #define _clwarn_clang_variadic_macro_arguments_omitted "-Wvariadic-macro-arguments-omitted"
+/// @def _clwarn_clang_variadic_macros
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvariadic-macros`.
 #define _clwarn_clang_variadic_macros "-Wvariadic-macros"
+/// @def _clwarn_clang_vec_elem_size
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvec-elem-size`.
 #define _clwarn_clang_vec_elem_size "-Wvec-elem-size"
+/// @def _clwarn_clang_vector_conversion
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvector-conversion`.
 #define _clwarn_clang_vector_conversion "-Wvector-conversion"
+/// @def _clwarn_clang_vector_conversions
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvector-conversions`.
 #define _clwarn_clang_vector_conversions "-Wvector-conversions"
+/// @def _clwarn_clang_vexing_parse
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvexing-parse`.
 #define _clwarn_clang_vexing_parse "-Wvexing-parse"
+/// @def _clwarn_clang_visibility
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvisibility`.
 #define _clwarn_clang_visibility "-Wvisibility"
+/// @def _clwarn_clang_vla
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvla`.
 #define _clwarn_clang_vla "-Wvla"
+/// @def _clwarn_clang_vla_cxx_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvla-cxx-extension`.
 #define _clwarn_clang_vla_cxx_extension "-Wvla-cxx-extension"
+/// @def _clwarn_clang_vla_extension
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvla-extension`.
 #define _clwarn_clang_vla_extension "-Wvla-extension"
+/// @def _clwarn_clang_vla_extension_static_assert
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvla-extension-static-assert`.
 #define _clwarn_clang_vla_extension_static_assert "-Wvla-extension-static-assert"
+/// @def _clwarn_clang_void_pointer_to_enum_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvoid-pointer-to-enum-cast`.
 #define _clwarn_clang_void_pointer_to_enum_cast "-Wvoid-pointer-to-enum-cast"
+/// @def _clwarn_clang_void_pointer_to_int_cast
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvoid-pointer-to-int-cast`.
 #define _clwarn_clang_void_pointer_to_int_cast "-Wvoid-pointer-to-int-cast"
+/// @def _clwarn_clang_void_ptr_dereference
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvoid-ptr-dereference`.
 #define _clwarn_clang_void_ptr_dereference "-Wvoid-ptr-dereference"
+/// @def _clwarn_clang_volatile_register_var
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wvolatile-register-var`.
 #define _clwarn_clang_volatile_register_var "-Wvolatile-register-var"
+/// @def _clwarn_clang_warnings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-W#warnings`.
 #define _clwarn_clang_warnings "-W#warnings"
+/// @def _clwarn_clang_wasm_exception_spec
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wwasm-exception-spec`.
 #define _clwarn_clang_wasm_exception_spec "-Wwasm-exception-spec"
+/// @def _clwarn_clang_weak_template_vtables
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wweak-template-vtables`.
 #define _clwarn_clang_weak_template_vtables "-Wweak-template-vtables"
+/// @def _clwarn_clang_weak_vtables
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wweak-vtables`.
 #define _clwarn_clang_weak_vtables "-Wweak-vtables"
+/// @def _clwarn_clang_writable_strings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wwritable-strings`.
 #define _clwarn_clang_writable_strings "-Wwritable-strings"
+/// @def _clwarn_clang_write_strings
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wwrite-strings`.
 #define _clwarn_clang_write_strings "-Wwrite-strings"
+/// @def _clwarn_clang_xor_used_as_pow
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wxor-used-as-pow`.
 #define _clwarn_clang_xor_used_as_pow "-Wxor-used-as-pow"
+/// @def _clwarn_clang_zero_as_null_pointer_constant
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wzero-as-null-pointer-constant`.
 #define _clwarn_clang_zero_as_null_pointer_constant "-Wzero-as-null-pointer-constant"
+/// @def _clwarn_clang_zero_length_array
+/// @ingroup compiler_warnings
+/// @brief Clang warning flag string `-Wzero-length-array`.
 #define _clwarn_clang_zero_length_array "-Wzero-length-array"
-
-/// @}
 
 // NOLINTEND(modernize-macro-to-enum)

@@ -11,6 +11,7 @@
 
 namespace sys::meta
 {
+    /// @ingroup sys
     /// @brief Metadata type for `sys::meta::type_switch_cases<...>`.
     template <bool Condition, typename T>
     struct type_case final : meta_type
@@ -20,6 +21,7 @@ namespace sys::meta
         /// @brief Whether `Condition` is `true`.
         static consteval bool is_early_return() { return Condition; }
     };
+    /// @ingroup sys
     /// @brief Metadata type for a type-`switch`.
     template <typename... Cases>
     struct type_switch_cases final : meta_type
@@ -33,6 +35,7 @@ namespace sys::meta
         /// @brief How many cases meet their conditions.
         static consteval size_t count_returns() { return (Cases::is_early_return() + ...); }
     };
+    /// @ingroup sys
     /// @brief The type of the first type-case that meets its condition.
     template <typename... Cases>
     using type_switch = std::tuple_element_t<0, typename type_switch_cases<Cases...>::return_cases>::type;

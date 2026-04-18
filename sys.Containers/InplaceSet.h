@@ -7,6 +7,7 @@
 
 namespace sys
 {
+    /// @ingroup sys_containers
     /// @brief Inplace set of data type `T` with fixed capacity.
     template <typename T, size_t Capacity>
     requires (Capacity > 0)

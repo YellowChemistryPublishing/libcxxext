@@ -15,6 +15,7 @@ namespace sys::meta
     template <typename...>
     inline constexpr bool dependent_false = false;
 
+    /// @ingroup sys
     template <typename T>
     struct generic_container_adaptor
     {
@@ -62,6 +63,7 @@ namespace sys::meta
 
 namespace sys
 {
+    /// @ingroup sys
     /// @brief Whether `T` is sizeable.
     template <typename T, typename U = size_t>
     concept ISizeable = requires(T range) {
@@ -72,6 +74,7 @@ namespace sys
         std::size(range);
     };
 
+    /// @ingroup sys
     /// @brief Whether `T` is iterable.
     template <typename T, typename U = void>
     concept IEnumerable = requires(T& range, std::remove_cvref_t<decltype(std::begin(range))> it) {
@@ -87,9 +90,11 @@ namespace sys
         } || std::same_as<std::remove_cvref_t<decltype(*std::begin(range))>, U>);
     };
 
+    /// @ingroup sys
     /// @brief Whether `T` can be checked for emptiness.
     template <typename T>
     concept IEmptyQueryable = requires(T range) { meta::generic_container_adaptor(range).empty(); };
+    /// @ingroup sys
     /// @brief Whether `T` can be appended to.
     template <typename T, typename... U>
     concept IAppendable = requires(T range) {

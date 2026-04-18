@@ -1,8 +1,12 @@
 #include <vector>
 
 // NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+#include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
 #include <catch2/catch_all.hpp>
+
+_nowarn_end_gcc();
 
 #include <module/sys>
 #include <module/sys.Threading>
@@ -11,26 +15,23 @@
 TEST_CASE("Condition variable wait / signal.", "[sys.Threading][cond_var]")
 {
     sys::cond_var cv;
-    sys::mutex mtx;
+    sys::mutex mut;
     bool ready = false;
 
     sys::managed_thread t = sys::managed_thread::ctor([&]() -> void
     {
-        const auto gRes = mtx.lock();
-        REQUIRE(gRes);
-
+        const sys::mutex::guard g = mut.lock().expect();
         while (!ready)
-            REQUIRE(cv.wait(mtx));
-    }).move();
+            cv.wait(mut).expect();
+    }).expect();
 
     {
-        const auto gRes = mtx.lock();
-        REQUIRE(gRes);
+        const sys::mutex::guard g = mut.lock().expect();
         ready = true;
     }
-    REQUIRE(cv.notify_one());
+    cv.notify_one().expect();
 
-    REQUIRE(t.join());
+    (void)t.join().expect();
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
@@ -39,7 +40,7 @@ TEST_CASE("Condition variable broadcast wakes everyone.", "[sys.Threading][cond_
     constexpr i32 numWaiters = 5;
 
     sys::cond_var cv;
-    sys::mutex mtx;
+    sys::mutex mut;
     i32 count = 0;
 
     std::vector<sys::managed_thread> waiters;
@@ -47,37 +48,32 @@ TEST_CASE("Condition variable broadcast wakes everyone.", "[sys.Threading][cond_
     {
         waiters.emplace_back(sys::managed_thread::ctor([&]() -> void
         {
-            const auto gRes = mtx.lock();
-            REQUIRE(gRes);
-
+            const sys::mutex::guard g = mut.lock().expect();
             ++count;
-            REQUIRE(cv.wait(mtx));
-        }).move());
+            cv.wait(mut).expect();
+        }).expect());
     }
 
     while (true)
     {
-        const auto gRes = mtx.lock();
-        REQUIRE(gRes);
-
+        const sys::mutex::guard g = mut.lock().expect();
         if (count == numWaiters)
             break;
-
         sys::thread_yield();
     }
 
-    REQUIRE(cv.notify_all());
+    cv.notify_all().expect();
     waiters.clear();
 }
 
-TEST_CASE("Condition variable lazy initialization internally under contention.", "[sys.Threading][cond_var]")
+TEST_CASE("Condition variable lazy initialization under contention.", "[sys.Threading][cond_var]")
 {
     sys::cond_var cv;
     constexpr i32 numThreads = 20;
     std::vector<sys::managed_thread> threads;
 
     for (i32 i = 0; i < numThreads; ++i)
-        threads.emplace_back(sys::managed_thread::ctor([&]() -> void { REQUIRE(cv.notify_one()); }).move());
+        threads.emplace_back(sys::managed_thread::ctor([&]() -> void { cv.notify_one().expect(); }).expect());
 
     threads.clear();
 }

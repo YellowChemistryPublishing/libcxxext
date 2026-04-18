@@ -5,6 +5,7 @@
 // NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)
 
 #include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 _nowarn_begin_conv_comp();
 _nowarn_begin_unreachable();
 
@@ -13,6 +14,7 @@ _nowarn_begin_unreachable();
 
 _nowarn_end_unreachable();
 _nowarn_end_conv_comp();
+_nowarn_end_gcc();
 
 #include <module/sys>
 #include <module/sys.Text>
@@ -45,11 +47,11 @@ TEST_CASE("Initializer List", "[sys.Text][string][ctor]")
 
 TEST_CASE("Unsafe C-String Constructor", "[sys.Text][string][ctor]")
 {
-    sys::str s(u8"unsafe", unsafe());
+    sys::str s(u8"unsafe", unsafe);
     CHECK(s == u8"unsafe");
 
     const char8_t c = u8'\0';
-    const sys::str empty(&c, unsafe());
+    const sys::str empty(&c, unsafe);
     CHECK(empty.empty());
 }
 

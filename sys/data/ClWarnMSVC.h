@@ -9,926 +9,3697 @@
 /// @addtogroup compiler_warnings
 /// @{
 
+/// @def _clwarn_msvc_nonstandard_extension_single_line_comment_was_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4001`.
 #define _clwarn_msvc_nonstandard_extension_single_line_comment_was_used 4001
+/// @def _clwarn_msvc_too_many_arguments_for_function_like_macro_invocation_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4002`.
 #define _clwarn_msvc_too_many_arguments_for_function_like_macro_invocation_identifier 4002
+/// @def _clwarn_msvc_not_enough_arguments_for_function_like_macro_invocation_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4003`.
 #define _clwarn_msvc_not_enough_arguments_for_function_like_macro_invocation_identifier 4003
+/// @def _clwarn_msvc_identifier_macro_redefinition
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4005`.
 #define _clwarn_msvc_identifier_macro_redefinition 4005
+/// @def _clwarn_msvc_undef_expected_an_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4006`.
 #define _clwarn_msvc_undef_expected_an_identifier 4006
+/// @def _clwarn_msvc_function_must_be_attribute
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4007`.
 #define _clwarn_msvc_function_must_be_attribute 4007
+/// @def _clwarn_msvc_function_attribute_attribute_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4008`.
 #define _clwarn_msvc_function_attribute_attribute_ignored 4008
+/// @def _clwarn_msvc_single_line_comment_contains_line_continuation_character
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4010`.
 #define _clwarn_msvc_single_line_comment_contains_line_continuation_character 4010
+/// @def _clwarn_msvc_function_undefined_assuming_extern_returning_int
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4013`.
 #define _clwarn_msvc_function_undefined_assuming_extern_returning_int 4013
+/// @def _clwarn_msvc_identifier_type_of_bit_field_must_be_integral
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4015`.
 #define _clwarn_msvc_identifier_type_of_bit_field_must_be_integral 4015
+/// @def _clwarn_msvc_expression_signed_unsigned_mismatch_4018
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4018`.
 #define _clwarn_msvc_expression_signed_unsigned_mismatch_4018 4018
+/// @def _clwarn_msvc_empty_statement_at_global_scope
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4019`.
 #define _clwarn_msvc_empty_statement_at_global_scope 4019
+/// @def _clwarn_msvc_function_too_many_actual_parameters
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4020`.
 #define _clwarn_msvc_function_too_many_actual_parameters 4020
+/// @def _clwarn_msvc_function_pointer_mismatch_for_actual_parameter_parameter_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4022`.
 #define _clwarn_msvc_function_pointer_mismatch_for_actual_parameter_parameter_number 4022
+/// @def _clwarn_msvc_function_based_pointer_passed_to_unprototyped_function_parameter_parameter_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4023`.
 #define _clwarn_msvc_function_based_pointer_passed_to_unprototyped_function_parameter_parameter_number 4023
+/// @def _clwarn_msvc_function_different_types_for_formal_and_actual_parameter_parameter_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4024`.
 #define _clwarn_msvc_function_different_types_for_formal_and_actual_parameter_parameter_number 4024
+/// @def _clwarn_msvc_function_based_pointer_passed_to_function_with_variable_arguments_parameter_parameter_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4025`.
 #define _clwarn_msvc_function_based_pointer_passed_to_function_with_variable_arguments_parameter_parameter_number 4025
+/// @def _clwarn_msvc_function_declared_with_formal_parameter_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4026`.
 #define _clwarn_msvc_function_declared_with_formal_parameter_list 4026
+/// @def _clwarn_msvc_function_declared_without_formal_parameter_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4027`.
 #define _clwarn_msvc_function_declared_without_formal_parameter_list 4027
+/// @def _clwarn_msvc_formal_parameter_parameter_number_different_from_declaration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4028`.
 #define _clwarn_msvc_formal_parameter_parameter_number_different_from_declaration 4028
+/// @def _clwarn_msvc_declared_formal_parameter_list_different_from_definition
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4029`.
 #define _clwarn_msvc_declared_formal_parameter_list_different_from_definition 4029
+/// @def _clwarn_msvc_first_formal_parameter_list_longer_than_the_second_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4030`.
 #define _clwarn_msvc_first_formal_parameter_list_longer_than_the_second_list 4030
+/// @def _clwarn_msvc_second_formal_parameter_list_longer_than_the_first_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4031`.
 #define _clwarn_msvc_second_formal_parameter_list_longer_than_the_first_list 4031
+/// @def _clwarn_msvc_formal_parameter_parameter_number_has_different_type_when_promoted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4032`.
 #define _clwarn_msvc_formal_parameter_parameter_number_has_different_type_when_promoted 4032
+/// @def _clwarn_msvc_function_must_return_a_value_4033
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4033`.
 #define _clwarn_msvc_function_must_return_a_value_4033 4033
+/// @def _clwarn_msvc_sizeof_returns_0
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4034`.
 #define _clwarn_msvc_sizeof_returns_0 4034
+/// @def _clwarn_msvc_function_no_return_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4035`.
 #define _clwarn_msvc_function_no_return_value 4035
+/// @def _clwarn_msvc_unnamed_type_as_actual_parameter
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4036`.
 #define _clwarn_msvc_unnamed_type_as_actual_parameter 4036
+/// @def _clwarn_msvc_modifier_illegal_class_modifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4038`.
 #define _clwarn_msvc_modifier_illegal_class_modifier 4038
+/// @def _clwarn_msvc_compiler_limit_terminating_browser_output
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4041`.
 #define _clwarn_msvc_compiler_limit_terminating_browser_output 4041
+/// @def _clwarn_msvc_identifier_has_bad_storage_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4042`.
 #define _clwarn_msvc_identifier_has_bad_storage_class 4042
+/// @def _clwarn_msvc_array_array_bounds_overflow
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4045`.
 #define _clwarn_msvc_array_array_bounds_overflow 4045
+/// @def _clwarn_msvc_operator_identifier1_differs_in_levels_of_indirection_from_identifier2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4047`.
 #define _clwarn_msvc_operator_identifier1_differs_in_levels_of_indirection_from_identifier2 4047
+/// @def _clwarn_msvc_different_array_subscripts_identifier1_and_identifier2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4048`.
 #define _clwarn_msvc_different_array_subscripts_identifier1_and_identifier2 4048
+/// @def _clwarn_msvc_compiler_limit_terminating_line_number_emission
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4049`.
 #define _clwarn_msvc_compiler_limit_terminating_line_number_emission 4049
+/// @def _clwarn_msvc_type_conversion_possible_loss_of_data
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4051`.
 #define _clwarn_msvc_type_conversion_possible_loss_of_data 4051
+/// @def _clwarn_msvc_function_declarations_different_one_contains_variable_arguments
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4052`.
 #define _clwarn_msvc_function_declarations_different_one_contains_variable_arguments 4052
+/// @def _clwarn_msvc_one_void_operand_for
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4053`.
 #define _clwarn_msvc_one_void_operand_for 4053
+/// @def _clwarn_msvc_conversion_from_data_pointer_type1_to_function_pointer_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4055`.
 #define _clwarn_msvc_conversion_from_data_pointer_type1_to_function_pointer_type2 4055
+/// @def _clwarn_msvc_overflow_in_floating_point_constant_arithmetic
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4056`.
 #define _clwarn_msvc_overflow_in_floating_point_constant_arithmetic 4056
+/// @def _clwarn_msvc_operator_identifier1_differs_in_indirection_to_slightly_different_base_types_from_identifier2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4057`.
 #define _clwarn_msvc_operator_identifier1_differs_in_indirection_to_slightly_different_base_types_from_identifier2 4057
+/// @def _clwarn_msvc_switch_statement_contains_no_case_or_default_labels
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4060`.
 #define _clwarn_msvc_switch_statement_contains_no_case_or_default_labels 4060
+/// @def _clwarn_msvc_enumerator_identifier_in_switch_of_enum_enumeration_is_not_explicitly_handled_by_a_case_label
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4061`.
 #define _clwarn_msvc_enumerator_identifier_in_switch_of_enum_enumeration_is_not_explicitly_handled_by_a_case_label 4061
+/// @def _clwarn_msvc_enumerator_identifier_in_switch_of_enum_enumeration_is_not_handled
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4062`.
 #define _clwarn_msvc_enumerator_identifier_in_switch_of_enum_enumeration_is_not_handled 4062
+/// @def _clwarn_msvc_case_identifier_is_not_a_valid_value_for_switch_of_enum_enumeration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4063`.
 #define _clwarn_msvc_case_identifier_is_not_a_valid_value_for_switch_of_enum_enumeration 4063
+/// @def _clwarn_msvc_switch_of_incomplete_enum_enumeration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4064`.
 #define _clwarn_msvc_switch_of_incomplete_enum_enumeration 4064
+/// @def _clwarn_msvc_switch_statement_contains_default_but_no_case_labels
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4065`.
 #define _clwarn_msvc_switch_statement_contains_default_but_no_case_labels 4065
+/// @def _clwarn_msvc_characters_beyond_first_in_wide_character_constant_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4066`.
 #define _clwarn_msvc_characters_beyond_first_in_wide_character_constant_ignored 4066
+/// @def _clwarn_msvc_unexpected_tokens_following_preprocessor_directive_expected_a_newline
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4067`.
 #define _clwarn_msvc_unexpected_tokens_following_preprocessor_directive_expected_a_newline 4067
+/// @def _clwarn_msvc_unknown_pragma_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4068`.
 #define _clwarn_msvc_unknown_pragma_identifier 4068
+/// @def _clwarn_msvc_long_double_is_the_same_precision_as_double
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4069`.
 #define _clwarn_msvc_long_double_is_the_same_precision_as_double 4069
+/// @def _clwarn_msvc_initializers_put_in_library_initialization_area
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4073`.
 #define _clwarn_msvc_initializers_put_in_library_initialization_area 4073
+/// @def _clwarn_msvc_initializers_put_in_compiler_reserved_initialization_area
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4074`.
 #define _clwarn_msvc_initializers_put_in_compiler_reserved_initialization_area 4074
+/// @def _clwarn_msvc_initializers_put_in_unrecognized_initialization_area
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4075`.
 #define _clwarn_msvc_initializers_put_in_unrecognized_initialization_area 4075
+/// @def _clwarn_msvc_type_modifier_cannot_be_used_with_type_typename
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4076`.
 #define _clwarn_msvc_type_modifier_cannot_be_used_with_type_typename 4076
+/// @def _clwarn_msvc_unknown_check_stack_option
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4077`.
 #define _clwarn_msvc_unknown_check_stack_option 4077
+/// @def _clwarn_msvc_unexpected_token_token
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4079`.
 #define _clwarn_msvc_unexpected_token_token 4079
+/// @def _clwarn_msvc_expected_identifier_for_segment_name_found_symbol
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4080`.
 #define _clwarn_msvc_expected_identifier_for_segment_name_found_symbol 4080
+/// @def _clwarn_msvc_expected_token1_found_token2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4081`.
 #define _clwarn_msvc_expected_token1_found_token2 4081
+/// @def _clwarn_msvc_expected_token_found_identifier_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4083`.
 #define _clwarn_msvc_expected_token_found_identifier_identifier 4083
+/// @def _clwarn_msvc_expected_pragma_parameter_to_be_on_or_off
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4085`.
 #define _clwarn_msvc_expected_pragma_parameter_to_be_on_or_off 4085
+/// @def _clwarn_msvc_expected_pragma_parameter_to_be_1_2_4_8_or_16
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4086`.
 #define _clwarn_msvc_expected_pragma_parameter_to_be_1_2_4_8_or_16 4086
+/// @def _clwarn_msvc_function_declared_with_void_parameter_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4087`.
 #define _clwarn_msvc_function_declared_with_void_parameter_list 4087
+/// @def _clwarn_msvc_function_pointer_mismatch_in_actual_parameter_parameter_number_formal_parameter_parameter_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4088`.
 #define _clwarn_msvc_function_pointer_mismatch_in_actual_parameter_parameter_number_formal_parameter_parameter_number 4088
+/// @def _clwarn_msvc_function_different_types_in_actual_parameter_parameter_number_formal_parameter_parameter_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4089`.
 #define _clwarn_msvc_function_different_types_in_actual_parameter_parameter_number_formal_parameter_parameter_number 4089
+/// @def _clwarn_msvc_operation_different_modifier_qualifiers
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4090`.
 #define _clwarn_msvc_operation_different_modifier_qualifiers 4090
+/// @def _clwarn_msvc_keyword_ignored_on_left_of_type_when_no_variable_is_declared
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4091`.
 #define _clwarn_msvc_keyword_ignored_on_left_of_type_when_no_variable_is_declared 4091
+/// @def _clwarn_msvc_sizeof_returns_unsigned_long
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4092`.
 #define _clwarn_msvc_sizeof_returns_unsigned_long 4092
+/// @def _clwarn_msvc_untagged_token_declared_no_symbols
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4094`.
 #define _clwarn_msvc_untagged_token_declared_no_symbols 4094
+/// @def _clwarn_msvc_identifier_interface_is_not_a_com_interface_will_not_be_emitted_to_idl
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4096`.
 #define _clwarn_msvc_identifier_interface_is_not_a_com_interface_will_not_be_emitted_to_idl 4096
+/// @def _clwarn_msvc_expected_pragma_parameter_to_be_restore_or_off
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4097`.
 #define _clwarn_msvc_expected_pragma_parameter_to_be_restore_or_off 4097
+/// @def _clwarn_msvc_function_void_function_returning_a_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4098`.
 #define _clwarn_msvc_function_void_function_returning_a_value 4098
+/// @def _clwarn_msvc_identifier_type_name_first_seen_using_object_type1_now_seen_using_object_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4099`.
 #define _clwarn_msvc_identifier_type_name_first_seen_using_object_type1_now_seen_using_object_type2 4099
+/// @def _clwarn_msvc_identifier_unreferenced_parameter
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4100`.
 #define _clwarn_msvc_identifier_unreferenced_parameter 4100
+/// @def _clwarn_msvc_identifier_unreferenced_local_variable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4101`.
 #define _clwarn_msvc_identifier_unreferenced_local_variable 4101
+/// @def _clwarn_msvc_label_unreferenced_label
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4102`.
 #define _clwarn_msvc_label_unreferenced_label 4102
+/// @def _clwarn_msvc_alignment_changed_after_including_header_may_be_due_to_missing_pragma_pack_pop
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4103`.
 #define _clwarn_msvc_alignment_changed_after_including_header_may_be_due_to_missing_pragma_pack_pop 4103
+/// @def _clwarn_msvc_unexpected_identifier_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4109`.
 #define _clwarn_msvc_unexpected_identifier_identifier 4109
+/// @def _clwarn_msvc_line_requires_an_integer_between_1_and_line_count
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4112`.
 #define _clwarn_msvc_line_requires_an_integer_between_1_and_line_count 4112
+/// @def _clwarn_msvc_identifier1_differs_in_parameter_lists_from_identifier2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4113`.
 #define _clwarn_msvc_identifier1_differs_in_parameter_lists_from_identifier2 4113
+/// @def _clwarn_msvc_same_type_qualifier_used_more_than_once
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4114`.
 #define _clwarn_msvc_same_type_qualifier_used_more_than_once 4114
+/// @def _clwarn_msvc_type_named_type_definition_in_parentheses
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4115`.
 #define _clwarn_msvc_type_named_type_definition_in_parentheses 4115
+/// @def _clwarn_msvc_unnamed_type_definition_in_parentheses
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4116`.
 #define _clwarn_msvc_unnamed_type_definition_in_parentheses 4116
+/// @def _clwarn_msvc_macro_name_name_is_reserved_command_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4117`.
 #define _clwarn_msvc_macro_name_name_is_reserved_command_ignored 4117
+/// @def _clwarn_msvc_different_bases_base1_and_base2_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4119`.
 #define _clwarn_msvc_different_bases_base1_and_base2_specified 4119
+/// @def _clwarn_msvc_based_unbased_mismatch
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4120`.
 #define _clwarn_msvc_based_unbased_mismatch 4120
+/// @def _clwarn_msvc_symbol_alignment_of_a_member_was_sensitive_to_packing
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4121`.
 #define _clwarn_msvc_symbol_alignment_of_a_member_was_sensitive_to_packing 4121
+/// @def _clwarn_msvc_function_alloc_text_applicable_only_to_functions_with_c_linkage
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4122`.
 #define _clwarn_msvc_function_alloc_text_applicable_only_to_functions_with_c_linkage 4122
+/// @def _clwarn_msvc_different_base_expressions_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4123`.
 #define _clwarn_msvc_different_base_expressions_specified 4123
+/// @def _clwarn_msvc_fastcall_with_stack_checking_is_inefficient
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4124`.
 #define _clwarn_msvc_fastcall_with_stack_checking_is_inefficient 4124
+/// @def _clwarn_msvc_decimal_digit_terminates_octal_escape_sequence
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4125`.
 #define _clwarn_msvc_decimal_digit_terminates_octal_escape_sequence 4125
+/// @def _clwarn_msvc_conditional_expression_is_constant
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4127`.
 #define _clwarn_msvc_conditional_expression_is_constant 4127
+/// @def _clwarn_msvc_character_unrecognized_character_escape_sequence
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4129`.
 #define _clwarn_msvc_character_unrecognized_character_escape_sequence 4129
+/// @def _clwarn_msvc_operator_logical_operation_on_address_of_string_constant
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4130`.
 #define _clwarn_msvc_operator_logical_operation_on_address_of_string_constant 4130
+/// @def _clwarn_msvc_function_uses_old_style_declarator
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4131`.
 #define _clwarn_msvc_function_uses_old_style_declarator 4131
+/// @def _clwarn_msvc_object_const_object_should_be_initialized
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4132`.
 #define _clwarn_msvc_object_const_object_should_be_initialized 4132
+/// @def _clwarn_msvc_expression_incompatible_types_from_type1_to_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4133`.
 #define _clwarn_msvc_expression_incompatible_types_from_type1_to_type2 4133
+/// @def _clwarn_msvc_function_no_return_value_from_floating_point_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4137`.
 #define _clwarn_msvc_function_no_return_value_from_floating_point_function 4137
+/// @def _clwarn_msvc_found_outside_of_comment
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4138`.
 #define _clwarn_msvc_found_outside_of_comment 4138
+/// @def _clwarn_msvc_modifier_used_more_than_once
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4141`.
 #define _clwarn_msvc_modifier_used_more_than_once 4141
+/// @def _clwarn_msvc_identifier_benign_redefinition_of_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4142`.
 #define _clwarn_msvc_identifier_benign_redefinition_of_type 4142
+/// @def _clwarn_msvc_pragma_same_seg_not_supported_use_based_allocation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4143`.
 #define _clwarn_msvc_pragma_same_seg_not_supported_use_based_allocation 4143
+/// @def _clwarn_msvc_expression_relational_expression_as_switch_expression
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4144`.
 #define _clwarn_msvc_expression_relational_expression_as_switch_expression 4144
+/// @def _clwarn_msvc_expression1_relational_expression_as_switch_expression_possible_confusion_with_expression2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4145`.
 #define _clwarn_msvc_expression1_relational_expression_as_switch_expression_possible_confusion_with_expression2 4145
+/// @def _clwarn_msvc_unary_minus_operator_applied_to_unsigned_type_result_still_unsigned
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4146`.
 #define _clwarn_msvc_unary_minus_operator_applied_to_unsigned_type_result_still_unsigned 4146
+/// @def _clwarn_msvc_deletion_of_pointer_to_incomplete_type_type_no_destructor_called
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4150`.
 #define _clwarn_msvc_deletion_of_pointer_to_incomplete_type_type_no_destructor_called 4150
+/// @def _clwarn_msvc_nonstandard_extension_function_data_pointer_conversion_in_expression
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4152`.
 #define _clwarn_msvc_nonstandard_extension_function_data_pointer_conversion_in_expression 4152
+/// @def _clwarn_msvc_function_data_pointer_conversion_in_expression
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4153`.
 #define _clwarn_msvc_function_data_pointer_conversion_in_expression 4153
+/// @def _clwarn_msvc_deletion_of_an_array_expression_conversion_to_pointer_supplied
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4154`.
 #define _clwarn_msvc_deletion_of_an_array_expression_conversion_to_pointer_supplied 4154
+/// @def _clwarn_msvc_deletion_of_an_array_expression_without_using_the_array_form_of_delete
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4155`.
 #define _clwarn_msvc_deletion_of_an_array_expression_without_using_the_array_form_of_delete 4155
+/// @def _clwarn_msvc_deletion_of_an_array_expression_without_using_the_array_form_of_delete_array_form_substituted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4156`.
 #define _clwarn_msvc_deletion_of_an_array_expression_without_using_the_array_form_of_delete_array_form_substituted 4156
+/// @def _clwarn_msvc_pragma_was_ignored_by_c_compiler
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4157`.
 #define _clwarn_msvc_pragma_was_ignored_by_c_compiler 4157
+/// @def _clwarn_msvc_assuming_pragma_pointers_to_members_full_generality_inheritance_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4158`.
 #define _clwarn_msvc_assuming_pragma_pointers_to_members_full_generality_inheritance_type 4158
+/// @def _clwarn_msvc_pragma_pragma_pop_has_popped_previously_pushed_identifier_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4159`.
 #define _clwarn_msvc_pragma_pragma_pop_has_popped_previously_pushed_identifier_identifier 4159
+/// @def _clwarn_msvc_pragma_pragma_pop_did_not_find_previously_pushed_identifier_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4160`.
 #define _clwarn_msvc_pragma_pragma_pop_did_not_find_previously_pushed_identifier_identifier 4160
+/// @def _clwarn_msvc_pragma_pragma_pop_more_pops_than_pushes
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4161`.
 #define _clwarn_msvc_pragma_pragma_pop_more_pops_than_pushes 4161
+/// @def _clwarn_msvc_identifier_no_function_with_c_linkage_found
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4162`.
 #define _clwarn_msvc_identifier_no_function_with_c_linkage_found 4162
+/// @def _clwarn_msvc_identifier_not_available_as_an_intrinsic_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4163`.
 #define _clwarn_msvc_identifier_not_available_as_an_intrinsic_function 4163
+/// @def _clwarn_msvc_function_intrinsic_function_not_declared
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4164`.
 #define _clwarn_msvc_function_intrinsic_function_not_declared 4164
+/// @def _clwarn_msvc_hresult_is_being_converted_to_bool_are_you_sure_this_is_what_you_want
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4165`.
 #define _clwarn_msvc_hresult_is_being_converted_to_bool_are_you_sure_this_is_what_you_want 4165
+/// @def _clwarn_msvc_illegal_calling_convention_for_constructor_destructor
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4166`.
 #define _clwarn_msvc_illegal_calling_convention_for_constructor_destructor 4166
+/// @def _clwarn_msvc_function_only_available_as_an_intrinsic_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4167`.
 #define _clwarn_msvc_function_only_available_as_an_intrinsic_function 4167
+/// @def _clwarn_msvc_compiler_limit_out_of_debugger_types_delete_program_database_database_and_rebuild
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4168`.
 #define _clwarn_msvc_compiler_limit_out_of_debugger_types_delete_program_database_database_and_rebuild 4168
+/// @def _clwarn_msvc_returning_address_of_local_variable_or_temporary_optional_context
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4172`.
 #define _clwarn_msvc_returning_address_of_local_variable_or_temporary_optional_context 4172
+/// @def _clwarn_msvc_name_not_available_as_a_pragma_component
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4174`.
 #define _clwarn_msvc_name_not_available_as_a_pragma_component 4174
+/// @def _clwarn_msvc_pragma_component_browser_on_browser_info_must_initially_be_specified_on_the_command_line
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4175`.
 #define _clwarn_msvc_pragma_component_browser_on_browser_info_must_initially_be_specified_on_the_command_line 4175
+/// @def _clwarn_msvc_subcomponent_unknown_subcomponent_for_pragma_component_browser
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4176`.
 #define _clwarn_msvc_subcomponent_unknown_subcomponent_for_pragma_component_browser 4176
+/// @def _clwarn_msvc_pragma_pragma_should_only_be_used_at_global_scope_or_namespace_scope
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4177`.
 #define _clwarn_msvc_pragma_pragma_should_only_be_used_at_global_scope_or_namespace_scope 4177
+/// @def _clwarn_msvc_case_constant_constant_too_big_for_the_type_of_the_switch_expression
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4178`.
 #define _clwarn_msvc_case_constant_constant_too_big_for_the_type_of_the_switch_expression 4178
+/// @def _clwarn_msvc_parsed_as_and_confusion_with_standard_comments
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4179`.
 #define _clwarn_msvc_parsed_as_and_confusion_with_standard_comments 4179
+/// @def _clwarn_msvc_qualifier_applied_to_function_type_has_no_meaning_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4180`.
 #define _clwarn_msvc_qualifier_applied_to_function_type_has_no_meaning_ignored 4180
+/// @def _clwarn_msvc_qualifier_applied_to_reference_type_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4181`.
 #define _clwarn_msvc_qualifier_applied_to_reference_type_ignored 4181
+/// @def _clwarn_msvc_include_nesting_level_is_nest_count_deep_possible_infinite_recursion
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4182`.
 #define _clwarn_msvc_include_nesting_level_is_nest_count_deep_possible_infinite_recursion 4182
+/// @def _clwarn_msvc_identifier_missing_return_type_assumed_to_be_a_member_function_returning_int
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4183`.
 #define _clwarn_msvc_identifier_missing_return_type_assumed_to_be_a_member_function_returning_int 4183
+/// @def _clwarn_msvc_ignoring_unknown_import_attribute_attribute
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4185`.
 #define _clwarn_msvc_ignoring_unknown_import_attribute_attribute 4185
+/// @def _clwarn_msvc_import_attribute_attribute_requires_argument_count_arguments_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4186`.
 #define _clwarn_msvc_import_attribute_attribute_requires_argument_count_arguments_ignored 4186
+/// @def _clwarn_msvc_import_attributes_attribute1_and_attribute2_are_incompatible_both_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4187`.
 #define _clwarn_msvc_import_attributes_attribute1_and_attribute2_are_incompatible_both_ignored 4187
+/// @def _clwarn_msvc_constant_expression_is_not_integral
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4188`.
 #define _clwarn_msvc_constant_expression_is_not_integral 4188
+/// @def _clwarn_msvc_identifier_local_variable_is_initialized_but_not_referenced
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4189`.
 #define _clwarn_msvc_identifier_local_variable_is_initialized_but_not_referenced 4189
+/// @def _clwarn_msvc_identifier1_has_c_linkage_specified_but_returns_identifier2_which_is_incompatible_with_c
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4190`.
 #define _clwarn_msvc_identifier1_has_c_linkage_specified_but_returns_identifier2_which_is_incompatible_with_c 4190
+/// @def _clwarn_msvc_4191
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4191`.
 #define _clwarn_msvc_4191 4191
+/// @def _clwarn_msvc_automatically_excluding_identifier_while_importing_type_library_library
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4192`.
 #define _clwarn_msvc_automatically_excluding_identifier_while_importing_type_library_library 4192
+/// @def _clwarn_msvc_pragma_warning_pop_no_matching_pragma_warning_push
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4193`.
 #define _clwarn_msvc_pragma_warning_pop_no_matching_pragma_warning_push 4193
+/// @def _clwarn_msvc_pragma_start_map_region_cannot_be_nested_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4194`.
 #define _clwarn_msvc_pragma_start_map_region_cannot_be_nested_ignored 4194
+/// @def _clwarn_msvc_pragma_stop_map_region_used_without_matching_pragma_start_map_region_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4195`.
 #define _clwarn_msvc_pragma_stop_map_region_used_without_matching_pragma_start_map_region_ignored 4195
+/// @def _clwarn_msvc_expected_token1_or_token2_found_token3
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4196`.
 #define _clwarn_msvc_expected_token1_or_token2_found_token3 4196
+/// @def _clwarn_msvc_type_top_level_volatile_in_cast_is_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4197`.
 #define _clwarn_msvc_type_top_level_volatile_in_cast_is_ignored 4197
+/// @def _clwarn_msvc_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4199`.
 #define _clwarn_msvc_message 4199
+/// @def _clwarn_msvc_nonstandard_extension_used_zero_sized_array_in_struct_union
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4200`.
 #define _clwarn_msvc_nonstandard_extension_used_zero_sized_array_in_struct_union 4200
+/// @def _clwarn_msvc_nonstandard_extension_used_nameless_struct_union
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4201`.
 #define _clwarn_msvc_nonstandard_extension_used_nameless_struct_union 4201
+/// @def _clwarn_msvc_nonstandard_extension_used_prototype_parameter_in_name_list_illegal
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4202`.
 #define _clwarn_msvc_nonstandard_extension_used_prototype_parameter_in_name_list_illegal 4202
+/// @def _clwarn_msvc_nonstandard_extension_used_union_with_static_member_variable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4203`.
 #define _clwarn_msvc_nonstandard_extension_used_union_with_static_member_variable 4203
+/// @def _clwarn_msvc_nonstandard_extension_used_non_constant_aggregate_initializer
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4204`.
 #define _clwarn_msvc_nonstandard_extension_used_non_constant_aggregate_initializer 4204
+/// @def _clwarn_msvc_nonstandard_extension_used_static_function_declaration_in_function_scope
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4205`.
 #define _clwarn_msvc_nonstandard_extension_used_static_function_declaration_in_function_scope 4205
+/// @def _clwarn_msvc_nonstandard_extension_used_translation_unit_is_empty
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4206`.
 #define _clwarn_msvc_nonstandard_extension_used_translation_unit_is_empty 4206
+/// @def _clwarn_msvc_nonstandard_extension_used_extended_initializer_form
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4207`.
 #define _clwarn_msvc_nonstandard_extension_used_extended_initializer_form 4207
+/// @def _clwarn_msvc_nonstandard_extension_used_delete_exp_exp_evaluated_but_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4208`.
 #define _clwarn_msvc_nonstandard_extension_used_delete_exp_exp_evaluated_but_ignored 4208
+/// @def _clwarn_msvc_nonstandard_extension_used_function_given_file_scope
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4210`.
 #define _clwarn_msvc_nonstandard_extension_used_function_given_file_scope 4210
+/// @def _clwarn_msvc_nonstandard_extension_used_redefined_extern_to_static
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4211`.
 #define _clwarn_msvc_nonstandard_extension_used_redefined_extern_to_static 4211
+/// @def _clwarn_msvc_nonstandard_extension_used_function_declaration_used_ellipsis
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4212`.
 #define _clwarn_msvc_nonstandard_extension_used_function_declaration_used_ellipsis 4212
+/// @def _clwarn_msvc_nonstandard_extension_used_cast_on_l_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4213`.
 #define _clwarn_msvc_nonstandard_extension_used_cast_on_l_value 4213
+/// @def _clwarn_msvc_nonstandard_extension_used_bit_field_types_other_than_int
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4214`.
 #define _clwarn_msvc_nonstandard_extension_used_bit_field_types_other_than_int 4214
+/// @def _clwarn_msvc_nonstandard_extension_used_long_float
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4215`.
 #define _clwarn_msvc_nonstandard_extension_used_long_float 4215
+/// @def _clwarn_msvc_nonstandard_extension_used_float_long
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4216`.
 #define _clwarn_msvc_nonstandard_extension_used_float_long 4216
+/// @def _clwarn_msvc_nonstandard_extension_used_must_specify_at_least_a_storage_class_or_a_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4218`.
 #define _clwarn_msvc_nonstandard_extension_used_must_specify_at_least_a_storage_class_or_a_type 4218
+/// @def _clwarn_msvc_varargs_matches_remaining_parameters
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4220`.
 #define _clwarn_msvc_varargs_matches_remaining_parameters 4220
+/// @def _clwarn_msvc_nonstandard_extension_used_identifier_cannot_be_initialized_using_address_of_automatic_variable_variable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4221`.
 #define _clwarn_msvc_nonstandard_extension_used_identifier_cannot_be_initialized_using_address_of_automatic_variable_variable 4221
+/// @def _clwarn_msvc_nonstandard_extension_used_non_lvalue_array_converted_to_pointer
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4223`.
 #define _clwarn_msvc_nonstandard_extension_used_non_lvalue_array_converted_to_pointer 4223
+/// @def _clwarn_msvc_nonstandard_extension_used_formal_parameter_identifier_was_previously_defined_as_a_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4224`.
 #define _clwarn_msvc_nonstandard_extension_used_formal_parameter_identifier_was_previously_defined_as_a_type 4224
+/// @def _clwarn_msvc_nonstandard_extension_used_keyword_is_an_obsolete_keyword
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4226`.
 #define _clwarn_msvc_nonstandard_extension_used_keyword_is_an_obsolete_keyword 4226
+/// @def _clwarn_msvc_anachronism_used_qualifiers_on_reference_are_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4227`.
 #define _clwarn_msvc_anachronism_used_qualifiers_on_reference_are_ignored 4227
+/// @def _clwarn_msvc_nonstandard_extension_used_qualifiers_after_comma_in_declarator_list_are_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4228`.
 #define _clwarn_msvc_nonstandard_extension_used_qualifiers_after_comma_in_declarator_list_are_ignored 4228
+/// @def _clwarn_msvc_anachronism_used_modifiers_on_data_are_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4229`.
 #define _clwarn_msvc_anachronism_used_modifiers_on_data_are_ignored 4229
+/// @def _clwarn_msvc_anachronism_used_modifiers_qualifiers_interspersed_qualifier_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4230`.
 #define _clwarn_msvc_anachronism_used_modifiers_qualifiers_interspersed_qualifier_ignored 4230
+/// @def _clwarn_msvc_nonstandard_extension_used_identifier_address_of_dllimport_dllimport_is_not_static_identity_not_guaranteed
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4232`.
 #define _clwarn_msvc_nonstandard_extension_used_identifier_address_of_dllimport_dllimport_is_not_static_identity_not_guaranteed 4232
+/// @def _clwarn_msvc_nonstandard_extension_used_keyword_keyword_only_supported_in_c_not_c
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4233`.
 #define _clwarn_msvc_nonstandard_extension_used_keyword_keyword_only_supported_in_c_not_c 4233
+/// @def _clwarn_msvc_nonstandard_extension_used_keyword_keyword_reserved_for_future_use
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4234`.
 #define _clwarn_msvc_nonstandard_extension_used_keyword_keyword_reserved_for_future_use 4234
+/// @def _clwarn_msvc_nonstandard_extension_used_keyword_keyword_not_supported_on_this_architecture
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4235`.
 #define _clwarn_msvc_nonstandard_extension_used_keyword_keyword_not_supported_on_this_architecture 4235
+/// @def _clwarn_msvc_keyword_keyword_is_not_yet_supported_but_reserved_for_future_use
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4237`.
 #define _clwarn_msvc_keyword_keyword_is_not_yet_supported_but_reserved_for_future_use 4237
+/// @def _clwarn_msvc_nonstandard_extension_used_class_rvalue_used_as_lvalue
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4238`.
 #define _clwarn_msvc_nonstandard_extension_used_class_rvalue_used_as_lvalue 4238
+/// @def _clwarn_msvc_nonstandard_extension_used_token_conversion_from_type1_to_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4239`.
 #define _clwarn_msvc_nonstandard_extension_used_token_conversion_from_type1_to_type2 4239
+/// @def _clwarn_msvc_4240
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4240`.
 #define _clwarn_msvc_4240 4240
+/// @def _clwarn_msvc_identifier_conversion_from_type1_to_type2_possible_loss_of_data
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4242`.
 #define _clwarn_msvc_identifier_conversion_from_type1_to_type2_possible_loss_of_data 4242
+/// @def _clwarn_msvc_conversion_type_conversion_from_type1_to_type2_exists_but_is_inaccessible
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4243`.
 #define _clwarn_msvc_conversion_type_conversion_from_type1_to_type2_exists_but_is_inaccessible 4243
+/// @def _clwarn_msvc_conversion_type_conversion_from_type1_to_type2_possible_loss_of_data
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4244`.
 #define _clwarn_msvc_conversion_type_conversion_from_type1_to_type2_possible_loss_of_data 4244
+/// @def _clwarn_msvc_conversion_type_conversion_from_type1_to_type2_signed_unsigned_mismatch
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4245`.
 #define _clwarn_msvc_conversion_type_conversion_from_type1_to_type2_signed_unsigned_mismatch 4245
+/// @def _clwarn_msvc_classname_inherits_base_classname_member_via_dominance
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4250`.
 #define _clwarn_msvc_classname_inherits_base_classname_member_via_dominance 4250
+/// @def _clwarn_msvc_type_type1_needs_to_have_dll_interface_to_be_used_by_clients_of_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4251`.
 #define _clwarn_msvc_type_type1_needs_to_have_dll_interface_to_be_used_by_clients_of_type2 4251
+/// @def _clwarn_msvc_operator_conversion_from_type1_field_bits_to_type2_field_bits_possible_loss_of_data
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4254`.
 #define _clwarn_msvc_operator_conversion_from_type1_field_bits_to_type2_field_bits_possible_loss_of_data 4254
+/// @def _clwarn_msvc_function_no_function_prototype_given_converting_to_void
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4255`.
 #define _clwarn_msvc_function_no_function_prototype_given_converting_to_void 4255
+/// @def _clwarn_msvc_4256
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4256`.
 #define _clwarn_msvc_4256 4256
+/// @def _clwarn_msvc_variable_definition_from_the_for_loop_is_ignored_the_definition_from_the_enclosing_scope_is_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4258`.
 #define _clwarn_msvc_variable_definition_from_the_for_loop_is_ignored_the_definition_from_the_enclosing_scope_is_used 4258
+/// @def _clwarn_msvc_function_member_function_does_not_override_any_base_class_virtual_member_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4263`.
 #define _clwarn_msvc_function_member_function_does_not_override_any_base_class_virtual_member_function 4263
+/// @def _clwarn_msvc_4264
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4264`.
 #define _clwarn_msvc_4264 4264
+/// @def _clwarn_msvc_4265
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4265`.
 #define _clwarn_msvc_4265 4265
+/// @def _clwarn_msvc_4266
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4266`.
 #define _clwarn_msvc_4266 4266
+/// @def _clwarn_msvc_variable_conversion_from_size_t_to_type_possible_loss_of_data
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4267`.
 #define _clwarn_msvc_variable_conversion_from_size_t_to_type_possible_loss_of_data 4267
+/// @def _clwarn_msvc_4268
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4268`.
 #define _clwarn_msvc_4268 4268
+/// @def _clwarn_msvc_4269
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4269`.
 #define _clwarn_msvc_4269 4269
+/// @def _clwarn_msvc_function_is_marked_declspec_dllimport_must_specify_native_calling_convention_when_importing_a_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4272`.
 #define _clwarn_msvc_function_is_marked_declspec_dllimport_must_specify_native_calling_convention_when_importing_a_function 4272
+/// @def _clwarn_msvc_function_inconsistent_dll_linkage
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4273`.
 #define _clwarn_msvc_function_inconsistent_dll_linkage 4273
+/// @def _clwarn_msvc_ident_ignored_see_documentation_for_pragma_comment_exestr_string
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4274`.
 #define _clwarn_msvc_ident_ignored_see_documentation_for_pragma_comment_exestr_string 4274
+/// @def _clwarn_msvc_non_dll_interface_classkey_identifier1_used_as_base_for_dll_interface_classkey_identifier2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4275`.
 #define _clwarn_msvc_non_dll_interface_classkey_identifier1_used_as_base_for_dll_interface_classkey_identifier2 4275
+/// @def _clwarn_msvc_function_no_prototype_provided_assumed_no_parameters
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4276`.
 #define _clwarn_msvc_function_no_prototype_provided_assumed_no_parameters 4276
+/// @def _clwarn_msvc_imported_item_classname_member_exists_as_both_data_member_and_function_member_data_member_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4277`.
 #define _clwarn_msvc_imported_item_classname_member_exists_as_both_data_member_and_function_member_data_member_ignored 4277
+/// @def _clwarn_msvc_identifier_identifier_in_type_library_library_is_already_a_macro_use_the_rename_qualifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4278`.
 #define _clwarn_msvc_identifier_identifier_in_type_library_library_is_already_a_macro_use_the_rename_qualifier 4278
+/// @def _clwarn_msvc_identifier_identifier_in_type_library_library_is_a_keyword_use_the_rename_qualifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4279`.
 #define _clwarn_msvc_identifier_identifier_in_type_library_library_is_a_keyword_use_the_rename_qualifier 4279
+/// @def _clwarn_msvc_operator_gt_was_self_recursive_through_type_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4280`.
 #define _clwarn_msvc_operator_gt_was_self_recursive_through_type_type 4280
+/// @def _clwarn_msvc_operator_gt_recursion_occurred_through_type_type1
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4281`.
 #define _clwarn_msvc_operator_gt_recursion_occurred_through_type_type1 4281
+/// @def _clwarn_msvc_then_through_type_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4282`.
 #define _clwarn_msvc_then_through_type_type2 4282
+/// @def _clwarn_msvc_and_through_type_typen
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4283`.
 #define _clwarn_msvc_and_through_type_typen 4283
+/// @def _clwarn_msvc_return_type_for_identifier_operator_gt_is_recursive_if_applied_using_infix_notation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4285`.
 #define _clwarn_msvc_return_type_for_identifier_operator_gt_is_recursive_if_applied_using_infix_notation 4285
+/// @def _clwarn_msvc_derived_type_is_caught_by_base_class_base_type_on_line_line_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4286`.
 #define _clwarn_msvc_derived_type_is_caught_by_base_class_base_type_on_line_line_number 4286
+/// @def _clwarn_msvc_operator_unsigned_negative_constant_mismatch
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4287`.
 #define _clwarn_msvc_operator_unsigned_negative_constant_mismatch 4287
+/// @def _clwarn_msvc_4288
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4288`.
 #define _clwarn_msvc_4288 4288
+/// @def _clwarn_msvc_4289
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4289`.
 #define _clwarn_msvc_4289 4289
+/// @def _clwarn_msvc_c_exception_specification_ignored_except_to_indicate_a_function_is_not_declspec_nothrow
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4290`.
 #define _clwarn_msvc_c_exception_specification_ignored_except_to_indicate_a_function_is_not_declspec_nothrow 4290
+/// @def _clwarn_msvc_4291
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4291`.
 #define _clwarn_msvc_4291 4291
+/// @def _clwarn_msvc_shift_operator_shift_count_negative_or_too_big_undefined_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4293`.
 #define _clwarn_msvc_shift_operator_shift_count_negative_or_too_big_undefined_behavior 4293
+/// @def _clwarn_msvc_array_array_is_too_small_to_include_a_terminating_null_character
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4295`.
 #define _clwarn_msvc_array_array_is_too_small_to_include_a_terminating_null_character 4295
+/// @def _clwarn_msvc_operator_expression_is_always_boolean_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4296`.
 #define _clwarn_msvc_operator_expression_is_always_boolean_value 4296
+/// @def _clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4297`.
 #define _clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does 4297
+/// @def _clwarn_msvc_identifier_identifier_in_type_library_library_is_already_a_macro_renaming_to_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4298`.
 #define _clwarn_msvc_identifier_identifier_in_type_library_library_is_already_a_macro_renaming_to_identifier 4298
+/// @def _clwarn_msvc_identifier_identifier_in_type_library_library_is_a_keyword_renaming_to_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4299`.
 #define _clwarn_msvc_identifier_identifier_in_type_library_library_is_a_keyword_renaming_to_identifier 4299
+/// @def _clwarn_msvc_4301
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4301`.
 #define _clwarn_msvc_4301 4301
+/// @def _clwarn_msvc_conversion_truncation_from_type1_to_type2_4302
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4302`.
 #define _clwarn_msvc_conversion_truncation_from_type1_to_type2_4302 4302
+/// @def _clwarn_msvc_c_style_cast_from_type1_to_type2_is_deprecated_use_static_cast_try_cast_or_dynamic_cast
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4303`.
 #define _clwarn_msvc_c_style_cast_from_type1_to_type2_is_deprecated_use_static_cast_try_cast_or_dynamic_cast 4303
+/// @def _clwarn_msvc_conversion_truncation_from_type1_to_type2_4305
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4305`.
 #define _clwarn_msvc_conversion_truncation_from_type1_to_type2_4305 4305
+/// @def _clwarn_msvc_conversion_conversion_from_type1_to_type2_of_greater_size
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4306`.
 #define _clwarn_msvc_conversion_conversion_from_type1_to_type2_of_greater_size 4306
+/// @def _clwarn_msvc_operator_signed_integral_constant_overflow
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4307`.
 #define _clwarn_msvc_operator_signed_integral_constant_overflow 4307
+/// @def _clwarn_msvc_negative_integral_constant_converted_to_unsigned_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4308`.
 #define _clwarn_msvc_negative_integral_constant_converted_to_unsigned_type 4308
+/// @def _clwarn_msvc_conversion_truncation_of_constant_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4309`.
 #define _clwarn_msvc_conversion_truncation_of_constant_value 4309
+/// @def _clwarn_msvc_cast_truncates_constant_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4310`.
 #define _clwarn_msvc_cast_truncates_constant_value 4310
+/// @def _clwarn_msvc_variable_pointer_truncation_from_type1_to_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4311`.
 #define _clwarn_msvc_variable_pointer_truncation_from_type1_to_type2 4311
+/// @def _clwarn_msvc_operation_conversion_from_type1_to_type2_of_greater_size
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4312`.
 #define _clwarn_msvc_operation_conversion_from_type1_to_type2_of_greater_size 4312
+/// @def _clwarn_msvc_function_format_specifier_in_format_string_conflicts_with_argument_argument_number_of_type_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4313`.
 #define _clwarn_msvc_function_format_specifier_in_format_string_conflicts_with_argument_argument_number_of_type_type 4313
+/// @def _clwarn_msvc_expected_pragma_parameter_to_be_32_or_64
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4314`.
 #define _clwarn_msvc_expected_pragma_parameter_to_be_32_or_64 4314
+/// @def _clwarn_msvc_classname_this_pointer_for_member_member_may_not_be_aligned_alignment_as_expected_by_the_constructor
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4315`.
 #define _clwarn_msvc_classname_this_pointer_for_member_member_may_not_be_aligned_alignment_as_expected_by_the_constructor 4315
+/// @def _clwarn_msvc_identifier_object_allocated_on_the_heap_may_not_be_aligned_alignment
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4316`.
 #define _clwarn_msvc_identifier_object_allocated_on_the_heap_may_not_be_aligned_alignment 4316
+/// @def _clwarn_msvc_printf_family_not_enough_arguments_passed_for_format_string
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4317`.
 #define _clwarn_msvc_printf_family_not_enough_arguments_passed_for_format_string 4317
+/// @def _clwarn_msvc_passing_constant_zero_as_the_length_to_memset
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4318`.
 #define _clwarn_msvc_passing_constant_zero_as_the_length_to_memset 4318
+/// @def _clwarn_msvc_operator_zero_extending_type1_to_type2_of_greater_size
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4319`.
 #define _clwarn_msvc_operator_zero_extending_type1_to_type2_of_greater_size 4319
+/// @def _clwarn_msvc_automatically_generating_an_iid_for_interface_interface
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4321`.
 #define _clwarn_msvc_automatically_generating_an_iid_for_interface_interface 4321
+/// @def _clwarn_msvc_automatically_generating_a_clsid_for_class_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4322`.
 #define _clwarn_msvc_automatically_generating_a_clsid_for_class_class 4322
+/// @def _clwarn_msvc_re_using_registered_clsid_for_class_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4323`.
 #define _clwarn_msvc_re_using_registered_clsid_for_class_class 4323
+/// @def _clwarn_msvc_type_structure_was_padded_due_to_alignment_specifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4324`.
 #define _clwarn_msvc_type_structure_was_padded_due_to_alignment_specifier 4324
+/// @def _clwarn_msvc_attributes_for_standard_section_section_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4325`.
 #define _clwarn_msvc_attributes_for_standard_section_section_ignored 4325
+/// @def _clwarn_msvc_return_type_of_function_should_be_type1_instead_of_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4326`.
 #define _clwarn_msvc_return_type_of_function_should_be_type1_instead_of_type2 4326
+/// @def _clwarn_msvc_assignment_indirection_alignment_of_lhs_alignment1_is_greater_than_rhs_alignment2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4327`.
 #define _clwarn_msvc_assignment_indirection_alignment_of_lhs_alignment1_is_greater_than_rhs_alignment2 4327
+/// @def _clwarn_msvc_4328
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4328`.
 #define _clwarn_msvc_4328 4328
+/// @def _clwarn_msvc_alignment_specifier_is_ignored_on_enum
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4329`.
 #define _clwarn_msvc_alignment_specifier_is_ignored_on_enum 4329
+/// @def _clwarn_msvc_attribute_attribute_for_section_section_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4330`.
 #define _clwarn_msvc_attribute_attribute_for_section_section_ignored 4330
+/// @def _clwarn_msvc_shift_operator_right_shift_by_too_large_amount_data_loss
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4333`.
 #define _clwarn_msvc_shift_operator_right_shift_by_too_large_amount_data_loss 4333
+/// @def _clwarn_msvc_shift_operator_result_of_32_bit_shift_implicitly_converted_to_64_bits_was_64_bit_shift_intended
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4334`.
 #define _clwarn_msvc_shift_operator_result_of_32_bit_shift_implicitly_converted_to_64_bits_was_64_bit_shift_intended 4334
+/// @def _clwarn_msvc_mac_file_format_detected_please_convert_the_source_file_to_either_dos_or_unix_format
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4335`.
 #define _clwarn_msvc_mac_file_format_detected_please_convert_the_source_file_to_either_dos_or_unix_format 4335
+/// @def _clwarn_msvc_import_cross_referenced_type_library_library1_before_importing_library2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4336`.
 #define _clwarn_msvc_import_cross_referenced_type_library_library1_before_importing_library2 4336
+/// @def _clwarn_msvc_cross_referenced_type_library_library1_in_library2_is_being_automatically_imported
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4337`.
 #define _clwarn_msvc_cross_referenced_type_library_library1_in_library2_is_being_automatically_imported 4337
+/// @def _clwarn_msvc_pragma_directive_standard_section_section_is_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4338`.
 #define _clwarn_msvc_pragma_directive_standard_section_section_is_used 4338
+/// @def _clwarn_msvc_type_use_of_undefined_type_detected_in_winrt_clr_meta_data_use_of_this_type_may_lead_to_a_runtime_exception
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4339`.
 #define _clwarn_msvc_type_use_of_undefined_type_detected_in_winrt_clr_meta_data_use_of_this_type_may_lead_to_a_runtime_exception 4339
+/// @def _clwarn_msvc_value_value_wrapped_from_positive_to_negative_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4340`.
 #define _clwarn_msvc_value_value_wrapped_from_positive_to_negative_value 4340
+/// @def _clwarn_msvc_behavior_change_function_called_but_a_member_operator_was_called_in_previous_versions
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4342`.
 #define _clwarn_msvc_behavior_change_function_called_but_a_member_operator_was_called_in_previous_versions 4342
+/// @def _clwarn_msvc_pragma_optimize_g_off_overrides_og_option
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4343`.
 #define _clwarn_msvc_pragma_optimize_g_off_overrides_og_option 4343
+/// @def _clwarn_msvc_behavior_change_use_of_explicit_template_arguments_results_in_call_to_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4344`.
 #define _clwarn_msvc_behavior_change_use_of_explicit_template_arguments_results_in_call_to_function 4344
+/// @def _clwarn_msvc_name_dependent_name_is_not_a_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4346`.
 #define _clwarn_msvc_name_dependent_name_is_not_a_type 4346
+/// @def _clwarn_msvc_type_redefinition_of_default_parameter_parameter_parameter_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4348`.
 #define _clwarn_msvc_type_redefinition_of_default_parameter_parameter_parameter_number 4348
+/// @def _clwarn_msvc_behavior_change_member1_called_instead_of_member2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4350`.
 #define _clwarn_msvc_behavior_change_member1_called_instead_of_member2 4350
+/// @def _clwarn_msvc_identifier_intrinsic_function_already_defined
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4352`.
 #define _clwarn_msvc_identifier_intrinsic_function_already_defined 4352
+/// @def _clwarn_msvc_nonstandard_extension_used_constant_0_as_function_expression_use_noop_function_intrinsic_instead
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4353`.
 #define _clwarn_msvc_nonstandard_extension_used_constant_0_as_function_expression_use_noop_function_intrinsic_instead 4353
+/// @def _clwarn_msvc_this_used_in_base_member_initializer_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4355`.
 #define _clwarn_msvc_this_used_in_base_member_initializer_list 4355
+/// @def _clwarn_msvc_member_static_data_member_cannot_be_initialized_via_derived_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4356`.
 #define _clwarn_msvc_member_static_data_member_cannot_be_initialized_via_derived_class 4356
+/// @def _clwarn_msvc_param_array_argument_found_in_formal_argument_list_for_delegate_delegate_ignored_when_generating_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4357`.
 #define _clwarn_msvc_param_array_argument_found_in_formal_argument_list_for_delegate_delegate_ignored_when_generating_function 4357
+/// @def _clwarn_msvc_operator_return_type_of_combined_delegates_is_not_void_returned_value_is_undefined
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4358`.
 #define _clwarn_msvc_operator_return_type_of_combined_delegates_is_not_void_returned_value_is_undefined 4358
+/// @def _clwarn_msvc_type_alignment_specifier_is_less_than_actual_alignment_alignment_and_will_be_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4359`.
 #define _clwarn_msvc_type_alignment_specifier_is_less_than_actual_alignment_alignment_and_will_be_ignored 4359
+/// @def _clwarn_msvc_type_alignment_greater_than_8_bytes_is_not_supported_by_clr
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4362`.
 #define _clwarn_msvc_type_alignment_greater_than_8_bytes_is_not_supported_by_clr 4362
+/// @def _clwarn_msvc_4364
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4364`.
 #define _clwarn_msvc_4364 4364
+/// @def _clwarn_msvc_expression_conversion_from_type1_to_type2_signed_unsigned_mismatch
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4365`.
 #define _clwarn_msvc_expression_conversion_from_type1_to_type2_signed_unsigned_mismatch 4365
+/// @def _clwarn_msvc_the_result_of_the_unary_operator_operator_may_be_unaligned
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4366`.
 #define _clwarn_msvc_the_result_of_the_unary_operator_operator_may_be_unaligned 4366
+/// @def _clwarn_msvc_conversion_from_type1_to_type2_may_cause_datatype_misalignment_exception
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4367`.
 #define _clwarn_msvc_conversion_from_type1_to_type2_may_cause_datatype_misalignment_exception 4367
+/// @def _clwarn_msvc_cannot_define_member_as_a_member_of_managed_type_mixed_types_are_not_supported
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4368`.
 #define _clwarn_msvc_cannot_define_member_as_a_member_of_managed_type_mixed_types_are_not_supported 4368
+/// @def _clwarn_msvc_enumerator_enumerator_value_value_cannot_be_represented_as_type_value_is_new_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4369`.
 #define _clwarn_msvc_enumerator_enumerator_value_value_cannot_be_represented_as_type_value_is_new_value 4369
+/// @def _clwarn_msvc_classname_layout_of_class_has_changed_from_a_previous_version_of_the_compiler_due_to_better_packing
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4370`.
 #define _clwarn_msvc_classname_layout_of_class_has_changed_from_a_previous_version_of_the_compiler_due_to_better_packing 4370
+/// @def _clwarn_msvc_4371
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4371`.
 #define _clwarn_msvc_4371 4371
+/// @def _clwarn_msvc_4373
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4373`.
 #define _clwarn_msvc_4373 4373
+/// @def _clwarn_msvc_function1_interface_method_will_not_be_implemented_by_non_virtual_method_function2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4374`.
 #define _clwarn_msvc_function1_interface_method_will_not_be_implemented_by_non_virtual_method_function2 4374
+/// @def _clwarn_msvc_non_public_method_method2_does_not_override_method2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4375`.
 #define _clwarn_msvc_non_public_method_method2_does_not_override_method2 4375
+/// @def _clwarn_msvc_access_specifier_specifier1_specifier2_is_no_longer_supported_please_use_new_specifier_instead
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4376`.
 #define _clwarn_msvc_access_specifier_specifier1_specifier2_is_no_longer_supported_please_use_new_specifier_instead 4376
+/// @def _clwarn_msvc_native_types_are_private_by_default_d1privatenativetypes_is_deprecated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4377`.
 #define _clwarn_msvc_native_types_are_private_by_default_d1privatenativetypes_is_deprecated 4377
+/// @def _clwarn_msvc_must_obtain_function_pointers_to_run_initializers_consider_system_modulehandle_resolvemethodhandle
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4378`.
 #define _clwarn_msvc_must_obtain_function_pointers_to_run_initializers_consider_system_modulehandle_resolvemethodhandle 4378
+/// @def _clwarn_msvc_4379
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4379`.
 #define _clwarn_msvc_4379 4379
+/// @def _clwarn_msvc_class_a_default_constructor_cannot_be_deprecated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4380`.
 #define _clwarn_msvc_class_a_default_constructor_cannot_be_deprecated 4380
+/// @def _clwarn_msvc_function1_interface_method_will_not_be_implemented_by_non_public_method_function2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4381`.
 #define _clwarn_msvc_function1_interface_method_will_not_be_implemented_by_non_public_method_function2 4381
+/// @def _clwarn_msvc_throwing_type_a_type_with_clrcall_destructor_or_copy_constructor_can_only_be_caught_in_clr_pure_module
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4382`.
 #define _clwarn_msvc_throwing_type_a_type_with_clrcall_destructor_or_copy_constructor_can_only_be_caught_in_clr_pure_module 4382
+/// @def _clwarn_msvc_4383
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4383`.
 #define _clwarn_msvc_4383 4383
+/// @def _clwarn_msvc_pragma_pragma_name_should_only_be_used_at_global_scope
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4384`.
 #define _clwarn_msvc_pragma_pragma_name_should_only_be_used_at_global_scope 4384
+/// @def _clwarn_msvc_alternative_was_considered
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4387`.
 #define _clwarn_msvc_alternative_was_considered 4387
+/// @def _clwarn_msvc_expression_signed_unsigned_mismatch_4388
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4388`.
 #define _clwarn_msvc_expression_signed_unsigned_mismatch_4388 4388
+/// @def _clwarn_msvc_operator_signed_unsigned_mismatch
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4389`.
 #define _clwarn_msvc_operator_signed_unsigned_mismatch 4389
+/// @def _clwarn_msvc_empty_controlled_statement_found_is_this_the_intent
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4390`.
 #define _clwarn_msvc_empty_controlled_statement_found_is_this_the_intent 4390
+/// @def _clwarn_msvc_function_signature_incorrect_return_type_for_intrinsic_function_expected_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4391`.
 #define _clwarn_msvc_function_signature_incorrect_return_type_for_intrinsic_function_expected_type 4391
+/// @def _clwarn_msvc_function_signature_incorrect_number_of_arguments_for_intrinsic_function_expected_argument_count_arguments
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4392`.
 #define _clwarn_msvc_function_signature_incorrect_number_of_arguments_for_intrinsic_function_expected_argument_count_arguments 4392
+/// @def _clwarn_msvc_variable_const_has_no_effect_on_literal_data_member_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4393`.
 #define _clwarn_msvc_variable_const_has_no_effect_on_literal_data_member_ignored 4393
+/// @def _clwarn_msvc_function_per_appdomain_symbol_should_not_be_marked_with_declspec_dllexport
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4394`.
 #define _clwarn_msvc_function_per_appdomain_symbol_should_not_be_marked_with_declspec_dllexport 4394
+/// @def _clwarn_msvc_function_member_function_will_be_invoked_on_a_copy_of_the_initonly_data_member_member
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4395`.
 #define _clwarn_msvc_function_member_function_will_be_invoked_on_a_copy_of_the_initonly_data_member_member 4395
+/// @def _clwarn_msvc_4396
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4396`.
 #define _clwarn_msvc_4396 4396
+/// @def _clwarn_msvc_defaultcharsetattribute_is_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4397`.
 #define _clwarn_msvc_defaultcharsetattribute_is_ignored 4397
+/// @def _clwarn_msvc_4398
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4398`.
 #define _clwarn_msvc_4398 4398
+/// @def _clwarn_msvc_symbol_per_process_symbol_should_not_be_marked_with_declspec_dllimport_when_compiled_with_clr_pure
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4399`.
 #define _clwarn_msvc_symbol_per_process_symbol_should_not_be_marked_with_declspec_dllimport_when_compiled_with_clr_pure 4399
+/// @def _clwarn_msvc_type_const_volatile_qualifiers_on_this_type_are_not_supported_4400
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4400`.
 #define _clwarn_msvc_type_const_volatile_qualifiers_on_this_type_are_not_supported_4400 4400
+/// @def _clwarn_msvc_bitfield_member_is_bit_field
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4401`.
 #define _clwarn_msvc_bitfield_member_is_bit_field 4401
+/// @def _clwarn_msvc_must_use_ptr_operator
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4402`.
 #define _clwarn_msvc_must_use_ptr_operator 4402
+/// @def _clwarn_msvc_illegal_ptr_operator
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4403`.
 #define _clwarn_msvc_illegal_ptr_operator 4403
+/// @def _clwarn_msvc_period_on_directive_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4404`.
 #define _clwarn_msvc_period_on_directive_ignored 4404
+/// @def _clwarn_msvc_identifier_identifier_is_reserved_word
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4405`.
 #define _clwarn_msvc_identifier_identifier_is_reserved_word 4405
+/// @def _clwarn_msvc_operand_on_directive_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4406`.
 #define _clwarn_msvc_operand_on_directive_ignored 4406
+/// @def _clwarn_msvc_cast_between_different_pointer_to_member_representations_compiler_may_generate_incorrect_code
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4407`.
 #define _clwarn_msvc_cast_between_different_pointer_to_member_representations_compiler_may_generate_incorrect_code 4407
+/// @def _clwarn_msvc_anonymous_struct_union_did_not_declare_any_data_members
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4408`.
 #define _clwarn_msvc_anonymous_struct_union_did_not_declare_any_data_members 4408
+/// @def _clwarn_msvc_illegal_instruction_size
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4409`.
 #define _clwarn_msvc_illegal_instruction_size 4409
+/// @def _clwarn_msvc_illegal_size_for_operand
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4410`.
 #define _clwarn_msvc_illegal_size_for_operand 4410
+/// @def _clwarn_msvc_identifier_symbol_resolves_to_displacement_register
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4411`.
 #define _clwarn_msvc_identifier_symbol_resolves_to_displacement_register 4411
+/// @def _clwarn_msvc_4412
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4412`.
 #define _clwarn_msvc_4412 4412
+/// @def _clwarn_msvc_4413
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4413`.
 #define _clwarn_msvc_4413 4413
+/// @def _clwarn_msvc_function_short_jump_to_function_converted_to_near
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4414`.
 #define _clwarn_msvc_function_short_jump_to_function_converted_to_near 4414
+/// @def _clwarn_msvc_duplicate_declspec_code_seg_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4415`.
 #define _clwarn_msvc_duplicate_declspec_code_seg_name 4415
+/// @def _clwarn_msvc_declspec_code_seg_contains_empty_string_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4416`.
 #define _clwarn_msvc_declspec_code_seg_contains_empty_string_ignored 4416
+/// @def _clwarn_msvc_an_explicit_template_instantiation_cannot_have_declspec_code_seg_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4417`.
 #define _clwarn_msvc_an_explicit_template_instantiation_cannot_have_declspec_code_seg_ignored 4417
+/// @def _clwarn_msvc_declspec_code_seg_ignored_on_an_enum
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4418`.
 #define _clwarn_msvc_declspec_code_seg_ignored_on_an_enum 4418
+/// @def _clwarn_msvc_symbol_has_no_effect_when_applied_to_private_ref_class_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4419`.
 #define _clwarn_msvc_symbol_has_no_effect_when_applied_to_private_ref_class_class 4419
+/// @def _clwarn_msvc_checked_operator_operator_not_available_using_operator_instead_run_time_checking_may_be_compromised
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4420`.
 #define _clwarn_msvc_checked_operator_operator_not_available_using_operator_instead_run_time_checking_may_be_compromised 4420
+/// @def _clwarn_msvc_parameter_a_reference_parameter_on_a_resumable_function_is_potentially_unsafe
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4421`.
 #define _clwarn_msvc_parameter_a_reference_parameter_on_a_resumable_function_is_potentially_unsafe 4421
+/// @def _clwarn_msvc_std_bad_alloc_will_be_caught_by_class_type_on_line_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4423`.
 #define _clwarn_msvc_std_bad_alloc_will_be_caught_by_class_type_on_line_number 4423
+/// @def _clwarn_msvc_4424
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4424`.
 #define _clwarn_msvc_4424 4424
+/// @def _clwarn_msvc_a_sal_annotation_cannot_be_applied_to
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4425`.
 #define _clwarn_msvc_a_sal_annotation_cannot_be_applied_to 4425
+/// @def _clwarn_msvc_optimization_flags_changed_after_including_header_may_be_due_to_pragma_optimize
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4426`.
 #define _clwarn_msvc_optimization_flags_changed_after_including_header_may_be_due_to_pragma_optimize 4426
+/// @def _clwarn_msvc_operator_overflow_in_constant_division_undefined_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4427`.
 #define _clwarn_msvc_operator_overflow_in_constant_division_undefined_behavior 4427
+/// @def _clwarn_msvc_possible_incomplete_or_improperly_formed_universal_character_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4429`.
 #define _clwarn_msvc_possible_incomplete_or_improperly_formed_universal_character_name 4429
+/// @def _clwarn_msvc_missing_type_specifier_int_assumed_note_c_does_not_support_default_int
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4430`.
 #define _clwarn_msvc_missing_type_specifier_int_assumed_note_c_does_not_support_default_int 4430
+/// @def _clwarn_msvc_missing_type_specifier_int_assumed_note_c_no_longer_supports_default_int
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4431`.
 #define _clwarn_msvc_missing_type_specifier_int_assumed_note_c_no_longer_supports_default_int 4431
+/// @def _clwarn_msvc_a_static_constructor_must_have_private_accessibility_changing_to_private_access
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4434`.
 #define _clwarn_msvc_a_static_constructor_must_have_private_accessibility_changing_to_private_access 4434
+/// @def _clwarn_msvc_derived_class_object_layout_under_vd2_will_change_due_to_virtual_base_base_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4435`.
 #define _clwarn_msvc_derived_class_object_layout_under_vd2_will_change_due_to_virtual_base_base_class 4435
+/// @def _clwarn_msvc_4436
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4436`.
 #define _clwarn_msvc_4436 4436
+/// @def _clwarn_msvc_dynamic_cast_from_virtual_base_base_class_to_derived_class_could_fail_in_some_contexts
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4437`.
 #define _clwarn_msvc_dynamic_cast_from_virtual_base_base_class_to_derived_class_could_fail_in_some_contexts 4437
+/// @def _clwarn_msvc_4438
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4438`.
 #define _clwarn_msvc_4438 4438
+/// @def _clwarn_msvc_function_function_definition_with_a_managed_type_in_the_signature_must_have_a_clrcall_calling_convention
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4439`.
 #define _clwarn_msvc_function_function_definition_with_a_managed_type_in_the_signature_must_have_a_clrcall_calling_convention 4439
+/// @def _clwarn_msvc_calling_convention_redefinition_from_calling_convention1_to_calling_convenction2_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4440`.
 #define _clwarn_msvc_calling_convention_redefinition_from_calling_convention1_to_calling_convenction2_ignored 4440
+/// @def _clwarn_msvc_calling_convention_of_calling_convention1_ignored_calling_convention2_used_instead
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4441`.
 #define _clwarn_msvc_calling_convention_of_calling_convention1_ignored_calling_convention2_used_instead 4441
+/// @def _clwarn_msvc_embedded_null_terminator_in_annotation_argument_value_will_be_truncated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4442`.
 #define _clwarn_msvc_embedded_null_terminator_in_annotation_argument_value_will_be_truncated 4442
+/// @def _clwarn_msvc_expected_pragma_parameter_to_be_0_1_or_2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4443`.
 #define _clwarn_msvc_expected_pragma_parameter_to_be_0_1_or_2 4443
+/// @def _clwarn_msvc_identifier_top_level_unaligned_is_not_implemented_in_this_context
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4444`.
 #define _clwarn_msvc_identifier_top_level_unaligned_is_not_implemented_in_this_context 4444
+/// @def _clwarn_msvc_function_in_a_winrt_managed_type_a_virtual_method_cannot_be_private
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4445`.
 #define _clwarn_msvc_function_in_a_winrt_managed_type_a_virtual_method_cannot_be_private 4445
+/// @def _clwarn_msvc_4446
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4446`.
 #define _clwarn_msvc_4446 4446
+/// @def _clwarn_msvc_4447
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4447`.
 #define _clwarn_msvc_4447 4447
+/// @def _clwarn_msvc_type1_does_not_have_a_default_interface_specified_in_metadata_picking_type2_which_may_fail_at_runtime
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4448`.
 #define _clwarn_msvc_type1_does_not_have_a_default_interface_specified_in_metadata_picking_type2_which_may_fail_at_runtime 4448
+/// @def _clwarn_msvc_type_an_unsealed_type_should_be_marked_as_webhosthidden
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4449`.
 #define _clwarn_msvc_type_an_unsealed_type_should_be_marked_as_webhosthidden 4449
+/// @def _clwarn_msvc_type1_should_be_marked_as_webhosthidden_because_it_derives_from_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4450`.
 #define _clwarn_msvc_type1_should_be_marked_as_webhosthidden_because_it_derives_from_type2 4450
+/// @def _clwarn_msvc_4451
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4451`.
 #define _clwarn_msvc_4451 4451
+/// @def _clwarn_msvc_4452
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4452`.
 #define _clwarn_msvc_4452 4452
+/// @def _clwarn_msvc_4453
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4453`.
 #define _clwarn_msvc_4453 4453
+/// @def _clwarn_msvc_4454
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4454`.
 #define _clwarn_msvc_4454 4454
+/// @def _clwarn_msvc_operator_operator_literal_suffix_identifiers_that_do_not_start_with_an_underscore_are_reserved
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4455`.
 #define _clwarn_msvc_operator_operator_literal_suffix_identifiers_that_do_not_start_with_an_underscore_are_reserved 4455
+/// @def _clwarn_msvc_declaration_of_identifier_hides_previous_local_declaration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4456`.
 #define _clwarn_msvc_declaration_of_identifier_hides_previous_local_declaration 4456
+/// @def _clwarn_msvc_declaration_of_identifier_hides_function_parameter
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4457`.
 #define _clwarn_msvc_declaration_of_identifier_hides_function_parameter 4457
+/// @def _clwarn_msvc_declaration_of_identifier_hides_class_member
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4458`.
 #define _clwarn_msvc_declaration_of_identifier_hides_class_member 4458
+/// @def _clwarn_msvc_declaration_of_identifier_hides_global_declaration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4459`.
 #define _clwarn_msvc_declaration_of_identifier_hides_global_declaration 4459
+/// @def _clwarn_msvc_4460
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4460`.
 #define _clwarn_msvc_4460 4460
+/// @def _clwarn_msvc_classname_this_class_has_a_finalizer_finalizer_but_no_destructor_dtor
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4461`.
 #define _clwarn_msvc_classname_this_class_has_a_finalizer_finalizer_but_no_destructor_dtor 4461
+/// @def _clwarn_msvc_type_cannot_determine_the_guid_of_the_type_program_may_fail_at_runtime
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4462`.
 #define _clwarn_msvc_type_cannot_determine_the_guid_of_the_type_program_may_fail_at_runtime 4462
+/// @def _clwarn_msvc_overflow_assigning_value_to_bit_field_that_can_only_hold_values_from_min_value_to_max_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4463`.
 #define _clwarn_msvc_overflow_assigning_value_to_bit_field_that_can_only_hold_values_from_min_value_to_max_value 4463
+/// @def _clwarn_msvc_relative_include_path_contains
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4464`.
 #define _clwarn_msvc_relative_include_path_contains 4464
+/// @def _clwarn_msvc_identifier_use_of_dependent_template_requires_template
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4465`.
 #define _clwarn_msvc_identifier_use_of_dependent_template_requires_template 4465
+/// @def _clwarn_msvc_could_not_perform_coroutine_heap_elision
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4466`.
 #define _clwarn_msvc_could_not_perform_coroutine_heap_elision 4466
+/// @def _clwarn_msvc_usage_of_atl_attributes_is_deprecated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4467`.
 #define _clwarn_msvc_usage_of_atl_attributes_is_deprecated 4467
+/// @def _clwarn_msvc_the_fallthrough_attribute_must_be_followed_by_a_case_label_or_a_default_label
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4468`.
 #define _clwarn_msvc_the_fallthrough_attribute_must_be_followed_by_a_case_label_or_a_default_label 4468
+/// @def _clwarn_msvc_floating_point_control_pragmas_ignored_under_clr
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4470`.
 #define _clwarn_msvc_floating_point_control_pragmas_ignored_under_clr 4470
+/// @def _clwarn_msvc_enumeration_a_forward_declaration_of_an_unscoped_enumeration_must_have_an_underlying_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4471`.
 #define _clwarn_msvc_enumeration_a_forward_declaration_of_an_unscoped_enumeration_must_have_an_underlying_type 4471
+/// @def _clwarn_msvc_identifier_is_a_native_enum_add_an_access_specifier_private_public_to_declare_a_winrt_managed_enum
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4472`.
 #define _clwarn_msvc_identifier_is_a_native_enum_add_an_access_specifier_private_public_to_declare_a_winrt_managed_enum 4472
+/// @def _clwarn_msvc_function_not_enough_arguments_passed_for_format_string
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4473`.
 #define _clwarn_msvc_function_not_enough_arguments_passed_for_format_string 4473
+/// @def _clwarn_msvc_function_too_many_arguments_passed_for_format_string
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4474`.
 #define _clwarn_msvc_function_too_many_arguments_passed_for_format_string 4474
+/// @def _clwarn_msvc_function_length_modifier_modifier_cannot_be_used_with_type_field_character_character_in_format_specifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4475`.
 #define _clwarn_msvc_function_length_modifier_modifier_cannot_be_used_with_type_field_character_character_in_format_specifier 4475
+/// @def _clwarn_msvc_function_unknown_type_field_character_character_in_format_specifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4476`.
 #define _clwarn_msvc_function_unknown_type_field_character_character_in_format_specifier 4476
+/// @def _clwarn_msvc_function_format_string_string_requires_an_argument_of_type_type_but_variadic_argument_number_has_type_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4477`.
 #define _clwarn_msvc_function_format_string_string_requires_an_argument_of_type_type_but_variadic_argument_number_has_type_type 4477
+/// @def _clwarn_msvc_function_positional_and_non_positional_placeholders_cannot_be_mixed_in_the_same_format_string
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4478`.
 #define _clwarn_msvc_function_positional_and_non_positional_placeholders_cannot_be_mixed_in_the_same_format_string 4478
+/// @def _clwarn_msvc_nonstandard_extension_used_specifying_underlying_type_for_enum_enumeration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4480`.
 #define _clwarn_msvc_nonstandard_extension_used_specifying_underlying_type_for_enum_enumeration 4480
+/// @def _clwarn_msvc_nonstandard_extension_used_override_specifier_keyword
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4481`.
 #define _clwarn_msvc_nonstandard_extension_used_override_specifier_keyword 4481
+/// @def _clwarn_msvc_nonstandard_extension_used_enum_enumeration_used_in_qualified_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4482`.
 #define _clwarn_msvc_nonstandard_extension_used_enum_enumeration_used_in_qualified_name 4482
+/// @def _clwarn_msvc_syntax_error_expected_c_keyword
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4483`.
 #define _clwarn_msvc_syntax_error_expected_c_keyword 4483
+/// @def _clwarn_msvc_4484
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4484`.
 #define _clwarn_msvc_4484 4484
+/// @def _clwarn_msvc_4485
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4485`.
 #define _clwarn_msvc_4485 4485
+/// @def _clwarn_msvc_function_a_private_virtual_method_of_a_ref_class_or_value_class_should_be_marked_sealed
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4486`.
 #define _clwarn_msvc_function_a_private_virtual_method_of_a_ref_class_or_value_class_should_be_marked_sealed 4486
+/// @def _clwarn_msvc_4487
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4487`.
 #define _clwarn_msvc_4487 4487
+/// @def _clwarn_msvc_function_requires_keyword_keyword_to_implement_the_interface_method_interface_method
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4488`.
 #define _clwarn_msvc_function_requires_keyword_keyword_to_implement_the_interface_method_interface_method 4488
+/// @def _clwarn_msvc_4489
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4489`.
 #define _clwarn_msvc_4489 4489
+/// @def _clwarn_msvc_override_incorrect_use_of_override_specifier_function_does_not_match_a_base_ref_class_method
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4490`.
 #define _clwarn_msvc_override_incorrect_use_of_override_specifier_function_does_not_match_a_base_ref_class_method 4490
+/// @def _clwarn_msvc_name_has_an_illegal_idl_version_format
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4491`.
 #define _clwarn_msvc_name_has_an_illegal_idl_version_format 4491
+/// @def _clwarn_msvc_function1_matches_base_ref_class_method_function2_but_is_not_marked_override
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4492`.
 #define _clwarn_msvc_function1_matches_base_ref_class_method_function2_but_is_not_marked_override 4492
+/// @def _clwarn_msvc_delete_expression_has_no_effect_as_the_destructor_of_type_does_not_have_public_accessibility
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4493`.
 #define _clwarn_msvc_delete_expression_has_no_effect_as_the_destructor_of_type_does_not_have_public_accessibility 4493
+/// @def _clwarn_msvc_function_ignoring_declspec_allocator_because_the_function_return_type_is_not_a_pointer_or_reference
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4494`.
 #define _clwarn_msvc_function_ignoring_declspec_allocator_because_the_function_return_type_is_not_a_pointer_or_reference 4494
+/// @def _clwarn_msvc_nonstandard_extension_super_used_replace_with_explicit_base_class_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4495`.
 #define _clwarn_msvc_nonstandard_extension_super_used_replace_with_explicit_base_class_name 4495
+/// @def _clwarn_msvc_nonstandard_extension_for_each_used_replace_with_ranged_for_statement
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4496`.
 #define _clwarn_msvc_nonstandard_extension_for_each_used_replace_with_ranged_for_statement 4496
+/// @def _clwarn_msvc_nonstandard_extension_sealed_used_replace_with_final
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4497`.
 #define _clwarn_msvc_nonstandard_extension_sealed_used_replace_with_final 4497
+/// @def _clwarn_msvc_nonstandard_extension_used_extension
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4498`.
 #define _clwarn_msvc_nonstandard_extension_used_extension 4498
+/// @def _clwarn_msvc_function_an_explicit_specialization_cannot_have_a_storage_class_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4499`.
 #define _clwarn_msvc_function_an_explicit_specialization_cannot_have_a_storage_class_ignored 4499
+/// @def _clwarn_msvc_linkage_specification_requires_use_of_keyword_extern_and_must_precede_all_other_specifiers
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4502`.
 #define _clwarn_msvc_linkage_specification_requires_use_of_keyword_extern_and_must_precede_all_other_specifiers 4502
+/// @def _clwarn_msvc_identifier_decorated_name_length_exceeded_name_was_truncated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4503`.
 #define _clwarn_msvc_identifier_decorated_name_length_exceeded_name_was_truncated 4503
+/// @def _clwarn_msvc_function_unreferenced_function_with_internal_linkage_has_been_removed_4505
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4505`.
 #define _clwarn_msvc_function_unreferenced_function_with_internal_linkage_has_been_removed_4505 4505
+/// @def _clwarn_msvc_no_definition_for_inline_function_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4506`.
 #define _clwarn_msvc_no_definition_for_inline_function_function 4506
+/// @def _clwarn_msvc_function_function_should_return_a_value_void_return_type_assumed
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4508`.
 #define _clwarn_msvc_function_function_should_return_a_value_void_return_type_assumed 4508
+/// @def _clwarn_msvc_nonstandard_extension_used_function_uses_seh_and_object_has_destructor
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4509`.
 #define _clwarn_msvc_nonstandard_extension_used_function_uses_seh_and_object_has_destructor 4509
+/// @def _clwarn_msvc_class_default_constructor_was_implicitly_defined_as_deleted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4510`.
 #define _clwarn_msvc_class_default_constructor_was_implicitly_defined_as_deleted 4510
+/// @def _clwarn_msvc_class_copy_constructor_was_implicitly_defined_as_deleted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4511`.
 #define _clwarn_msvc_class_copy_constructor_was_implicitly_defined_as_deleted 4511
+/// @def _clwarn_msvc_class_assignment_operator_was_implicitly_defined_as_deleted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4512`.
 #define _clwarn_msvc_class_assignment_operator_was_implicitly_defined_as_deleted 4512
+/// @def _clwarn_msvc_class_destructor_was_implicitly_defined_as_deleted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4513`.
 #define _clwarn_msvc_class_destructor_was_implicitly_defined_as_deleted 4513
+/// @def _clwarn_msvc_function_unreferenced_inline_function_has_been_removed
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4514`.
 #define _clwarn_msvc_function_unreferenced_inline_function_has_been_removed 4514
+/// @def _clwarn_msvc_namespace_namespace_uses_itself
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4515`.
 #define _clwarn_msvc_namespace_namespace_uses_itself 4515
+/// @def _clwarn_msvc_class_symbol_access_declarations_are_deprecated_member_using_declarations_provide_a_better_alternative
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4516`.
 #define _clwarn_msvc_class_symbol_access_declarations_are_deprecated_member_using_declarations_provide_a_better_alternative 4516
+/// @def _clwarn_msvc_access_declarations_are_deprecated_member_using_declarations_provide_a_better_alternative
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4517`.
 #define _clwarn_msvc_access_declarations_are_deprecated_member_using_declarations_provide_a_better_alternative 4517
+/// @def _clwarn_msvc_specifier_storage_class_or_type_specifier_s_unexpected_here_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4518`.
 #define _clwarn_msvc_specifier_storage_class_or_type_specifier_s_unexpected_here_ignored 4518
+/// @def _clwarn_msvc_default_template_arguments_are_only_allowed_on_a_class_template
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4519`.
 #define _clwarn_msvc_default_template_arguments_are_only_allowed_on_a_class_template 4519
+/// @def _clwarn_msvc_class_multiple_copy_constructors_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4521`.
 #define _clwarn_msvc_class_multiple_copy_constructors_specified 4521
+/// @def _clwarn_msvc_class_multiple_assignment_operators_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4522`.
 #define _clwarn_msvc_class_multiple_assignment_operators_specified 4522
+/// @def _clwarn_msvc_class_multiple_destructors_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4523`.
 #define _clwarn_msvc_class_multiple_destructors_specified 4523
+/// @def _clwarn_msvc_4526
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4526`.
 #define _clwarn_msvc_4526 4526
+/// @def _clwarn_msvc_c_exception_handler_used_but_unwind_semantics_are_not_enabled_specify_ehsc
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4530`.
 #define _clwarn_msvc_c_exception_handler_used_but_unwind_semantics_are_not_enabled_specify_ehsc 4530
+/// @def _clwarn_msvc_c_exception_handling_not_available_on_windows_ce_use_structured_exception_handling
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4531`.
 #define _clwarn_msvc_c_exception_handling_not_available_on_windows_ce_use_structured_exception_handling 4531
+/// @def _clwarn_msvc_continue_jump_out_of_finally_finally_block_has_undefined_behavior_during_termination_handling
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4532`.
 #define _clwarn_msvc_continue_jump_out_of_finally_finally_block_has_undefined_behavior_during_termination_handling 4532
+/// @def _clwarn_msvc_initialization_of_variable_is_skipped_by_goto_label
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4533`.
 #define _clwarn_msvc_initialization_of_variable_is_skipped_by_goto_label 4533
+/// @def _clwarn_msvc_constructor_will_not_be_a_default_constructor_for_class_struct_identifier_due_to_the_default_argument
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4534`.
 #define _clwarn_msvc_constructor_will_not_be_a_default_constructor_for_class_struct_identifier_due_to_the_default_argument 4534
+/// @def _clwarn_msvc_calling_set_se_translator_requires_eha
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4535`.
 #define _clwarn_msvc_calling_set_se_translator_requires_eha 4535
+/// @def _clwarn_msvc_typename_type_name_exceeds_meta_data_limit_of_character_limit_characters
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4536`.
 #define _clwarn_msvc_typename_type_name_exceeds_meta_data_limit_of_character_limit_characters 4536
+/// @def _clwarn_msvc_object_applied_to_non_udt_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4537`.
 #define _clwarn_msvc_object_applied_to_non_udt_type 4537
+/// @def _clwarn_msvc_type_const_volatile_qualifiers_on_this_type_are_not_supported_4538
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4538`.
 #define _clwarn_msvc_type_const_volatile_qualifiers_on_this_type_are_not_supported_4538 4538
+/// @def _clwarn_msvc_dynamic_cast_used_to_convert_to_inaccessible_or_ambiguous_base_run_time_test_will_fail_type1_to_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4540`.
 #define _clwarn_msvc_dynamic_cast_used_to_convert_to_inaccessible_or_ambiguous_base_run_time_test_will_fail_type1_to_type2 4540
+/// @def _clwarn_msvc_operator_used_on_polymorphic_type_type_with_gr_unpredictable_behavior_may_result
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4541`.
 #define _clwarn_msvc_operator_used_on_polymorphic_type_type_with_gr_unpredictable_behavior_may_result 4541
+/// @def _clwarn_msvc_skipping_generation_of_merged_injected_text_file_cannot_write_filetype_file_issue_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4542`.
 #define _clwarn_msvc_skipping_generation_of_merged_injected_text_file_cannot_write_filetype_file_issue_message 4542
+/// @def _clwarn_msvc_injected_text_suppressed_by_attribute_no_injected_text
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4543`.
 #define _clwarn_msvc_injected_text_suppressed_by_attribute_no_injected_text 4543
+/// @def _clwarn_msvc_the_default_template_argument_for_declaration_is_ignored_on_this_template_declaration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4544`.
 #define _clwarn_msvc_the_default_template_argument_for_declaration_is_ignored_on_this_template_declaration 4544
+/// @def _clwarn_msvc_expression_before_comma_evaluates_to_a_function_which_is_missing_an_argument_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4545`.
 #define _clwarn_msvc_expression_before_comma_evaluates_to_a_function_which_is_missing_an_argument_list 4545
+/// @def _clwarn_msvc_function_call_before_comma_missing_argument_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4546`.
 #define _clwarn_msvc_function_call_before_comma_missing_argument_list 4546
+/// @def _clwarn_msvc_operator_operator_before_comma_has_no_effect_expected_operator_with_side_effect
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4547`.
 #define _clwarn_msvc_operator_operator_before_comma_has_no_effect_expected_operator_with_side_effect 4547
+/// @def _clwarn_msvc_expression_before_comma_has_no_effect_expected_expression_with_side_effect
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4548`.
 #define _clwarn_msvc_expression_before_comma_has_no_effect_expected_expression_with_side_effect 4548
+/// @def _clwarn_msvc_operator_operator_before_comma_has_no_effect_did_you_intend_operator
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4549`.
 #define _clwarn_msvc_operator_operator_before_comma_has_no_effect_did_you_intend_operator 4549
+/// @def _clwarn_msvc_expression_evaluates_to_a_function_which_is_missing_an_argument_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4550`.
 #define _clwarn_msvc_expression_evaluates_to_a_function_which_is_missing_an_argument_list 4550
+/// @def _clwarn_msvc_function_call_missing_argument_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4551`.
 #define _clwarn_msvc_function_call_missing_argument_list 4551
+/// @def _clwarn_msvc_operator_result_of_expression_not_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4552`.
 #define _clwarn_msvc_operator_result_of_expression_not_used 4552
+/// @def _clwarn_msvc_operator_result_of_expression_not_used_did_you_intend_operator
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4553`.
 #define _clwarn_msvc_operator_result_of_expression_not_used_did_you_intend_operator 4553
+/// @def _clwarn_msvc_operator_check_operator_precedence_for_possible_error_use_parentheses_to_clarify_precedence
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4554`.
 #define _clwarn_msvc_operator_check_operator_precedence_for_possible_error_use_parentheses_to_clarify_precedence 4554
+/// @def _clwarn_msvc_result_of_expression_not_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4555`.
 #define _clwarn_msvc_result_of_expression_not_used 4555
+/// @def _clwarn_msvc_value_of_intrinsic_immediate_argument_value_is_out_of_range_lower_bound_upper_bound
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4556`.
 #define _clwarn_msvc_value_of_intrinsic_immediate_argument_value_is_out_of_range_lower_bound_upper_bound 4556
+/// @def _clwarn_msvc_assume_contains_effect_effect
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4557`.
 #define _clwarn_msvc_assume_contains_effect_effect 4557
+/// @def _clwarn_msvc_value_of_operand_value_is_out_of_range_lower_bound_upper_bound
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4558`.
 #define _clwarn_msvc_value_of_operand_value_is_out_of_range_lower_bound_upper_bound 4558
+/// @def _clwarn_msvc_function_redefinition_the_function_gains_declspec_modifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4559`.
 #define _clwarn_msvc_function_redefinition_the_function_gains_declspec_modifier 4559
+/// @def _clwarn_msvc_fastcall_incompatible_with_the_clr_option_converting_to_stdcall
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4561`.
 #define _clwarn_msvc_fastcall_incompatible_with_the_clr_option_converting_to_stdcall 4561
+/// @def _clwarn_msvc_fully_prototyped_functions_are_required_with_the_clr_option_converting_to_void
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4562`.
 #define _clwarn_msvc_fully_prototyped_functions_are_required_with_the_clr_option_converting_to_void 4562
+/// @def _clwarn_msvc_method_method_of_class_classname_defines_unsupported_default_parameter_parameter
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4564`.
 #define _clwarn_msvc_method_method_of_class_classname_defines_unsupported_default_parameter_parameter 4564
+/// @def _clwarn_msvc_function_redefinition_the_symbol_was_previously_declared_with_declspec_modifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4565`.
 #define _clwarn_msvc_function_redefinition_the_symbol_was_previously_declared_with_declspec_modifier 4565
+/// @def _clwarn_msvc_4566
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4566`.
 #define _clwarn_msvc_4566 4566
+/// @def _clwarn_msvc_function_no_members_match_the_signature_of_the_explicit_override_4568
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4568`.
 #define _clwarn_msvc_function_no_members_match_the_signature_of_the_explicit_override_4568 4568
+/// @def _clwarn_msvc_function_no_members_match_the_signature_of_the_explicit_override_4569
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4569`.
 #define _clwarn_msvc_function_no_members_match_the_signature_of_the_explicit_override_4569 4569
+/// @def _clwarn_msvc_type_is_not_explicitly_declared_as_abstract_but_has_abstract_functions
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4570`.
 #define _clwarn_msvc_type_is_not_explicitly_declared_as_abstract_but_has_abstract_functions 4570
+/// @def _clwarn_msvc_informational_catch_semantics_changed_since_visual_c_7_1_structured_exceptions_seh_are_no_longer_caught
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4571`.
 #define _clwarn_msvc_informational_catch_semantics_changed_since_visual_c_7_1_structured_exceptions_seh_are_no_longer_caught 4571
+/// @def _clwarn_msvc_paramarray_attribute_is_deprecated_under_clr_use_instead
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4572`.
 #define _clwarn_msvc_paramarray_attribute_is_deprecated_under_clr_use_instead 4572
+/// @def _clwarn_msvc_4573
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4573`.
 #define _clwarn_msvc_4573 4573
+/// @def _clwarn_msvc_identifier_is_defined_to_be_0_did_you_mean_to_use_if_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4574`.
 #define _clwarn_msvc_identifier_is_defined_to_be_0_did_you_mean_to_use_if_identifier 4574
+/// @def _clwarn_msvc_vectorcall_incompatible_with_the_clr_option_converting_to_stdcall
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4575`.
 #define _clwarn_msvc_vectorcall_incompatible_with_the_clr_option_converting_to_stdcall 4575
+/// @def _clwarn_msvc_a_parenthesized_type_followed_by_an_initializer_list_is_a_non_standard_explicit_type_conversion_syntax
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4576`.
 #define _clwarn_msvc_a_parenthesized_type_followed_by_an_initializer_list_is_a_non_standard_explicit_type_conversion_syntax 4576
+/// @def _clwarn_msvc_4577
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4577`.
 #define _clwarn_msvc_4577 4577
+/// @def _clwarn_msvc_4578
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4578`.
 #define _clwarn_msvc_4578 4578
+/// @def _clwarn_msvc_attribute_is_deprecated_instead_specify_namespace_attribute_as_a_base_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4580`.
 #define _clwarn_msvc_attribute_is_deprecated_instead_specify_namespace_attribute_as_a_base_class 4580
+/// @def _clwarn_msvc_deprecated_behavior_string_replaced_with_string_to_process_attribute
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4581`.
 #define _clwarn_msvc_deprecated_behavior_string_replaced_with_string_to_process_attribute 4581
+/// @def _clwarn_msvc_type_constructor_is_not_implicitly_called
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4582`.
 #define _clwarn_msvc_type_constructor_is_not_implicitly_called 4582
+/// @def _clwarn_msvc_type_destructor_is_not_implicitly_called
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4583`.
 #define _clwarn_msvc_type_destructor_is_not_implicitly_called 4583
+/// @def _clwarn_msvc_class1_base_class_class2_is_already_a_base_class_of_class3
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4584`.
 #define _clwarn_msvc_class1_base_class_class2_is_already_a_base_class_of_class3 4584
+/// @def _clwarn_msvc_class_a_winrt_public_ref_class_must_either_be_sealed_or_derive_from_an_existing_unsealed_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4585`.
 #define _clwarn_msvc_class_a_winrt_public_ref_class_must_either_be_sealed_or_derive_from_an_existing_unsealed_class 4585
+/// @def _clwarn_msvc_type_a_public_type_cannot_be_declared_in_a_top_level_namespace_called_windows
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4586`.
 #define _clwarn_msvc_type_a_public_type_cannot_be_declared_in_a_top_level_namespace_called_windows 4586
+/// @def _clwarn_msvc_anonymous_structure_behavior_change_constructor_is_no_longer_implicitly_called
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4587`.
 #define _clwarn_msvc_anonymous_structure_behavior_change_constructor_is_no_longer_implicitly_called 4587
+/// @def _clwarn_msvc_anonymous_structure_behavior_change_destructor_is_no_longer_implicitly_called
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4588`.
 #define _clwarn_msvc_anonymous_structure_behavior_change_destructor_is_no_longer_implicitly_called 4588
+/// @def _clwarn_msvc_constructor_of_abstract_class_class1_ignores_initializer_for_virtual_base_class_class2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4589`.
 #define _clwarn_msvc_constructor_of_abstract_class_class1_ignores_initializer_for_virtual_base_class_class2 4589
+/// @def _clwarn_msvc_constexpr_call_depth_limit_of_number_exceeded_constexpr_depth_lt_number_gt
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4591`.
 #define _clwarn_msvc_constexpr_call_depth_limit_of_number_exceeded_constexpr_depth_lt_number_gt 4591
+/// @def _clwarn_msvc_name_symbol_will_be_dynamically_initialized_implementation_limitation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4592`.
 #define _clwarn_msvc_name_symbol_will_be_dynamically_initialized_implementation_limitation 4592
+/// @def _clwarn_msvc_4593
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4593`.
 #define _clwarn_msvc_4593 4593
+/// @def _clwarn_msvc_class_name_can_never_be_instantiated_indirect_virtual_base_class_name_is_inaccessible
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4594`.
 #define _clwarn_msvc_class_name_can_never_be_instantiated_indirect_virtual_base_class_name_is_inaccessible 4594
+/// @def _clwarn_msvc_name_non_member_operator_new_or_delete_functions_may_not_be_declared_inline
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4595`.
 #define _clwarn_msvc_name_non_member_operator_new_or_delete_functions_may_not_be_declared_inline 4595
+/// @def _clwarn_msvc_identifier_illegal_qualified_name_in_member_declaration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4596`.
 #define _clwarn_msvc_identifier_illegal_qualified_name_in_member_declaration 4596
+/// @def _clwarn_msvc_undefined_behavior_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4597`.
 #define _clwarn_msvc_undefined_behavior_message 4597
+/// @def _clwarn_msvc_4598
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4598`.
 #define _clwarn_msvc_4598 4598
+/// @def _clwarn_msvc_flag_path_command_line_argument_number_number_does_not_match_precompiled_header
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4599`.
 #define _clwarn_msvc_flag_path_command_line_argument_number_number_does_not_match_precompiled_header 4599
+/// @def _clwarn_msvc_pragma_macro_name_expected_a_valid_non_empty_string
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4600`.
 #define _clwarn_msvc_pragma_macro_name_expected_a_valid_non_empty_string 4600
+/// @def _clwarn_msvc_pragma_pop_macro_macro_name_no_previous_pragma_push_macro_for_this_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4602`.
 #define _clwarn_msvc_pragma_pop_macro_macro_name_no_previous_pragma_push_macro_for_this_identifier 4602
+/// @def _clwarn_msvc_identifier_macro_is_not_defined_or_definition_is_different_after_precompiled_header_use
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4603`.
 #define _clwarn_msvc_identifier_macro_is_not_defined_or_definition_is_different_after_precompiled_header_use 4603
+/// @def _clwarn_msvc_4604
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4604`.
 #define _clwarn_msvc_4604 4604
+/// @def _clwarn_msvc_dmacro_specified_on_current_command_line_but_was_not_specified_when_precompiled_header_was_built
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4605`.
 #define _clwarn_msvc_dmacro_specified_on_current_command_line_but_was_not_specified_when_precompiled_header_was_built 4605
+/// @def _clwarn_msvc_pragma_warning_warning_number_ignored_code_analysis_warnings_are_not_associated_with_warning_levels
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4606`.
 #define _clwarn_msvc_pragma_warning_warning_number_ignored_code_analysis_warnings_are_not_associated_with_warning_levels 4606
+/// @def _clwarn_msvc_initializing_multiple_members_of_union_member1_and_member2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4608`.
 #define _clwarn_msvc_initializing_multiple_members_of_union_member1_and_member2 4608
+/// @def _clwarn_msvc_4609
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4609`.
 #define _clwarn_msvc_4609 4609
+/// @def _clwarn_msvc_class_name_can_never_be_instantiated_user_defined_constructor_required
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4610`.
 #define _clwarn_msvc_class_name_can_never_be_instantiated_user_defined_constructor_required 4610
+/// @def _clwarn_msvc_interaction_between_function_and_c_object_destruction_is_non_portable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4611`.
 #define _clwarn_msvc_interaction_between_function_and_c_object_destruction_is_non_portable 4611
+/// @def _clwarn_msvc_error_in_include_filename
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4612`.
 #define _clwarn_msvc_error_in_include_filename 4612
+/// @def _clwarn_msvc_symbol_class_of_segment_cannot_be_changed
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4613`.
 #define _clwarn_msvc_symbol_class_of_segment_cannot_be_changed 4613
+/// @def _clwarn_msvc_pragma_warning_unknown_user_warning_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4615`.
 #define _clwarn_msvc_pragma_warning_unknown_user_warning_type 4615
+/// @def _clwarn_msvc_pragma_warning_warning_number_number_not_a_valid_compiler_warning
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4616`.
 #define _clwarn_msvc_pragma_warning_warning_number_number_not_a_valid_compiler_warning 4616
+/// @def _clwarn_msvc_pragma_parameters_included_an_empty_string_pragma_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4618`.
 #define _clwarn_msvc_pragma_parameters_included_an_empty_string_pragma_ignored 4618
+/// @def _clwarn_msvc_pragma_warning_there_is_no_warning_number_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4619`.
 #define _clwarn_msvc_pragma_warning_there_is_no_warning_number_number 4619
+/// @def _clwarn_msvc_no_postfix_form_of_operator_found_for_type_type_using_prefix_form_4620
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4620`.
 #define _clwarn_msvc_no_postfix_form_of_operator_found_for_type_type_using_prefix_form_4620 4620
+/// @def _clwarn_msvc_no_postfix_form_of_operator_found_for_type_type_using_prefix_form_4621
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4621`.
 #define _clwarn_msvc_no_postfix_form_of_operator_found_for_type_type_using_prefix_form_4621 4621
+/// @def _clwarn_msvc_overwriting_debug_information_formed_during_creation_of_the_precompiled_header_in_object_file_file
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4622`.
 #define _clwarn_msvc_overwriting_debug_information_formed_during_creation_of_the_precompiled_header_in_object_file_file 4622
+/// @def _clwarn_msvc_derived_class_default_constructor_was_implicitly_defined_as_deleted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4623`.
 #define _clwarn_msvc_derived_class_default_constructor_was_implicitly_defined_as_deleted 4623
+/// @def _clwarn_msvc_derived_class_destructor_was_implicitly_defined_as_deleted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4624`.
 #define _clwarn_msvc_derived_class_destructor_was_implicitly_defined_as_deleted 4624
+/// @def _clwarn_msvc_derived_class_copy_constructor_was_implicitly_defined_as_deleted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4625`.
 #define _clwarn_msvc_derived_class_copy_constructor_was_implicitly_defined_as_deleted 4625
+/// @def _clwarn_msvc_derived_class_assignment_operator_was_implicitly_defined_as_deleted
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4626`.
 #define _clwarn_msvc_derived_class_assignment_operator_was_implicitly_defined_as_deleted 4626
+/// @def _clwarn_msvc_identifier_skipped_when_looking_for_precompiled_header_use
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4627`.
 #define _clwarn_msvc_identifier_skipped_when_looking_for_precompiled_header_use 4627
+/// @def _clwarn_msvc_digraphs_not_supported_with_ze_character_sequence_digraph_not_interpreted_as_alternate_token_for_token
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4628`.
 #define _clwarn_msvc_digraphs_not_supported_with_ze_character_sequence_digraph_not_interpreted_as_alternate_token_for_token 4628
+/// @def _clwarn_msvc_4629
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4629`.
 #define _clwarn_msvc_4629 4629
+/// @def _clwarn_msvc_symbol_extern_storage_class_specifier_illegal_on_member_definition
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4630`.
 #define _clwarn_msvc_symbol_extern_storage_class_specifier_illegal_on_member_definition 4630
+/// @def _clwarn_msvc_msxml_or_xpath_unavailable_xml_document_comments_will_not_be_processed_reason
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4631`.
 #define _clwarn_msvc_msxml_or_xpath_unavailable_xml_document_comments_will_not_be_processed_reason 4631
+/// @def _clwarn_msvc_xml_document_comment_file_access_denied_reason
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4632`.
 #define _clwarn_msvc_xml_document_comment_file_access_denied_reason 4632
+/// @def _clwarn_msvc_xml_document_comment_target_error_reason
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4633`.
 #define _clwarn_msvc_xml_document_comment_target_error_reason 4633
+/// @def _clwarn_msvc_xml_document_comment_target_cannot_be_applied_reason
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4634`.
 #define _clwarn_msvc_xml_document_comment_target_cannot_be_applied_reason 4634
+/// @def _clwarn_msvc_xml_document_comment_target_badly_formed_xml_reason
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4635`.
 #define _clwarn_msvc_xml_document_comment_target_badly_formed_xml_reason 4635
+/// @def _clwarn_msvc_xml_document_comment_target_tag_requires_non_empty_attribute_attribute
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4636`.
 #define _clwarn_msvc_xml_document_comment_target_tag_requires_non_empty_attribute_attribute 4636
+/// @def _clwarn_msvc_xml_document_comment_target_lt_include_gt_tag_discarded_reason
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4637`.
 #define _clwarn_msvc_xml_document_comment_target_lt_include_gt_tag_discarded_reason 4637
+/// @def _clwarn_msvc_xml_document_comment_target_reference_to_unknown_symbol_symbol
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4638`.
 #define _clwarn_msvc_xml_document_comment_target_reference_to_unknown_symbol_symbol 4638
+/// @def _clwarn_msvc_msxml_error_xml_document_comments_will_not_be_processed_reason
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4639`.
 #define _clwarn_msvc_msxml_error_xml_document_comments_will_not_be_processed_reason 4639
+/// @def _clwarn_msvc_instance_construction_of_local_static_object_is_not_thread_safe
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4640`.
 #define _clwarn_msvc_instance_construction_of_local_static_object_is_not_thread_safe 4640
+/// @def _clwarn_msvc_xml_document_comment_has_an_ambiguous_cross_reference
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4641`.
 #define _clwarn_msvc_xml_document_comment_has_an_ambiguous_cross_reference 4641
+/// @def _clwarn_msvc_class_could_not_import_the_constraints_for_generic_parameter_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4642`.
 #define _clwarn_msvc_class_could_not_import_the_constraints_for_generic_parameter_name 4642
+/// @def _clwarn_msvc_forward_declaring_identifier_in_namespace_std_is_not_permitted_by_the_c_standard
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4643`.
 #define _clwarn_msvc_forward_declaring_identifier_in_namespace_std_is_not_permitted_by_the_c_standard 4643
+/// @def _clwarn_msvc_4644
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4644`.
 #define _clwarn_msvc_4644 4644
+/// @def _clwarn_msvc_function_declared_with_noreturn_has_a_return_statement
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4645`.
 #define _clwarn_msvc_function_declared_with_noreturn_has_a_return_statement 4645
+/// @def _clwarn_msvc_function_declared_with_noreturn_has_non_void_return_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4646`.
 #define _clwarn_msvc_function_declared_with_noreturn_has_non_void_return_type 4646
+/// @def _clwarn_msvc_behavior_change_is_pod_type_has_different_value_in_previous_versions
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4647`.
 #define _clwarn_msvc_behavior_change_is_pod_type_has_different_value_in_previous_versions 4647
+/// @def _clwarn_msvc_standard_attribute_attribute_is_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4648`.
 #define _clwarn_msvc_standard_attribute_attribute_is_ignored 4648
+/// @def _clwarn_msvc_attributes_are_ignored_in_this_context
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4649`.
 #define _clwarn_msvc_attributes_are_ignored_in_this_context 4649
+/// @def _clwarn_msvc_debugging_information_not_in_precompiled_header_only_global_symbols_from_the_header_will_be_available
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4650`.
 #define _clwarn_msvc_debugging_information_not_in_precompiled_header_only_global_symbols_from_the_header_will_be_available 4650
+/// @def _clwarn_msvc_ddefinition_specified_for_precompiled_header_but_not_for_current_compile
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4651`.
 #define _clwarn_msvc_ddefinition_specified_for_precompiled_header_but_not_for_current_compile 4651
+/// @def _clwarn_msvc_4652
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4652`.
 #define _clwarn_msvc_4652 4652
+/// @def _clwarn_msvc_compiler_option_option_inconsistent_with_precompiled_header_current_command_line_option_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4653`.
 #define _clwarn_msvc_compiler_option_option_inconsistent_with_precompiled_header_current_command_line_option_ignored 4653
+/// @def _clwarn_msvc_code_placed_before_include_of_precompiled_header_line_will_be_ignored_add_code_to_precompiled_header
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4654`.
 #define _clwarn_msvc_code_placed_before_include_of_precompiled_header_line_will_be_ignored_add_code_to_precompiled_header 4654
+/// @def _clwarn_msvc_symbol_variable_type_is_new_since_the_latest_build_or_is_defined_differently_elsewhere
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4655`.
 #define _clwarn_msvc_symbol_variable_type_is_new_since_the_latest_build_or_is_defined_differently_elsewhere 4655
+/// @def _clwarn_msvc_symbol_data_type_is_new_or_has_changed_since_the_latest_build_or_is_defined_differently_elsewhere
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4656`.
 #define _clwarn_msvc_symbol_data_type_is_new_or_has_changed_since_the_latest_build_or_is_defined_differently_elsewhere 4656
+/// @def _clwarn_msvc_expression_involves_a_data_type_that_is_new_since_the_latest_build
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4657`.
 #define _clwarn_msvc_expression_involves_a_data_type_that_is_new_since_the_latest_build 4657
+/// @def _clwarn_msvc_function_function_prototype_is_new_since_the_latest_build_or_is_declared_differently_elsewhere
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4658`.
 #define _clwarn_msvc_function_function_prototype_is_new_since_the_latest_build_or_is_declared_differently_elsewhere 4658
+/// @def _clwarn_msvc_pragma_pragma_use_of_reserved_segment_segment_has_undefined_behavior_use_pragma_comment_linker
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4659`.
 #define _clwarn_msvc_pragma_pragma_use_of_reserved_segment_segment_has_undefined_behavior_use_pragma_comment_linker 4659
+/// @def _clwarn_msvc_identifier_no_suitable_definition_provided_for_explicit_template_instantiation_request
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4661`.
 #define _clwarn_msvc_identifier_no_suitable_definition_provided_for_explicit_template_instantiation_request 4661
+/// @def _clwarn_msvc_explicit_instantiation_template_class_identifier1_has_no_definition_from_which_to_specialize_identifier2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4662`.
 #define _clwarn_msvc_explicit_instantiation_template_class_identifier1_has_no_definition_from_which_to_specialize_identifier2 4662
+/// @def _clwarn_msvc_function_cannot_find_a_function_template_that_matches_the_explicit_instantiation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4667`.
 #define _clwarn_msvc_function_cannot_find_a_function_template_that_matches_the_explicit_instantiation 4667
+/// @def _clwarn_msvc_symbol_is_not_defined_as_a_preprocessor_macro_replacing_with_0_for_directive
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4668`.
 #define _clwarn_msvc_symbol_is_not_defined_as_a_preprocessor_macro_replacing_with_0_for_directive 4668
+/// @def _clwarn_msvc_cast_unsafe_conversion_class_is_a_managed_winrt_type_object
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4669`.
 #define _clwarn_msvc_cast_unsafe_conversion_class_is_a_managed_winrt_type_object 4669
+/// @def _clwarn_msvc_identifier_this_base_class_is_inaccessible
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4670`.
 #define _clwarn_msvc_identifier_this_base_class_is_inaccessible 4670
+/// @def _clwarn_msvc_identifier_the_copy_constructor_is_inaccessible
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4671`.
 #define _clwarn_msvc_identifier_the_copy_constructor_is_inaccessible 4671
+/// @def _clwarn_msvc_identifier1_ambiguous_first_seen_as_identifier2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4672`.
 #define _clwarn_msvc_identifier1_ambiguous_first_seen_as_identifier2 4672
+/// @def _clwarn_msvc_throwing_identifier_the_following_types_will_not_be_considered_at_the_catch_site
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4673`.
 #define _clwarn_msvc_throwing_identifier_the_following_types_will_not_be_considered_at_the_catch_site 4673
+/// @def _clwarn_msvc_method_should_be_declared_static_and_have_exactly_one_parameter
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4674`.
 #define _clwarn_msvc_method_should_be_declared_static_and_have_exactly_one_parameter 4674
+/// @def _clwarn_msvc_class_the_destructor_is_inaccessible
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4676`.
 #define _clwarn_msvc_class_the_destructor_is_inaccessible 4676
+/// @def _clwarn_msvc_function_signature_of_non_private_member_contains_assembly_private_type_private_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4677`.
 #define _clwarn_msvc_function_signature_of_non_private_member_contains_assembly_private_type_private_type 4677
+/// @def _clwarn_msvc_base_class_base_type_is_less_accessible_than_derived_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4678`.
 #define _clwarn_msvc_base_class_base_type_is_less_accessible_than_derived_type 4678
+/// @def _clwarn_msvc_member_could_not_import_item_or_its_associated_custom_attribute
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4679`.
 #define _clwarn_msvc_member_could_not_import_item_or_its_associated_custom_attribute 4679
+/// @def _clwarn_msvc_class_coclass_does_not_specify_a_default_interface
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4680`.
 #define _clwarn_msvc_class_coclass_does_not_specify_a_default_interface 4680
+/// @def _clwarn_msvc_class_coclass_does_not_specify_a_default_interface_that_is_an_event_source
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4681`.
 #define _clwarn_msvc_class_coclass_does_not_specify_a_default_interface_that_is_an_event_source 4681
+/// @def _clwarn_msvc_parameter_no_directional_parameter_attribute_specified_defaulting_to_in
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4682`.
 #define _clwarn_msvc_parameter_no_directional_parameter_attribute_specified_defaulting_to_in 4682
+/// @def _clwarn_msvc_function_event_source_has_an_out_parameter_exercise_caution_when_hooking_multiple_event_handlers
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4683`.
 #define _clwarn_msvc_function_event_source_has_an_out_parameter_exercise_caution_when_hooking_multiple_event_handlers 4683
+/// @def _clwarn_msvc_attribute_warning_attribute_may_cause_invalid_code_generation_use_with_caution
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4684`.
 #define _clwarn_msvc_attribute_warning_attribute_may_cause_invalid_code_generation_use_with_caution 4684
+/// @def _clwarn_msvc_expecting_gt_gt_found_gt_gt_when_parsing_template_parameters
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4685`.
 #define _clwarn_msvc_expecting_gt_gt_found_gt_gt_when_parsing_template_parameters 4685
+/// @def _clwarn_msvc_user_defined_type_possible_change_in_behavior_change_in_udt_return_calling_convention
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4686`.
 #define _clwarn_msvc_user_defined_type_possible_change_in_behavior_change_in_udt_return_calling_convention 4686
+/// @def _clwarn_msvc_class_a_sealed_abstract_class_cannot_implement_an_interface_interface
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4687`.
 #define _clwarn_msvc_class_a_sealed_abstract_class_cannot_implement_an_interface_interface 4687
+/// @def _clwarn_msvc_constraint_constraint_list_contains_assembly_private_type_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4688`.
 #define _clwarn_msvc_constraint_constraint_list_contains_assembly_private_type_type 4688
+/// @def _clwarn_msvc_character_unsupported_character_in_pragma_detect_mismatch_pragma_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4689`.
 #define _clwarn_msvc_character_unsupported_character_in_pragma_detect_mismatch_pragma_ignored 4689
+/// @def _clwarn_msvc_emitidl_pop_more_pops_than_pushes
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4690`.
 #define _clwarn_msvc_emitidl_pop_more_pops_than_pushes 4690
+/// @def _clwarn_msvc_4691
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4691`.
 #define _clwarn_msvc_4691 4691
+/// @def _clwarn_msvc_function_signature_of_non_private_member_contains_assembly_private_native_type_native_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4692`.
 #define _clwarn_msvc_function_signature_of_non_private_member_contains_assembly_private_native_type_native_type 4692
+/// @def _clwarn_msvc_class_a_sealed_abstract_class_cannot_have_any_instance_members_instance_member
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4693`.
 #define _clwarn_msvc_class_a_sealed_abstract_class_cannot_have_any_instance_members_instance_member 4693
+/// @def _clwarn_msvc_class_a_sealed_abstract_class_cannot_have_a_base_class_base_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4694`.
 #define _clwarn_msvc_class_a_sealed_abstract_class_cannot_have_a_base_class_base_class 4694
+/// @def _clwarn_msvc_pragma_execution_character_set_character_set_is_not_a_supported_argument_currently_only_utf_8_is_supported
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4695`.
 #define _clwarn_msvc_pragma_execution_character_set_character_set_is_not_a_supported_argument_currently_only_utf_8_is_supported 4695
+/// @def _clwarn_msvc_zbvalue1_option_out_of_range_assuming_value2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4696`.
 #define _clwarn_msvc_zbvalue1_option_out_of_range_assuming_value2 4696
+/// @def _clwarn_msvc_feature_is_for_evaluation_purposes_only_and_is_subject_to_change_or_removal_in_future_updates
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4698`.
 #define _clwarn_msvc_feature_is_for_evaluation_purposes_only_and_is_subject_to_change_or_removal_in_future_updates 4698
+/// @def _clwarn_msvc_uninitialized_local_variable_name_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4700`.
 #define _clwarn_msvc_uninitialized_local_variable_name_used 4700
+/// @def _clwarn_msvc_potentially_uninitialized_local_variable_name_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4701`.
 #define _clwarn_msvc_potentially_uninitialized_local_variable_name_used 4701
+/// @def _clwarn_msvc_unreachable_code
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4702`.
 #define _clwarn_msvc_unreachable_code 4702
+/// @def _clwarn_msvc_potentially_uninitialized_local_pointer_variable_identifier_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4703`.
 #define _clwarn_msvc_potentially_uninitialized_local_pointer_variable_identifier_used 4703
+/// @def _clwarn_msvc_assignment_used_as_a_condition
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4706`.
 #define _clwarn_msvc_assignment_used_as_a_condition 4706
+/// @def _clwarn_msvc_comma_operator_within_array_index_expression
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4709`.
 #define _clwarn_msvc_comma_operator_within_array_index_expression 4709
+/// @def _clwarn_msvc_function_function_not_inlined
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4710`.
 #define _clwarn_msvc_function_function_not_inlined 4710
+/// @def _clwarn_msvc_function_function_selected_for_automatic_inline_expansion
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4711`.
 #define _clwarn_msvc_function_function_selected_for_automatic_inline_expansion 4711
+/// @def _clwarn_msvc_function_function_marked_as_forceinline_not_inlined
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4714`.
 #define _clwarn_msvc_function_function_marked_as_forceinline_not_inlined 4714
+/// @def _clwarn_msvc_function_not_all_control_paths_return_a_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4715`.
 #define _clwarn_msvc_function_not_all_control_paths_return_a_value 4715
+/// @def _clwarn_msvc_function_must_return_a_value_4716
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4716`.
 #define _clwarn_msvc_function_must_return_a_value_4716 4716
+/// @def _clwarn_msvc_function_recursive_on_all_control_paths_function_will_cause_runtime_stack_overflow
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4717`.
 #define _clwarn_msvc_function_recursive_on_all_control_paths_function_will_cause_runtime_stack_overflow 4717
+/// @def _clwarn_msvc_function_call_recursive_call_has_no_side_effects_deleting
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4718`.
 #define _clwarn_msvc_function_call_recursive_call_has_no_side_effects_deleting 4718
+/// @def _clwarn_msvc_double_constant_found_when_qfast_specified_use_f_as_a_suffix_to_indicate_single_precision
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4719`.
 #define _clwarn_msvc_double_constant_found_when_qfast_specified_use_f_as_a_suffix_to_indicate_single_precision 4719
+/// @def _clwarn_msvc_in_line_assembler_reports_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4720`.
 #define _clwarn_msvc_in_line_assembler_reports_message 4720
+/// @def _clwarn_msvc_function_not_available_as_an_intrinsic
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4721`.
 #define _clwarn_msvc_function_not_available_as_an_intrinsic 4721
+/// @def _clwarn_msvc_function_destructor_never_returns_potential_memory_leak
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4722`.
 #define _clwarn_msvc_function_destructor_never_returns_potential_memory_leak 4722
+/// @def _clwarn_msvc_potential_divide_by_0
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4723`.
 #define _clwarn_msvc_potential_divide_by_0 4723
+/// @def _clwarn_msvc_potential_mod_by_0
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4724`.
 #define _clwarn_msvc_potential_mod_by_0 4724
+/// @def _clwarn_msvc_instruction_may_be_inaccurate_on_some_pentiums
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4725`.
 #define _clwarn_msvc_instruction_may_be_inaccurate_on_some_pentiums 4725
+/// @def _clwarn_msvc_arm_arch4_4t_supports_only_lt_cpsr_f_gt_or_lt_spsr_f_gt_with_immediate_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4726`.
 #define _clwarn_msvc_arm_arch4_4t_supports_only_lt_cpsr_f_gt_or_lt_spsr_f_gt_with_immediate_value 4726
+/// @def _clwarn_msvc_pch_named_pch_file_with_same_timestamp_found_in_obj_file_1_and_obj_file_2_using_first_pch
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4727`.
 #define _clwarn_msvc_pch_named_pch_file_with_same_timestamp_found_in_obj_file_1_and_obj_file_2_using_first_pch 4727
+/// @def _clwarn_msvc_yl_option_ignored_because_pch_reference_is_required
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4728`.
 #define _clwarn_msvc_yl_option_ignored_because_pch_reference_is_required 4728
+/// @def _clwarn_msvc_function_too_big_for_flow_graph_based_warnings
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4729`.
 #define _clwarn_msvc_function_too_big_for_flow_graph_based_warnings 4729
+/// @def _clwarn_msvc_main_mixing_m64_and_floating_point_expressions_may_result_in_incorrect_code
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4730`.
 #define _clwarn_msvc_main_mixing_m64_and_floating_point_expressions_may_result_in_incorrect_code 4730
+/// @def _clwarn_msvc_pointer_frame_pointer_register_register_modified_by_inline_assembly_code
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4731`.
 #define _clwarn_msvc_pointer_frame_pointer_register_register_modified_by_inline_assembly_code 4731
+/// @def _clwarn_msvc_intrinsic_identifier_is_not_supported_in_this_architecture
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4732`.
 #define _clwarn_msvc_intrinsic_identifier_is_not_supported_in_this_architecture 4732
+/// @def _clwarn_msvc_inline_asm_assigning_to_fs_0_handler_not_registered_as_safe_handler
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4733`.
 #define _clwarn_msvc_inline_asm_assigning_to_fs_0_handler_not_registered_as_safe_handler 4733
+/// @def _clwarn_msvc_4734
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4734`.
 #define _clwarn_msvc_4734 4734
+/// @def _clwarn_msvc_align_function_attribute_argument_argument_is_not_a_power_of_two_and_is_not_positive_ignoring_attribute
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4735`.
 #define _clwarn_msvc_align_function_attribute_argument_argument_is_not_a_power_of_two_and_is_not_positive_ignoring_attribute 4735
+/// @def _clwarn_msvc_align_function_attribute_ignored_because_gy_was_not_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4736`.
 #define _clwarn_msvc_align_function_attribute_ignored_because_gy_was_not_specified 4736
+/// @def _clwarn_msvc_unable_to_perform_required_tail_call_performance_may_be_degraded_see_msvc_musttail
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4737`.
+#define _clwarn_msvc_unable_to_perform_required_tail_call_performance_may_be_degraded_see_msvc_musttail 4737
+/// @def _clwarn_msvc_storing_32_bit_float_result_in_memory_possible_loss_of_performance
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4738`.
 #define _clwarn_msvc_storing_32_bit_float_result_in_memory_possible_loss_of_performance 4738
+/// @def _clwarn_msvc_reference_to_variable_var_exceeds_its_storage_space
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4739`.
 #define _clwarn_msvc_reference_to_variable_var_exceeds_its_storage_space 4739
+/// @def _clwarn_msvc_flow_in_or_out_of_inline_asm_code_suppresses_global_optimization
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4740`.
 #define _clwarn_msvc_flow_in_or_out_of_inline_asm_code_suppresses_global_optimization 4740
+/// @def _clwarn_msvc_var_has_different_alignment_in_file1_and_file2_number_and_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4742`.
 #define _clwarn_msvc_var_has_different_alignment_in_file1_and_file2_number_and_number 4742
+/// @def _clwarn_msvc_type_has_different_size_in_file1_and_file2_number_and_number_bytes
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4743`.
 #define _clwarn_msvc_type_has_different_size_in_file1_and_file2_number_and_number_bytes 4743
+/// @def _clwarn_msvc_var_has_different_type_in_file1_and_file2_type1_and_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4744`.
 #define _clwarn_msvc_var_has_different_type_in_file1_and_file2_type1_and_type2 4744
+/// @def _clwarn_msvc_volatile_access_of_name_cannot_be_honored_due_to_its_size
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4745`.
 #define _clwarn_msvc_volatile_access_of_name_cannot_be_honored_due_to_its_size 4745
+/// @def _clwarn_msvc_4746
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4746`.
 #define _clwarn_msvc_4746 4746
+/// @def _clwarn_msvc_4747
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4747`.
 #define _clwarn_msvc_4747 4747
+/// @def _clwarn_msvc_conditionally_supported_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4749`.
 #define _clwarn_msvc_conditionally_supported_message 4749
+/// @def _clwarn_msvc_identifier_function_with_alloca_inlined_into_a_loop
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4750`.
 #define _clwarn_msvc_identifier_function_with_alloca_inlined_into_a_loop 4750
+/// @def _clwarn_msvc_arch_avx_does_not_apply_to_intel_r_streaming_simd_extensions_that_are_within_inline_asm
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4751`.
 #define _clwarn_msvc_arch_avx_does_not_apply_to_intel_r_streaming_simd_extensions_that_are_within_inline_asm 4751
+/// @def _clwarn_msvc_found_intel_r_advanced_vector_extensions_consider_using_arch_avx
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4752`.
 #define _clwarn_msvc_found_intel_r_advanced_vector_extensions_consider_using_arch_avx 4752
+/// @def _clwarn_msvc_cannot_find_bounds_for_pointer_mpx_intrinsic_function_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4753`.
 #define _clwarn_msvc_cannot_find_bounds_for_pointer_mpx_intrinsic_function_ignored 4753
+/// @def _clwarn_msvc_4754
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4754`.
 #define _clwarn_msvc_4754 4754
+/// @def _clwarn_msvc_4755
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4755`.
 #define _clwarn_msvc_4755 4755
+/// @def _clwarn_msvc_overflow_in_constant_arithmetic
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4756`.
 #define _clwarn_msvc_overflow_in_constant_arithmetic 4756
+/// @def _clwarn_msvc_subscript_is_a_large_unsigned_value_did_you_intend_a_negative_constant
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4757`.
 #define _clwarn_msvc_subscript_is_a_large_unsigned_value_did_you_intend_a_negative_constant 4757
+/// @def _clwarn_msvc_integral_size_mismatch_in_argument_conversion_supplied
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4761`.
 #define _clwarn_msvc_integral_size_mismatch_in_argument_conversion_supplied 4761
+/// @def _clwarn_msvc_can_not_align_catch_objects_to_greater_than_16_bytes
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4764`.
 #define _clwarn_msvc_can_not_align_catch_objects_to_greater_than_16_bytes 4764
+/// @def _clwarn_msvc_section_name_s_is_longer_than_8_characters_and_will_be_truncated_by_the_linker
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4767`.
 #define _clwarn_msvc_section_name_s_is_longer_than_8_characters_and_will_be_truncated_by_the_linker 4767
+/// @def _clwarn_msvc_declspec_attributes_before_linkage_specification_are_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4768`.
 #define _clwarn_msvc_declspec_attributes_before_linkage_specification_are_ignored 4768
+/// @def _clwarn_msvc_partially_validated_enum_name_used_as_index
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4770`.
 #define _clwarn_msvc_partially_validated_enum_name_used_as_index 4770
+/// @def _clwarn_msvc_bounds_must_be_created_using_a_simple_pointer_mpx_intrinsic_function_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4771`.
 #define _clwarn_msvc_bounds_must_be_created_using_a_simple_pointer_mpx_intrinsic_function_ignored 4771
+/// @def _clwarn_msvc_import_referenced_a_type_from_a_missing_type_library_missing_type_used_as_a_placeholder
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4772`.
 #define _clwarn_msvc_import_referenced_a_type_from_a_missing_type_library_missing_type_used_as_a_placeholder 4772
+/// @def _clwarn_msvc_string_format_string_expected_in_argument_number_is_not_a_string_literal
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4774`.
 #define _clwarn_msvc_string_format_string_expected_in_argument_number_is_not_a_string_literal 4774
+/// @def _clwarn_msvc_nonstandard_extension_used_in_format_string_string_of_function_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4775`.
 #define _clwarn_msvc_nonstandard_extension_used_in_format_string_string_of_function_function 4775
+/// @def _clwarn_msvc_character_is_not_allowed_in_the_format_string_of_function_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4776`.
 #define _clwarn_msvc_character_is_not_allowed_in_the_format_string_of_function_function 4776
+/// @def _clwarn_msvc_4777
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4777`.
 #define _clwarn_msvc_4777 4777
+/// @def _clwarn_msvc_function_unterminated_format_string_string
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4778`.
 #define _clwarn_msvc_function_unterminated_format_string_string 4778
+/// @def _clwarn_msvc_identifier_identifier_was_truncated_to_number_characters
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4788`.
 #define _clwarn_msvc_identifier_identifier_was_truncated_to_number_characters 4788
+/// @def _clwarn_msvc_buffer_identifier_of_size_n_bytes_will_be_overrun_m_bytes_will_be_written_starting_at_offset_l
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4789`.
 #define _clwarn_msvc_buffer_identifier_of_size_n_bytes_will_be_overrun_m_bytes_will_be_written_starting_at_offset_l 4789
+/// @def _clwarn_msvc_function_s_declared_using_sysimport_and_referenced_from_native_code_import_library_required_to_link
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4792`.
 #define _clwarn_msvc_function_s_declared_using_sysimport_and_referenced_from_native_code_import_library_required_to_link 4792
+/// @def _clwarn_msvc_function_function_compiled_as_native_reason
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4793`.
 #define _clwarn_msvc_function_function_compiled_as_native_reason 4793
+/// @def _clwarn_msvc_segment_of_thread_local_storage_variable_s_changed_from_s_to_s
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4794`.
 #define _clwarn_msvc_segment_of_thread_local_storage_variable_s_changed_from_s_to_s 4794
+/// @def _clwarn_msvc_native_code_generated_for_p_code_function_name_with_exception_handler_or_unwind_semantics
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4798`.
 #define _clwarn_msvc_native_code_generated_for_p_code_function_name_with_exception_handler_or_unwind_semantics 4798
+/// @def _clwarn_msvc_function_function_has_no_emms_instruction
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4799`.
 #define _clwarn_msvc_function_function_has_no_emms_instruction 4799
+/// @def _clwarn_msvc_implicit_conversion_from_type_to_bool_possible_information_loss
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4800`.
 #define _clwarn_msvc_implicit_conversion_from_type_to_bool_possible_information_loss 4800
+/// @def _clwarn_msvc_return_by_reference_is_not_verifiable_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4801`.
 #define _clwarn_msvc_return_by_reference_is_not_verifiable_message 4801
+/// @def _clwarn_msvc_method_the_raise_method_has_a_different_storage_class_from_that_of_the_event_event
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4803`.
 #define _clwarn_msvc_method_the_raise_method_has_a_different_storage_class_from_that_of_the_event_event 4803
+/// @def _clwarn_msvc_operation_unsafe_use_of_type_bool_in_operation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4804`.
 #define _clwarn_msvc_operation_unsafe_use_of_type_bool_in_operation 4804
+/// @def _clwarn_msvc_operation_unsafe_mix_of_type_type1_and_type_type2_in_operation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4805`.
 #define _clwarn_msvc_operation_unsafe_mix_of_type_type1_and_type_type2_in_operation 4805
+/// @def _clwarn_msvc_operation_unsafe_operation_no_value_of_type_type1_promoted_to_type_type2_can_equal_the_given_constant
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4806`.
 #define _clwarn_msvc_operation_unsafe_operation_no_value_of_type_type1_promoted_to_type_type2_can_equal_the_given_constant 4806
+/// @def _clwarn_msvc_operation_unsafe_mix_of_type_type1_and_signed_bit_field_of_type_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4807`.
 #define _clwarn_msvc_operation_unsafe_mix_of_type_type1_and_signed_bit_field_of_type_type2 4807
+/// @def _clwarn_msvc_case_value_is_not_a_valid_value_for_switch_condition_of_type_bool
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4808`.
 #define _clwarn_msvc_case_value_is_not_a_valid_value_for_switch_condition_of_type_bool 4808
+/// @def _clwarn_msvc_switch_statement_has_redundant_default_label_all_possible_case_labels_are_given
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4809`.
 #define _clwarn_msvc_switch_statement_has_redundant_default_label_all_possible_case_labels_are_given 4809
+/// @def _clwarn_msvc_value_of_pragma_pack_show_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4810`.
 #define _clwarn_msvc_value_of_pragma_pack_show_number 4810
+/// @def _clwarn_msvc_value_of_pragma_conform_forscope_show_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4811`.
 #define _clwarn_msvc_value_of_pragma_conform_forscope_show_value 4811
+/// @def _clwarn_msvc_obsolete_declaration_style_please_use_new_syntax_instead
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4812`.
 #define _clwarn_msvc_obsolete_declaration_style_please_use_new_syntax_instead 4812
+/// @def _clwarn_msvc_function_a_friend_function_of_a_local_class_must_have_been_previously_declared
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4813`.
 #define _clwarn_msvc_function_a_friend_function_of_a_local_class_must_have_been_previously_declared 4813
+/// @def _clwarn_msvc_4815
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4815`.
 #define _clwarn_msvc_4815 4815
+/// @def _clwarn_msvc_param_parameter_has_a_zero_sized_array_which_will_be_truncated_unless_the_object_is_passed_by_reference
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4816`.
 #define _clwarn_msvc_param_parameter_has_a_zero_sized_array_which_will_be_truncated_unless_the_object_is_passed_by_reference 4816
+/// @def _clwarn_msvc_member_illegal_use_of_to_access_this_member_compiler_replaced_with_gt
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4817`.
 #define _clwarn_msvc_member_illegal_use_of_to_access_this_member_compiler_replaced_with_gt 4817
+/// @def _clwarn_msvc_4819
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4819`.
 #define _clwarn_msvc_4819 4819
+/// @def _clwarn_msvc_type_bytes_bytes_padding_added_after_class_member_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4820`.
 #define _clwarn_msvc_type_bytes_bytes_padding_added_after_class_member_name 4820
+/// @def _clwarn_msvc_unable_to_determine_unicode_encoding_type_please_save_the_file_with_signature_bom
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4821`.
 #define _clwarn_msvc_unable_to_determine_unicode_encoding_type_please_save_the_file_with_signature_bom 4821
+/// @def _clwarn_msvc_member_function_local_class_member_function_does_not_have_a_body
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4822`.
 #define _clwarn_msvc_member_function_local_class_member_function_does_not_have_a_body 4822
+/// @def _clwarn_msvc_function_uses_pinning_pointers_but_unwind_semantics_are_not_enabled_consider_using_eha
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4823`.
 #define _clwarn_msvc_function_uses_pinning_pointers_but_unwind_semantics_are_not_enabled_consider_using_eha 4823
+/// @def _clwarn_msvc_conversion_from_type1_to_type2_is_sign_extended_this_may_cause_unexpected_runtime_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4826`.
 #define _clwarn_msvc_conversion_from_type1_to_type2_is_sign_extended_this_may_cause_unexpected_runtime_behavior 4826
+/// @def _clwarn_msvc_a_public_tostring_method_with_0_parameters_should_be_marked_as_virtual_and_override
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4827`.
 #define _clwarn_msvc_a_public_tostring_method_with_0_parameters_should_be_marked_as_virtual_and_override 4827
+/// @def _clwarn_msvc_4828
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4828`.
 #define _clwarn_msvc_4828 4828
+/// @def _clwarn_msvc_possibly_incorrect_parameters_to_function_main_consider_int_main_platform_array_lt_platform_string_gt_argv
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4829`.
 #define _clwarn_msvc_possibly_incorrect_parameters_to_function_main_consider_int_main_platform_array_lt_platform_string_gt_argv 4829
+/// @def _clwarn_msvc_discarding_return_value_of_function_with_nodiscard_attribute
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4834`.
 #define _clwarn_msvc_discarding_return_value_of_function_with_nodiscard_attribute 4834
+/// @def _clwarn_msvc_4835
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4835`.
 #define _clwarn_msvc_4835 4835
+/// @def _clwarn_msvc_trigraph_detected_character_replaced_by_character
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4837`.
 #define _clwarn_msvc_trigraph_detected_character_replaced_by_character 4837
+/// @def _clwarn_msvc_conversion_from_type_1_to_type_2_requires_a_narrowing_conversion
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4838`.
 #define _clwarn_msvc_conversion_from_type_1_to_type_2_requires_a_narrowing_conversion 4838
+/// @def _clwarn_msvc_non_standard_use_of_class_type_as_an_argument_to_a_variadic_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4839`.
 #define _clwarn_msvc_non_standard_use_of_class_type_as_an_argument_to_a_variadic_function 4839
+/// @def _clwarn_msvc_non_portable_use_of_class_type_as_an_argument_to_a_variadic_function
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4840`.
 #define _clwarn_msvc_non_portable_use_of_class_type_as_an_argument_to_a_variadic_function 4840
+/// @def _clwarn_msvc_non_standard_extension_used_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4841`.
 #define _clwarn_msvc_non_standard_extension_used_message 4841
+/// @def _clwarn_msvc_4842
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4842`.
 #define _clwarn_msvc_4842 4842
+/// @def _clwarn_msvc_type1_an_exception_handler_of_reference_to_array_or_function_type_is_unreachable_use_type2_instead
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4843`.
 #define _clwarn_msvc_type1_an_exception_handler_of_reference_to_array_or_function_type_is_unreachable_use_type2_instead 4843
+/// @def _clwarn_msvc_export_module_module_name_is_now_the_preferred_syntax_for_declaring_a_module_interface
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4844`.
 #define _clwarn_msvc_export_module_module_name_is_now_the_preferred_syntax_for_declaring_a_module_interface 4844
+/// @def _clwarn_msvc_declspec_no_init_all_is_ignored_unless_d1initall_0_1_2_3_or_presetpadding_is_specified_on_the_command_line
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4845`.
 #define _clwarn_msvc_declspec_no_init_all_is_ignored_unless_d1initall_0_1_2_3_or_presetpadding_is_specified_on_the_command_line 4845
+/// @def _clwarn_msvc_value_is_not_a_valid_argument_for_d1initall_command_line_flag_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4846`.
 #define _clwarn_msvc_value_is_not_a_valid_argument_for_d1initall_command_line_flag_ignored 4846
+/// @def _clwarn_msvc_identifier_declspec_no_init_all_can_only_be_applied_to_a_function_a_class_type_or_a_local_variable_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4847`.
 #define _clwarn_msvc_identifier_declspec_no_init_all_can_only_be_applied_to_a_function_a_class_type_or_a_local_variable_ignored 4847
+/// @def _clwarn_msvc_support_for_attribute_attribute_in_c_17_and_earlier_is_a_vendor_extension
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4848`.
 #define _clwarn_msvc_support_for_attribute_attribute_in_c_17_and_earlier_is_a_vendor_extension 4848
+/// @def _clwarn_msvc_openmp_clause_clause_ignored_in_directive_directive
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4849`.
 #define _clwarn_msvc_openmp_clause_clause_ignored_in_directive_directive 4849
+/// @def _clwarn_msvc_binding_dereferenced_null_pointer_to_reference_has_undefined_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4854`.
 #define _clwarn_msvc_binding_dereferenced_null_pointer_to_reference_has_undefined_behavior 4854
+/// @def _clwarn_msvc_implicit_capture_of_this_via_is_deprecated_in_version
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4855`.
 #define _clwarn_msvc_implicit_capture_of_this_via_is_deprecated_in_version 4855
+/// @def _clwarn_msvc_4856
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4856`.
 #define _clwarn_msvc_4856 4856
+/// @def _clwarn_msvc_c_cli_mode_does_not_support_c_versions_newer_than_c_ver_setting_language_to_std_c_ver
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4857`.
 #define _clwarn_msvc_c_cli_mode_does_not_support_c_versions_newer_than_c_ver_setting_language_to_std_c_ver 4857
+/// @def _clwarn_msvc_discarding_return_value_function_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4858`.
 #define _clwarn_msvc_discarding_return_value_function_name 4858
+/// @def _clwarn_msvc_value_is_not_a_valid_argument_for_presetwarn_it_must_be_a_decimal_value_gt_0_command_line_flag_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4859`.
 #define _clwarn_msvc_value_is_not_a_valid_argument_for_presetwarn_it_must_be_a_decimal_value_gt_0_command_line_flag_ignored 4859
+/// @def _clwarn_msvc_object_name_compiler_zero_initialized_number_bytes_of_storage
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4860`.
 #define _clwarn_msvc_object_name_compiler_zero_initialized_number_bytes_of_storage 4860
+/// @def _clwarn_msvc_compiler_zero_initialized_number_bytes_of_storage
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4861`.
 #define _clwarn_msvc_compiler_zero_initialized_number_bytes_of_storage 4861
+/// @def _clwarn_msvc_justification_property_is_not_allowed_with_more_than_one_warning_number
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4862`.
+#define _clwarn_msvc_justification_property_is_not_allowed_with_more_than_one_warning_number 4862
+/// @def _clwarn_msvc_compiler_may_not_enforce_left_to_right_evaluation_order_for_call_to_operator_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4866`.
 #define _clwarn_msvc_compiler_may_not_enforce_left_to_right_evaluation_order_for_call_to_operator_name 4866
+/// @def _clwarn_msvc_function_name_non_standard_syntax_use_amp_to_create_a_pointer_to_member
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4867`.
 #define _clwarn_msvc_function_name_non_standard_syntax_use_amp_to_create_a_pointer_to_member 4867
+/// @def _clwarn_msvc_file_line_number_compiler_may_not_enforce_left_to_right_evaluation_order_in_braced_initialization_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4868`.
 #define _clwarn_msvc_file_line_number_compiler_may_not_enforce_left_to_right_evaluation_order_in_braced_initialization_list 4868
+/// @def _clwarn_msvc_nodiscard_may_only_be_applied_to_classes_enumerations_and_functions
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4869`.
 #define _clwarn_msvc_nodiscard_may_only_be_applied_to_classes_enumerations_and_functions 4869
+/// @def _clwarn_msvc_4872
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4872`.
 #define _clwarn_msvc_4872 4872
+/// @def _clwarn_msvc_4880
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4880`.
 #define _clwarn_msvc_4880 4880
+/// @def _clwarn_msvc_the_constructor_and_or_the_destructor_will_not_be_invoked_for_tile_static_variable_variable_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4881`.
 #define _clwarn_msvc_the_constructor_and_or_the_destructor_will_not_be_invoked_for_tile_static_variable_variable_name 4881
+/// @def _clwarn_msvc_passing_functors_with_non_const_call_operators_to_concurrency_parallel_for_each_is_deprecated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4882`.
 #define _clwarn_msvc_passing_functors_with_non_const_call_operators_to_concurrency_parallel_for_each_is_deprecated 4882
+/// @def _clwarn_msvc_function_name_function_size_suppresses_optimizations
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4883`.
 #define _clwarn_msvc_function_name_function_size_suppresses_optimizations 4883
+/// @def _clwarn_msvc_il_mismatch_between_tool1_version_version1_and_tool2_version_version2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4900`.
 #define _clwarn_msvc_il_mismatch_between_tool1_version_version1_and_tool2_version_version2 4900
+/// @def _clwarn_msvc_wide_string_literal_cast_to_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4905`.
 #define _clwarn_msvc_wide_string_literal_cast_to_type 4905
+/// @def _clwarn_msvc_string_literal_cast_to_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4906`.
 #define _clwarn_msvc_string_literal_cast_to_type 4906
+/// @def _clwarn_msvc_multiple_calling_conventions_cannot_be_specified_last_given_will_be_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4907`.
 #define _clwarn_msvc_multiple_calling_conventions_cannot_be_specified_last_given_will_be_used 4907
+/// @def _clwarn_msvc_identifier_declspec_dllexport_and_extern_are_incompatible_on_an_explicit_instantiation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4910`.
 #define _clwarn_msvc_identifier_declspec_dllexport_and_extern_are_incompatible_on_an_explicit_instantiation 4910
+/// @def _clwarn_msvc_attribute_attribute_has_undefined_behavior_on_a_nested_udt
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4912`.
 #define _clwarn_msvc_attribute_attribute_has_undefined_behavior_on_a_nested_udt 4912
+/// @def _clwarn_msvc_4913
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4913`.
 #define _clwarn_msvc_4913 4913
+/// @def _clwarn_msvc_in_order_to_have_a_dispid_description_must_be_introduced_by_an_interface
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4916`.
 #define _clwarn_msvc_in_order_to_have_a_dispid_description_must_be_introduced_by_an_interface 4916
+/// @def _clwarn_msvc_declarator_a_guid_can_only_be_associated_with_a_class_interface_or_namespace
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4917`.
 #define _clwarn_msvc_declarator_a_guid_can_only_be_associated_with_a_class_interface_or_namespace 4917
+/// @def _clwarn_msvc_character_invalid_character_in_pragma_optimization_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4918`.
 #define _clwarn_msvc_character_invalid_character_in_pragma_optimization_list 4918
+/// @def _clwarn_msvc_enum_enum_name_member_member_1_value_1_already_seen_in_enum_enum_name_as_member_2_value_2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4920`.
 #define _clwarn_msvc_enum_enum_name_member_member_1_value_1_already_seen_in_enum_enum_name_as_member_2_value_2 4920
+/// @def _clwarn_msvc_description_attribute_value_attribute_should_not_be_multiply_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4921`.
 #define _clwarn_msvc_description_attribute_value_attribute_should_not_be_multiply_specified 4921
+/// @def _clwarn_msvc_method_dispinterface_method_cannot_be_called_from_script
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4925`.
 #define _clwarn_msvc_method_dispinterface_method_cannot_be_called_from_script 4925
+/// @def _clwarn_msvc_identifier_symbol_is_already_defined_attributes_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4926`.
 #define _clwarn_msvc_identifier_symbol_is_already_defined_attributes_ignored 4926
+/// @def _clwarn_msvc_illegal_conversion_more_than_one_user_defined_conversion_has_been_implicitly_applied
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4927`.
 #define _clwarn_msvc_illegal_conversion_more_than_one_user_defined_conversion_has_been_implicitly_applied 4927
+/// @def _clwarn_msvc_illegal_copy_initialization_more_than_one_user_defined_conversion_has_been_implicitly_applied
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4928`.
 #define _clwarn_msvc_illegal_copy_initialization_more_than_one_user_defined_conversion_has_been_implicitly_applied 4928
+/// @def _clwarn_msvc_file_typelibrary_contains_a_union_ignoring_the_embedded_idl_qualifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4929`.
 #define _clwarn_msvc_file_typelibrary_contains_a_union_ignoring_the_embedded_idl_qualifier 4929
+/// @def _clwarn_msvc_prototype_prototyped_function_not_called_was_a_variable_definition_intended
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4930`.
 #define _clwarn_msvc_prototype_prototyped_function_not_called_was_a_variable_definition_intended 4930
+/// @def _clwarn_msvc_we_are_assuming_the_type_library_was_built_for_number_bit_pointers
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4931`.
 #define _clwarn_msvc_we_are_assuming_the_type_library_was_built_for_number_bit_pointers 4931
+/// @def _clwarn_msvc_identifier_identifier_and_identifier_identifier_are_indistinguishable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4932`.
 #define _clwarn_msvc_identifier_identifier_and_identifier_identifier_are_indistinguishable 4932
+/// @def _clwarn_msvc_delegate_multicast_is_deprecated_use_delegate_instead
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4934`.
 #define _clwarn_msvc_delegate_multicast_is_deprecated_use_delegate_instead 4934
+/// @def _clwarn_msvc_assembly_access_specifier_modified_from_access
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4935`.
 #define _clwarn_msvc_assembly_access_specifier_modified_from_access 4935
+/// @def _clwarn_msvc_this_declspec_is_supported_only_when_compiled_with_clr_or_clr_pure
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4936`.
 #define _clwarn_msvc_this_declspec_is_supported_only_when_compiled_with_clr_or_clr_pure 4936
+/// @def _clwarn_msvc_text1_and_text2_are_indistinguishable_as_arguments_to_directive
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4937`.
 #define _clwarn_msvc_text1_and_text2_are_indistinguishable_as_arguments_to_directive 4937
+/// @def _clwarn_msvc_var_floating_point_reduction_variable_may_cause_inconsistent_results_under_fp_strict_or_pragma_fenv_access
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4938`.
 #define _clwarn_msvc_var_floating_point_reduction_variable_may_cause_inconsistent_results_under_fp_strict_or_pragma_fenv_access 4938
+/// @def _clwarn_msvc_pragma_vtordisp_is_deprecated_and_will_be_removed_in_a_future_release_of_visual_c
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4939`.
 #define _clwarn_msvc_pragma_vtordisp_is_deprecated_and_will_be_removed_in_a_future_release_of_visual_c 4939
+/// @def _clwarn_msvc_symbol_cannot_import_symbol_from_assembly1_as_symbol_already_exists_in_the_current_scope
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4944`.
 #define _clwarn_msvc_symbol_cannot_import_symbol_from_assembly1_as_symbol_already_exists_in_the_current_scope 4944
+/// @def _clwarn_msvc_4945
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4945`.
 #define _clwarn_msvc_4945 4945
+/// @def _clwarn_msvc_reinterpret_cast_used_between_related_classes_class1_and_class2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4946`.
 #define _clwarn_msvc_reinterpret_cast_used_between_related_classes_class1_and_class2 4946
+/// @def _clwarn_msvc_type_or_member_marked_as_obsolete_4947
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4947`.
 #define _clwarn_msvc_type_or_member_marked_as_obsolete_4947 4947
+/// @def _clwarn_msvc_return_type_of_accessor_does_not_match_the_last_parameter_type_of_the_corresponding_setter
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4948`.
 #define _clwarn_msvc_return_type_of_accessor_does_not_match_the_last_parameter_type_of_the_corresponding_setter 4948
+/// @def _clwarn_msvc_pragma_pragma_is_meaningful_only_when_compiled_with_clr_option
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4949`.
 #define _clwarn_msvc_pragma_pragma_is_meaningful_only_when_compiled_with_clr_option 4949
+/// @def _clwarn_msvc_type_or_member_marked_as_obsolete_4950
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4950`.
 #define _clwarn_msvc_type_or_member_marked_as_obsolete_4950 4950
+/// @def _clwarn_msvc_function_has_been_edited_since_profile_data_was_collected_function_profile_data_not_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4951`.
 #define _clwarn_msvc_function_has_been_edited_since_profile_data_was_collected_function_profile_data_not_used 4951
+/// @def _clwarn_msvc_function_no_profile_data_found_in_program_database_pgd_file
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4952`.
 #define _clwarn_msvc_function_no_profile_data_found_in_program_database_pgd_file 4952
+/// @def _clwarn_msvc_inlinee_function_has_been_edited_since_profile_data_was_collected_profile_data_not_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4953`.
 #define _clwarn_msvc_inlinee_function_has_been_edited_since_profile_data_was_collected_profile_data_not_used 4953
+/// @def _clwarn_msvc_function_not_profiled_contains_int64_switch_expression
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4954`.
 #define _clwarn_msvc_function_not_profiled_contains_int64_switch_expression 4954
+/// @def _clwarn_msvc_import2_import_ignored_already_imported_from_import1
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4955`.
 #define _clwarn_msvc_import2_import_ignored_already_imported_from_import1 4955
+/// @def _clwarn_msvc_type_this_type_is_not_verifiable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4956`.
 #define _clwarn_msvc_type_this_type_is_not_verifiable 4956
+/// @def _clwarn_msvc_cast_explicit_cast_from_cast_from_to_cast_to_is_not_verifiable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4957`.
 #define _clwarn_msvc_cast_explicit_cast_from_cast_from_to_cast_to_is_not_verifiable 4957
+/// @def _clwarn_msvc_operation_pointer_arithmetic_is_not_verifiable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4958`.
 #define _clwarn_msvc_operation_pointer_arithmetic_is_not_verifiable 4958
+/// @def _clwarn_msvc_cannot_define_unmanaged_type_identifier_in_clr_safe_because_accessing_its_members_yields_unverifiable_code
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4959`.
 #define _clwarn_msvc_cannot_define_unmanaged_type_identifier_in_clr_safe_because_accessing_its_members_yields_unverifiable_code 4959
+/// @def _clwarn_msvc_function_is_too_big_to_be_profiled
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4960`.
 #define _clwarn_msvc_function_is_too_big_to_be_profiled 4960
+/// @def _clwarn_msvc_no_profile_data_was_merged_into_pgd_file_profile_guided_optimizations_disabled
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4961`.
 #define _clwarn_msvc_no_profile_data_was_merged_into_pgd_file_profile_guided_optimizations_disabled 4961
+/// @def _clwarn_msvc_4962
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4962`.
 #define _clwarn_msvc_4962 4962
+/// @def _clwarn_msvc_description_no_profile_data_found_different_compiler_options_were_used_in_instrumented_build
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4963`.
 #define _clwarn_msvc_description_no_profile_data_found_different_compiler_options_were_used_in_instrumented_build 4963
+/// @def _clwarn_msvc_no_optimization_options_were_specified_profile_info_will_not_be_collected
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4964`.
 #define _clwarn_msvc_no_optimization_options_were_specified_profile_info_will_not_be_collected 4964
+/// @def _clwarn_msvc_implicit_box_of_integer_0_use_nullptr_or_explicit_cast
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4965`.
 #define _clwarn_msvc_implicit_box_of_integer_0_use_nullptr_or_explicit_cast 4965
+/// @def _clwarn_msvc_function_has_code_seg_annotation_with_unsupported_segment_name_annotation_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4966`.
 #define _clwarn_msvc_function_has_code_seg_annotation_with_unsupported_segment_name_annotation_ignored 4966
+/// @def _clwarn_msvc_delegate_constructor_target_object_ignored_since_type_is_static
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4970`.
 #define _clwarn_msvc_delegate_constructor_target_object_ignored_since_type_is_static 4970
+/// @def _clwarn_msvc_4971
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4971`.
 #define _clwarn_msvc_4971 4971
+/// @def _clwarn_msvc_directly_modifying_or_treating_the_result_of_an_unbox_operation_as_an_lvalue_is_unverifiable
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4972`.
 #define _clwarn_msvc_directly_modifying_or_treating_the_result_of_an_unbox_operation_as_an_lvalue_is_unverifiable 4972
+/// @def _clwarn_msvc_symbol_marked_as_deprecated_4973
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4973`.
 #define _clwarn_msvc_symbol_marked_as_deprecated_4973 4973
+/// @def _clwarn_msvc_symbol_marked_as_deprecated_4974
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4974`.
 #define _clwarn_msvc_symbol_marked_as_deprecated_4974 4974
+/// @def _clwarn_msvc_modopt_modifier_was_ignored_for_formal_parameter_parameter
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4975`.
 #define _clwarn_msvc_modopt_modifier_was_ignored_for_formal_parameter_parameter 4975
+/// @def _clwarn_msvc_invalid_value_value_for_w_assuming_1
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4976`.
 #define _clwarn_msvc_invalid_value_value_for_w_assuming_1 4976
+/// @def _clwarn_msvc_warbird_function_function_marked_as_forceinline_not_inlined_because_it_contains_exception_semantics
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4981`.
 #define _clwarn_msvc_warbird_function_function_marked_as_forceinline_not_inlined_because_it_contains_exception_semantics 4981
+/// @def _clwarn_msvc_analyze_sarif_hashname_ignored_because_the_argument_to_analyze_log_is_a_single_file_rather_than_a_directory
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4983`.
 #define _clwarn_msvc_analyze_sarif_hashname_ignored_because_the_argument_to_analyze_log_is_a_single_file_rather_than_a_directory 4983
+/// @def _clwarn_msvc_if_constexpr_is_a_c_17_language_extension
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4984`.
 #define _clwarn_msvc_if_constexpr_is_a_c_17_language_extension 4984
+/// @def _clwarn_msvc_symbol_name_attributes_not_present_on_previous_declaration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4985`.
 #define _clwarn_msvc_symbol_name_attributes_not_present_on_previous_declaration 4985
+/// @def _clwarn_msvc_declaration_exception_specification_does_not_match_previous_declaration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4986`.
 #define _clwarn_msvc_declaration_exception_specification_does_not_match_previous_declaration 4986
+/// @def _clwarn_msvc_nonstandard_extension_used_throw
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4987`.
 #define _clwarn_msvc_nonstandard_extension_used_throw 4987
+/// @def _clwarn_msvc_variable_variable_declared_outside_class_function_scope
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4988`.
 #define _clwarn_msvc_variable_variable_declared_outside_class_function_scope 4988
+/// @def _clwarn_msvc_type_type_has_conflicting_definitions
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4989`.
 #define _clwarn_msvc_type_type_has_conflicting_definitions 4989
+/// @def _clwarn_msvc_warbird_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4990`.
 #define _clwarn_msvc_warbird_message 4990
+/// @def _clwarn_msvc_4991
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4991`.
 #define _clwarn_msvc_4991 4991
+/// @def _clwarn_msvc_4992
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4992`.
 #define _clwarn_msvc_4992 4992
+/// @def _clwarn_msvc_function_name_was_marked_as_pragma_deprecated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4995`.
 #define _clwarn_msvc_function_name_was_marked_as_pragma_deprecated 4995
+/// @def _clwarn_msvc_deprecated_declaration_deprecation_message
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4996`.
 #define _clwarn_msvc_deprecated_declaration_deprecation_message 4996
+/// @def _clwarn_msvc_class_coclass_does_not_implement_a_com_interface_or_pseudo_interface
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4997`.
 #define _clwarn_msvc_class_coclass_does_not_implement_a_com_interface_or_pseudo_interface 4997
+/// @def _clwarn_msvc_expectation_failed_expectation_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C4998`.
 #define _clwarn_msvc_expectation_failed_expectation_value 4998
+/// @def _clwarn_msvc_type_multiple_move_constructors_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5022`.
 #define _clwarn_msvc_type_multiple_move_constructors_specified 5022
+/// @def _clwarn_msvc_type_multiple_move_assignment_operators_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5023`.
 #define _clwarn_msvc_type_multiple_move_assignment_operators_specified 5023
+/// @def _clwarn_msvc_type_move_constructor_was_implicitly_defined_as_deleted_5024
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5024`.
 #define _clwarn_msvc_type_move_constructor_was_implicitly_defined_as_deleted_5024 5024
+/// @def _clwarn_msvc_type_move_assignment_operator_was_implicitly_defined_as_deleted_5025
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5025`.
 #define _clwarn_msvc_type_move_assignment_operator_was_implicitly_defined_as_deleted_5025 5025
+/// @def _clwarn_msvc_type_move_constructor_was_implicitly_defined_as_deleted_5026
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5026`.
 #define _clwarn_msvc_type_move_constructor_was_implicitly_defined_as_deleted_5026 5026
+/// @def _clwarn_msvc_type_move_assignment_operator_was_implicitly_defined_as_deleted_5027
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5027`.
 #define _clwarn_msvc_type_move_assignment_operator_was_implicitly_defined_as_deleted_5027 5027
+/// @def _clwarn_msvc_name_alignment_specified_in_prior_declaration_number_not_specified_in_definition
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5028`.
 #define _clwarn_msvc_name_alignment_specified_in_prior_declaration_number_not_specified_in_definition 5028
+/// @def _clwarn_msvc_nonstandard_extension_used_alignment_attributes_in_c_apply_to_variables_data_members_and_tag_types_only
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5029`.
 #define _clwarn_msvc_nonstandard_extension_used_alignment_attributes_in_c_apply_to_variables_data_members_and_tag_types_only 5029
+/// @def _clwarn_msvc_attribute_attribute_name_is_not_recognized
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5030`.
 #define _clwarn_msvc_attribute_attribute_name_is_not_recognized 5030
+/// @def _clwarn_msvc_pragma_warning_pop_likely_mismatch_popping_warning_state_pushed_in_different_file
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5031`.
 #define _clwarn_msvc_pragma_warning_pop_likely_mismatch_popping_warning_state_pushed_in_different_file 5031
+/// @def _clwarn_msvc_detected_pragma_warning_push_with_no_corresponding_pragma_warning_pop
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5032`.
 #define _clwarn_msvc_detected_pragma_warning_push_with_no_corresponding_pragma_warning_pop 5032
+/// @def _clwarn_msvc_storage_class_is_no_longer_a_supported_storage_class
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5033`.
 #define _clwarn_msvc_storage_class_is_no_longer_a_supported_storage_class 5033
+/// @def _clwarn_msvc_use_of_intrinsic_intrinsic_causes_function_function_name_to_be_compiled_as_guest_code
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5034`.
 #define _clwarn_msvc_use_of_intrinsic_intrinsic_causes_function_function_name_to_be_compiled_as_guest_code 5034
+/// @def _clwarn_msvc_use_of_feature_feature_causes_function_function_name_to_be_compiled_as_guest_code
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5035`.
 #define _clwarn_msvc_use_of_feature_feature_causes_function_function_name_to_be_compiled_as_guest_code 5035
+/// @def _clwarn_msvc_varargs_function_pointer_conversion_when_compiling_with_hybrid_x86arm64_from_type_type1_to_type_type2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5036`.
 #define _clwarn_msvc_varargs_function_pointer_conversion_when_compiling_with_hybrid_x86arm64_from_type_type1_to_type_type2 5036
+/// @def _clwarn_msvc_member_function_an_out_of_line_definition_of_a_member_of_a_class_template_cannot_have_default_arguments
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5037`.
 #define _clwarn_msvc_member_function_an_out_of_line_definition_of_a_member_of_a_class_template_cannot_have_default_arguments 5037
+/// @def _clwarn_msvc_data_member_member1_will_be_initialized_after_data_member_member2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5038`.
 #define _clwarn_msvc_data_member_member1_will_be_initialized_after_data_member_member2 5038
+/// @def _clwarn_msvc_5039
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5039`.
 #define _clwarn_msvc_5039 5039
+/// @def _clwarn_msvc_dynamic_exception_specifications_are_valid_only_in_c_14_and_earlier_treating_as_noexcept_false
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5040`.
 #define _clwarn_msvc_dynamic_exception_specifications_are_valid_only_in_c_14_and_earlier_treating_as_noexcept_false 5040
+/// @def _clwarn_msvc_definition_out_of_line_definition_for_constexpr_static_data_member_is_not_needed_and_is_deprecated_in_c_17
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5041`.
 #define _clwarn_msvc_definition_out_of_line_definition_for_constexpr_static_data_member_is_not_needed_and_is_deprecated_in_c_17 5041
+/// @def _clwarn_msvc_5042
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5042`.
 #define _clwarn_msvc_5042 5042
+/// @def _clwarn_msvc_specification_exception_specification_does_not_match_previous_declaration
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5043`.
 #define _clwarn_msvc_specification_exception_specification_does_not_match_previous_declaration 5043
+/// @def _clwarn_msvc_an_argument_to_command_line_option_option_name_points_to_a_path_path_name_that_does_not_exist
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5044`.
 #define _clwarn_msvc_an_argument_to_command_line_option_option_name_points_to_a_path_path_name_that_does_not_exist 5044
+/// @def _clwarn_msvc_compiler_will_insert_spectre_mitigation_for_memory_load_if_qspectre_switch_specified
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5045`.
 #define _clwarn_msvc_compiler_will_insert_spectre_mitigation_for_memory_load_if_qspectre_switch_specified 5045
+/// @def _clwarn_msvc_function_symbol_involving_type_with_internal_linkage_not_defined
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5046`.
 #define _clwarn_msvc_function_symbol_involving_type_with_internal_linkage_not_defined 5046
+/// @def _clwarn_msvc_use_of_nonstandard_keyword_with_modules_is_not_supported
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5047`.
 #define _clwarn_msvc_use_of_nonstandard_keyword_with_modules_is_not_supported 5047
+/// @def _clwarn_msvc_use_of_macro_macroname_may_result_in_non_deterministic_output
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5048`.
 #define _clwarn_msvc_use_of_macro_macroname_may_result_in_non_deterministic_output 5048
+/// @def _clwarn_msvc_string_embedding_a_full_path_may_result_in_machine_dependent_output
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5049`.
 #define _clwarn_msvc_string_embedding_a_full_path_may_result_in_machine_dependent_output 5049
+/// @def _clwarn_msvc_possible_incompatible_environment_while_importing_module_module_name_issue
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5050`.
 #define _clwarn_msvc_possible_incompatible_environment_while_importing_module_module_name_issue 5050
+/// @def _clwarn_msvc_attribute_attribute_name_requires_at_least_standard_version_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5051`.
 #define _clwarn_msvc_attribute_attribute_name_requires_at_least_standard_version_ignored 5051
+/// @def _clwarn_msvc_keyword_keyword_name_was_introduced_in_c_version_and_requires_use_of_the_switch_command_line_option
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5052`.
 #define _clwarn_msvc_keyword_keyword_name_was_introduced_in_c_version_and_requires_use_of_the_switch_command_line_option 5052
+/// @def _clwarn_msvc_support_for_explicit_lt_expr_gt_in_c_17_and_earlier_is_a_vendor_extension
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5053`.
 #define _clwarn_msvc_support_for_explicit_lt_expr_gt_in_c_17_and_earlier_is_a_vendor_extension 5053
+/// @def _clwarn_msvc_operator_operator_name_deprecated_between_enumerations_of_different_types
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5054`.
 #define _clwarn_msvc_operator_operator_name_deprecated_between_enumerations_of_different_types 5054
+/// @def _clwarn_msvc_operator_operator_name_deprecated_between_enumerations_and_floating_point_types
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5055`.
 #define _clwarn_msvc_operator_operator_name_deprecated_between_enumerations_and_floating_point_types 5055
+/// @def _clwarn_msvc_operator_operator_name_deprecated_for_array_types
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5056`.
 #define _clwarn_msvc_operator_operator_name_deprecated_for_array_types 5056
+/// @def _clwarn_msvc_header_unit_reference_to_name_already_exists_ignoring_header_unit_header_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5057`.
 #define _clwarn_msvc_header_unit_reference_to_name_already_exists_ignoring_header_unit_header_name 5057
+/// @def _clwarn_msvc_file_system_error_cannot_find_header_file_file_name_for_header_unit_unit_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5058`.
 #define _clwarn_msvc_file_system_error_cannot_find_header_file_file_name_for_header_unit_unit_name 5058
+/// @def _clwarn_msvc_runtime_checks_and_address_sanitizer_is_not_currently_supported_disabling_runtime_checks
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5059`.
 #define _clwarn_msvc_runtime_checks_and_address_sanitizer_is_not_currently_supported_disabling_runtime_checks 5059
+/// @def _clwarn_msvc_qpar_and_address_sanitizer_not_currently_supported_disabling_auto_parallelization
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5060`.
 #define _clwarn_msvc_qpar_and_address_sanitizer_not_currently_supported_disabling_auto_parallelization 5060
+/// @def _clwarn_msvc_the_use_of_a_comma_operator_as_a_subscript_expression_has_been_deprecated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5061`.
 #define _clwarn_msvc_the_use_of_a_comma_operator_as_a_subscript_expression_has_been_deprecated 5061
+/// @def _clwarn_msvc_enum_direct_list_initialization_between_type_1_and_type_2_is_no_longer_supported
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5062`.
 #define _clwarn_msvc_enum_direct_list_initialization_between_type_1_and_type_2_is_no_longer_supported 5062
+/// @def _clwarn_msvc_std_is_constant_evaluated_always_evaluates_to_true_in_manifestly_constant_evaluated_expressions
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5063`.
 #define _clwarn_msvc_std_is_constant_evaluated_always_evaluates_to_true_in_manifestly_constant_evaluated_expressions 5063
+/// @def _clwarn_msvc_asan_enabled_without_debug_information_emission_enable_debug_info_for_better_asan_error_reporting
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5072`.
 #define _clwarn_msvc_asan_enabled_without_debug_information_emission_enable_debug_info_for_better_asan_error_reporting 5072
+/// @def _clwarn_msvc_secure_hotpatch_is_not_supported_with_genprofile_fastgenprofile_or_ltcg_pgi_disabling_secure_hotpatch
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5081`.
 #define _clwarn_msvc_secure_hotpatch_is_not_supported_with_genprofile_fastgenprofile_or_ltcg_pgi_disabling_secure_hotpatch 5081
+/// @def _clwarn_msvc_va_args_is_reserved_for_use_in_variadic_macros
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5100`.
 #define _clwarn_msvc_va_args_is_reserved_for_use_in_variadic_macros 5100
+/// @def _clwarn_msvc_use_of_preprocessor_directive_in_function_like_macro_argument_list_is_undefined_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5101`.
 #define _clwarn_msvc_use_of_preprocessor_directive_in_function_like_macro_argument_list_is_undefined_behavior 5101
+/// @def _clwarn_msvc_ignoring_invalid_command_line_macro_definition_value
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5102`.
 #define _clwarn_msvc_ignoring_invalid_command_line_macro_definition_value 5102
+/// @def _clwarn_msvc_pasting_token1_and_token2_does_not_result_in_a_valid_preprocessing_token
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5103`.
 #define _clwarn_msvc_pasting_token1_and_token2_does_not_result_in_a_valid_preprocessing_token 5103
+/// @def _clwarn_msvc_found_string1_string2_in_macro_replacement_list_did_you_mean_string1_string2
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5104`.
 #define _clwarn_msvc_found_string1_string2_in_macro_replacement_list_did_you_mean_string1_string2 5104
+/// @def _clwarn_msvc_macro_expansion_producing_defined_has_undefined_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5105`.
 #define _clwarn_msvc_macro_expansion_producing_defined_has_undefined_behavior 5105
+/// @def _clwarn_msvc_macro_redefined_with_different_parameter_names
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5106`.
 #define _clwarn_msvc_macro_redefined_with_different_parameter_names 5106
+/// @def _clwarn_msvc_missing_terminating_char_character
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5107`.
 #define _clwarn_msvc_missing_terminating_char_character 5107
+/// @def _clwarn_msvc_va_opt_is_reserved_for_use_in_variadic_macros
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5108`.
 #define _clwarn_msvc_va_opt_is_reserved_for_use_in_variadic_macros 5108
+/// @def _clwarn_msvc_va_opt_use_in_macro_requires_zc_preprocessor
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5109`.
 #define _clwarn_msvc_va_opt_use_in_macro_requires_zc_preprocessor 5109
+/// @def _clwarn_msvc_va_opt_is_an_extension_prior_to_c_20_or_c23
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5110`.
 #define _clwarn_msvc_va_opt_is_an_extension_prior_to_c_20_or_c23 5110
+/// @def _clwarn_msvc_feature_feature_name_requires_compiler_flag_option_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5200`.
 #define _clwarn_msvc_feature_feature_name_requires_compiler_flag_option_name 5200
+/// @def _clwarn_msvc_5201
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5201`.
 #define _clwarn_msvc_5201 5201
+/// @def _clwarn_msvc_a_global_module_fragment_can_only_contain_preprocessor_directives
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5202`.
 #define _clwarn_msvc_a_global_module_fragment_can_only_contain_preprocessor_directives 5202
+/// @def _clwarn_msvc_a_parenthesized_declarator_name_after_explicit_will_be_considered_an_explicit_specifier_in_c_20
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5203`.
 #define _clwarn_msvc_a_parenthesized_declarator_name_after_explicit_will_be_considered_an_explicit_specifier_in_c_20 5203
+/// @def _clwarn_msvc_5204
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5204`.
 #define _clwarn_msvc_5204 5204
+/// @def _clwarn_msvc_delete_of_an_abstract_class_type_name_that_has_a_non_virtual_destructor_results_in_undefined_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5205`.
 #define _clwarn_msvc_delete_of_an_abstract_class_type_name_that_has_a_non_virtual_destructor_results_in_undefined_behavior 5205
+/// @def _clwarn_msvc_deduced_return_types_for_coroutines_is_a_non_standard_extension
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5206`.
 #define _clwarn_msvc_deduced_return_types_for_coroutines_is_a_non_standard_extension 5206
+/// @def _clwarn_msvc_5207
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5207`.
 #define _clwarn_msvc_5207 5207
+/// @def _clwarn_msvc_5208
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5208`.
 #define _clwarn_msvc_5208 5208
+/// @def _clwarn_msvc_the_c_20_syntax_for_an_init_capture_has_changed_to_amp_opt_identifier_initializer
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5209`.
 #define _clwarn_msvc_the_c_20_syntax_for_an_init_capture_has_changed_to_amp_opt_identifier_initializer 5209
+/// @def _clwarn_msvc_name_is_not_a_valid_header_unit_reference_ignoring
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5210`.
 #define _clwarn_msvc_name_is_not_a_valid_header_unit_reference_ignoring 5210
+/// @def _clwarn_msvc_name_is_not_a_valid_named_reference_treating_as_reference_to_file
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5212`.
 #define _clwarn_msvc_name_is_not_a_valid_named_reference_treating_as_reference_to_file 5212
+/// @def _clwarn_msvc_5213
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5213`.
 #define _clwarn_msvc_5213 5213
+/// @def _clwarn_msvc_applying_modifier_to_an_operand_with_a_volatile_qualified_type_is_deprecated_in_c_20
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5214`.
 #define _clwarn_msvc_applying_modifier_to_an_operand_with_a_volatile_qualified_type_is_deprecated_in_c_20 5214
+/// @def _clwarn_msvc_name_a_function_parameter_with_a_volatile_qualified_type_is_deprecated_in_c_20
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5215`.
 #define _clwarn_msvc_name_a_function_parameter_with_a_volatile_qualified_type_is_deprecated_in_c_20 5215
+/// @def _clwarn_msvc_name_a_volatile_qualified_return_type_is_deprecated_in_c_20
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5216`.
 #define _clwarn_msvc_name_a_volatile_qualified_return_type_is_deprecated_in_c_20 5216
+/// @def _clwarn_msvc_a_structured_binding_declaration_that_includes_volatile_is_deprecated_in_c_20
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5217`.
 #define _clwarn_msvc_a_structured_binding_declaration_that_includes_volatile_is_deprecated_in_c_20 5217
+/// @def _clwarn_msvc_5218
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5218`.
 #define _clwarn_msvc_5218 5218
+/// @def _clwarn_msvc_implicit_conversion_from_type_1_to_type_2_possible_loss_of_data
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5219`.
 #define _clwarn_msvc_implicit_conversion_from_type_1_to_type_2_possible_loss_of_data 5219
+/// @def _clwarn_msvc_5220
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5220`.
 #define _clwarn_msvc_5220 5220
+/// @def _clwarn_msvc_xfg_rename_is_deprecated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5221`.
 #define _clwarn_msvc_xfg_rename_is_deprecated 5221
+/// @def _clwarn_msvc_attribute_name_all_unscoped_attribute_names_are_reserved_for_future_standardization
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5222`.
 #define _clwarn_msvc_attribute_name_all_unscoped_attribute_names_are_reserved_for_future_standardization 5222
+/// @def _clwarn_msvc_all_attribute_names_in_the_attribute_namespace_msvc_are_reserved_for_the_implementation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5223`.
 #define _clwarn_msvc_all_attribute_names_in_the_attribute_namespace_msvc_are_reserved_for_the_implementation 5223
+/// @def _clwarn_msvc_all_attribute_names_in_the_attribute_namespace_namespace_name_are_reserved_for_future_standardization
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5224`.
 #define _clwarn_msvc_all_attribute_names_in_the_attribute_namespace_namespace_name_are_reserved_for_future_standardization 5224
+/// @def _clwarn_msvc_symbol_exported_inline_function_defined_in_a_private_module_fragment_is_a_non_standard_extension
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5225`.
 #define _clwarn_msvc_symbol_exported_inline_function_defined_in_a_private_module_fragment_is_a_non_standard_extension 5225
+/// @def _clwarn_msvc_symbol_exported_template_defined_in_private_module_fragment_has_no_reachable_instantiation
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5226`.
 #define _clwarn_msvc_symbol_exported_template_defined_in_private_module_fragment_has_no_reachable_instantiation 5226
+/// @def _clwarn_msvc_nonstandard_extension_resolved_symbol_to_value_which_is_not_visible_with_permissive_on
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5227`.
 #define _clwarn_msvc_nonstandard_extension_resolved_symbol_to_value_which_is_not_visible_with_permissive_on 5227
+/// @def _clwarn_msvc_5228
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5228`.
 #define _clwarn_msvc_5228 5228
+/// @def _clwarn_msvc_5229
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5229`.
 #define _clwarn_msvc_5229 5229
+/// @def _clwarn_msvc_5230
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5230`.
 #define _clwarn_msvc_5230 5230
+/// @def _clwarn_msvc_the_expression_co_await_promise_final_suspend_must_be_non_throwing
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5231`.
 #define _clwarn_msvc_the_expression_co_await_promise_final_suspend_must_be_non_throwing 5231
+/// @def _clwarn_msvc_in_c_20_this_comparison_calls_name_recursively
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5232`.
 #define _clwarn_msvc_in_c_20_this_comparison_calls_name_recursively 5232
+/// @def _clwarn_msvc_explicit_lambda_capture_identifier_is_not_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5233`.
 #define _clwarn_msvc_explicit_lambda_capture_identifier_is_not_used 5233
+/// @def _clwarn_msvc_file_system_error_filename_is_not_a_valid_header_name_ignoring
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5234`.
 #define _clwarn_msvc_file_system_error_filename_is_not_a_valid_header_name_ignoring 5234
+/// @def _clwarn_msvc_json_parse_error_message_ignoring_filename
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5235`.
 #define _clwarn_msvc_json_parse_error_message_ignoring_filename 5235
+/// @def _clwarn_msvc_json_ill_formed_message_ignoring_filename
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5236`.
 #define _clwarn_msvc_json_ill_formed_message_ignoring_filename 5236
+/// @def _clwarn_msvc_cannot_resolve_header_unit_entry_name_to_a_header_file_in_filename_ignoring_entry
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5237`.
 #define _clwarn_msvc_cannot_resolve_header_unit_entry_name_to_a_header_file_in_filename_ignoring_entry 5237
+/// @def _clwarn_msvc_file_system_error_cannot_open_filename_for_reading_ignoring
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5238`.
 #define _clwarn_msvc_file_system_error_cannot_open_filename_for_reading_ignoring 5238
+/// @def _clwarn_msvc_5239
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5239`.
 #define _clwarn_msvc_5239 5239
+/// @def _clwarn_msvc_attribute_name_attribute_is_ignored_in_this_syntactic_position
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5240`.
 #define _clwarn_msvc_attribute_name_attribute_is_ignored_in_this_syntactic_position 5240
+/// @def _clwarn_msvc_exportheader_usage_to_lookup_header_name_is_deprecated_prefer_headername_name_value_filename
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5241`.
 #define _clwarn_msvc_exportheader_usage_to_lookup_header_name_is_deprecated_prefer_headername_name_value_filename 5241
+/// @def _clwarn_msvc_syntax_error_in_pragma_identifier
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5242`.
 #define _clwarn_msvc_syntax_error_in_pragma_identifier 5242
+/// @def _clwarn_msvc_5243
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5243`.
 #define _clwarn_msvc_5243 5243
+/// @def _clwarn_msvc_5244
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5244`.
 #define _clwarn_msvc_5244 5244
+/// @def _clwarn_msvc_function_unreferenced_function_with_internal_linkage_has_been_removed_5245
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5245`.
 #define _clwarn_msvc_function_unreferenced_function_with_internal_linkage_has_been_removed_5245 5245
+/// @def _clwarn_msvc_member_the_initialization_of_a_subobject_should_be_wrapped_in_braces
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5246`.
 #define _clwarn_msvc_member_the_initialization_of_a_subobject_should_be_wrapped_in_braces 5246
+/// @def _clwarn_msvc_5247
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5247`.
 #define _clwarn_msvc_5247 5247
+/// @def _clwarn_msvc_5248
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5248`.
 #define _clwarn_msvc_5248 5248
+/// @def _clwarn_msvc_5249
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5249`.
 #define _clwarn_msvc_5249 5249
+/// @def _clwarn_msvc_function_name_intrinsic_function_not_declared
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5250`.
 #define _clwarn_msvc_function_name_intrinsic_function_not_declared 5250
+/// @def _clwarn_msvc_the_value_of_pragma_pragma_name_changed_after_include_pragma_pragma_name_pop_missing_in_this_header
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5251`.
 #define _clwarn_msvc_the_value_of_pragma_pragma_name_changed_after_include_pragma_pragma_name_pop_missing_in_this_header 5251
+/// @def _clwarn_msvc_5252
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5252`.
 #define _clwarn_msvc_5252 5252
+/// @def _clwarn_msvc_a_non_local_lambda_cannot_have_a_capture_default
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5253`.
 #define _clwarn_msvc_a_non_local_lambda_cannot_have_a_capture_default 5253
+/// @def _clwarn_msvc_language_feature_terse_static_assert_requires_compiler_flag_std_c_17
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5254`.
 #define _clwarn_msvc_language_feature_terse_static_assert_requires_compiler_flag_std_c_17 5254
+/// @def _clwarn_msvc_unterminated_bidirectional_character_encountered_u_xxxx
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5255`.
 #define _clwarn_msvc_unterminated_bidirectional_character_encountered_u_xxxx 5255
+/// @def _clwarn_msvc_5256
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5256`.
 #define _clwarn_msvc_5256 5256
+/// @def _clwarn_msvc_enumeration_enumeration_was_previously_declared_without_a_fixed_underlying_type
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5257`.
 #define _clwarn_msvc_enumeration_enumeration_was_previously_declared_without_a_fixed_underlying_type 5257
+/// @def _clwarn_msvc_explicit_capture_of_symbol_is_not_required_for_this_use
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5258`.
 #define _clwarn_msvc_explicit_capture_of_symbol_is_not_required_for_this_use 5258
+/// @def _clwarn_msvc_specialized_type_explicit_specialization_requires_template_lt_gt
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5259`.
 #define _clwarn_msvc_specialized_type_explicit_specialization_requires_template_lt_gt 5259
+/// @def _clwarn_msvc_5260
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5260`.
 #define _clwarn_msvc_5260 5260
+/// @def _clwarn_msvc_no_integer_type_can_represent_all_enumerator_values_in_enumeration_enum_name
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5261`.
 #define _clwarn_msvc_no_integer_type_can_represent_all_enumerator_values_in_enumeration_enum_name 5261
+/// @def _clwarn_msvc_5262
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5262`.
 #define _clwarn_msvc_5262 5262
+/// @def _clwarn_msvc_calling_std_move_on_a_temporary_object_prevents_copy_elision
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5263`.
 #define _clwarn_msvc_calling_std_move_on_a_temporary_object_prevents_copy_elision 5263
+/// @def _clwarn_msvc_variable_name_const_variable_is_not_used
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5264`.
 #define _clwarn_msvc_variable_name_const_variable_is_not_used 5264
+/// @def _clwarn_msvc_cannot_open_search_path_path
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5265`.
 #define _clwarn_msvc_cannot_open_search_path_path 5265
+/// @def _clwarn_msvc_const_qualifier_on_return_type_has_no_effect
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5266`.
 #define _clwarn_msvc_const_qualifier_on_return_type_has_no_effect 5266
+/// @def _clwarn_msvc_5267
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5267`.
 #define _clwarn_msvc_5267 5267
+/// @def _clwarn_msvc_5268
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5268`.
 #define _clwarn_msvc_5268 5268
+/// @def _clwarn_msvc_5269
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5269`.
 #define _clwarn_msvc_5269 5269
+/// @def _clwarn_msvc_value_is_not_allowed_for_option_switch_name_allowed_values_are_value_list
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5270`.
 #define _clwarn_msvc_value_is_not_allowed_for_option_switch_name_allowed_values_are_value_list 5270
+/// @def _clwarn_msvc_5271
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5271`.
 #define _clwarn_msvc_5271 5271
+/// @def _clwarn_msvc_5272
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5272`.
 #define _clwarn_msvc_5272 5272
+/// @def _clwarn_msvc_behavior_change_alignas_on_anonymous_type_no_longer_ignored_promoted_members_will_align
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5273`.
 #define _clwarn_msvc_behavior_change_alignas_on_anonymous_type_no_longer_ignored_promoted_members_will_align 5273
+/// @def _clwarn_msvc_behavior_change_alignas_no_longer_applies_to_the_type_type_only_applies_to_declared_data_objects
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5274`.
 #define _clwarn_msvc_behavior_change_alignas_no_longer_applies_to_the_type_type_only_applies_to_declared_data_objects 5274
+/// @def _clwarn_msvc_assembly_name_being_imported_under_clr_does_not_contain_the_required_fundamental_types
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5275`.
 #define _clwarn_msvc_assembly_name_being_imported_under_clr_does_not_contain_the_required_fundamental_types 5275
+/// @def _clwarn_msvc_experimental_ifcdebugrecords_currently_requires_z7_to_be_enabled_please_recompile_with_z7_enabled
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5276`.
 #define _clwarn_msvc_experimental_ifcdebugrecords_currently_requires_z7_to_be_enabled_please_recompile_with_z7_enabled 5276
+/// @def _clwarn_msvc_type_trait_optimization_for_class_name_is_disabled
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5277`.
 #define _clwarn_msvc_type_trait_optimization_for_class_name_is_disabled 5277
+/// @def _clwarn_msvc_adding_a_specialization_for_type_has_undefined_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5278`.
 #define _clwarn_msvc_adding_a_specialization_for_type_has_undefined_behavior 5278
+/// @def _clwarn_msvc_a_lambda_declarator_without_a_parameter_list_requires_at_least_language_version
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5279`.
 #define _clwarn_msvc_a_lambda_declarator_without_a_parameter_list_requires_at_least_language_version 5279
+/// @def _clwarn_msvc_a_static_operator_operator_name_requires_at_least_language_version
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5280`.
 #define _clwarn_msvc_a_static_operator_operator_name_requires_at_least_language_version 5280
+/// @def _clwarn_msvc_a_static_lambda_requires_at_least_language_version
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5281`.
 #define _clwarn_msvc_a_static_lambda_requires_at_least_language_version 5281
+/// @def _clwarn_msvc_if_consteval_requires_at_least_language_version
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5282`.
 #define _clwarn_msvc_if_consteval_requires_at_least_language_version 5282
+/// @def _clwarn_msvc_an_attribute_in_this_position_requires_at_least_language_version
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5283`.
 #define _clwarn_msvc_an_attribute_in_this_position_requires_at_least_language_version 5283
+/// @def _clwarn_msvc_conversion_from_value_value_of_type_type_1_to_type_2_requires_a_narrowing_conversion
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5284`.
 #define _clwarn_msvc_conversion_from_value_value_of_type_type_1_to_type_2_requires_a_narrowing_conversion 5284
+/// @def _clwarn_msvc_cannot_declare_a_specialization_for_template_name_template_argument
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5285`.
 #define _clwarn_msvc_cannot_declare_a_specialization_for_template_name_template_argument 5285
+/// @def _clwarn_msvc_implicit_conversion_from_enum_type_type_1_to_enum_type_type_2_use_an_explicit_cast_to_silence_this_warning
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5286`.
 #define _clwarn_msvc_implicit_conversion_from_enum_type_type_1_to_enum_type_type_2_use_an_explicit_cast_to_silence_this_warning 5286
+/// @def _clwarn_msvc_operands_are_different_enum_types_type_1_and_type_2_use_an_explicit_cast_to_silence_this_warning
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5287`.
 #define _clwarn_msvc_operands_are_different_enum_types_type_1_and_type_2_use_an_explicit_cast_to_silence_this_warning 5287
+/// @def _clwarn_msvc_pragma_omp_atomic_clause_expression_mismatch_for_lvalue_being_updated
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5300`.
 #define _clwarn_msvc_pragma_omp_atomic_clause_expression_mismatch_for_lvalue_being_updated 5300
+/// @def _clwarn_msvc_pragma_omp_for_loop_index_increases_while_loop_condition_uses_comparison_non_terminating_loop
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5301`.
 #define _clwarn_msvc_pragma_omp_for_loop_index_increases_while_loop_condition_uses_comparison_non_terminating_loop 5301
+/// @def _clwarn_msvc_pragma_omp_for_loop_index_decreases_while_loop_condition_uses_comparison_non_terminating_loop
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5302`.
 #define _clwarn_msvc_pragma_omp_for_loop_index_decreases_while_loop_condition_uses_comparison_non_terminating_loop 5302
+/// @def _clwarn_msvc_function_marked_with_msvc_intrinsic_did_not_result_in_a_no_op_cast
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5303`.
 #define _clwarn_msvc_function_marked_with_msvc_intrinsic_did_not_result_in_a_no_op_cast 5303
+/// @def _clwarn_msvc_5304
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5304`.
 #define _clwarn_msvc_5304 5304
+/// @def _clwarn_msvc_name_an_explicit_instantiation_declaration_that_follows_an_explicit_instantiation_definition_is_ignored
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5305`.
 #define _clwarn_msvc_name_an_explicit_instantiation_declaration_that_follows_an_explicit_instantiation_definition_is_ignored 5305
+/// @def _clwarn_msvc_5306
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5306`.
 #define _clwarn_msvc_5306 5306
+/// @def _clwarn_msvc_5307
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5307`.
 #define _clwarn_msvc_5307 5307
+/// @def _clwarn_msvc_modifying_reserved_macro_name_macro_name_may_cause_undefined_behavior
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5308`.
 #define _clwarn_msvc_modifying_reserved_macro_name_macro_name_may_cause_undefined_behavior 5308
+/// @def _clwarn_msvc_literal_suffix_name_requires_at_least_language_version
+/// @ingroup compiler_warnings
+/// @brief MSVC warning code for `C5309`.
 #define _clwarn_msvc_literal_suffix_name_requires_at_least_language_version 5309
 
 /// @}

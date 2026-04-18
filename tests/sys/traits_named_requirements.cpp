@@ -1,8 +1,12 @@
 #include <memory>
 
 // NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+#include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
 #include <catch2/catch_all.hpp>
+
+_nowarn_end_gcc();
 
 #include <module/sys>
 

@@ -7,6 +7,7 @@
 
 namespace sys
 {
+    /// @ingroup sys_containers
     /// @brief A queue that stores elements in-place.
     /// @tparam T The type of elements to store.
     /// @tparam Capacity The maximum number of elements that can be stored in the queue.
@@ -18,6 +19,7 @@ namespace sys
         size_t _begin = 0, _end = 0;
         bool full = false;
     public:
+        /// @ingroup sys_containers
         /// @brief Iterator for an `inplace_queue`.
         struct iterator
         {

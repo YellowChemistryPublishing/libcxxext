@@ -2,15 +2,18 @@
 
 /// @file
 
-/// @def _libcxxext_have_cxx_exceptions
+/// @def _have_cxx_exceptions
+/// @ingroup sys
 /// @brief Whether the compiler is setup to provide runtime support for C++ exceptions.
-#define _libcxxext_have_cxx_exceptions 0
+#define _have_cxx_exceptions 0
 #if (defined(__EXCEPTIONS) && __EXCEPTIONS) || (defined(_CPPUNWIND) && _CPPUNWIND)
-#undef _libcxxext_have_cxx_exceptions
-#define _libcxxext_have_cxx_exceptions 1
+#undef _have_cxx_exceptions
+#define _have_cxx_exceptions 1
 #endif
 
 /// @defgroup compiler_detection Compiler Detection Constants
+/// @ingroup tags
+/// @ingroup sys
 /// @brief `#ifdef`able constants for compiler detection.
 /// @{
 
@@ -42,6 +45,8 @@
 /// @endcond
 
 /// @defgroup isa_detection Instruction Set Architecture Detection Constants
+/// @ingroup tags
+/// @ingroup sys
 /// @brief `#ifdef`able constants for executing ISA detection.
 /// @{
 
@@ -133,6 +138,8 @@
 /// @endcond
 
 /// @defgroup os_detection Operating System Detection Constants
+/// @ingroup tags
+/// @ingroup sys
 /// @brief `#ifdef`able constants for target operating system detection.
 /// @{
 

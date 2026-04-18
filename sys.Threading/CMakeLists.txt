@@ -4,18 +4,23 @@ if(NOT TARGET sys.Threading)
     set(CMAKE_POLICY_VERSION_MINIMUM 3.10)
     add_subdirectory(../tinycthread "${CMAKE_BINARY_DIR}/tinycthread" EXCLUDE_FROM_ALL)
 
-    target_link_libraries(libsyscor PRIVATE $<LINK_LIBRARY:WHOLE_ARCHIVE,tinycthread>)
+    if(CMAKE_CXX_COMPILER_LINKER_FRONTEND_VARIANT STREQUAL "GNU")
+        # Because `ld.lld` targeting `win32` doesn't actually support `--push/pop-state`.
+        target_link_libraries(libsyscor PRIVATE -Wl,--whole-archive tinycthread -Wl,--no-whole-archive)
+    else()
+        target_link_libraries(libsyscor PRIVATE $<LINK_LIBRARY:WHOLE_ARCHIVE,tinycthread>)
+    endif()
     target_include_directories(libsyscor INTERFACE $<TARGET_PROPERTY:tinycthread,INTERFACE_INCLUDE_DIRECTORIES>)
 
     file(GLOB SYS_THREAD_HEADERS CONFIGURE_DEPENDS "*.h")
 
-    add_library(sys.Threading ${LIBCXXEXT_LIBRARY_TYPE} src.cpp)
+    add_library(sys.Threading INTERFACE)
     target_libcxxext_common_config(sys.Threading)
     target_sources(sys.Threading PRIVATE
         FILE_SET HEADERS
         FILES ${SYS_THREAD_HEADERS} "${CMAKE_CURRENT_SOURCE_DIR}/module/sys.Threading"
     )
-    target_include_directories(sys.Threading PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+    target_include_directories(sys.Threading INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
     if(libcxxext_IS_TOP_LEVEL)
         generate_module_header(
             sys.Threading
@@ -26,12 +31,9 @@ if(NOT TARGET sys.Threading)
     endif()
     if(LIBCXXEXT_EXPORT_PCH)
         target_precompile_headers(sys.Threading INTERFACE ${SYS_THREAD_HEADERS})
-        target_link_libraries(sys.Threading PRIVATE sys.BuildSupport.stdc++inc)
     endif()
     target_link_libraries(sys.Threading
-        PRIVATE
-        sys.BuildSupport.CompilerOptions
-        PUBLIC
+        INTERFACE
         libsyscor
         sys
         $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>

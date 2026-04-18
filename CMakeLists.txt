@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.30)
 
-project(libcxxext VERSION 1.0.0)
+project(libcxxext VERSION 1.0.0 LANGUAGES C CXX)
 
 include(CMakeDependentOption)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

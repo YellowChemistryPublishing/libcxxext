@@ -193,6 +193,7 @@ def main(argv: List[str]) -> None:
 
                 namespace sys
                 {
+                    /// @ingroup sys_text
                     /// @brief Context for forward-looking casing rules.
                     struct forward_casing_context
                     {
@@ -200,6 +201,7 @@ def main(argv: List[str]) -> None:
                         bool after_soft_dotted : 1 = false;
                         bool after_i : 1 = false;
                     };
+                    /// @ingroup sys_text
                     /// @brief Context for precomputed lookahead casing rules.
                     struct lookahead_casing_context
                     {
@@ -223,6 +225,7 @@ def main(argv: List[str]) -> None:
                     dedent(
                         f"""\
                         /// @internal
+                        /// @ingroup sys_internal
                         constexpr bool {name}(const char32_t c) noexcept
                         {{
                             switch (c)
@@ -263,6 +266,7 @@ def main(argv: List[str]) -> None:
                     dedent(
                         f"""\
                         /// @internal
+                        /// @ingroup sys_internal
                         constexpr char32_t {name}(const char32_t c) noexcept
                         {{
                             switch (c)
@@ -324,7 +328,8 @@ def main(argv: List[str]) -> None:
                     dedent(
                         f"""\
                         /// @internal
-                        constexpr sz {name}(char32_t out[], const char32_t c, const std::u8string_view lang{context_params}, unsafe) noexcept
+                        /// @ingroup sys_internal
+                        constexpr sz {name}(char32_t out[], const char32_t c, const std::u8string_view lang{context_params}, decltype(unsafe)) noexcept
                         {{
                         """
                     ),

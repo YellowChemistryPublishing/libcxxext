@@ -1,6 +1,7 @@
 // NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)
 
 #include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 _nowarn_begin_conv_comp();
 _nowarn_begin_unreachable();
 
@@ -8,6 +9,8 @@ _nowarn_begin_unreachable();
 #include <rapidcheck.h>
 
 _nowarn_end_unreachable();
+_nowarn_end_conv_comp();
+_nowarn_end_gcc();
 
 #include <module/sys.Text>
 
@@ -30,8 +33,8 @@ TEST_CASE("UTF-32 -> UTF-8 -> UTF-32 is invariant.", "[fuzz][sys.Text][ch]")
             return;
 
         char8_t buf[4] {};
-        const sz written = sys::ch::write_codepoint(cp, buf, unsafe());
-        auto [readCp, readSz] = sys::ch::read_codepoint(std::span(buf, written), unsafe());
+        const sz written = sys::ch::write_codepoint(cp, buf, unsafe);
+        auto [readCp, readSz] = sys::ch::read_codepoint(std::span(buf, written), unsafe);
 
         RC_ASSERT(readCp == cp);
         RC_ASSERT(readSz == written);
@@ -46,8 +49,8 @@ TEST_CASE("UTF-32 -> UTF-16 -> UTF-32 is invariant.", "[fuzz][sys.Text][ch]")
             return;
 
         char16_t buf[2] {};
-        const sz written = sys::ch::write_codepoint(cp, buf, unsafe());
-        auto [readCp, readSz] = sys::ch::read_codepoint(std::span(buf, written), unsafe());
+        const sz written = sys::ch::write_codepoint(cp, buf, unsafe);
+        auto [readCp, readSz] = sys::ch::read_codepoint(std::span(buf, written), unsafe);
 
         RC_ASSERT(readCp == cp);
         RC_ASSERT(readSz == written);
@@ -64,7 +67,7 @@ TEST_CASE("Arbitrary UTF-8 sequence decode never crashes.", "[fuzz][sys.Text][ch
         const char8_t* current = ptr;
         while (current < end)
         {
-            const auto [cp, sz] = sys::ch::read_codepoint(std::span(current, end), unsafe());
+            const auto [cp, sz] = sys::ch::read_codepoint(std::span(current, end), unsafe);
             RC_ASSERT(sz > 0_uz);
             RC_ASSERT((current + sz <= end));
             current += sz;
@@ -81,7 +84,7 @@ TEST_CASE("Arbitrary UTF-16 sequence decode never crashes.", "[fuzz][sys.Text][c
         const char16_t* current = ptr;
         while (current < end)
         {
-            const auto [cp, sz] = sys::ch::read_codepoint(std::span(current, end), unsafe());
+            const auto [cp, sz] = sys::ch::read_codepoint(std::span(current, end), unsafe);
             RC_ASSERT(sz > 0_uz);
             RC_ASSERT((current + sz <= end));
             current += sz;

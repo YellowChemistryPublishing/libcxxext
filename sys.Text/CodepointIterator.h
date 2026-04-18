@@ -7,11 +7,13 @@
 #include <string_view>
 
 #include <Char.h>
+#include <LanguageSupport.h>
 #include <Numeric.h>
 #include <meta/Builtin.h>
 
 namespace sys
 {
+    /// @ingroup sys_text
     /// @brief UTF-32 codepoint view iterator for a unicode string.
     template <ICharacter T>
     struct codepoint_iter final
@@ -35,7 +37,7 @@ namespace sys
         /// @brief Codepoint value for current position.
         constexpr char32_t operator*() noexcept
         {
-            const auto [c, size] = ch::read_codepoint(std::span(this->cur, this->end), unsafe());
+            const auto [c, size] = ch::read_codepoint(std::span(this->cur, this->end), unsafe);
             this->cp_size = ssz(size);
             return c;
         }
@@ -47,7 +49,7 @@ namespace sys
         constexpr codepoint_iter& operator++() noexcept
         {
             if (!this->cp_size)
-                this->cp_size = ssz(ch::read_codepoint(std::span(this->cur, this->end), unsafe()).size_bytes);
+                this->cp_size = ssz(ch::read_codepoint(std::span(this->cur, this->end), unsafe).size_bytes);
             this->cur += this->cp_size;
             this->cp_size = 0_z;
             return *this;
@@ -60,6 +62,7 @@ namespace sys
         }
     };
 
+    /// @ingroup sys_text
     /// @brief UTF-32 codepoint view for a unicode string.
     template <ICharacter T>
     struct codepoint_view final

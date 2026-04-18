@@ -11,6 +11,7 @@
 
 namespace sys::meta
 {
+    /// @ingroup sys
     /// @brief Metadata for parameter pack `Pack...`.
     template <typename... Pack>
     struct /* [[sys::static]] */ parameter_pack final : meta_type
@@ -28,6 +29,7 @@ namespace sys::meta
         }
     };
 
+    /// @ingroup sys
     /// @brief Metadata for some type.
     template <typename T>
     struct /* [[sys::static]] */ type final : meta_type
@@ -277,6 +279,7 @@ namespace sys::meta
         }
     };
 
+    /// @ingroup sys
     /// @brief Obtain the type `T`, inherited with the `cv` qualifiers of a reference-stripped `With`.
     template <typename T, typename With>
     using replace_cv = std::conditional_t<

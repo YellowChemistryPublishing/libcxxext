@@ -7,6 +7,7 @@
 
 namespace sys
 {
+    /// @ingroup sys_containers
     /// @brief An in-place set of atomic values that can be exchanged.
     /// @tparam T Type of value to store.
     /// @tparam Capacity Maximum number of values that can be stored.

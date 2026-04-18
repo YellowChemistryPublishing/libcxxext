@@ -3,6 +3,7 @@
 // NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 
 #include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 _nowarn_begin_conv_comp();
 _nowarn_begin_unreachable();
 
@@ -11,6 +12,7 @@ _nowarn_begin_unreachable();
 
 _nowarn_end_unreachable();
 _nowarn_end_conv_comp();
+_nowarn_end_gcc();
 
 #include <module/sys>
 #include <module/sys.Text>

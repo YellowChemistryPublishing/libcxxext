@@ -4,13 +4,13 @@
 
 namespace sys::meta
 {
-    /// @internal
+    /// @ingroup sys
     /// @brief Shared attributes for all meta types.
     struct /* [[sys::static]] */ meta_type
     {
         meta_type() = delete;
     };
-    /// @internal
+    /// @ingroup sys
     /// @brief Metadata validity property.
     template <bool Value>
     struct /* [[sys::static]] */ is_valid_prop : meta_type

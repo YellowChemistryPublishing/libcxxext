@@ -5,8 +5,12 @@
 #include <vector>
 
 // NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+#include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
 #include <catch2/catch_all.hpp>
+
+_nowarn_end_gcc();
 
 #include <module/sys>
 #include <module/sys.Threading>
@@ -90,7 +94,7 @@ TEST_CASE("Once actually guards under contention.", "[sys.Threading][once]")
                 ++runCount;
             });
             CHECK(o.is_completed());
-        }).move());
+        }).expect());
     }
 
     while (readyCount.load(std::memory_order_acquire) != numThreads)
@@ -117,7 +121,7 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
             while (!done.test(std::memory_order_acquire))
                 sys::thread_yield();
         });
-    }).move();
+    }).expect();
     while (!started.test(std::memory_order_acquire))
         sys::thread_yield();
 
@@ -130,7 +134,7 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
         o.wait(); // Should return immediately.
         waitFinished.test_and_set(std::memory_order_release);
         CHECK(o.is_completed());
-    }).move();
+    }).expect();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
     CHECK_FALSE(waitFinished.test(std::memory_order_acquire));
@@ -156,24 +160,24 @@ TEST_CASE("Once correctly handles `sys::result<...>` return types.", "[sys.Threa
     };
 
     auto res1 = o.call_once(func, false);
-    CHECK_FALSE(res1);
-    CHECK(res1.err() == 42_i32);
+    i32 err = res1.expect_err();
+    CHECK(err == 42_i32);
     CHECK_FALSE(o.is_completed());
     CHECK(count == 1_i32);
 
     auto res2 = o.call_once(func, false);
-    CHECK_FALSE(res2);
-    CHECK(res2.err() == 42_i32);
+    err = res2.expect_err();
+    CHECK(err == 42_i32);
     CHECK_FALSE(o.is_completed());
     CHECK(count == 2_i32);
 
     auto res3 = o.call_once(func, true);
-    CHECK(res3);
+    res3.expect();
     CHECK(o.is_completed());
     CHECK(count == 3_i32);
 
     auto res4 = o.call_once(func, false);
-    CHECK(res4);
+    res4.expect();
     CHECK(o.is_completed());
     CHECK(count == 3_i32);
 }

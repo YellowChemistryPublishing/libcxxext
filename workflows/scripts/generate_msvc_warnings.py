@@ -112,7 +112,16 @@ def main() -> None:
             macro_kvs.append((wid, macro_name))
 
         for wid, mname in sorted(macro_kvs):
-            f.write(f"#define {mname} {wid}\n")
+            f.write(
+                dedent(
+                    f"""\
+                    /// @def {mname}
+                    /// @ingroup compiler_warnings
+                    /// @brief MSVC warning code for `C{wid}`.
+                    #define {mname} {wid}
+                    """
+                )
+            )
 
         f.write(
             dedent(

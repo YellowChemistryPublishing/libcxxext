@@ -11,6 +11,7 @@
 
 namespace sys
 {
+    /// @ingroup sys
     /// @brief Exact-value cast `From` to `To`, or error if the value is out of range.
     template <std::integral To, std::integral From>
     /* NOLINT(misc-use-internal-linkage) */ constexpr result<To> bnumeric_cast(From value) noexcept
@@ -21,12 +22,14 @@ namespace sys
             return To(value);
     }
 
+    /// @ingroup sys
     /// @brief Returns an opinionated sentinel value for `T`.
     template <sys::IBuiltinFloatingPoint T>
     /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel() noexcept
     {
         return std::numeric_limits<T>::quiet_NaN();
     }
+    /// @ingroup sys
     /// @brief Returns an opinionated sentinel value for `T`.
     template <sys::ICharacter T>
     /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel() noexcept

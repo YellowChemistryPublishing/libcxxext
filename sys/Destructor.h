@@ -9,11 +9,12 @@
 
 namespace sys
 {
+    /// @ingroup sys
     /// @brief Wrapper for `noexcept` cleanup function.
     /// @note Pass `byref`.
     template <typename Func>
     requires std::is_nothrow_invocable_v<Func&> && std::is_nothrow_move_constructible_v<Func> && std::is_nothrow_destructible_v<Func>
-    struct destructor final
+    struct [[clang::scoped_lockable]] destructor final
     {
         /// @brief Construct with a cleanup function.
         /* NOLINT(hicpp-explicit-conversions) */ destructor(Func&& func) noexcept(noexcept(Func(std::move(func)))) : func(std::move(func)) { }
@@ -30,11 +31,12 @@ namespace sys
     template <typename Func>
     destructor(Func&&) -> destructor<std::remove_reference_t<Func>>;
 
+    /// @ingroup sys
     /// @brief Moveable, no-op-able, wrapper for `noexcept` cleanup function.
     /// @note Pass `byref`.
     template <typename Func>
     requires std::is_nothrow_invocable_v<Func&> && std::is_nothrow_move_constructible_v<Func> && std::is_nothrow_destructible_v<Func>
-    struct optional_destructor final
+    struct [[clang::scoped_lockable]] optional_destructor final
     {
         /// @brief Construct with a cleanup function.
         /* NOLINT(hicpp-explicit-conversions) */ optional_destructor(Func&& func) noexcept(noexcept(Func(std::move(func)))) : func(std::move(func)) { }
@@ -75,7 +77,7 @@ namespace sys
 
         /// @brief Mark this `sys::destructor<...>` as no-op.
         /// @warning `unsafe` because you may only call this once.
-        void release(unsafe) noexcept(noexcept(this->func.~Func()))
+        void release(decltype(unsafe)) noexcept(noexcept(this->func.~Func()))
         {
             this->func.~Func();
             this->execute = false;

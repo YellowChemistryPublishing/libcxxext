@@ -10,42 +10,42 @@
 
 namespace sys::meta
 {
-    /// @internal
+    /// @ingroup sys
     /// @brief Metadata has `const` attribute.
     template <bool Value>
     struct /* [[sys::static]] */ is_const_prop : meta_type
     {
         static consteval bool is_const() { return Value; }
     };
-    /// @internal
+    /// @ingroup sys
     /// @brief Metadata has `volatile` attribute.
     template <bool Value>
     struct /* [[sys::static]] */ is_volatile_prop : meta_type
     {
         static consteval bool is_volatile() { return Value; }
     };
-    /// @internal
+    /// @ingroup sys
     /// @brief Metadata is lvalue reference attribute.
     template <bool Value>
     struct /* [[sys::static]] */ is_lvalue_ref_prop : meta_type
     {
         static consteval bool is_lvalue_ref() { return Value; }
     };
-    /// @internal
+    /// @ingroup sys
     /// @brief Metadata is rvalue reference attribute.
     template <bool Value>
     struct /* [[sys::static]] */ is_rvalue_ref_prop : meta_type
     {
         static consteval bool is_rvalue_ref() { return Value; }
     };
-    /// @internal
+    /// @ingroup sys
     /// @brief Metadata has `noexcept` attribute.
     template <bool Value>
     struct /* [[sys::static]] */ is_noexcept_prop : meta_type
     {
         static consteval bool is_noexcept() { return Value; }
     };
-    /// @internal
+    /// @ingroup sys
     /// @brief Metadata is member function attribute.
     template <bool Value>
     struct /* [[sys::static]] */ is_member_func_prop : meta_type
@@ -53,6 +53,7 @@ namespace sys::meta
         static consteval bool is_member_func() { return Value; }
     };
 
+    /// @ingroup sys
     /// @brief Metadata for some function signature `T`.
     template <typename T = void, typename... Args>
     struct /* [[sys::static]] */ function_signature : is_valid_prop<false>,
@@ -236,6 +237,7 @@ namespace sys::meta
 
 namespace sys
 {
+    /// @ingroup sys
     /// @brief Whether `Functor` represents a function with signature `Signature`.
     template <typename Functor, typename Signature> // i.e. void(int, int)
     concept IFunc = meta::function_signature<Signature>::template is_signature_of<Functor>();

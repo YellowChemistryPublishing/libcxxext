@@ -7,6 +7,7 @@
 
 namespace sys
 {
+    /// @ingroup sys_containers
     /// @brief Inplace string of fixed capacity.
     template <size_t Capacity, typename CharType = char>
     class inplace_string

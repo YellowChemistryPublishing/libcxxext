@@ -26,6 +26,7 @@ namespace sys
 {
     class thread;
 
+    /// @ingroup sys_threading
     /// @brief Opaque, non-owning identifier for a thread, or `nullptr`.
     /// @details
     /// Implements `sys::INothrowCopyConstructible`, `sys::INothrowMoveConstructible`, `sys::INothrowCopyAssignable`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`,
@@ -40,7 +41,7 @@ namespace sys
         thrd_t th {};
 
         /// @warning `unsafe` because `th` must be initialized and running, or empty.
-        thread_id(const thrd_t th, unsafe) noexcept : th(th) { }
+        thread_id(const thrd_t th, decltype(unsafe)) noexcept : th(th) { }
     public:
         /// @brief Construct an empty thread id.
         /* NOLINT(hicpp-explicit-conversions) */ thread_id(std::nullptr_t) noexcept { }
@@ -64,6 +65,7 @@ namespace sys
         friend class sys::thread;
     };
 
+    /// @ingroup sys_threading
     /// @brief Nullable-value specialization for `sys::result<thread_id, void>`.
     /// @details
     /// Implements `sys::INothrowCopyConstructible`, `sys::INothrowMoveConstructible`, `sys::INothrowCopyAssignable`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`,
@@ -82,6 +84,7 @@ namespace sys
     class managed_thread;
     thread thread_current() noexcept;
 
+    /// @ingroup sys_threading
     /// @brief Encapsulates the information about a running thread, or `nullptr`.
     /// @details
     /// Implements `sys::INothrowMoveConstructible`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`, `sys::IBooleanTestable`, `sys::INothrowEqualityComparable`,
@@ -95,7 +98,7 @@ namespace sys
         thrd_t th {};
 
         /// @warning `unsafe` because `th` must be initialized and running, or empty.
-        thread(const thrd_t th, unsafe) noexcept : th(th) { }
+        thread(const thrd_t th, decltype(unsafe)) noexcept : th(th) { }
     public:
         /// @brief Construct an empty thread handle.
         /* NOLINT(hicpp-explicit-conversions) */ thread(std::nullptr_t) noexcept { }
@@ -113,7 +116,7 @@ namespace sys
         /// @brief Whether this thread is valid (i.e. non-empty).
         [[nodiscard]] explicit operator bool() const noexcept { return this->th != thrd_t {}; }
         /// @brief Obtain the id of this thread.
-        [[nodiscard]] thread_id id() const noexcept { return { this->th, unsafe() }; }
+        [[nodiscard]] thread_id id() const noexcept { return { this->th, unsafe }; }
 
         friend thread sys::thread_current() noexcept;
         friend void swap(thread& a, thread& b) noexcept { std::swap(a.th, b.th); }
@@ -121,12 +124,15 @@ namespace sys
         friend class sys::managed_thread;
     };
 
+    /// @ingroup sys_threading
     /// @brief Obtains a handle to the current thread.
-    [[nodiscard]] inline thread thread_current() noexcept { return { thrd_current(), unsafe() }; }
+    [[nodiscard]] inline thread thread_current() noexcept { return { thrd_current(), unsafe }; }
 
+    /// @ingroup sys_threading
     /// @brief Yields the current thread.
     inline void thread_yield() noexcept { thrd_yield(); }
 
+    /// @ingroup sys_threading
     /// @brief A spun-off thread lifetime that is joined upon destruction.
     /// @details
     /// Implements `sys::INothrowMoveConstructible`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`, `sys::IBooleanTestable`.
@@ -148,7 +154,7 @@ namespace sys
         thrd_t th {};
 
         /// @warning `unsafe` because `th` must be initialized and running.
-        managed_thread(const thrd_t th, unsafe) noexcept : th(th) { }
+        managed_thread(const thrd_t th, decltype(unsafe)) noexcept : th(th) { }
     public:
         /// @brief Construct an empty managed thread.
         /* NOLINT(hicpp-explicit-conversions) */ managed_thread(std::nullptr_t) noexcept { }
@@ -226,8 +232,8 @@ namespace sys
                 return threading_error::init_failed;
             _nowarn_end_msvc();
 
-            releaseFunc.release(unsafe());
-            return managed_thread(th, unsafe());
+            releaseFunc.release(unsafe);
+            return managed_thread(th, unsafe);
         }
 
         /// @brief Whether this managed thread is valid (i.e. non-empty).
@@ -236,7 +242,7 @@ namespace sys
         [[nodiscard]] bool joinable() const noexcept { return this->th != thrd_t {} && !thrd_equal(this->th, thrd_current()); }
 
         /// @brief Obtain information about this thread.
-        [[nodiscard]] thread thread() const noexcept { return { this->th, unsafe() }; }
+        [[nodiscard]] thread thread() const noexcept { return { this->th, unsafe }; }
 
         /// @brief Block-and-wait for this thread to complete execution, and obtain its exit code.
         result<sys::integer<int>, threading_error> join() noexcept

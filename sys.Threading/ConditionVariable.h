@@ -3,6 +3,7 @@
 /// @file
 
 #define NOMINMAX 1 // NOLINT(readability-identifier-naming)
+#include <concepts>
 #include <tinycthread.h>
 #undef NOMINMAX // NOLINT(misc-include-cleaner): Spurious.
 #ifdef call_once
@@ -20,8 +21,9 @@ namespace sys
     template <bool>
     class ordinary_mutex;
 
+    /// @ingroup sys_threading
     /// @brief Condition variable threading primitive.
-    /// @details Implements `std::is_nothrow_default_constructible_v`, `std::is_nothrow_destructible_v`.
+    /// @details Implements `sys::INothrowDefaultConstructible` and `sys::INothrowDestructible`.
     /// @see
     /// For more information on condition variables, see
     /// [Rust Docs](https://doc.rust-lang.org/std/sync/struct.Condvar.html),
@@ -31,15 +33,13 @@ namespace sys
         cnd_t cond {};
         once o;
 
-        sys::result<void, threading_error> try_init() noexcept
+        sys::result<void> try_init() noexcept
         {
-            _retif(threading_error::init_failed,
-                   !this->o.call_once([&]() noexcept -> sys::result<void>
+            return this->o.call_once([&]() noexcept -> sys::result<void>
             {
                 _retif(nullptr, cnd_init(&this->cond) != thrd_success);
                 return {};
-            }));
-            return {};
+            });
         }
     public:
         cond_var() noexcept = default;
@@ -61,27 +61,29 @@ namespace sys
         /// Be _very_ careful if you choose to wait with a `sys::reentrant_mutex`.
         template <typename T>
         requires (sys::meta::type<T>::template is_from<ordinary_mutex>())
-        sys::result<void, threading_error> wait(T& mut) noexcept
+        [[nodiscard]] auto wait(T& mut) noexcept -> sys::result<void, threading_error>
         {
-            auto initRes = this->try_init();
-            _retif(initRes, !initRes);
+            _retif(threading_error::init_failed, !this->try_init());
             _retif(threading_error::operation_failed, cnd_wait(&this->cond, &mut.mut) != thrd_success);
             return {};
         }
         /// @brief Wait for the condition variable to be notified, until `pred()` is `true`.
         /// @pre `mut` must be locked, and locked by the calling thread.
         /// @details Equivalent to
-        /// ```cpp
+        /// @code{.cpp}
         /// while (!pred())
         /// { /* wait ... */ }
-        /// ```
+        /// @endcode
         /// @warning Be _very_ careful if you choose to wait with a `sys::reentrant_mutex`.
+        /// @see `sys::cond_var::wait(T&)`
         template <typename T, typename Pred>
-        requires (sys::meta::type<T>::template is_from<ordinary_mutex>())
-        sys::result<void, threading_error> wait_until(T& mut, Pred&& pred) noexcept
+        [[nodiscard]] sys::result<void, threading_error> wait_until(T& mut, Pred&& pred) noexcept(noexcept(pred()))
+        requires requires {
+            requires sys::meta::type<T>::template is_from<ordinary_mutex>();
+            { std::forward<Pred>(pred)() } -> std::convertible_to<bool>;
+        }
         {
-            auto initRes = this->try_init();
-            _retif(initRes, !initRes);
+            _retif(threading_error::init_failed, !this->try_init());
             while (!std::forward<Pred>(pred)())
             {
                 auto waitRes = this->wait(mut);
@@ -92,18 +94,16 @@ namespace sys
         // TODO(halloimdragon): `wait_timeout(...)`.
 
         /// @brief Notify one thread waiting on this condition variable.
-        sys::result<void, threading_error> notify_one() noexcept
+        [[nodiscard]] sys::result<void, threading_error> notify_one() noexcept
         {
-            auto initRes = this->try_init();
-            _retif(initRes, !initRes);
+            _retif(threading_error::init_failed, !this->try_init());
             _retif(threading_error::operation_failed, cnd_signal(&this->cond) != thrd_success);
             return {};
         }
         /// @brief Notify all threads waiting on this condition variable.
-        sys::result<void, threading_error> notify_all() noexcept
+        [[nodiscard]] sys::result<void, threading_error> notify_all() noexcept
         {
-            auto initRes = this->try_init();
-            _retif(initRes, !initRes);
+            _retif(threading_error::init_failed, !this->try_init());
             _retif(threading_error::operation_failed, cnd_broadcast(&this->cond) != thrd_success);
             return {};
         }

@@ -70,6 +70,7 @@ def main(argv: List[str]) -> None:
 
                 namespace sys
                 {
+                    /// @ingroup sys_text
                     /// @brief Unicode Canonical Combining Class (CCC).
                     enum class canonical_combining_class : uint_least8_t
                     {
@@ -90,6 +91,7 @@ def main(argv: List[str]) -> None:
                 namespace sys::internal
                 {
                     /// @internal
+                    /// @ingroup sys_internal
                     constexpr sys::canonical_combining_class dchar_ccc(const char32_t c) noexcept
                     {
                         switch (c)

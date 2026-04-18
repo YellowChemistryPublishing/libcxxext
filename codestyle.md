@@ -55,8 +55,11 @@ Stick `final` on any types that aren't designed for inheritance, as well as leaf
 All functions, where correct to, must be annotated with `_pure_const` (`[[gnu::const]]`), or, where otherwise correct to, `_pure` (`[[gnu::pure]]`). Don't forget `[[nodiscard]]`
 too!
 
-Please use the following specifier order: `static`|`thread_local`|`extern`&emsp; `constexpr`|`consteval`|`constinit`|`inline`&emsp; `explicit`&emsp;`virtual`&emsp;`cv-pre`&emsp;
-`T`|`auto`&emsp;`decl...`&emsp;`cvref-post`&emsp; `noexcept`&emsp;`override`|`final`
+Please use the following specifier order:
+`static`|`thread_local`|`extern`&emsp;`constexpr`|`consteval`|`constinit`|`inline`&emsp;`explicit`&emsp;`virtual`&emsp;`cv-pre`&emsp;`T`|`auto`&emsp;`decl...`&emsp;`cvref-post`&emsp;`noexcept`&emsp;`override`|`final`.
+
+Please use the following doxygen command order:
+`@internal`|`@private`&emsp;`@file`|`@defgroup`|`@namespace`|`@def`&emsp;`@ingroup`&emsp;`@relates`&emsp;`@overload`&emsp;`@brief`&emsp;`@tparam`&emsp;`@param`&emsp;`@pre`&emsp;`@post`&emsp;`@return`&emsp;`@note`&emsp;`@warning`&emsp;`@attention`&emsp;`@details`&emsp;`@see`
 
 Where template parameters have restricted domain or constraints, they must be specified with a `requires` clause.
 

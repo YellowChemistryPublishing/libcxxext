@@ -9,6 +9,7 @@
 
 namespace sys::meta
 {
+    /// @ingroup sys
     template <typename T>
     requires (!std::is_reference_v<T>)
     struct generic_nullable_adaptor

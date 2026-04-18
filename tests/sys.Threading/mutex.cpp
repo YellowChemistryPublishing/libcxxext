@@ -2,31 +2,37 @@
 #include <vector>
 
 // NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+#include <CompilerWarnings.h>
+_nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
 #include <catch2/catch_all.hpp>
+
+_nowarn_end_gcc();
 
 #include <module/sys>
 #include <module/sys.Threading>
 
 TEST_CASE("Mutex guard acquisition.", "[sys.Threading][mutex]")
 {
-    sys::mutex mtx;
-    CHECK(mtx.try_lock());
+    sys::mutex mut;
+    (void)mut.try_lock().expect();
+    const sys::mutex::guard g2 = mut.lock().expect();
+    CHECK(mut.try_lock().expect_err() == sys::threading_error::busy);
+}
 
-    auto gRes = mtx.lock();
-    REQUIRE(gRes);
-
-    const sys::mutex::guard g = gRes.move();
-    CHECK(mtx.try_lock().err() == sys::threading_error::operation_failed);
+TEST_CASE("Mutex direct acquire/release.", "[sys.Threading][mutex]")
+{
+    sys::mutex mut;
+    mut.try_acquire(unsafe).expect();
+    mut.release(unsafe).expect();
+    mut.acquire(unsafe).expect();
+    CHECK(mut.try_acquire(unsafe).expect_err() == sys::threading_error::busy);
 }
 
 TEST_CASE("Mutex guard is movable.", "[sys.Threading][mutex]")
 {
-    sys::mutex mtx;
-    auto gRes = mtx.lock();
-    REQUIRE(gRes);
-
-    sys::mutex::guard g1 = gRes.move();
+    sys::mutex mut;
+    sys::mutex::guard g1 = mut.lock().expect();
     const sys::mutex::guard g2 = std::move(g1);
 }
 
@@ -35,7 +41,7 @@ TEST_CASE("Mutex actually guards under contention.", "[sys.Threading][mutex]")
     constexpr i32 numThreads = 20;
     constexpr i32 incrementsPerThread = 10000;
 
-    sys::mutex mtx;
+    sys::mutex mut;
     std::mutex referenceMtx;
     std::vector<sys::managed_thread> threads;
 
@@ -45,14 +51,11 @@ TEST_CASE("Mutex actually guards under contention.", "[sys.Threading][mutex]")
         {
             for (i32 j = 0; j < incrementsPerThread; j++)
             {
-                auto gRes = mtx.lock();
-                REQUIRE(gRes);
-
-                const sys::mutex::guard g = gRes.move();
+                const sys::mutex::guard g = mut.lock().expect();
                 CHECK(referenceMtx.try_lock());
                 referenceMtx.unlock();
             }
-        }).move());
+        }).expect());
     }
 }
 

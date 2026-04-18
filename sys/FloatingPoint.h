@@ -7,6 +7,7 @@
 #endif
 
 /// @defgroup floating_point Floating Point Types
+/// @ingroup tags
 /// @brief Fixed-width floating point types.
 /// @note Pass `byval`.
 /// @{

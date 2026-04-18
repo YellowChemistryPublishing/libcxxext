@@ -6,5 +6,6 @@
 #include <ConditionVariable.h> // IWYU pragma: export
 #include <Mutex.h>             // IWYU pragma: export
 #include <Once.h>              // IWYU pragma: export
+#include <SemaphoreEx.h>       // IWYU pragma: export
 #include <ThreadEx.h>          // IWYU pragma: export
 #include <ThreadingErrors.h>   // IWYU pragma: export

@@ -9,6 +9,7 @@
 
 namespace sys
 {
+    /// @ingroup sys
     /// @brief Helper inheritable for accessing derived type `T`.
     template <typename T>
     struct recurring_template

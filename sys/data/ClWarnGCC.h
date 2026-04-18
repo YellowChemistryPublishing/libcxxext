@@ -6,242 +6,933 @@
 
 // NOLINTBEGIN(modernize-macro-to-enum)
 
-/// @addtogroup compiler_warnings
-/// @{
-
+/// @def _clwarn_gcc_abbreviated_auto_in_template_arg
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wabbreviated-auto-in-template-arg`.
 #define _clwarn_gcc_abbreviated_auto_in_template_arg "-Wabbreviated-auto-in-template-arg"
+/// @def _clwarn_gcc_abi
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wabi`.
 #define _clwarn_gcc_abi "-Wabi"
+/// @def _clwarn_gcc_absolute_value
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wabsolute-value`.
 #define _clwarn_gcc_absolute_value "-Wabsolute-value"
+/// @def _clwarn_gcc_address
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Waddress`.
 #define _clwarn_gcc_address "-Waddress"
+/// @def _clwarn_gcc_aggregate_return
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Waggregate-return`.
 #define _clwarn_gcc_aggregate_return "-Waggregate-return"
+/// @def _clwarn_gcc_aggressive_loop_optimizations
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Waggressive-loop-optimizations`.
 #define _clwarn_gcc_aggressive_loop_optimizations "-Waggressive-loop-optimizations"
+/// @def _clwarn_gcc_all
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wall`.
 #define _clwarn_gcc_all "-Wall"
+/// @def _clwarn_gcc_alloc_size
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Walloc-size`.
 #define _clwarn_gcc_alloc_size "-Walloc-size"
+/// @def _clwarn_gcc_alloc_size_larger_than
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Walloc-size-larger-than`.
 #define _clwarn_gcc_alloc_size_larger_than "-Walloc-size-larger-than"
+/// @def _clwarn_gcc_alloc_zero
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Walloc-zero`.
 #define _clwarn_gcc_alloc_zero "-Walloc-zero"
+/// @def _clwarn_gcc_alloca
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Walloca`.
 #define _clwarn_gcc_alloca "-Walloca"
+/// @def _clwarn_gcc_alloca_larger_than
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Walloca-larger-than`.
 #define _clwarn_gcc_alloca_larger_than "-Walloca-larger-than"
+/// @def _clwarn_gcc_analyzer_infinite_recursion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wanalyzer-infinite-recursion`.
 #define _clwarn_gcc_analyzer_infinite_recursion "-Wanalyzer-infinite-recursion"
+/// @def _clwarn_gcc_arith_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Warith-conversion`.
 #define _clwarn_gcc_arith_conversion "-Warith-conversion"
+/// @def _clwarn_gcc_array_bounds
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Warray-bounds`.
 #define _clwarn_gcc_array_bounds "-Warray-bounds"
+/// @def _clwarn_gcc_array_compare
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Warray-compare`.
 #define _clwarn_gcc_array_compare "-Warray-compare"
+/// @def _clwarn_gcc_array_parameter
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Warray-parameter`.
 #define _clwarn_gcc_array_parameter "-Warray-parameter"
+/// @def _clwarn_gcc_attribute_alias
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wattribute-alias`.
 #define _clwarn_gcc_attribute_alias "-Wattribute-alias"
+/// @def _clwarn_gcc_attributes
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wattributes`.
 #define _clwarn_gcc_attributes "-Wattributes"
+/// @def _clwarn_gcc_auto_profile
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wauto-profile`.
 #define _clwarn_gcc_auto_profile "-Wauto-profile"
+/// @def _clwarn_gcc_bad_function_cast
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wbad-function-cast`.
 #define _clwarn_gcc_bad_function_cast "-Wbad-function-cast"
+/// @def _clwarn_gcc_bidi_chars
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wbidi-chars`.
 #define _clwarn_gcc_bidi_chars "-Wbidi-chars"
+/// @def _clwarn_gcc_bool_compare
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wbool-compare`.
 #define _clwarn_gcc_bool_compare "-Wbool-compare"
+/// @def _clwarn_gcc_bool_operation
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wbool-operation`.
 #define _clwarn_gcc_bool_operation "-Wbool-operation"
+/// @def _clwarn_gcc_builtin_declaration_mismatch
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wbuiltin-declaration-mismatch`.
 #define _clwarn_gcc_builtin_declaration_mismatch "-Wbuiltin-declaration-mismatch"
+/// @def _clwarn_gcc_c11_c23_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc11-c23-compat`.
 #define _clwarn_gcc_c11_c23_compat "-Wc11-c23-compat"
+/// @def _clwarn_gcc_c11_c2x_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc11-c2x-compat`.
 #define _clwarn_gcc_c11_c2x_compat "-Wc11-c2x-compat"
+/// @def _clwarn_gcc_c23_c2y_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc23-c2y-compat`.
 #define _clwarn_gcc_c23_c2y_compat "-Wc23-c2y-compat"
+/// @def _clwarn_gcc_c90_c99_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc90-c99-compat`.
 #define _clwarn_gcc_c90_c99_compat "-Wc90-c99-compat"
+/// @def _clwarn_gcc_c99_c11_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc99-c11-compat`.
 #define _clwarn_gcc_c99_c11_compat "-Wc99-c11-compat"
+/// @def _clwarn_gcc_calloc_transposed_args
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcalloc-transposed-args`.
 #define _clwarn_gcc_calloc_transposed_args "-Wcalloc-transposed-args"
+/// @def _clwarn_gcc_cannot_profile
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcannot-profile`.
 #define _clwarn_gcc_cannot_profile "-Wcannot-profile"
+/// @def _clwarn_gcc_cast_align
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcast-align`.
 #define _clwarn_gcc_cast_align "-Wcast-align"
+/// @def _clwarn_gcc_cast_function_type
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcast-function-type`.
 #define _clwarn_gcc_cast_function_type "-Wcast-function-type"
+/// @def _clwarn_gcc_cast_qual
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcast-qual`.
 #define _clwarn_gcc_cast_qual "-Wcast-qual"
+/// @def _clwarn_gcc_cast_user_defined
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcast-user-defined`.
 #define _clwarn_gcc_cast_user_defined "-Wcast-user-defined"
+/// @def _clwarn_gcc_changes_meaning
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wchanges-meaning`.
 #define _clwarn_gcc_changes_meaning "-Wchanges-meaning"
+/// @def _clwarn_gcc_char_subscripts
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wchar-subscripts`.
 #define _clwarn_gcc_char_subscripts "-Wchar-subscripts"
+/// @def _clwarn_gcc_clobbered
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wclobbered`.
 #define _clwarn_gcc_clobbered "-Wclobbered"
+/// @def _clwarn_gcc_comma_subscript
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcomma-subscript`.
 #define _clwarn_gcc_comma_subscript "-Wcomma-subscript"
+/// @def _clwarn_gcc_comment
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcomment`.
 #define _clwarn_gcc_comment "-Wcomment"
+/// @def _clwarn_gcc_comments
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcomments`.
 #define _clwarn_gcc_comments "-Wcomments"
+/// @def _clwarn_gcc_compare_distinct_pointer_types
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wcompare-distinct-pointer-types`.
 #define _clwarn_gcc_compare_distinct_pointer_types "-Wcompare-distinct-pointer-types"
+/// @def _clwarn_gcc_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wconversion`.
 #define _clwarn_gcc_conversion "-Wconversion"
+/// @def _clwarn_gcc_cxx11_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc++11-compat`.
 #define _clwarn_gcc_cxx11_compat "-Wc++11-compat"
+/// @def _clwarn_gcc_cxx14_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc++14-compat`.
 #define _clwarn_gcc_cxx14_compat "-Wc++14-compat"
+/// @def _clwarn_gcc_cxx17_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc++17-compat`.
 #define _clwarn_gcc_cxx17_compat "-Wc++17-compat"
+/// @def _clwarn_gcc_cxx20_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc++20-compat`.
 #define _clwarn_gcc_cxx20_compat "-Wc++20-compat"
+/// @def _clwarn_gcc_cxx26_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc++26-compat`.
 #define _clwarn_gcc_cxx26_compat "-Wc++26-compat"
+/// @def _clwarn_gcc_cxx_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wc++-compat`.
 #define _clwarn_gcc_cxx_compat "-Wc++-compat"
+/// @def _clwarn_gcc_dangling_else
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdangling-else`.
 #define _clwarn_gcc_dangling_else "-Wdangling-else"
+/// @def _clwarn_gcc_dangling_pointer
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdangling-pointer`.
 #define _clwarn_gcc_dangling_pointer "-Wdangling-pointer"
+/// @def _clwarn_gcc_date_time
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdate-time`.
 #define _clwarn_gcc_date_time "-Wdate-time"
+/// @def _clwarn_gcc_declaration_after_statement
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeclaration-after-statement`.
 #define _clwarn_gcc_declaration_after_statement "-Wdeclaration-after-statement"
+/// @def _clwarn_gcc_declaration_missing_parameter_type
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeclaration-missing-parameter-type`.
 #define _clwarn_gcc_declaration_missing_parameter_type "-Wdeclaration-missing-parameter-type"
+/// @def _clwarn_gcc_deprecated
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeprecated`.
 #define _clwarn_gcc_deprecated "-Wdeprecated"
+/// @def _clwarn_gcc_deprecated_copy
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeprecated-copy`.
 #define _clwarn_gcc_deprecated_copy "-Wdeprecated-copy"
+/// @def _clwarn_gcc_deprecated_enum_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeprecated-enum-enum-conversion`.
 #define _clwarn_gcc_deprecated_enum_enum_conversion "-Wdeprecated-enum-enum-conversion"
+/// @def _clwarn_gcc_deprecated_enum_float_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeprecated-enum-float-conversion`.
 #define _clwarn_gcc_deprecated_enum_float_conversion "-Wdeprecated-enum-float-conversion"
+/// @def _clwarn_gcc_deprecated_literal_operator
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeprecated-literal-operator`.
 #define _clwarn_gcc_deprecated_literal_operator "-Wdeprecated-literal-operator"
+/// @def _clwarn_gcc_deprecated_non_prototype
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeprecated-non-prototype`.
 #define _clwarn_gcc_deprecated_non_prototype "-Wdeprecated-non-prototype"
+/// @def _clwarn_gcc_deprecated_variadic_comma_omission
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdeprecated-variadic-comma-omission`.
 #define _clwarn_gcc_deprecated_variadic_comma_omission "-Wdeprecated-variadic-comma-omission"
+/// @def _clwarn_gcc_disabled_optimization
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdisabled-optimization`.
 #define _clwarn_gcc_disabled_optimization "-Wdisabled-optimization"
+/// @def _clwarn_gcc_double_promotion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wdouble-promotion`.
 #define _clwarn_gcc_double_promotion "-Wdouble-promotion"
+/// @def _clwarn_gcc_duplicate_decl_specifier
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wduplicate-decl-specifier`.
 #define _clwarn_gcc_duplicate_decl_specifier "-Wduplicate-decl-specifier"
+/// @def _clwarn_gcc_duplicated_branches
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wduplicated-branches`.
 #define _clwarn_gcc_duplicated_branches "-Wduplicated-branches"
+/// @def _clwarn_gcc_duplicated_cond
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wduplicated-cond`.
 #define _clwarn_gcc_duplicated_cond "-Wduplicated-cond"
+/// @def _clwarn_gcc_elaborated_enum_base
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Welaborated-enum-base`.
 #define _clwarn_gcc_elaborated_enum_base "-Welaborated-enum-base"
+/// @def _clwarn_gcc_empty_body
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wempty-body`.
 #define _clwarn_gcc_empty_body "-Wempty-body"
+/// @def _clwarn_gcc_enum_compare
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wenum-compare`.
 #define _clwarn_gcc_enum_compare "-Wenum-compare"
+/// @def _clwarn_gcc_enum_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wenum-conversion`.
 #define _clwarn_gcc_enum_conversion "-Wenum-conversion"
+/// @def _clwarn_gcc_enum_int_mismatch
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wenum-int-mismatch`.
 #define _clwarn_gcc_enum_int_mismatch "-Wenum-int-mismatch"
+/// @def _clwarn_gcc_error
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Werror`.
 #define _clwarn_gcc_error "-Werror"
+/// @def _clwarn_gcc_expansion_to_defined
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wexpansion-to-defined`.
 #define _clwarn_gcc_expansion_to_defined "-Wexpansion-to-defined"
+/// @def _clwarn_gcc_extra
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wextra`.
 #define _clwarn_gcc_extra "-Wextra"
+/// @def _clwarn_gcc_fatal_errors
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wfatal-errors`.
 #define _clwarn_gcc_fatal_errors "-Wfatal-errors"
+/// @def _clwarn_gcc_flex_array_member_not_at_end
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wflex-array-member-not-at-end`.
 #define _clwarn_gcc_flex_array_member_not_at_end "-Wflex-array-member-not-at-end"
+/// @def _clwarn_gcc_float_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wfloat-conversion`.
 #define _clwarn_gcc_float_conversion "-Wfloat-conversion"
+/// @def _clwarn_gcc_float_equal
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wfloat-equal`.
 #define _clwarn_gcc_float_equal "-Wfloat-equal"
+/// @def _clwarn_gcc_format
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wformat`.
 #define _clwarn_gcc_format "-Wformat"
+/// @def _clwarn_gcc_format_nonliteral
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wformat-nonliteral`.
 #define _clwarn_gcc_format_nonliteral "-Wformat-nonliteral"
+/// @def _clwarn_gcc_format_overflow
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wformat-overflow`.
 #define _clwarn_gcc_format_overflow "-Wformat-overflow"
+/// @def _clwarn_gcc_format_security
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wformat-security`.
 #define _clwarn_gcc_format_security "-Wformat-security"
+/// @def _clwarn_gcc_format_signedness
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wformat-signedness`.
 #define _clwarn_gcc_format_signedness "-Wformat-signedness"
+/// @def _clwarn_gcc_format_truncation
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wformat-truncation`.
 #define _clwarn_gcc_format_truncation "-Wformat-truncation"
+/// @def _clwarn_gcc_format_y2k
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wformat-y2k`.
 #define _clwarn_gcc_format_y2k "-Wformat-y2k"
+/// @def _clwarn_gcc_frame_address
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wframe-address`.
 #define _clwarn_gcc_frame_address "-Wframe-address"
+/// @def _clwarn_gcc_frame_larger_than
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wframe-larger-than`.
 #define _clwarn_gcc_frame_larger_than "-Wframe-larger-than"
+/// @def _clwarn_gcc_free_labels
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wfree-labels`.
 #define _clwarn_gcc_free_labels "-Wfree-labels"
+/// @def _clwarn_gcc_free_nonheap_object
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wfree-nonheap-object`.
 #define _clwarn_gcc_free_nonheap_object "-Wfree-nonheap-object"
+/// @def _clwarn_gcc_hardened
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Whardened`.
 #define _clwarn_gcc_hardened "-Whardened"
+/// @def _clwarn_gcc_header_guard
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wheader-guard`.
 #define _clwarn_gcc_header_guard "-Wheader-guard"
+/// @def _clwarn_gcc_ignored_qualifiers
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wignored-qualifiers`.
 #define _clwarn_gcc_ignored_qualifiers "-Wignored-qualifiers"
+/// @def _clwarn_gcc_implicit
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wimplicit`.
 #define _clwarn_gcc_implicit "-Wimplicit"
+/// @def _clwarn_gcc_implicit_fallthrough
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wimplicit-fallthrough`.
 #define _clwarn_gcc_implicit_fallthrough "-Wimplicit-fallthrough"
+/// @def _clwarn_gcc_implicit_function_declaration
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wimplicit-function-declaration`.
 #define _clwarn_gcc_implicit_function_declaration "-Wimplicit-function-declaration"
+/// @def _clwarn_gcc_implicit_int
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wimplicit-int`.
 #define _clwarn_gcc_implicit_int "-Wimplicit-int"
+/// @def _clwarn_gcc_incompatible_pointer_types
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wincompatible-pointer-types`.
 #define _clwarn_gcc_incompatible_pointer_types "-Wincompatible-pointer-types"
+/// @def _clwarn_gcc_infinite_recursion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Winfinite-recursion`.
 #define _clwarn_gcc_infinite_recursion "-Winfinite-recursion"
+/// @def _clwarn_gcc_init_self
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Winit-self`.
 #define _clwarn_gcc_init_self "-Winit-self"
+/// @def _clwarn_gcc_inline
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Winline`.
 #define _clwarn_gcc_inline "-Winline"
+/// @def _clwarn_gcc_int_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wint-conversion`.
 #define _clwarn_gcc_int_conversion "-Wint-conversion"
+/// @def _clwarn_gcc_int_in_bool_context
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wint-in-bool-context`.
 #define _clwarn_gcc_int_in_bool_context "-Wint-in-bool-context"
+/// @def _clwarn_gcc_interference_size
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Winterference-size`.
 #define _clwarn_gcc_interference_size "-Winterference-size"
+/// @def _clwarn_gcc_invalid_memory_model
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Winvalid-memory-model`.
 #define _clwarn_gcc_invalid_memory_model "-Winvalid-memory-model"
+/// @def _clwarn_gcc_invalid_pch
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Winvalid-pch`.
 #define _clwarn_gcc_invalid_pch "-Winvalid-pch"
+/// @def _clwarn_gcc_invalid_utf8
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Winvalid-utf8`.
 #define _clwarn_gcc_invalid_utf8 "-Winvalid-utf8"
+/// @def _clwarn_gcc_jump_misses_init
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wjump-misses-init`.
 #define _clwarn_gcc_jump_misses_init "-Wjump-misses-init"
+/// @def _clwarn_gcc_keyword_macro
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wkeyword-macro`.
 #define _clwarn_gcc_keyword_macro "-Wkeyword-macro"
+/// @def _clwarn_gcc_larger_than
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wlarger-than`.
 #define _clwarn_gcc_larger_than "-Wlarger-than"
+/// @def _clwarn_gcc_leading_whitespace
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wleading-whitespace`.
 #define _clwarn_gcc_leading_whitespace "-Wleading-whitespace"
+/// @def _clwarn_gcc_logical_not_parentheses
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wlogical-not-parentheses`.
 #define _clwarn_gcc_logical_not_parentheses "-Wlogical-not-parentheses"
+/// @def _clwarn_gcc_logical_op
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wlogical-op`.
 #define _clwarn_gcc_logical_op "-Wlogical-op"
+/// @def _clwarn_gcc_long_long
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wlong-long`.
 #define _clwarn_gcc_long_long "-Wlong-long"
+/// @def _clwarn_gcc_main
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmain`.
 #define _clwarn_gcc_main "-Wmain"
+/// @def _clwarn_gcc_maybe_musttail_local_addr
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmaybe-musttail-local-addr`.
 #define _clwarn_gcc_maybe_musttail_local_addr "-Wmaybe-musttail-local-addr"
+/// @def _clwarn_gcc_maybe_uninitialized
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmaybe-uninitialized`.
 #define _clwarn_gcc_maybe_uninitialized "-Wmaybe-uninitialized"
+/// @def _clwarn_gcc_memset_elt_size
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmemset-elt-size`.
 #define _clwarn_gcc_memset_elt_size "-Wmemset-elt-size"
+/// @def _clwarn_gcc_memset_transposed_args
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmemset-transposed-args`.
 #define _clwarn_gcc_memset_transposed_args "-Wmemset-transposed-args"
+/// @def _clwarn_gcc_misleading_indentation
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmisleading-indentation`.
 #define _clwarn_gcc_misleading_indentation "-Wmisleading-indentation"
+/// @def _clwarn_gcc_mismatched_dealloc
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmismatched-dealloc`.
 #define _clwarn_gcc_mismatched_dealloc "-Wmismatched-dealloc"
+/// @def _clwarn_gcc_mismatched_new_delete
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmismatched-new-delete`.
 #define _clwarn_gcc_mismatched_new_delete "-Wmismatched-new-delete"
+/// @def _clwarn_gcc_missing_attributes
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-attributes`.
 #define _clwarn_gcc_missing_attributes "-Wmissing-attributes"
+/// @def _clwarn_gcc_missing_braces
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-braces`.
 #define _clwarn_gcc_missing_braces "-Wmissing-braces"
+/// @def _clwarn_gcc_missing_declarations
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-declarations`.
 #define _clwarn_gcc_missing_declarations "-Wmissing-declarations"
+/// @def _clwarn_gcc_missing_field_initializers
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-field-initializers`.
 #define _clwarn_gcc_missing_field_initializers "-Wmissing-field-initializers"
+/// @def _clwarn_gcc_missing_format_attribute
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-format-attribute`.
 #define _clwarn_gcc_missing_format_attribute "-Wmissing-format-attribute"
+/// @def _clwarn_gcc_missing_include_dirs
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-include-dirs`.
 #define _clwarn_gcc_missing_include_dirs "-Wmissing-include-dirs"
+/// @def _clwarn_gcc_missing_noreturn
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-noreturn`.
 #define _clwarn_gcc_missing_noreturn "-Wmissing-noreturn"
+/// @def _clwarn_gcc_missing_parameter_name
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-parameter-name`.
 #define _clwarn_gcc_missing_parameter_name "-Wmissing-parameter-name"
+/// @def _clwarn_gcc_missing_parameter_type
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-parameter-type`.
 #define _clwarn_gcc_missing_parameter_type "-Wmissing-parameter-type"
+/// @def _clwarn_gcc_missing_prototypes
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-prototypes`.
 #define _clwarn_gcc_missing_prototypes "-Wmissing-prototypes"
+/// @def _clwarn_gcc_missing_variable_declarations
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmissing-variable-declarations`.
 #define _clwarn_gcc_missing_variable_declarations "-Wmissing-variable-declarations"
+/// @def _clwarn_gcc_multiple_parameter_fwd_decl_lists
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmultiple-parameter-fwd-decl-lists`.
 #define _clwarn_gcc_multiple_parameter_fwd_decl_lists "-Wmultiple-parameter-fwd-decl-lists"
+/// @def _clwarn_gcc_multistatement_macros
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wmultistatement-macros`.
 #define _clwarn_gcc_multistatement_macros "-Wmultistatement-macros"
+/// @def _clwarn_gcc_narrowing
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wnarrowing`.
 #define _clwarn_gcc_narrowing "-Wnarrowing"
+/// @def _clwarn_gcc_nested_externs
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wnested-externs`.
 #define _clwarn_gcc_nested_externs "-Wnested-externs"
+/// @def _clwarn_gcc_nonnull
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wnonnull`.
 #define _clwarn_gcc_nonnull "-Wnonnull"
+/// @def _clwarn_gcc_nonnull_compare
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wnonnull-compare`.
 #define _clwarn_gcc_nonnull_compare "-Wnonnull-compare"
+/// @def _clwarn_gcc_nopacked_bitfield_compat
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wnopacked-bitfield-compat`.
 #define _clwarn_gcc_nopacked_bitfield_compat "-Wnopacked-bitfield-compat"
+/// @def _clwarn_gcc_normalized
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wnormalized`.
 #define _clwarn_gcc_normalized "-Wnormalized"
+/// @def _clwarn_gcc_nrvo
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wnrvo`.
 #define _clwarn_gcc_nrvo "-Wnrvo"
+/// @def _clwarn_gcc_null_dereference
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wnull-dereference`.
 #define _clwarn_gcc_null_dereference "-Wnull-dereference"
+/// @def _clwarn_gcc_old_style_declaration
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wold-style-declaration`.
 #define _clwarn_gcc_old_style_declaration "-Wold-style-declaration"
+/// @def _clwarn_gcc_old_style_definition
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wold-style-definition`.
 #define _clwarn_gcc_old_style_definition "-Wold-style-definition"
+/// @def _clwarn_gcc_openacc_parallelism
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wopenacc-parallelism`.
 #define _clwarn_gcc_openacc_parallelism "-Wopenacc-parallelism"
+/// @def _clwarn_gcc_openmp_simd
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wopenmp-simd`.
 #define _clwarn_gcc_openmp_simd "-Wopenmp-simd"
+/// @def _clwarn_gcc_overlength_strings
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Woverlength-strings`.
 #define _clwarn_gcc_overlength_strings "-Woverlength-strings"
+/// @def _clwarn_gcc_overloaded_virtual
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Woverloaded-virtual`.
 #define _clwarn_gcc_overloaded_virtual "-Woverloaded-virtual"
+/// @def _clwarn_gcc_override_init
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Woverride-init`.
 #define _clwarn_gcc_override_init "-Woverride-init"
+/// @def _clwarn_gcc_packed
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wpacked`.
 #define _clwarn_gcc_packed "-Wpacked"
+/// @def _clwarn_gcc_packed_not_aligned
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wpacked-not-aligned`.
 #define _clwarn_gcc_packed_not_aligned "-Wpacked-not-aligned"
+/// @def _clwarn_gcc_padded
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wpadded`.
 #define _clwarn_gcc_padded "-Wpadded"
+/// @def _clwarn_gcc_parentheses
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wparentheses`.
 #define _clwarn_gcc_parentheses "-Wparentheses"
+/// @def _clwarn_gcc_pedantic
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wpedantic`.
 #define _clwarn_gcc_pedantic "-Wpedantic"
+/// @def _clwarn_gcc_pointer_arith
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wpointer-arith`.
 #define _clwarn_gcc_pointer_arith "-Wpointer-arith"
+/// @def _clwarn_gcc_pointer_sign
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wpointer-sign`.
 #define _clwarn_gcc_pointer_sign "-Wpointer-sign"
+/// @def _clwarn_gcc_psabi
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wpsabi`.
 #define _clwarn_gcc_psabi "-Wpsabi"
+/// @def _clwarn_gcc_range_loop_construct
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wrange-loop-construct`.
 #define _clwarn_gcc_range_loop_construct "-Wrange-loop-construct"
+/// @def _clwarn_gcc_redundant_decls
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wredundant-decls`.
 #define _clwarn_gcc_redundant_decls "-Wredundant-decls"
+/// @def _clwarn_gcc_redundant_move
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wredundant-move`.
 #define _clwarn_gcc_redundant_move "-Wredundant-move"
+/// @def _clwarn_gcc_reorder
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wreorder`.
 #define _clwarn_gcc_reorder "-Wreorder"
+/// @def _clwarn_gcc_restrict
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wrestrict`.
 #define _clwarn_gcc_restrict "-Wrestrict"
+/// @def _clwarn_gcc_return_mismatch
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wreturn-mismatch`.
 #define _clwarn_gcc_return_mismatch "-Wreturn-mismatch"
+/// @def _clwarn_gcc_return_type
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wreturn-type`.
 #define _clwarn_gcc_return_type "-Wreturn-type"
+/// @def _clwarn_gcc_sequence_point
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsequence-point`.
 #define _clwarn_gcc_sequence_point "-Wsequence-point"
+/// @def _clwarn_gcc_shadow
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wshadow`.
 #define _clwarn_gcc_shadow "-Wshadow"
+/// @def _clwarn_gcc_shift_negative_value
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wshift-negative-value`.
 #define _clwarn_gcc_shift_negative_value "-Wshift-negative-value"
+/// @def _clwarn_gcc_shift_overflow
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wshift-overflow`.
 #define _clwarn_gcc_shift_overflow "-Wshift-overflow"
+/// @def _clwarn_gcc_sign_compare
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsign-compare`.
 #define _clwarn_gcc_sign_compare "-Wsign-compare"
+/// @def _clwarn_gcc_sign_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsign-conversion`.
 #define _clwarn_gcc_sign_conversion "-Wsign-conversion"
+/// @def _clwarn_gcc_sized_deallocation
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsized-deallocation`.
 #define _clwarn_gcc_sized_deallocation "-Wsized-deallocation"
+/// @def _clwarn_gcc_sizeof_array_div
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsizeof-array-div`.
 #define _clwarn_gcc_sizeof_array_div "-Wsizeof-array-div"
+/// @def _clwarn_gcc_sizeof_pointer_div
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsizeof-pointer-div`.
 #define _clwarn_gcc_sizeof_pointer_div "-Wsizeof-pointer-div"
+/// @def _clwarn_gcc_sizeof_pointer_memaccess
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsizeof-pointer-memaccess`.
 #define _clwarn_gcc_sizeof_pointer_memaccess "-Wsizeof-pointer-memaccess"
+/// @def _clwarn_gcc_stack_protector
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstack-protector`.
 #define _clwarn_gcc_stack_protector "-Wstack-protector"
+/// @def _clwarn_gcc_stack_usage
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstack-usage`.
 #define _clwarn_gcc_stack_usage "-Wstack-usage"
+/// @def _clwarn_gcc_strict_aliasing
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstrict-aliasing`.
 #define _clwarn_gcc_strict_aliasing "-Wstrict-aliasing"
+/// @def _clwarn_gcc_strict_flex_arrays
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstrict-flex-arrays`.
 #define _clwarn_gcc_strict_flex_arrays "-Wstrict-flex-arrays"
+/// @def _clwarn_gcc_strict_overflow
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstrict-overflow`.
 #define _clwarn_gcc_strict_overflow "-Wstrict-overflow"
+/// @def _clwarn_gcc_strict_prototypes
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstrict-prototypes`.
 #define _clwarn_gcc_strict_prototypes "-Wstrict-prototypes"
+/// @def _clwarn_gcc_string_compare
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstring-compare`.
 #define _clwarn_gcc_string_compare "-Wstring-compare"
+/// @def _clwarn_gcc_stringop_overflow
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstringop-overflow`.
 #define _clwarn_gcc_stringop_overflow "-Wstringop-overflow"
+/// @def _clwarn_gcc_stringop_overread
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wstringop-overread`.
 #define _clwarn_gcc_stringop_overread "-Wstringop-overread"
+/// @def _clwarn_gcc_suggest_attribute
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsuggest-attribute`.
 #define _clwarn_gcc_suggest_attribute "-Wsuggest-attribute"
+/// @def _clwarn_gcc_suggest_final_types
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsuggest-final-types`.
 #define _clwarn_gcc_suggest_final_types "-Wsuggest-final-types"
+/// @def _clwarn_gcc_switch
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wswitch`.
 #define _clwarn_gcc_switch "-Wswitch"
+/// @def _clwarn_gcc_switch_default
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wswitch-default`.
 #define _clwarn_gcc_switch_default "-Wswitch-default"
+/// @def _clwarn_gcc_switch_enum
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wswitch-enum`.
 #define _clwarn_gcc_switch_enum "-Wswitch-enum"
+/// @def _clwarn_gcc_switch_unreachable
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wswitch-unreachable`.
 #define _clwarn_gcc_switch_unreachable "-Wswitch-unreachable"
+/// @def _clwarn_gcc_sync_nand
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsync-nand`.
 #define _clwarn_gcc_sync_nand "-Wsync-nand"
+/// @def _clwarn_gcc_system_headers
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wsystem-headers`.
 #define _clwarn_gcc_system_headers "-Wsystem-headers"
+/// @def _clwarn_gcc_tautological_compare
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtautological-compare`.
 #define _clwarn_gcc_tautological_compare "-Wtautological-compare"
+/// @def _clwarn_gcc_template_body
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtemplate-body`.
 #define _clwarn_gcc_template_body "-Wtemplate-body"
+/// @def _clwarn_gcc_traditional
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtraditional`.
 #define _clwarn_gcc_traditional "-Wtraditional"
+/// @def _clwarn_gcc_traditional_conversion
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtraditional-conversion`.
 #define _clwarn_gcc_traditional_conversion "-Wtraditional-conversion"
+/// @def _clwarn_gcc_trailing_whitespace
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtrailing-whitespace`.
 #define _clwarn_gcc_trailing_whitespace "-Wtrailing-whitespace"
+/// @def _clwarn_gcc_trampolines
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtrampolines`.
 #define _clwarn_gcc_trampolines "-Wtrampolines"
+/// @def _clwarn_gcc_trigraphs
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtrigraphs`.
 #define _clwarn_gcc_trigraphs "-Wtrigraphs"
+/// @def _clwarn_gcc_trivial_auto_var_init
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtrivial-auto-var-init`.
 #define _clwarn_gcc_trivial_auto_var_init "-Wtrivial-auto-var-init"
+/// @def _clwarn_gcc_type_limits
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wtype-limits`.
 #define _clwarn_gcc_type_limits "-Wtype-limits"
+/// @def _clwarn_gcc_undef
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wundef`.
 #define _clwarn_gcc_undef "-Wundef"
+/// @def _clwarn_gcc_uninitialized
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wuninitialized`.
 #define _clwarn_gcc_uninitialized "-Wuninitialized"
+/// @def _clwarn_gcc_unknown_pragmas
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunknown-pragmas`.
 #define _clwarn_gcc_unknown_pragmas "-Wunknown-pragmas"
+/// @def _clwarn_gcc_unknown_warning
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunknown-warning`.
 #define _clwarn_gcc_unknown_warning "-Wunknown-warning"
+/// @def _clwarn_gcc_unsafe_loop_optimizations
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunsafe-loop-optimizations`.
 #define _clwarn_gcc_unsafe_loop_optimizations "-Wunsafe-loop-optimizations"
+/// @def _clwarn_gcc_unsuffixed_float_constants
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunsuffixed-float-constants`.
 #define _clwarn_gcc_unsuffixed_float_constants "-Wunsuffixed-float-constants"
+/// @def _clwarn_gcc_unterminated_string_initialization
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunterminated-string-initialization`.
 #define _clwarn_gcc_unterminated_string_initialization "-Wunterminated-string-initialization"
+/// @def _clwarn_gcc_unused
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused`.
 #define _clwarn_gcc_unused "-Wunused"
+/// @def _clwarn_gcc_unused_but_set_parameter
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-but-set-parameter`.
 #define _clwarn_gcc_unused_but_set_parameter "-Wunused-but-set-parameter"
+/// @def _clwarn_gcc_unused_but_set_variable
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-but-set-variable`.
 #define _clwarn_gcc_unused_but_set_variable "-Wunused-but-set-variable"
+/// @def _clwarn_gcc_unused_const_variable
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-const-variable`.
 #define _clwarn_gcc_unused_const_variable "-Wunused-const-variable"
+/// @def _clwarn_gcc_unused_function
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-function`.
 #define _clwarn_gcc_unused_function "-Wunused-function"
+/// @def _clwarn_gcc_unused_label
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-label`.
 #define _clwarn_gcc_unused_label "-Wunused-label"
+/// @def _clwarn_gcc_unused_local_typedefs
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-local-typedefs`.
 #define _clwarn_gcc_unused_local_typedefs "-Wunused-local-typedefs"
+/// @def _clwarn_gcc_unused_macros
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-macros`.
 #define _clwarn_gcc_unused_macros "-Wunused-macros"
+/// @def _clwarn_gcc_unused_parameter
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-parameter`.
 #define _clwarn_gcc_unused_parameter "-Wunused-parameter"
+/// @def _clwarn_gcc_unused_result
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-result`.
 #define _clwarn_gcc_unused_result "-Wunused-result"
+/// @def _clwarn_gcc_unused_value
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-value`.
 #define _clwarn_gcc_unused_value "-Wunused-value"
+/// @def _clwarn_gcc_unused_variable
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wunused-variable`.
 #define _clwarn_gcc_unused_variable "-Wunused-variable"
+/// @def _clwarn_gcc_use_after_free
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wuse-after-free`.
 #define _clwarn_gcc_use_after_free "-Wuse-after-free"
+/// @def _clwarn_gcc_useless_cast
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wuseless-cast`.
 #define _clwarn_gcc_useless_cast "-Wuseless-cast"
+/// @def _clwarn_gcc_variadic_macros
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wvariadic-macros`.
 #define _clwarn_gcc_variadic_macros "-Wvariadic-macros"
+/// @def _clwarn_gcc_vector_operation_performance
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wvector-operation-performance`.
 #define _clwarn_gcc_vector_operation_performance "-Wvector-operation-performance"
+/// @def _clwarn_gcc_vla
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wvla`.
 #define _clwarn_gcc_vla "-Wvla"
+/// @def _clwarn_gcc_vla_larger_than
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wvla-larger-than`.
 #define _clwarn_gcc_vla_larger_than "-Wvla-larger-than"
+/// @def _clwarn_gcc_vla_parameter
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wvla-parameter`.
 #define _clwarn_gcc_vla_parameter "-Wvla-parameter"
+/// @def _clwarn_gcc_volatile
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wvolatile`.
 #define _clwarn_gcc_volatile "-Wvolatile"
+/// @def _clwarn_gcc_volatile_register_var
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wvolatile-register-var`.
 #define _clwarn_gcc_volatile_register_var "-Wvolatile-register-var"
+/// @def _clwarn_gcc_write_strings
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wwrite-strings`.
 #define _clwarn_gcc_write_strings "-Wwrite-strings"
+/// @def _clwarn_gcc_zero_as_null_pointer_constant
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wzero-as-null-pointer-constant`.
 #define _clwarn_gcc_zero_as_null_pointer_constant "-Wzero-as-null-pointer-constant"
+/// @def _clwarn_gcc_zero_length_bounds
+/// @ingroup compiler_warnings
+/// @brief GCC warning flag string `-Wzero-length-bounds`.
 #define _clwarn_gcc_zero_length_bounds "-Wzero-length-bounds"
-
-/// @}
 
 // NOLINTEND(modernize-macro-to-enum)

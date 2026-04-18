@@ -16,6 +16,8 @@
 #include <meta/Builtin.h>
 
 /// @defgroup builtin_integers Built-in Integer Types
+/// @ingroup tags
+/// @ingroup sys
 /// @brief Abbreviated built-in integer types.
 /// @note Pass `byval`.
 /// @{
@@ -41,12 +43,14 @@ using ullong = unsigned long long;
 
 namespace sys
 {
+    /// @ingroup sys
     /// @brief Opinionated sentinel value for `T`.
     template <sys::IBuiltinIntegerSigned T>
     /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel() noexcept
     {
         return std::numeric_limits<T>::lowest();
     }
+    /// @ingroup sys
     /// @brief Opinionated sentinel value for `T`.
     template <sys::IBuiltinIntegerUnsigned T>
     /* NOLINT(misc-use-internal-linkage) */ consteval T bsentinel() noexcept
@@ -54,10 +58,11 @@ namespace sys
         return std::numeric_limits<T>::max();
     }
 
+    /// @ingroup sys
     /// @brief Integer-to-integer cast.
     /// @warning `unsafe` because this is saturating!
     template <sys::IBuiltinInteger To, sys::IBuiltinInteger From>
-    /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const From value, unsafe) noexcept
+    /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const From value, decltype(unsafe)) noexcept
     {
 #if !_libcxxext_compiler_clang && defined(__cpp_lib_saturation_arithmetic) && __cpp_lib_saturation_arithmetic >= 202311l
         return std::saturate_cast<To>(value);
@@ -70,10 +75,11 @@ namespace sys
             return To(value);
 #endif
     }
+    /// @ingroup sys
     /// @brief Floating-point-to-integer cast.
     /// @warning `unsafe` because this is saturating!
     template <sys::IBuiltinInteger To, sys::IBuiltinFloatingPoint From>
-    /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const From value, unsafe) noexcept
+    /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const From value, decltype(unsafe)) noexcept
     {
         if (!std::isfinite(value)) [[unlikely]]
             return sys::bsentinel<To>();
@@ -85,6 +91,7 @@ namespace sys
             return To(value);
     }
 
+    /// @ingroup sys
     /// @brief Safe(r) high-level integer wrapper.
     /// @tparam For Built-in integer type.
     /// @details
@@ -124,11 +131,11 @@ namespace sys
         /// @note Saturating.
         template <typename T>
         requires ((!IBuiltinIntegerCanHold<T, For> && sys::IBuiltinInteger<T>) || sys::IBuiltinFloatingPoint<T>)
-        constexpr explicit integer(T v) noexcept : underlying(bnumeric_cast<For>(v, unsafe()))
+        constexpr explicit integer(T v) noexcept : underlying(bnumeric_cast<For>(v, unsafe))
         { }
         /// @warning `unsafe` because this is truncating.
         template <sys::IBuiltinInteger T>
-        constexpr explicit integer(T v, unsafe) noexcept : underlying(std::bit_cast<For>(_as(unsigned_t, std::bit_cast<std::make_unsigned_t<T>>(v))))
+        constexpr explicit integer(T v, decltype(unsafe)) noexcept : underlying(std::bit_cast<For>(_as(unsigned_t, std::bit_cast<std::make_unsigned_t<T>>(v))))
         { }
         /// @note Saturating.
         template <sys::IBuiltinInteger T>
@@ -136,7 +143,7 @@ namespace sys
         { }
         /// @warning `unsafe` because this is truncating.
         template <sys::IBuiltinInteger T>
-        constexpr explicit integer(integer<T> v, unsafe) noexcept : integer(*v, unsafe())
+        constexpr explicit integer(integer<T> v, decltype(unsafe)) noexcept : integer(*v, unsafe)
         { }
         constexpr integer(const integer& v) noexcept = default;
         constexpr integer(integer&& v) noexcept = default;
@@ -158,7 +165,7 @@ namespace sys
         template <sys::IBuiltinInteger T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
         {
-            return bnumeric_cast<T>(**this, unsafe());
+            return bnumeric_cast<T>(**this, unsafe);
         }
         /// @brief _Implicit_ conversion to underlying type.
         [[nodiscard]] constexpr /* NOLINT(hicpp-explicit-conversions) */ operator For() const noexcept { return **this; }
@@ -248,18 +255,18 @@ namespace sys
             return std::cmp_greater_equal(a, *b);
         }
 
-        constexpr integer& operator++() noexcept { return (*this = integer(this->u() + _as(unsigned_t, 1), unsafe())); }
-        constexpr integer& operator--() noexcept { return (*this = integer(this->u() - _as(unsigned_t, 1), unsafe())); }
+        constexpr integer& operator++() noexcept { return (*this = integer(this->u() + _as(unsigned_t, 1), unsafe)); }
+        constexpr integer& operator--() noexcept { return (*this = integer(this->u() - _as(unsigned_t, 1), unsafe)); }
         constexpr integer operator++(int) noexcept
         {
             integer ret = *this;
-            *this = integer(this->u() + _as(unsigned_t, 1), unsafe());
+            *this = integer(this->u() + _as(unsigned_t, 1), unsafe);
             return ret;
         }
         constexpr integer operator--(int) noexcept
         {
             integer ret = *this;
-            *this = integer(this->u() - _as(unsigned_t, 1), unsafe());
+            *this = integer(this->u() - _as(unsigned_t, 1), unsafe);
             return ret;
         }
 
@@ -273,9 +280,9 @@ namespace sys
             else [[likely]]
                 return integer(_as(For, -**this));
         }
-        [[nodiscard]] friend constexpr integer operator+(integer a, integer b) noexcept { return integer(a.u() + b.u(), unsafe()); }
-        [[nodiscard]] friend constexpr integer operator-(integer a, integer b) noexcept { return integer(a.u() - b.u(), unsafe()); }
-        [[nodiscard]] friend constexpr integer operator*(integer a, integer b) noexcept { return integer(a.u() * b.u(), unsafe()); }
+        [[nodiscard]] friend constexpr integer operator+(integer a, integer b) noexcept { return integer(a.u() + b.u(), unsafe); }
+        [[nodiscard]] friend constexpr integer operator-(integer a, integer b) noexcept { return integer(a.u() - b.u(), unsafe); }
+        [[nodiscard]] friend constexpr integer operator*(integer a, integer b) noexcept { return integer(a.u() * b.u(), unsafe); }
         [[nodiscard]] friend constexpr integer operator/(integer a, integer b) noexcept
         {
             if (*b == 0) [[unlikely]]
@@ -297,25 +304,25 @@ namespace sys
                 return integer(_as(For, *a % *b));
         }
 
-        [[nodiscard]] constexpr integer operator~() const noexcept { return integer(~this->u(), unsafe()); }
-        [[nodiscard]] friend constexpr integer operator&(integer a, integer b) noexcept { return integer(a.u() & b.u(), unsafe()); }
-        [[nodiscard]] friend constexpr integer operator|(integer a, integer b) noexcept { return integer(a.u() | b.u(), unsafe()); }
-        [[nodiscard]] friend constexpr integer operator^(integer a, integer b) noexcept { return integer(a.u() ^ b.u(), unsafe()); }
+        [[nodiscard]] constexpr integer operator~() const noexcept { return integer(~this->u(), unsafe); }
+        [[nodiscard]] friend constexpr integer operator&(integer a, integer b) noexcept { return integer(a.u() & b.u(), unsafe); }
+        [[nodiscard]] friend constexpr integer operator|(integer a, integer b) noexcept { return integer(a.u() | b.u(), unsafe); }
+        [[nodiscard]] friend constexpr integer operator^(integer a, integer b) noexcept { return integer(a.u() ^ b.u(), unsafe); }
         [[nodiscard]] friend constexpr integer operator<<(integer a, integer b) noexcept
         {
             if constexpr (std::is_signed_v<For>)
                 if (*b < 0) [[unlikely]]
-                    return integer(a.u() >> (-b).u(), unsafe()); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
+                    return integer(a.u() >> (-b).u(), unsafe); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
 
-            return integer(a.u() << b.u(), unsafe());
+            return integer(a.u() << b.u(), unsafe);
         }
         [[nodiscard]] friend constexpr integer operator>>(integer a, integer b) noexcept
         {
             if constexpr (std::is_signed_v<For>)
                 if (*b < 0) [[unlikely]]
-                    return integer(a.u() << (-b).u(), unsafe()); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
+                    return integer(a.u() << (-b).u(), unsafe); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
 
-            return integer(a.u() >> b.u(), unsafe());
+            return integer(a.u() >> b.u(), unsafe);
         }
 
         constexpr integer& operator+=(const integer& other) noexcept { return (*this = *this + other); }
@@ -336,6 +343,8 @@ namespace sys
 } // namespace sys
 
 /// @defgroup integers Safe(r) Integer Types
+/// @ingroup tags
+/// @ingroup sys
 /// @brief Convenience aliases for `sys::integer<...>`.
 /// @note Pass `byval`.
 /// @{
@@ -366,6 +375,8 @@ using ssz = ::sys::integer<ptrdiff_t>;
 /// @}
 
 /// @defgroup integer_literals Integer Literals
+/// @ingroup tags
+/// @ingroup sys
 /// @brief Literal suffixes for `sys::integer<...>`.
 /// @note Pass `byval`.
 /// @{

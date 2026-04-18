@@ -7,6 +7,7 @@
 // NOLINTBEGIN(modernize-macro-to-enum)
 
 /// @defgroup compiler_warnings Compiler Warning Identifier Constants
+/// @ingroup tags
 /// @brief Compiler-specific warning flag mappings.
 /// @details Use with `_push_nowarn_*(...)` and `_pop_nowarn_*(...)`.
 
@@ -15,77 +16,100 @@
 #include <data/ClWarnMSVC.h>  // IWYU pragma: export
 
 /// @internal
+/// @ingroup sys_internal
 /// @def _internal_pragma(...)
 #define _internal_pragma(...) _Pragma(#__VA_ARGS__)
 
 /// @def _nowarn_begin_clang()
+/// @ingroup sys
 /// @brief Begin suppressing `clang` warnings.
 #define _nowarn_begin_clang()
 /// @def _nowarn_begin_gcc()
+/// @ingroup sys
 /// @brief Begin suppressing `gcc` warnings.
 #define _nowarn_begin_gcc()
 /// @def _nowarn_begin_msvc()
+/// @ingroup sys
 /// @brief Begin suppressing `msvc` warnings.
 #define _nowarn_begin_msvc()
 
 /// @def _nowarn_clang(compilerWarning)
+/// @ingroup sys
 /// @brief Suppress one `clang` warning.
 #define _nowarn_clang(compilerWarning)
 /// @def _nowarn_gcc(compilerWarning)
+/// @ingroup sys
 /// @brief Suppress one `gcc` warning.
 #define _nowarn_gcc(compilerWarning)
 /// @def _nowarn_msvc(compilerWarning)
+/// @ingroup sys
 /// @brief Suppress one `msvc` warning.
 #define _nowarn_msvc(compilerWarning)
 
 /// @def _nowarn_begin_one_clang(compilerWarning)
+/// @ingroup sys
 /// @brief Begin suppressing one `clang` warning.
 #define _nowarn_begin_one_clang(compilerWarning)
 /// @def _nowarn_begin_one_gcc(compilerWarning)
+/// @ingroup sys
 /// @brief Begin suppressing one `gcc` warning.
 #define _nowarn_begin_one_gcc(compilerWarning)
 /// @def _nowarn_begin_one_msvc(compilerWarning)
+/// @ingroup sys
 /// @brief Begin suppressing one `msvc` warning.
 #define _nowarn_begin_one_msvc(compilerWarning)
 
 /// @def _nowarn_end_clang()
+/// @ingroup sys
 /// @brief End suppressing `clang` warnings.
 #define _nowarn_end_clang()
 /// @def _nowarn_end_gcc()
+/// @ingroup sys
 /// @brief End suppressing `gcc` warnings.
 #define _nowarn_end_gcc()
 /// @def _nowarn_end_msvc()
+/// @ingroup sys
 /// @brief End suppressing `msvc` warnings.
 #define _nowarn_end_msvc()
 
 /// @def _nowarn_begin_conv_comp()
+/// @ingroup sys
 /// @brief Begin suppressing generic built-in type conversion warnings.
 #define _nowarn_begin_conv_comp()
 /// @def _nowarn_end_conv_comp()
+/// @ingroup sys
 /// @brief End suppressing generic built-in type conversion warnings.
 #define _nowarn_end_conv_comp()
 /// @def _nowarn_begin_deprecated()
+/// @ingroup sys
 /// @brief Begin suppressing generic deprecated warnings.
 #define _nowarn_begin_deprecated()
 /// @def _nowarn_end_deprecated()
+/// @ingroup sys
 /// @brief End suppressing generic deprecated warnings.
 #define _nowarn_end_deprecated()
 /// @def _nowarn_begin_c_cast()
+/// @ingroup sys
 /// @brief Begin suppressing generic C-style cast warnings.
 #define _nowarn_begin_c_cast()
 /// @def _nowarn_end_c_cast()
+/// @ingroup sys
 /// @brief End suppressing generic C-style cast warnings.
 #define _nowarn_end_c_cast()
 /// @def _nowarn_begin_use_after_free()
+/// @ingroup sys
 /// @brief Begin suppressing generic use-after-free warnings.
 #define _nowarn_begin_use_after_free()
 /// @def _nowarn_end_use_after_free()
+/// @ingroup sys
 /// @brief End suppressing generic use-after-free warnings.
 #define _nowarn_end_use_after_free()
 /// @def _nowarn_begin_unreachable()
+/// @ingroup sys
 /// @brief Begin suppressing generic unreachable code warnings.
 #define _nowarn_begin_unreachable()
 /// @def _nowarn_end_unreachable()
+/// @ingroup sys
 /// @brief End suppressing generic unreachable code warnings.
 #define _nowarn_end_unreachable()
 

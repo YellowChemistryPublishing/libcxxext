@@ -29,6 +29,7 @@ namespace sys
     template <ICharacter T>
     struct codepoint_view;
 
+    /// @ingroup sys_text
     /// @brief Unicode string container.
     template <ICharacter T>
     class string final
@@ -139,13 +140,13 @@ namespace sys
                 char32_t conv[3];
                 sz convSize = 0_uz;
                 if constexpr (IsUpper)
-                    convSize = internal::dchar_to_upper_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, fctx, lctx, unsafe());
+                    convSize = internal::dchar_to_upper_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, fctx, lctx, unsafe);
                 else
-                    convSize = internal::dchar_to_lower_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, fctx, lctx, unsafe());
+                    convSize = internal::dchar_to_lower_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, fctx, lctx, unsafe);
 
                 T buf[sizeof(char32_t) / sizeof(T)];
                 for (sz j = 0_uz; j < convSize; j++)
-                    ret.append(std::span(buf, ch::write_codepoint(conv[j] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */, buf, unsafe())));
+                    ret.append(std::span(buf, ch::write_codepoint(conv[j] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */, buf, unsafe)));
 
                 string::update_fcontext_for_char(fctx, c);
             }
@@ -162,8 +163,8 @@ namespace sys
         { }
         constexpr string(const std::initializer_list<T> il) : str(il) { }
         /// @warning `unsafe` because `cstr` has preconditions.
-        /// @pre `const T cstr[N]` => `cstr != nullptr && cstr[N - 1z] == '\0'`
-        constexpr string(const T* cstr, unsafe) : string(cstr, cstr + ch::buffer_size(cstr, unsafe())) { }
+        /// @pre `const T cstr[N] && cstr != nullptr && cstr[N - 1z] == '\0'`
+        constexpr string(const T* cstr, decltype(unsafe)) : string(cstr, cstr + ch::buffer_size(cstr, unsafe)) { }
         constexpr /* NOLINT(hicpp-explicit-conversions) */ string(std::basic_string<T> str) : str(std::move(str)) { }
         constexpr explicit string(const std::span<const T> data) : string(data.begin(), data.end()) { }
         constexpr explicit string(const std::basic_string_view<T> data) : string(data.begin(), data.end()) { }
@@ -225,9 +226,9 @@ namespace sys
         }
         /// @warning `unsafe` because `i` has preconditions.
         /// @pre `i < this->size()`
-        constexpr T& operator[](const sz i, unsafe) { return this->str[i]; }
+        constexpr T& operator[](const sz i, decltype(unsafe)) { return this->str[i]; }
         /// @overload
-        constexpr const T& operator[](const sz i, unsafe) const { return this->str[i]; }
+        constexpr const T& operator[](const sz i, decltype(unsafe)) const { return this->str[i]; }
 
         /// @brief Transcode between unicode strings of different character types.
         template <ICharacter U>
@@ -237,7 +238,7 @@ namespace sys
             for (const char32_t c : codepoint_view(std::span(other)))
             {
                 T buf[(sizeof(char32_t) / sizeof(T)) + 1uz] {};
-                this->append(std::span(buf, ch::write_codepoint(c, buf, unsafe())));
+                this->append(std::span(buf, ch::write_codepoint(c, buf, unsafe)));
             }
         }
         /// @see `sys::string<T>::string(const std::basic_string_view<U>)`
@@ -269,14 +270,14 @@ namespace sys
 
         /// @warning `unsafe` because `this` has preconditions.
         /// @pre `!this->empty()`
-        [[nodiscard]] constexpr T& front(unsafe) { return this->str.front(); }
+        [[nodiscard]] constexpr T& front(decltype(unsafe)) { return this->str.front(); }
         /// @overload
-        [[nodiscard]] constexpr const T& front(unsafe) const { return this->str.front(); }
+        [[nodiscard]] constexpr const T& front(decltype(unsafe)) const { return this->str.front(); }
         /// @warning `unsafe` because `this` has preconditions.
         /// @pre `!this->empty()`
-        [[nodiscard]] constexpr T& back(unsafe) { return this->str.back(); }
+        [[nodiscard]] constexpr T& back(decltype(unsafe)) { return this->str.back(); }
         /// @overload
-        [[nodiscard]] constexpr const T& back(unsafe) const { return this->str.back(); }
+        [[nodiscard]] constexpr const T& back(decltype(unsafe)) const { return this->str.back(); }
 
         [[nodiscard]] bool contains(const std::basic_string_view<T> substr) const { return this->str.contains(substr); }
         [[nodiscard]] bool starts_with(const T c) const { return this->str.starts_with(c); }
@@ -336,18 +337,18 @@ namespace sys
         /// @brief Remove the last character from the string.
         /// @warning `unsafe` because `this` has preconditions.
         /// @pre `!this->empty()`
-        constexpr string& pop_back(unsafe) &
+        constexpr string& pop_back(decltype(unsafe)) &
         {
             this->str.pop_back();
             return *this;
         }
         /// @overload
-        constexpr string pop_back(unsafe) && { return this->pop_back(unsafe()), std::move(*this); }
+        constexpr string pop_back(decltype(unsafe)) && { return this->pop_back(unsafe), std::move(*this); }
         /// @brief Erase the last character, if string non-empty.
         constexpr string& pop_back() &
         {
             if (!this->empty())
-                this->pop_back(unsafe());
+                this->pop_back(unsafe);
             return *this;
         }
         /// @overload
@@ -389,7 +390,7 @@ namespace sys
             for (const char32_t c : codepoint_view(*this))
             {
                 T buf[(sizeof(char32_t) / sizeof(T)) + 1uz] {};
-                ret.append(std::span(buf, ch::write_codepoint(c, buf, unsafe())));
+                ret.append(std::span(buf, ch::write_codepoint(c, buf, unsafe)));
             }
             return ret;
         }
@@ -419,11 +420,11 @@ namespace sys
             for (const char32_t c : codepoint_view(*this))
             {
                 char32_t conv[3];
-                const sz convSize = internal::dchar_fold_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, unsafe());
+                const sz convSize = internal::dchar_fold_special(conv /* NOLINT(hicpp-no-array-decay) */, c, lang, unsafe);
 
                 T buf[sizeof(char32_t) / sizeof(T)];
                 for (sz i = 0_uz; i < convSize; i++)
-                    ret.append(std::span(buf, ch::write_codepoint(conv[i] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */, buf, unsafe())));
+                    ret.append(std::span(buf, ch::write_codepoint(conv[i] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */, buf, unsafe)));
             }
             return ret;
         }
@@ -540,13 +541,19 @@ namespace sys
     template <ICharacter T>
     string(std::basic_string<T>) -> string<T>;
 
+    /// @ingroup sys_text
     using cstr = string<char>;
+    /// @ingroup sys_text
     using wstr = string<wchar_t>;
+    /// @ingroup sys_text
     using str = string<char8_t>;
+    /// @ingroup sys_text
     using str16 = string<char16_t>;
+    /// @ingroup sys_text
     using str32 = string<char32_t>;
 } // namespace sys
 
+/// @ingroup sys_text
 /// @brief `std::formatter<...>` specialization for `sys::string<...>`.
 template <sys::ICharacter T, sys::ICharacter FormatChar>
 struct /* NOLINT(bugprone-std-namespace-modification) */ std::formatter<sys::string<T>, FormatChar> : std::formatter<std::basic_string_view<FormatChar>, FormatChar>

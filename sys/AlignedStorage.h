@@ -10,6 +10,7 @@
 
 namespace sys
 {
+    /// @ingroup sys
     /// @brief Uninitialized aligned storage.
     /// @tparam Ts... Align to and be able to store at least the largest of these types.
     /// @note Pass `byref`.

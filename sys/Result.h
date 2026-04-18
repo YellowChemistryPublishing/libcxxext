@@ -5,12 +5,12 @@
 #include <algorithm>
 #include <cassert>
 #include <concepts>
-#include <coroutine>
 #include <cstddef>
 #include <memory>
 #include <type_traits>
 #include <utility>
 
+#include <CompilerWarnings.h>
 #include <LanguageSupport.h>
 #include <RecurringTemplate.h>
 #include <inline/Integer.inl>
@@ -19,40 +19,47 @@
 
 // NOLINTBEGIN(bugprone-macro-parentheses)
 /// @def _res_movret(out_decl, res_xval)
+/// @ingroup sys
 /// @brief Initialize `out_decl` with `res_xval`, early-returning if `res_xval` is an error.
-#define _res_movret(out_decl, res_xval)                        \
-    auto _ppcat(_result, __LINE__) = res_xval;                 \
-    if (!_ppcat(_result, __LINE__))                            \
-    {                                                          \
-        return [](auto&& res) -> auto                          \
-        {                                                      \
-            if constexpr (requires { res.err(); })             \
-                return std::forward<decltype(res)>(res).err(); \
-            else                                               \
-                return nullptr;                                \
-        }(std::move(_ppcat(_result, __LINE__)));               \
-    }                                                          \
-    out_decl = _ppcat(_result, __LINE__).move();
+#define _res_movret(out_decl, res_xval)              \
+    _nowarn_begin_one_clang(_clwarn_clang_consumed); \
+    auto _ppcat(_result, __LINE__) = res_xval;       \
+    if (!_ppcat(_result, __LINE__))                  \
+    {                                                \
+        return [](auto& res) -> auto                 \
+        {                                            \
+            if constexpr (requires { res.err(); })   \
+                return res.err();                    \
+            else                                     \
+                return nullptr;                      \
+        }(_ppcat(_result, __LINE__));                \
+    }                                                \
+    out_decl = _ppcat(_result, __LINE__).move();     \
+    _nowarn_end_clang();
 /// @def _res_movcoret(out_decl, res_xval)
+/// @ingroup sys
 /// @brief Initialize `out_decl` with `res_xval`, early-coroutine-returning if `res_xval` is an error.
-#define _res_movcoret(out_decl, res_xval)                      \
-    auto _ppcat(_result, __LINE__) = res_xval;                 \
-    if (!_ppcat(_result, __LINE__))                            \
-    {                                                          \
-        co_return [](auto&& res) -> auto                       \
-        {                                                      \
-            if constexpr (requires { res.err(); })             \
-                return std::forward<decltype(res)>(res).err(); \
-            else                                               \
-                return nullptr;                                \
-        }(std::move(_ppcat(_result, __LINE__)));               \
-    }                                                          \
-    out_decl = _ppcat(_result, __LINE__).move();
+#define _res_movcoret(out_decl, res_xval)            \
+    _nowarn_begin_one_clang(_clwarn_clang_consumed); \
+    auto _ppcat(_result, __LINE__) = res_xval;       \
+    if (!_ppcat(_result, __LINE__))                  \
+    {                                                \
+        co_return [](auto& res) -> auto              \
+        {                                            \
+            if constexpr (requires { res.err(); })   \
+                return res.err();                    \
+            else                                     \
+                return nullptr;                      \
+        }(_ppcat(_result, __LINE__));                \
+    }                                                \
+    out_decl = _ppcat(_result, __LINE__).move();     \
+    _nowarn_end_clang();
 // NOLINTEND(bugprone-macro-parentheses)
 
 namespace sys::internal
 {
     /// @internal
+    /// @ingroup sys_internal
     /// @brief Status of a result.
     /// @note Pass `byval`.
     enum class result_status : byte
@@ -62,15 +69,14 @@ namespace sys::internal
         empty
     };
 
-    template <typename T, typename Err>
-    struct result_awaiter;
-
     /// @internal
+    /// @ingroup sys_internal
     /// @brief Type to use in result storage to represent `T`.
     template <typename T>
     using result_storage_type = std::conditional_t<!std::is_lvalue_reference_v<T>, std::remove_cv_t<T>, std::remove_reference_t<T>*>;
 
     /// @internal
+    /// @ingroup sys_internal
     /// @brief Shared functionality for result types.
     template <template <typename, typename> class Result, typename T, typename Err>
     struct result_b : public recurring_template<Result<T, Err>>
@@ -83,24 +89,9 @@ namespace sys::internal
 
         using ok_type = T;
         using err_type = Err;
-
-        /// @brief Whether the result is good.
-        constexpr explicit operator bool() const noexcept { return this->downcast().status == result_status::ok; }
-        /// @brief Whether the result is bad.
-        /// @note We abuse operator overloading to make it so that both `operator bool()` and `operator!()` are `false` for an empty result!
-        constexpr bool operator!() const noexcept { return this->downcast().status == result_status::error; }
-
-        /// @brief Apply `func(*this)` and return its output.
-        [[nodiscard]] constexpr auto transform(auto&& func) noexcept(noexcept(func(std::move(this->downcast()))))
-        requires requires { func(std::declval<Result<T, Err>&&>()); }
-        {
-            return func(std::move(this->downcast()));
-        }
-
-        /// @brief Returns an awaiter to enable short-circuiting, akin to rustlang's `operator?`.
-        _inline_always result_awaiter<T, Err> operator co_await() { return result_awaiter<T, Err>(this->downcast()); }
     };
     /// @internal
+    /// @ingroup sys_internal
     /// @brief Shared functionality for result types that have a bad value.
     template <template <typename, typename> class Result, typename T, typename Err>
     struct result_b_err : public recurring_template<Result<T, Err>>
@@ -118,22 +109,19 @@ namespace sys::internal
             this->downcast().status = internal::result_status::error;
         }
 
-        [[nodiscard]] constexpr Err err(unsafe) noexcept(noexcept(Err(std::move(this->downcast().error))))
+        /// @internal
+        /// @brief Takes the error of a bad result.
+        /// @warning `unsafe` because of unchecked tagged union access.
+        [[nodiscard]] constexpr Err err(decltype(unsafe)) noexcept(noexcept(Err(std::move(this->downcast().error))))
         {
             Err ret = std::move(this->downcast().error);
             std::destroy_at(std::addressof(this->downcast().error));
             this->downcast().status = internal::result_status::empty;
             return ret;
         }
-    public:
-        /// @brief Take the error of a bad result.
-        /// @pre `*this == false`
-        [[nodiscard]] constexpr Err err() noexcept(noexcept(Err(this->err(unsafe()))))
-        {
-            _contract_assert(this->downcast().status == result_status::error, "Taking error for a good or empty result!");
-            return this->err(unsafe());
-        }
 
+        /// @internal
+        /// @brief Convert to a result with a single error state.
         [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || std::is_lvalue_reference_v<T> || requires {
             requires !std::same_as<T, void>;
             { T(std::declval<T&&>()) } noexcept;
@@ -141,18 +129,21 @@ namespace sys::internal
         {
             switch (this->downcast().status)
             {
-            case result_status::error: return Result<T, void>(nullptr);
-            case result_status::ok:
+            [[likely]] case result_status::error:
+                return Result<T, void>(nullptr);
+            [[likely]] case result_status::ok:
                 if constexpr (std::same_as<T, void>)
                     return Result<T, void>();
                 else
-                    return Result<T, void>(this->downcast().move(unsafe()));
-            case result_status::empty:
-            default: return Result<T, void>(unsafe());
+                    return Result<T, void>(this->downcast().template result_b_ok<Result, T, Err>::move(unsafe));
+            [[unlikely]] case result_status::empty:
+            [[unlikely]] default:
+                return Result<T, void>(unsafe);
             }
         }
     };
     /// @internal
+    /// @ingroup sys_internal
     /// @brief Shared functionality for result types that have a good value.
     template <template <typename, typename> class Result, typename T, typename Err>
     struct result_b_ok : public recurring_template<Result<T, Err>>
@@ -188,7 +179,10 @@ namespace sys::internal
             this->downcast().status = internal::result_status::ok;
         }
 
-        [[nodiscard]] constexpr T move(unsafe) noexcept(std::is_lvalue_reference_v<T> || noexcept(T(std::declval<T&&>())))
+        /// @internal
+        /// @brief Takes the value of a good result.
+        /// @warning `unsafe` because of unchecked tagged union access.
+        [[nodiscard]] constexpr T move(decltype(unsafe)) noexcept(std::is_lvalue_reference_v<T> || noexcept(T(std::declval<T&&>())))
         {
             if constexpr (std::is_lvalue_reference_v<T>)
             {
@@ -205,22 +199,6 @@ namespace sys::internal
             }
         }
     public:
-        /// @brief Takes the value if the result has a good value.
-        /// @pre `*this == true`
-        [[nodiscard]] constexpr T move() noexcept(noexcept(this->move(unsafe())))
-        {
-            _contract_assert(this->downcast().status == result_status::ok, "Taking value for a bad result!");
-            return this->move(unsafe());
-        }
-        /// @brief `this->move()` if the result is good, otherwise `other`.
-        template <typename With>
-        [[nodiscard]] constexpr T move_or(With&& other) noexcept(noexcept(this->move(unsafe())) && noexcept(T(std::forward<With>(other))))
-        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
-        {
-            _retif(T(std::forward<With>(other)), this->downcast().status != result_status::ok);
-            return this->move(unsafe());
-        }
-
         template <template <typename, typename> class, typename, typename>
         friend struct sys::internal::result_b_err;
     };
@@ -228,10 +206,12 @@ namespace sys::internal
 
 namespace sys
 {
+    /// @ingroup sys
     /// @brief Tag type to force construction of a bad result.
     struct error_tag final
     { };
 
+    /// @ingroup sys
     /// @brief Concept for types that can be stored in a result.
     template <typename T>
     concept IResultStorable = !requires {
@@ -244,6 +224,7 @@ namespace sys
              std::is_nothrow_destructible_v<T>);
     };
 
+    /// @ingroup sys
     /// @brief A monadic type that can hold either a value or an error.
     /// @details Like the one in rustlang!
     /// @note Pass `byref`.
@@ -251,7 +232,9 @@ namespace sys
     requires (!requires {
                  { sizeof(T) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
              } || !std::is_reference_v<Err>)            /* Intentionally don't support reference errors--doesn't really make sense. */
-    class [[nodiscard]] result final : public internal::result_b<result, T, Err>, public internal::result_b_ok<result, T, Err>, public internal::result_b_err<result, T, Err>
+    class [[nodiscard, clang::consumable(unconsumed)]] result final : public internal::result_b<result, T, Err>,
+                                                                      public internal::result_b_ok<result, T, Err>,
+                                                                      public internal::result_b_err<result, T, Err>
     {
         union
         {
@@ -314,22 +297,23 @@ namespace sys
         // NOLINTEND(hicpp-explicit-conversions)
 
         constexpr result(const result&) = delete;
-        constexpr result(result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>) && std::is_nothrow_move_constructible_v<Err>)
+        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>) &&
+                                                                                       std::is_nothrow_move_constructible_v<Err>)
         {
             switch (other.status)
             {
             [[likely]] case internal::result_status::ok:
-                this->ctor_ok(other.move(unsafe()));
+                this->ctor_ok(other.template result_b_ok<result, T, Err>::move(unsafe));
                 break;
             [[unlikely]] case internal::result_status::error:
-                this->ctor_err(other.err(unsafe()));
+                this->ctor_err(other.template result_b_err<result, T, Err>::err(unsafe));
                 break;
             [[unlikely]] case internal::result_status::empty:
             [[unlikely]] default:
                 other.status = internal::result_status::empty;
             }
         }
-        constexpr ~result()
+        [[clang::callable_when("consumed", "unknown")]] constexpr ~result()
         {
             switch (this->status)
             {
@@ -354,15 +338,160 @@ namespace sys
             return *this;
         }
 
+        /// @brief Whether the result is good.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr explicit operator bool() const noexcept
+        {
+            return this->status == internal::result_status::ok;
+        }
+        /// @brief Whether the result is bad.
+        /// @note We abuse operator overloading to make it so that both `operator bool()` and `operator!()` are `false` for an empty result!
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr bool operator!() const noexcept
+        {
+            return this->status == internal::result_status::error;
+        }
+
+        /// @brief Convert to a result with a single error state.
+        [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<T, void>() && noexcept(
+            noexcept(std::move(*this).template result_b_err<sys::result, T, Err>::operator result<T, void>()))
+        {
+            return std::move(*this).template result_b_err<sys::result, T, Err>::operator result<T, void>();
+        }
+
+        /// @brief Takes the value if the result has a good value.
+        /// @pre `*this == true`
+        [[nodiscard, clang::callable_when("consumed"), clang::set_typestate(unknown)]] constexpr T move() noexcept(
+            noexcept(this->template result_b_ok<sys::result, T, Err>::move(unsafe)))
+        {
+            _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad result!");
+            return this->template result_b_ok<sys::result, T, Err>::move(unsafe);
+        }
+        /// @brief `this->move()` if the result is good, otherwise `other`.
+        template <typename With>
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T move_or(With&& other) noexcept(
+            noexcept(this->template result_b_ok<sys::result, T, Err>::move(unsafe)) && noexcept(T(std::forward<With>(other))))
+        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
+        {
+            _retif(T(std::forward<With>(other)), this->status != internal::result_status::ok);
+            return this->template result_b_ok<sys::result, T, Err>::move(unsafe);
+        }
+        /// @brief Takes the value if the result has a good value.
+        /// @pre `*this == true`
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T expect() noexcept(
+            noexcept(this->template result_b_ok<sys::result, T, Err>::move(unsafe)))
+        {
+            _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad result!");
+            return this->template result_b_ok<sys::result, T, Err>::move(unsafe);
+        }
+
+        /// @brief Take the error of a bad result.
+        /// @pre `*this == false`
+        [[nodiscard, clang::callable_when("consumed"), clang::set_typestate(unknown)]] constexpr Err err() noexcept(
+            noexcept(Err(this->template result_b_err<sys::result, T, Err>::err(unsafe))))
+        {
+            _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!");
+            return this->template result_b_err<sys::result, T, Err>::err(unsafe);
+        }
+        /// @brief Take the error of a bad result.
+        /// @pre `*this == false`
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr Err expect_err() noexcept(
+            noexcept(Err(this->template result_b_err<sys::result, T, Err>::err(unsafe))))
+        {
+            _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!");
+            return this->template result_b_err<sys::result, T, Err>::err(unsafe);
+        }
+
+        /// @brief Apply `func(*this)` and return its output.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr auto transform(auto&& func) && noexcept(
+            noexcept(func(std::move(*this))))
+        requires requires { func(std::move(*this)); }
+        {
+            return func(std::move(*this));
+        }
+
+        friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
+                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(noexcept(std::swap(a, b)))
+        {
+            std::swap(a, b);
+        }
+
         friend struct sys::internal::result_b<result, T, Err>;
         friend struct sys::internal::result_b_ok<result, T, Err>;
         friend struct sys::internal::result_b_err<result, T, Err>;
     };
 
+    /// @ingroup sys
+    /// @brief Specialization of `sys::result<...>` representing a boolean result.
+    /// @details A result valueless in both `T` and `Err`, iow. a `bool` with more explicit semantics.
+    template <>
+    class [[nodiscard, clang::consumable(unconsumed)]] result<void, void> final : public internal::result_b<result, void, void>
+    {
+        internal::result_status status = internal::result_status::empty;
+
+        constexpr explicit result(decltype(unsafe)) noexcept { };
+    public:
+        // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
+
+        /// @brief Construct a success result.
+        [[clang::return_typestate(unconsumed)]] constexpr result() noexcept : status(internal::result_status::ok) { }
+        /// @brief Construct an error result.
+        constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
+        constexpr result(const result&) = delete;
+        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept : status(other.status) { other.status = internal::result_status::empty; }
+        [[clang::callable_when("consumed")]] constexpr ~result() = default;
+
+        // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
+
+        result& operator=(const result&) = delete;
+        result& operator=(result&& other) noexcept(std::is_nothrow_move_constructible_v<result>)
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        /// @brief Whether the result is good.
+        [[nodiscard, clang::set_typestate(consumed)]] constexpr explicit operator bool() const noexcept { return this->status == internal::result_status::ok; }
+        /// @brief Whether the result is bad.
+        /// @note We abuse operator overloading to make it so that both `operator bool()` and `operator!()` are `false` for an empty result!
+        [[nodiscard, clang::set_typestate(consumed)]] constexpr bool operator!() const noexcept { return this->status == internal::result_status::error; }
+
+        /// @brief Expects the result to be good.
+        /// @pre `*this == true`
+        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect() const
+        {
+            _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad or empty result!");
+        }
+        /// @brief Expects the result to be bad.
+        /// @pre `*this == false`
+        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect_err() const
+        {
+            _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!");
+        }
+
+        /// @brief Apply `func(*this)` and return its output.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr auto transform(auto&& func) && noexcept(
+            noexcept(func(std::move(*this))))
+        requires requires { func(std::move(*this)); }
+        {
+            return func(std::move(*this));
+        }
+
+        friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
+                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept
+        {
+            std::swap(a.status, b.status);
+        }
+
+        friend struct sys::internal::result_b<result, void, void>;
+        template <template <typename, typename> class, typename, typename>
+        friend struct sys::internal::result_b_err;
+    };
+
+    /// @ingroup sys
     /// @brief Specialization of `sys::result<...>` with a unit error type.
     /// @details For a result with a single possible error state, iow. a valueless error.
     template <IResultStorable T>
-    class [[nodiscard]] result<T, void> final : public internal::result_b<result, T, void>, public internal::result_b_ok<result, T, void>
+    requires (!std::same_as<std::remove_cvref_t<T>, void>)
+    class [[nodiscard, clang::consumable(unconsumed)]] result<T, void> final : public internal::result_b<result, T, void>, public internal::result_b_ok<result, T, void>
     {
         union
         {
@@ -372,7 +501,7 @@ namespace sys
         internal::result_status status = internal::result_status::empty;
 
         // To ensure well-defined conversion from any `Err` result to `void` result.
-        constexpr explicit result(unsafe) noexcept /* NOLINT(hicpp-member-init) */ { };
+        constexpr explicit result(decltype(unsafe)) noexcept /* NOLINT(hicpp-member-init) */ { };
     public:
         // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
 
@@ -396,12 +525,12 @@ namespace sys
         /// @brief Construct an error result.
         constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
-        constexpr result(result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>))
+        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>))
         {
             switch (other.status)
             {
             [[likely]] case internal::result_status::ok:
-                this->ctor_ok(other.move(unsafe()));
+                this->ctor_ok(other.template result_b_ok<result, T, void>::move(unsafe));
                 break;
             [[unlikely]] case internal::result_status::error:
                 this->status = internal::result_status::error;
@@ -411,7 +540,7 @@ namespace sys
                 other.status = internal::result_status::empty;
             }
         }
-        ~result()
+        [[clang::callable_when("consumed", "unknown")]] ~result()
         {
             if constexpr (!std::is_lvalue_reference_v<T>)
                 if (this->status == internal::result_status::ok) [[likely]]
@@ -429,19 +558,82 @@ namespace sys
             return *this;
         }
 
+        /// @brief Whether the result is good.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr explicit operator bool() const noexcept
+        {
+            return this->status == internal::result_status::ok;
+        }
+        /// @brief Whether the result is bad.
+        /// @note We abuse operator overloading to make it so that both `operator bool()` and `operator!()` are `false` for an empty result!
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr bool operator!() const noexcept
+        {
+            return this->status == internal::result_status::error;
+        }
+
+        /// @brief Takes the value if the result has a good value.
+        /// @pre `*this == true`
+        [[nodiscard, clang::callable_when("consumed"), clang::set_typestate(unknown)]] constexpr T move() noexcept(
+            noexcept(this->template result_b_ok<sys::result, T, void>::move(unsafe)))
+        {
+            _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad result!");
+            return this->template result_b_ok<sys::result, T, void>::move(unsafe);
+        }
+        /// @brief `this->move()` if the result is good, otherwise `other`.
+        template <typename With>
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T move_or(With&& other) noexcept(
+            noexcept(this->template result_b_ok<sys::result, T, void>::move(unsafe)) && noexcept(T(std::forward<With>(other))))
+        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
+        {
+            _retif(T(std::forward<With>(other)), this->status != internal::result_status::ok);
+            return this->template result_b_ok<sys::result, T, void>::move(unsafe);
+        }
+        /// @brief Takes the value if the result has a good value.
+        /// @pre `*this == true`
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T expect() noexcept(
+            noexcept(this->template result_b_ok<sys::result, T, void>::move(unsafe)))
+        {
+            _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad result!");
+            return this->template result_b_ok<sys::result, T, void>::move(unsafe);
+        }
+
+        /// @brief Expects the result to be bad.
+        /// @pre `*this == false`
+        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect_err() const
+        {
+            _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!");
+        }
+
+        /// @brief Apply `func(*this)` and return its output.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr auto transform(auto&& func) && noexcept(
+            noexcept(func(std::move(*this))))
+        requires requires { func(std::move(*this)); }
+        {
+            return func(std::move(*this));
+        }
+
+        friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
+                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(noexcept(std::swap(a, b)))
+        {
+            std::swap(a, b);
+        }
+
         friend struct sys::internal::result_b<result, T, void>;
         friend struct sys::internal::result_b_ok<result, T, void>;
         template <template <typename, typename> class, typename, typename>
         friend struct sys::internal::result_b_err;
     };
 
+    /// @ingroup sys
     /// @brief Specialization of `sys::result<...>` that holds no value if ok.
     /// @details For a result with a single possible success state.
     template <typename Err>
-    requires (!requires {
-                 { sizeof(Err) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
-             } || !std::is_reference_v<Err>)
-    class [[nodiscard]] result<void, Err> final : public internal::result_b<result, void, Err>, public internal::result_b_err<result, void, Err>
+    requires requires {
+        requires !requires {
+            { sizeof(Err) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
+        } || !std::is_reference_v<Err>;
+        requires !std::same_as<std::remove_cvref_t<Err>, void>;
+    }
+    class [[nodiscard, clang::consumable(unconsumed)]] result<void, Err> final : public internal::result_b<result, void, Err>, public internal::result_b_err<result, void, Err>
     {
         union
         {
@@ -453,7 +645,7 @@ namespace sys
         // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
 
         /// @brief Construct a success result.
-        constexpr result() noexcept : status(internal::result_status::ok) { }
+        [[clang::return_typestate(unconsumed)]] constexpr result() noexcept : status(internal::result_status::ok) { }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
         constexpr result(error_tag, Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
@@ -481,12 +673,12 @@ namespace sys
             : result(error_tag(), std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;
-        constexpr result(result&& other) noexcept(std::is_nothrow_move_constructible_v<Err>) : status(other.status)
+        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept(std::is_nothrow_move_constructible_v<Err>) : status(other.status)
         {
             switch (other.status)
             {
             [[unlikely]] case internal::result_status::error:
-                this->ctor_err(other.err(unsafe()));
+                this->ctor_err(other.template result_b_err<result, void, Err>::err(unsafe));
                 break;
             [[likely]] case internal::result_status::ok:
                 this->status = internal::result_status::ok;
@@ -496,7 +688,7 @@ namespace sys
                 other.status = internal::result_status::empty;
             }
         }
-        ~result()
+        [[clang::callable_when("consumed", "unknown")]] ~result()
         {
             if (this->status == internal::result_status::error) [[unlikely]]
                 std::destroy_at(std::addressof(this->error));
@@ -513,55 +705,78 @@ namespace sys
             return *this;
         }
 
-        friend struct sys::internal::result_b<result, void, Err>;
-        friend struct sys::internal::result_b_err<result, void, Err>;
-    };
-
-    /// @brief Specialization of `sys::result<...>` representing a boolean result.
-    /// @details A result valueless in both `T` and `Err`, iow. a `bool` with more explicit semantics.
-    template <>
-    class [[nodiscard]] result<void, void> final : public internal::result_b<result, void, void>
-    {
-        internal::result_status status = internal::result_status::empty;
-
-        constexpr explicit result(unsafe) noexcept { };
-    public:
-        // NOLINTBEGIN(hicpp-explicit-conversions, hicpp-member-init)
-
-        /// @brief Construct a success result.
-        constexpr result() noexcept : status(internal::result_status::ok) { }
-        /// @brief Construct an error result.
-        constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
-        constexpr result(const result&) = delete;
-        constexpr result(result&& other) noexcept : status(other.status) { other.status = internal::result_status::empty; }
-        constexpr ~result() = default;
-
-        // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
-
-        result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(std::is_nothrow_move_constructible_v<result>)
+        /// @brief Whether the result is good.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr explicit operator bool() const noexcept
         {
-            swap(*this, other);
-            return *this;
+            return this->status == internal::result_status::ok;
+        }
+        /// @brief Whether the result is bad.
+        /// @note We abuse operator overloading to make it so that both `operator bool()` and `operator!()` are `false` for an empty result!
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr bool operator!() const noexcept
+        {
+            return this->status == internal::result_status::error;
         }
 
-        friend void swap(result& a, result& b) noexcept { std::swap(a.status, b.status); }
+        /// @brief Convert to a result with a single error state.
+        [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<void, void>() && noexcept(
+            noexcept(std::move(*this).template result_b_err<sys::result, void, Err>::operator result<void, void>()))
+        {
+            return std::move(*this).template result_b_err<sys::result, void, Err>::operator result<void, void>();
+        }
 
-        friend struct sys::internal::result_b<result, void, void>;
-        template <template <typename, typename> class, typename, typename>
-        friend struct sys::internal::result_b_err;
+        /// @brief Expects the result to be good.
+        /// @pre `*this == true`
+        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect() const
+        {
+            _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad or empty result!");
+        }
+
+        /// @brief Take the error of a bad result.
+        /// @pre `*this == false`
+        [[nodiscard, clang::callable_when("consumed"), clang::set_typestate(unknown)]] constexpr Err err() noexcept(
+            noexcept(Err(this->template result_b_err<sys::result, void, Err>::err(unsafe))))
+        {
+            _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!");
+            return this->template result_b_err<sys::result, void, Err>::err(unsafe);
+        }
+        /// @brief Take the error of a bad result.
+        /// @pre `*this == false`
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr Err expect_err() noexcept(
+            noexcept(Err(this->template result_b_err<sys::result, void, Err>::err(unsafe))))
+        {
+            _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!");
+            return this->template result_b_err<sys::result, void, Err>::err(unsafe);
+        }
+
+        /// @brief Apply `func(*this)` and return its output.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr auto transform(auto&& func) && noexcept(
+            noexcept(func(std::move(*this))))
+        requires requires { func(std::move(*this)); }
+        {
+            return func(std::move(*this));
+        }
+
+        friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
+                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(noexcept(std::swap(a, b)))
+        {
+            std::swap(a, b);
+        }
+
+        friend struct sys::internal::result_b<result, void, Err>;
+        friend struct sys::internal::result_b_err<result, void, Err>;
     };
 } // namespace sys
 
 namespace sys::internal
 {
+    /// @ingroup sys_internal
     /// @warning Be careful, `T` must be empty-queryable after moved-from, for an underlying specialization of `sys::result<...>` to be valid in its entirety!
     template <IResultStorable T>
     requires requires {
         requires !std::is_reference_v<T>;
         meta::generic_nullable_adaptor<std::add_const_t<T>>(std::declval<std::add_const_t<T>&>()).is_null();
     }
-    class [[nodiscard]] nullable_value_result : public internal::result_b<result, T, void>
+    class [[nodiscard, clang::consumable(unconsumed)]] nullable_value_result : public internal::result_b<result, T, void>
     {
         T value {};
     public:
@@ -571,31 +786,61 @@ namespace sys::internal
             value(std::forward<Args>(args)...)
         { }
         constexpr nullable_value_result(const nullable_value_result&) = delete;
-        constexpr nullable_value_result(nullable_value_result&& other) noexcept(noexcept(swap(*this, other))) { swap(*this, other); }
-        constexpr ~nullable_value_result() = default;
+        constexpr nullable_value_result([[clang::return_typestate(unknown)]] nullable_value_result&& other) noexcept(noexcept(swap(*this, other))) { swap(*this, other); }
+        [[clang::callable_when("consumed", "unknown")]] constexpr ~nullable_value_result() = default;
 
         nullable_value_result& operator=(const nullable_value_result&) = delete;
-        nullable_value_result& operator=(nullable_value_result&& other) noexcept(noexcept(swap(*this, other)))
+        nullable_value_result& operator=([[clang::return_typestate(unknown)]] nullable_value_result&& other) noexcept(noexcept(swap(*this, other)))
         {
             swap(*this, other);
             return *this;
         }
 
-        // Deliberately shadow otherwise invalid functions in base.
-        constexpr explicit operator bool() const noexcept { return !meta::generic_nullable_adaptor<std::add_const_t<T>>(this->value).is_null(); }
-        constexpr bool operator!() const noexcept { return !_as(bool, *this); }
+        /// @brief Whether the result is good.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr explicit operator bool() const noexcept
+        {
+            return !meta::generic_nullable_adaptor<std::add_const_t<T>>(this->value).is_null();
+        }
+        /// @brief Whether the result is bad.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr bool operator!() const noexcept { return !_as(bool, *this); }
 
-        [[nodiscard]] constexpr T move() noexcept(noexcept(T(std::move(this->value))))
+        /// @brief Takes the value if the result has a good value.
+        /// @pre `*this == true`
+        [[nodiscard, clang::callable_when("consumed"), clang::set_typestate(unknown)]] constexpr T move() noexcept(noexcept(T(std::move(this->value))))
         {
             _contract_assert(*this, "Taking value for a bad result!");
             return std::move(this->value);
         }
+        /// @brief `this->move()` if the result is good, otherwise `other`.
         template <typename With>
-        [[nodiscard]] constexpr T move_or(With&& other) noexcept(noexcept(T(std::move(this->value))) && noexcept(T(std::forward<With>(other))))
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T move_or(With&& other) noexcept(
+            noexcept(T(std::move(this->value))) && noexcept(T(std::forward<With>(other))))
         requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
         {
             _retif(T(std::forward<With>(other)), !(*this));
             return std::move(this->value);
+        }
+        /// @brief Takes the value if the result has a good value.
+        /// @pre `*this == true`
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T expect() noexcept(noexcept(T(std::move(this->value))))
+        {
+            _contract_assert(*this, "Taking value for a bad result!");
+            return std::move(this->value);
+        }
+
+        /// @brief Expects the result to be bad.
+        /// @pre `*this == false`
+        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect_err() const
+        {
+            _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!");
+        }
+
+        /// @brief Apply `func(*this)` and return its output.
+        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr auto transform(this result<T>&& _this, auto&& func) noexcept(
+            noexcept(func(std::move(_this))))
+        requires requires { func(std::move(_this)); }
+        {
+            return func(std::move(_this));
         }
 
         friend void swap(nullable_value_result& a, nullable_value_result& b) noexcept(noexcept(std::swap(a.value, b.value)))
@@ -608,6 +853,7 @@ namespace sys::internal
 
 namespace sys
 {
+    /// @ingroup sys
     template <typename T>
     class [[nodiscard]] result<T*, void> final : public internal::nullable_value_result<T*>
     {
@@ -616,32 +862,5 @@ namespace sys
 
         using internal::nullable_value_result<T*>::nullable_value_result;
         using internal::nullable_value_result<T*>::operator=;
-    };
-
-    /// @brief Awaiter to enable short-circuiting, akin to rustlang's `operator?`.
-    template <typename T, typename Err>
-    struct result_awaiter final
-    {
-        /// @cond
-        [[nodiscard]] _inline_always constexpr bool await_ready() const noexcept { return res; }
-        template <typename Promise>
-        _inline_always constexpr void await_suspend(std::coroutine_handle<Promise> parent)
-        {
-            if constexpr (!std::same_as<Err, void>)
-                parent.promise().return_value(res.err());
-            else if constexpr (requires { parent.promise().return_void(); })
-                parent.promise().return_void();
-            else
-                parent.promise().return_value(nullptr);
-
-            if constexpr (requires { parent.promise().continuation.resume(); })
-                parent.promise().continuation.resume();
-        }
-        _inline_always constexpr T await_resume() const noexcept(std::same_as<T, void>) { return res.move(); }
-        /// @endcond
-
-        friend class sys::result<T, Err>;
-    private:
-        result<T, Err>& res; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
     };
 } // namespace sys
