@@ -77,7 +77,7 @@ namespace sys
             if (this->pre_call())
                 return;
 
-            const sys::destructor releaseBusy = [&]() noexcept -> void { this->busy.clear(std::memory_order_release); };
+            const sys::destructor releaseBusy = [this]() noexcept -> void { this->busy.clear(std::memory_order_release); };
             std::forward<Func>(func)(std::forward<Args>(args)...);
 
             this->initialized.test_and_set(std::memory_order_release);
@@ -95,7 +95,7 @@ namespace sys
             if (this->pre_call())
                 return {};
 
-            const sys::destructor releaseBusy = [&]() noexcept -> void { this->busy.clear(std::memory_order_release); };
+            const sys::destructor releaseBusy = [this]() noexcept -> void { this->busy.clear(std::memory_order_release); };
             if (auto res = std::forward<Func>(func)(std::forward<Args>(args)...); !res)
             {
                 if constexpr (!std::same_as<typename std::invoke_result_t<Func, Args&&...>::err_type, void>)

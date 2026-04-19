@@ -142,15 +142,6 @@ namespace sys
     /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/jthread.html).
     class [[nodiscard]] managed_thread final
     {
-        /// @brief Checks if `Func` could be the type of a global function.
-        template <typename Func>
-        static consteval bool is_global_func() noexcept
-        {
-            return std::is_function_v<std::remove_pointer_t<std::decay_t<Func>>>;
-        }
-        template <typename Func>
-        using storage_type = std::conditional_t<managed_thread::is_global_func<Func>(), std::decay_t<Func>, std::decay_t<Func>*>;
-
         thrd_t th {};
 
         /// @warning `unsafe` because `th` must be initialized and running.
@@ -185,42 +176,27 @@ namespace sys
         {
             thrd_t th {};
 
-            storage_type<Func> f = [&]() noexcept(noexcept(std::decay_t<Func>(std::declval<Func&&>()))) -> storage_type<Func>
+            std::decay_t<Func>* f = [&]() noexcept(noexcept(std::decay_t<Func>(std::declval<Func&&>()))) -> std::decay_t<Func>*
             {
-                if constexpr (!managed_thread::is_global_func<Func>())
-                    return new(std::nothrow) std::decay_t<Func>(std::forward<Func>(func)); // NOLINT(cppcoreguidelines-owning-memory)
-                else
-                    return func;
+                return new(std::nothrow) std::decay_t<Func>(std::forward<Func>(func)); // NOLINT(cppcoreguidelines-owning-memory)
             }();
-            if constexpr (managed_thread::is_global_func<Func>())
-                _retif(threading_error::invalid_argument, !f);
-            else
-                _retif(threading_error::oom, !f);
+            _retif(threading_error::oom, !f);
 
-            sys::optional_destructor releaseFunc = [&]() noexcept -> void
-            {
-                if constexpr (!managed_thread::is_global_func<Func>())
-                    delete f; // NOLINT(cppcoreguidelines-owning-memory)
-            };
+            sys::optional_destructor releaseFunc = [f]() noexcept -> void { delete f /* NOLINT(cppcoreguidelines-owning-memory) */; };
 
             _nowarn_begin_one_msvc(4702);
             if (thrd_create(&th, [](void* arg) noexcept -> int
             {
                 int ret = 0;
-                std::decay_t<Func> func = [&]() noexcept -> std::decay_t<Func>
-                {
-                    if constexpr (!managed_thread::is_global_func<Func>())
-                        return *(_as(std::decay_t<Func>*, arg));
-                    else
-                        return _asr(std::decay_t<Func>, arg);
-                }();
+                std::decay_t<Func>* func = _as(std::decay_t<Func>*, arg);
+                sys::destructor releaseFunc = [func]() noexcept -> void { delete func /* NOLINT(cppcoreguidelines-owning-memory) */; };
 
                 try
                 {
                     if constexpr (std::convertible_to<std::invoke_result_t<std::decay_t<Func>>, int>)
-                        ret = _as(int, func());
+                        ret = _as(int, (*func)());
                     else
-                        (void)func();
+                        (void)(*func)();
                 }
                 catch (...)
                 {
