@@ -14,7 +14,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
         $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fconcepts-diagnostics-depth=4>
 
         $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU>,$<COMPILE_LANG_AND_ID:CXX,GNU>>:
-        -fno-signaling-nans -fcx-limited-range -Wlogical-op -Wduplicated-cond -Wduplicated-branches -Wuseless-cast
+        -fno-signaling-nans -fcx-limited-range -Wlogical-op -Wduplicated-cond -Wduplicated-branches
         -Wimplicit-fallthrough=5 -Walloc-zero -Wdangling-pointer=2 -Wmaybe-uninitialized>
         $<$<OR:$<COMPILE_LANG_AND_ID:C,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>>:
         -Wno-extra-semi -Wno-c++98-compat-extra-semi -Wno-c2y-extensions
