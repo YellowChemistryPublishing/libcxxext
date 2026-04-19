@@ -12072,7 +12072,8 @@ namespace sys::internal
 
     /// @internal
     /// @ingroup sys_internal
-    constexpr sz dchar_to_lower_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx, [[maybe_unused]] const sys::lookahead_casing_context& lctx, decltype(unsafe)) noexcept
+    constexpr sz dchar_to_lower_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx,
+                                        [[maybe_unused]] const sys::lookahead_casing_context& lctx, decltype(unsafe)) noexcept
     {
         if (c == U'\u03A3' && fctx.is_preceded_by_cased && !lctx.followed_by_cased)
         {
@@ -12144,14 +12145,13 @@ namespace sys::internal
             out[0] = U'\u0069';
             out[1] = U'\u0307';
             return 2_uz;
-        default:
-            out[0] = dchar_to_lower_simple(c);
-            return 1_uz;
+        default: out[0] = dchar_to_lower_simple(c); return 1_uz;
         }
     }
     /// @internal
     /// @ingroup sys_internal
-    constexpr sz dchar_to_upper_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx, [[maybe_unused]] const sys::lookahead_casing_context& lctx, decltype(unsafe)) noexcept
+    constexpr sz dchar_to_upper_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx,
+                                        [[maybe_unused]] const sys::lookahead_casing_context& lctx, decltype(unsafe)) noexcept
     {
         if (c == U'\u0069' && lang == u8"tr")
         {
@@ -12589,9 +12589,7 @@ namespace sys::internal
             out[0] = U'\u0544';
             out[1] = U'\u053D';
             return 2_uz;
-        default:
-            out[0] = dchar_to_upper_simple(c);
-            return 1_uz;
+        default: out[0] = dchar_to_upper_simple(c); return 1_uz;
         }
     }
     /// @internal
@@ -13052,9 +13050,7 @@ namespace sys::internal
             out[0] = U'\u0574';
             out[1] = U'\u056D';
             return 2_uz;
-        default:
-            out[0] = dchar_fold_simple(c);
-            return 1_uz;
+        default: out[0] = dchar_fold_simple(c); return 1_uz;
         }
     }
 } // namespace sys::internal

@@ -66,17 +66,14 @@ TEST_CASE("Thread handle can be detached.", "[sys.Threading][thread]")
     std::atomic_flag done = ATOMIC_FLAG_INIT;
 
     {
-        sys::managed_thread t = sys::managed_thread::ctor([&]() -> void
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(50 /* NOLINT(readability-magic-numbers) */));
-            done.test_and_set();
-        }).expect();
+        sys::managed_thread t = sys::managed_thread::ctor([&]() -> void { done.test_and_set(); }).expect();
         t.detach();
 
         CHECK_FALSE(t.joinable());
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(100 /* NOLINT(readability-magic-numbers) */));
+    // Wait probably long enough...
+    std::this_thread::sleep_for(std::chrono::milliseconds(250 /* NOLINT(readability-magic-numbers) */));
     CHECK(done.test());
 }
 
