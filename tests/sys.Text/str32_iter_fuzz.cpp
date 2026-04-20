@@ -18,7 +18,7 @@ TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fu
 {
     rc::check("Iterating over random bytes never crashes and exhausts buffer.", [](const std::vector<u8::underlying_type>& bytes) -> void
     {
-        const char8_t* start = _asr(const char8_t*, bytes.data());
+        const char8_t* start = _asr(bytes.data(), const char8_t*);
         const char8_t* endPtr = start + bytes.size(); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
         sys::codepoint_iter<char8_t> it(start, endPtr);

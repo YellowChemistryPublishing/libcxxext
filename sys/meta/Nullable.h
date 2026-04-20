@@ -21,7 +21,7 @@ namespace sys::meta
 
         [[nodiscard]] constexpr bool is_null(this auto&& _this)
         requires requires {
-            { _as(bool, _this.ref) } -> std::same_as<bool>;
+            { _as(_this.ref, bool) } -> std::same_as<bool>;
         } || requires {
             { _this.ref } -> std::convertible_to<bool>;
         } || requires {
@@ -29,9 +29,9 @@ namespace sys::meta
         }
         {
             if constexpr (requires {
-                              { _as(bool, _this.ref) } -> std::same_as<bool>;
+                              { _as(_this.ref, bool) } -> std::same_as<bool>;
                           })
-                return !_as(bool, _this.ref);
+                return !_as(_this.ref, bool);
             else if constexpr (requires {
                                    { _this.ref } -> std::convertible_to<bool>;
                                })

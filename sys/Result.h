@@ -125,7 +125,7 @@ namespace sys::internal
         /// @brief Convert to a result with a single error state.
         [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || meta::type<T>::is_lvalue() || requires {
             requires !std::same_as<T, void>;
-            { T(std::declval<T&&>()) } noexcept;
+            requires INothrowMoveConstructible<T>;
         })
         {
             switch (this->downcast().status)
@@ -142,6 +142,8 @@ namespace sys::internal
                 return Result<T, void>(unsafe);
             }
         }
+
+        friend Result<T, Err>; // Because MSVC is a moron.
     };
     /// @internal
     /// @ingroup sys_internal
@@ -352,12 +354,10 @@ namespace sys
         }
 
         /// @brief Convert to a result with a single error state.
-        [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<T, void>() && noexcept(
-            noexcept(std::move(*this).template result_b_err<sys::result, T, Err>::operator result<T, void>()))
+        [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<T, void>() && noexcept(std::same_as<T, void> || meta::type<T>::is_lvalue() ||
+                                                                                                               INothrowMoveConstructible<T>)
         {
-            // MSVC thinks there's a non-returning branch (erroneously), otherwise.
-            result<T, void> ret = std::move(*this).template result_b_err<sys::result, T, Err>::operator result<T, void>();
-            return ret;
+            return _as(std::move(_as(*this, internal::result_b_err<result, T, Err>&)), result<T, void>);
         }
 
         /// @brief Takes the value if the result has a good value.
@@ -721,10 +721,9 @@ namespace sys
         }
 
         /// @brief Convert to a result with a single error state.
-        [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<void, void>() && noexcept(
-            noexcept(std::move(*this).template result_b_err<sys::result, void, Err>::operator result<void, void>()))
+        [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<void, void>() && noexcept
         {
-            return std::move(*this).template result_b_err<sys::result, void, Err>::operator result<void, void>();
+            return _as(std::move(_as(*this, internal::result_b_err<result, void, Err>&)), result<void, void>);
         }
 
         /// @brief Expects the result to be good.

@@ -55,7 +55,7 @@ TEST_CASE("Overlong Encodings (Produces Replacement Character)", "[sys.Text][ch]
 }
 TEST_CASE("Invalid Start Bytes", "[sys.Text][ch][read_codepoint][utf8]")
 {
-    for (char8_t b : { _as(char8_t, 0x80), _as(char8_t, 0xBF), _as(char8_t, 0xF5), _as(char8_t, 0xFF) })
+    for (char8_t b : { _as(0x80, char8_t), _as(0xBF, char8_t), _as(0xF5, char8_t), _as(0xFF, char8_t) })
     {
         auto [cp, size] = sys::ch::read_codepoint(std::span(&b, 1uz), unsafe); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
         CHECK(cp == sys::ch::replacement<char32_t>()[0]);
@@ -110,7 +110,7 @@ TEST_CASE("Unpaired Surrogates", "[sys.Text][ch][read_codepoint][utf16]")
     // Trail surrogate first.
     char16_t buf3[] { 0xDD25 };
     auto [cp3, size3] = sys::ch::read_codepoint(std::span(buf3), unsafe); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
-    CHECK(_as(uint32_t, cp3) == _as(uint32_t, sys::ch::replacement<char32_t>()[0]));
+    CHECK(_as(cp3, uint32_t) == _as(sys::ch::replacement<char32_t>()[0], uint32_t));
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)

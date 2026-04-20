@@ -250,7 +250,7 @@ namespace sys
         /// @see `sys::string<T>::string(const std::basic_string_view<U>)`
         template <ICharacter U>
         requires (!std::same_as<T, U>)
-        constexpr explicit string(const sys::string<U>& other) : string(_as(std::basic_string_view<U>, other))
+        constexpr explicit string(const sys::string<U>& other) : string(_as(other, std::basic_string_view<U>))
         { }
 
         [[nodiscard]] bool empty() const { return this->str.empty(); }
@@ -524,7 +524,7 @@ namespace sys
                 if constexpr (requires { ret.append(part); })
                     ret.append(part);
                 else
-                    ret.append(_as(string, part));
+                    ret.append(_as(part, string));
                 needPrependSep = true;
             }
 
@@ -566,6 +566,6 @@ struct /* NOLINT(bugprone-std-namespace-modification) */ std::formatter<sys::str
         if constexpr (std::same_as<T, FormatChar>)
             return std::formatter<std::basic_string_view<FormatChar>, FormatChar>::format(std::basic_string_view<T>(str), context);
         else
-            return std::formatter<std::basic_string_view<FormatChar>, FormatChar>::format(_as(std::basic_string_view<FormatChar>, sys::string<FormatChar>(str)), context);
+            return std::formatter<std::basic_string_view<FormatChar>, FormatChar>::format(_as(sys::string<FormatChar>(str), std::basic_string_view<FormatChar>), context);
     }
 };

@@ -31,7 +31,7 @@ namespace sys::meta
             if constexpr (requires { _this.range.empty(); })
                 return _this.range.empty();
             else if constexpr (requires { std::size(_this.range); })
-                return std::size(_this.range) == _as(decltype(std::size(_this.range)), 0);
+                return std::size(_this.range) == _as(0, decltype(std::size(_this.range)));
         }
         [[nodiscard]] constexpr bool empty(this auto&&) = delete;
         /// @brief (Potentially) inplace construct and append an element to an appendable `this->range`.

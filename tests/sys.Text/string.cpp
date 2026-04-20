@@ -25,18 +25,18 @@ TEST_CASE("Empty Constructors", "[sys.Text][string][ctor]")
 {
     const sys::str s;
     CHECK(s.empty());
-    CHECK(s.size() == _as(sz, 0_uz));
+    CHECK(s.size() == _as(0_uz, sz));
 }
 
 TEST_CASE("Literal Constructors", "[sys.Text][string][ctor]")
 {
     sys::cstr s = "hello";
     CHECK(s == "hello");
-    CHECK(s.size() == _as(sz, 5_uz));
+    CHECK(s.size() == _as(5_uz, sz));
 
     sys::str16 s16 = u"world";
     CHECK(s16 == u"world");
-    CHECK(s16.size() == _as(sz, 5_uz));
+    CHECK(s16.size() == _as(5_uz, sz));
 }
 
 TEST_CASE("Initializer List", "[sys.Text][string][ctor]")

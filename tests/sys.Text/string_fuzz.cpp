@@ -24,7 +24,7 @@ TEST_CASE("Join of split by same delimiter is invariant.", "[fuzz][sys.Text][str
         sys::str s;
         for (const u8::underlying_type v : bytes)
             if (v)
-                s.append(_as(char8_t, v));
+                s.append(_as(v, char8_t));
 
         RC_ASSERT(sys::str::join(s.split(u8','), u8",") == s);
     });
@@ -34,18 +34,18 @@ TEST_CASE("UTF-8 -> UTF-32 -> UTF-8 is invariant.", "[fuzz][sys.Text][string]")
 {
     rc::check("UTF-8 -> UTF-32 -> UTF-8 is invariant.", [](const std::string& input) -> void
     {
-        sys::str s(std::span<const char8_t>(_asr(const char8_t*, input.data()) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
+        sys::str s(std::span<const char8_t>(_asr(input.data(), const char8_t*) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
         s.replace_invalid();
-        RC_ASSERT(s == _as(sys::str, _as(sys::str32, s)));
+        RC_ASSERT(s == _as(_as(s, sys::str32), sys::str));
     });
 }
 TEST_CASE("UTF-8 -> UTF-16 -> UTF-8 is invariant.", "[fuzz][sys.Text][string]")
 {
     rc::check("UTF-8 -> UTF-16 -> UTF-8 is invariant.", [](const std::string& input) -> void
     {
-        sys::str s(std::span<const char8_t>(_asr(const char8_t*, input.data()) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
+        sys::str s(std::span<const char8_t>(_asr(input.data(), const char8_t*) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
         s.replace_invalid();
-        RC_ASSERT(s == _as(sys::str, _as(sys::str16, s)));
+        RC_ASSERT(s == _as(_as(s, sys::str16), sys::str));
     });
 }
 
@@ -53,18 +53,18 @@ TEST_CASE("UTF-16 -> UTF-32 -> UTF-16 is invariant.", "[fuzz][sys.Text][string]"
 {
     rc::check("UTF-16 -> UTF-32 -> UTF-16 is invariant.", [](const std::vector<u16::underlying_type>& input) -> void
     {
-        sys::str16 s(std::span<const char16_t>(_asr(const char16_t*, input.data()) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
+        sys::str16 s(std::span<const char16_t>(_asr(input.data(), const char16_t*) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
         s.replace_invalid();
-        RC_ASSERT(s == _as(sys::str16, _as(sys::str32, s)));
+        RC_ASSERT(s == _as(_as(s, sys::str32), sys::str16));
     });
 }
 TEST_CASE("UTF-16 -> UTF-8 -> UTF-16 is invariant.", "[fuzz][sys.Text][string]")
 {
     rc::check("UTF-16 -> UTF-8 -> UTF-16 is invariant.", [](const std::vector<u16::underlying_type>& input) -> void
     {
-        sys::str16 s(std::span<const char16_t>(_asr(const char16_t*, input.data()) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
+        sys::str16 s(std::span<const char16_t>(_asr(input.data(), const char16_t*) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
         s.replace_invalid();
-        RC_ASSERT(s == _as(sys::str16, _as(sys::str, s)));
+        RC_ASSERT(s == _as(_as(s, sys::str), sys::str16));
     });
 }
 
@@ -72,18 +72,18 @@ TEST_CASE("UTF-32 -> UTF-16 -> UTF-32 is invariant.", "[fuzz][sys.Text][string]"
 {
     rc::check("UTF-32 -> UTF-16 -> UTF-32 is invariant.", [](const std::vector<u32::underlying_type>& input) -> void
     {
-        sys::str32 s(std::span<const char32_t>(_asr(const char32_t*, input.data()) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
+        sys::str32 s(std::span<const char32_t>(_asr(input.data(), const char32_t*) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
         s.replace_invalid();
-        RC_ASSERT(s == _as(sys::str32, _as(sys::str16, s)));
+        RC_ASSERT(s == _as(_as(s, sys::str16), sys::str32));
     });
 }
 TEST_CASE("UTF-32 -> UTF-8 -> UTF-32 is invariant.", "[fuzz][sys.Text][string]")
 {
     rc::check("UTF-32 -> UTF-8 -> UTF-32 is invariant.", [](const std::vector<u32::underlying_type>& input) -> void
     {
-        sys::str32 s(std::span<const char32_t>(_asr(const char32_t*, input.data()) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
+        sys::str32 s(std::span<const char32_t>(_asr(input.data(), const char32_t*) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
         s.replace_invalid();
-        RC_ASSERT(s == _as(sys::str32, _as(sys::str, s)));
+        RC_ASSERT(s == _as(_as(s, sys::str), sys::str32));
     });
 }
 
@@ -91,7 +91,7 @@ TEST_CASE("Trim reduces size or stays same.", "[fuzz][sys.Text][string]")
 {
     rc::check("Trim reduces size or stays same.", [](const std::string& input) -> void
     {
-        const sys::str s(std::span<const char8_t>(_asr(const char8_t*, input.data()) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
+        const sys::str s(std::span<const char8_t>(_asr(input.data(), const char8_t*) /* NOLINT(cppcoreguidelines-pro-type-reinterpret-cast) */, input.size()));
         const sys::str trimmed = sys::str(s).trim();
         RC_ASSERT(trimmed.size() <= s.size());
         RC_ASSERT(s.contains(trimmed));

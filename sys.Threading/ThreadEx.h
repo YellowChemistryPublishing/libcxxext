@@ -188,13 +188,13 @@ namespace sys
             if (thrd_create(&th, [](void* arg) noexcept -> int
             {
                 int ret = 0;
-                std::decay_t<Func>* func = _as(std::decay_t<Func>*, arg);
+                std::decay_t<Func>* func = _as(arg, std::decay_t<Func>*);
                 sys::destructor releaseFunc = [func]() noexcept -> void { delete func /* NOLINT(cppcoreguidelines-owning-memory) */; };
 
                 try
                 {
                     if constexpr (std::convertible_to<std::invoke_result_t<std::decay_t<Func>>, int>)
-                        ret = _as(int, (*func)());
+                        ret = _as((*func)(), int);
                     else
                         (void)(*func)();
                 }
@@ -204,7 +204,7 @@ namespace sys
                 }
 
                 return ret;
-            }, _asr(void*, f)) != thrd_success)
+            }, _as(f, void*)) != thrd_success)
                 return threading_error::init_failed;
             _nowarn_end_msvc();
 

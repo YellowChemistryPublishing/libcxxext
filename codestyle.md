@@ -14,11 +14,9 @@ Due to partial requirements to support exceptions, your code must expect that co
 abandons unmanaged resources, i.e. (wrong) `spinLock.lock(); ... /* throw expr */ ... spinLock.unlock();`. The natural corollary of this is that all synchronisation mechanisms
 (i.e. `std::mutex`) must never have `.lock()` or `.unlock()` invoked directly--you should use some lock guard instead.
 
-No C-style casts! Shortened macros for all casts are provided for convenience, please use those! (i.e. `_as(T, expr)` equiv. `static_cast<T>(expr)`.) Alternatively, for many
-builtin types, prefer invoking their constructors explicitly. (i.e. `int(2.0f)`.)
+No C-style casts! Shortened macros for all casts are provided for convenience, please use those! (i.e. `_as(expr, T)` equiv. `static_cast<T>(expr)`.)
 
-Please don't let constructors silently fail! Instead, include the static member function `static sys::result<T> ctor(...)`, and include in the body of the analogous constructor
-`_assert_ctor_can_fail()`.
+Please don't let constructors silently fail! Instead, include the static member function `static sys::result<T> ctor(...)`.
 
 ## Informed Annotations
 
@@ -97,7 +95,7 @@ When deciding what casing to use:
 
 Single statement bodies of control flow (i.e. after an `if`, `else`, `for`, etc.) must omit curly braces.
 
-In addition, boolean checks must be as concise as possible, i.e. prefer `if (res)` over `if (_as(bool, res) == true)`.
+In addition, boolean checks must be as concise as possible, i.e. prefer `if (res)` over `if (_as(res, bool) == true)`.
 
 ## Library Checklist
 

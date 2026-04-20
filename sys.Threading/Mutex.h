@@ -33,7 +33,7 @@ namespace sys
         {
             return this->o.call_once([&]() noexcept -> sys::result<void>
             {
-                _retif(nullptr, mtx_init(&this->mut, _as(unsigned, mtx_plain) | _as(unsigned, mtx_timed) | _as(unsigned, IsRecursive ? mtx_recursive : 0)) != thrd_success);
+                _retif(nullptr, mtx_init(&this->mut, _as(mtx_plain, unsigned) | _as(mtx_timed, unsigned) | _as(IsRecursive ? mtx_recursive : 0, unsigned)) != thrd_success);
                 return {};
             });
         }

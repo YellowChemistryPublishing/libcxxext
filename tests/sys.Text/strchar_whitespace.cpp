@@ -22,39 +22,39 @@ TEST_CASE("Standard Whitespace", "[sys.Text][ch][is_whitespace]")
 TEST_CASE("Unicode Whitespace (Exhaustive)", "[sys.Text][ch][is_whitespace]")
 {
     // Space Separators
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x00A0))); // NBSP
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x1680))); // OGHAM SPACE MARK
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2000))); // EN QUAD
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2001))); // EM QUAD
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2002))); // EN SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2003))); // EM SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2004))); // THREE-PER-EM SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2005))); // FOUR-PER-EM SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2006))); // SIX-PER-EM SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2007))); // FIGURE SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2008))); // PUNCTUATION SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2009))); // THIN SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x200A))); // HAIR SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x202F))); // NARROW NO-BREAK SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x205F))); // MEDIUM MATHEMATICAL SPACE
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x3000))); // IDEOGRAPHIC SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x00A0, char32_t))); // NBSP
+    CHECK(sys::ch::is_whitespace(_as(0x1680, char32_t))); // OGHAM SPACE MARK
+    CHECK(sys::ch::is_whitespace(_as(0x2000, char32_t))); // EN QUAD
+    CHECK(sys::ch::is_whitespace(_as(0x2001, char32_t))); // EM QUAD
+    CHECK(sys::ch::is_whitespace(_as(0x2002, char32_t))); // EN SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x2003, char32_t))); // EM SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x2004, char32_t))); // THREE-PER-EM SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x2005, char32_t))); // FOUR-PER-EM SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x2006, char32_t))); // SIX-PER-EM SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x2007, char32_t))); // FIGURE SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x2008, char32_t))); // PUNCTUATION SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x2009, char32_t))); // THIN SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x200A, char32_t))); // HAIR SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x202F, char32_t))); // NARROW NO-BREAK SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x205F, char32_t))); // MEDIUM MATHEMATICAL SPACE
+    CHECK(sys::ch::is_whitespace(_as(0x3000, char32_t))); // IDEOGRAPHIC SPACE
 
     // Line / Paragraph Separators
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2028))); // LINE SEPARATOR
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x2029))); // PARAGRAPH SEPARATOR
+    CHECK(sys::ch::is_whitespace(_as(0x2028, char32_t))); // LINE SEPARATOR
+    CHECK(sys::ch::is_whitespace(_as(0x2029, char32_t))); // PARAGRAPH SEPARATOR
 
     // Other Control Characters
-    CHECK(sys::ch::is_whitespace(_as(char32_t, 0x0085))); // NEXT LINE (NEL)
+    CHECK(sys::ch::is_whitespace(_as(0x0085, char32_t))); // NEXT LINE (NEL)
 }
 
 TEST_CASE("Non-Whitespace Boundaries", "[sys.Text][ch][is_whitespace]")
 {
     CHECK_FALSE(sys::ch::is_whitespace('A'));
     CHECK_FALSE(sys::ch::is_whitespace(U'0'));
-    CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x0000))); // Null-terminator doesn't count.
-    CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x167F))); // Just before Ogham.
-    CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x1681))); // Just after Ogham.
-    CHECK_FALSE(sys::ch::is_whitespace(_as(char32_t, 0x200B))); // ZERO WIDTH SPACE
+    CHECK_FALSE(sys::ch::is_whitespace(_as(0x0000, char32_t))); // Null-terminator doesn't count.
+    CHECK_FALSE(sys::ch::is_whitespace(_as(0x167F, char32_t))); // Just before Ogham.
+    CHECK_FALSE(sys::ch::is_whitespace(_as(0x1681, char32_t))); // Just after Ogham.
+    CHECK_FALSE(sys::ch::is_whitespace(_as(0x200B, char32_t))); // ZERO WIDTH SPACE
 }
 
 TEST_CASE("Basic ASCII String Trimming", "[sys.Text][string][trim]")

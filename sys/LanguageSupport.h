@@ -63,11 +63,6 @@
 /// @brief Concatenates two tokens.
 #define _ppcat(a, b) _catcat(a, b)
 
-/// @def _assert_ctor_can_fail()
-/// @ingroup sys
-/// @brief Reminder to use `...::%ctor` instead of a constructor when the constructor may fail.
-#define _assert_ctor_can_fail() static_assert(false, "This constructor may fail, use `...::ctor` instead.")
-
 /// @ingroup sys
 /// @brief Tag value for function variants that are `unsafe`.
 constexpr struct
@@ -148,22 +143,22 @@ constexpr struct
 /// @brief Convenience macro aliases for C++ casts.
 /// @{
 
-/// @def _as(T, ...)
+/// @def _as(expr, ...)
 /// @ingroup sys
 /// @brief Alias for `static_cast`.
-#define _as(T, ...) static_cast<T>(__VA_ARGS__)
-/// @def _asd(T, ...)
+#define _as(expr, ...) static_cast<__VA_ARGS__>(expr)
+/// @def _asd(expr, ...)
 /// @ingroup sys
 /// @brief Alias for `dynamic_cast`.
-#define _asd(T, ...) dynamic_cast<T>(__VA_ARGS__)
-/// @def _asc(T, ...)
+#define _asd(expr, ...) dynamic_cast<__VA_ARGS__>(expr)
+/// @def _asc(expr, ...)
 /// @ingroup sys
 /// @brief Alias for `const_cast`.
-#define _asc(T, ...) const_cast<T>(__VA_ARGS__)
-/// @def _asr(T, ...)
+#define _asc(expr, ...) const_cast<__VA_ARGS__>(expr)
+/// @def _asr(expr, ...)
 /// @ingroup sys
 /// @brief Alias for `reinterpret_cast`.
-#define _asr(T, ...) reinterpret_cast<T>(__VA_ARGS__)
+#define _asr(expr, ...) reinterpret_cast<__VA_ARGS__>(expr)
 
 /// @}
 

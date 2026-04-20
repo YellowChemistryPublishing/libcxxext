@@ -22,7 +22,7 @@ namespace sys
     /// @tparam DefaultConcurrentAccessors A statically-known default number of concurrent accesses, or `sys::bsentinel<T>()` to require a constructor argument.
     /// @details Implements `sys::INothrowDestructible`. Conditionally implements `sys::INothrowDefaultConstructible` when `DefaultConcurrentAccessors != sys::bsentinel<T>()`.
     template <sys::IBuiltinInteger T, T DefaultConcurrentAccessors = sys::bsentinel<T>()>
-    requires (DefaultConcurrentAccessors >= _as(T, 0) || DefaultConcurrentAccessors == sys::bsentinel<T>())
+    requires (DefaultConcurrentAccessors >= _as(0, T) || DefaultConcurrentAccessors == sys::bsentinel<T>())
     class [[clang::capability("semaphore")]] ordinary_semaphore final
     {
     private:
@@ -64,7 +64,7 @@ namespace sys
         {
             auto guardRes = this->mut.lock();
             _retif(guardRes.err(), !guardRes);
-            _retif(waitRes.err(), auto waitRes = this->cv.wait_until(this->mut, [&]() -> bool { return this->counter > _as(T, 0); }); !waitRes);
+            _retif(waitRes.err(), auto waitRes = this->cv.wait_until(this->mut, [&]() -> bool { return this->counter > _as(0, T); }); !waitRes);
 
             --this->counter;
             return {};
@@ -111,7 +111,7 @@ namespace sys
     /// For more information on semaphore threading primitives, see
     /// [Rust Docs](https://docs.rs/semaphore/latest/semaphore/struct.Semaphore.html),
     /// [C++ Docs](https://en.cppreference.com/w/cpp/thread/counting_semaphore.html).
-    using binary_semaphore = ordinary_semaphore<uint_least8_t, _as(uint_least8_t, 1)>;
+    using binary_semaphore = ordinary_semaphore<uint_least8_t, _as(1, uint_least8_t)>;
 
     /// @ingroup sys_threading
     /// @relates ordinary_semaphore

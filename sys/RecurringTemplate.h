@@ -22,10 +22,6 @@ namespace sys
 
         /// @private
         /// @brief Downcasts to `T`.
-        constexpr auto& downcast(this auto&& _this) noexcept
-        {
-            using type = meta::replace_cv<recurring_type, std::remove_reference_t<decltype(_this)>>;
-            return *_as(type*, std::addressof(_this));
-        }
+        constexpr auto& downcast(this auto&& _this) noexcept { return *_as(std::addressof(_this), meta::replace_cv<recurring_type, std::remove_reference_t<decltype(_this)>>*); }
     };
 } // namespace sys

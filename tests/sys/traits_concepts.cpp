@@ -297,7 +297,7 @@ namespace
 {
     struct test_functor
     {
-        int operator()(int x, float y) const { return _as(int, _as(float, x) + y); }
+        int operator()(int x, float y) const { return _as(_as(x, float) + y, int); }
     };
 } // namespace
 static_assert(sys::IFunc<test_functor, int(int, float)>);

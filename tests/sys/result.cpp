@@ -146,7 +146,7 @@ TEST_CASE("Value/error type semantics are correct.", "[sys][result]")
     CHECK_FALSE([]() -> sys::result<void, i32> { return 4_i32; }().operator bool());
 
     CHECK([]() -> sys::result<std::string, const char*> { return "hallo"; }().expect() == "hallo");
-    CHECK(std::string_view([]() -> sys::result<std::string, const char*> { return _as(const char*, "hallo"); }().expect_err()) == "hallo");
+    CHECK(std::string_view([]() -> sys::result<std::string, const char*> { return _as("hallo", const char*); }().expect_err()) == "hallo");
     CHECK([]() -> sys::result<std::string, const char*> { return { 4uz, 'a' }; }().expect() == "aaaa");
     CHECK(std::string_view([]() -> sys::result<std::string, const char*> { return { sys::error_tag, "oops" }; }().expect_err()) == "oops");
 
@@ -181,11 +181,11 @@ TEST_CASE("Can transform result to any value.", "[sys][result][transform]")
 
 TEST_CASE("Can convert result to unit-result.", "[sys][result]")
 {
-    CHECK(_as(sys::result<void>, sys::result<void>()));
-    CHECK_FALSE(_as(sys::result<void>, sys::result<void, i32>(4_i32)));
-    _as(sys::result<i64>, sys::result<i64>(nullptr)).expect_err();
-    CHECK_FALSE(_as(bool, _as(sys::result<i64>, sys::result<i64, i32>(23_i32))));
-    CHECK(_as(sys::result<i64>, sys::result<i64, i32>(23_i64)).expect() == 23_i64);
+    CHECK(_as(sys::result<void>(), sys::result<void>));
+    CHECK_FALSE(_as((sys::result<void, i32>(4_i32)), sys::result<void>));
+    _as(sys::result<i64>(nullptr), sys::result<i64>).expect_err();
+    CHECK_FALSE(_as(_as((sys::result<i64, i32>(23_i32)), sys::result<i64>), bool));
+    CHECK(_as((sys::result<i64, i32>(23_i64)), sys::result<i64>).expect() == 23_i64);
 }
 
 TEST_CASE("Pointer result (analogous to any other nullable-value result) works correctly.", "[sys][result]")

@@ -104,7 +104,7 @@ TEST_CASE("Semaphore limits concurrent accessors under contention.", "[sys.Threa
     constexpr i32 maxPermits = 3;
     constexpr i32 numThreads = 12;
 
-    sys::semaphore sem(_as(sz, maxPermits), unsafe);
+    sys::semaphore sem(_as(maxPermits, sz), unsafe);
     std::atomic<int> inFlight = 0;
     std::atomic<int> maxInFlight = 0;
     std::vector<sys::managed_thread> threads;

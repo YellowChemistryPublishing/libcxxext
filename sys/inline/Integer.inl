@@ -83,9 +83,9 @@ namespace sys
     {
         if (!std::isfinite(value)) [[unlikely]]
             return sys::bsentinel<To>();
-        else if (value <= _as(From, std::numeric_limits<To>::lowest())) [[unlikely]]
+        else if (value <= _as(std::numeric_limits<To>::lowest(), From)) [[unlikely]]
             return std::numeric_limits<To>::lowest();
-        else if (value >= _as(From, std::numeric_limits<To>::max())) [[unlikely]]
+        else if (value >= _as(std::numeric_limits<To>::max(), From)) [[unlikely]]
             return std::numeric_limits<To>::max();
         else [[likely]]
             return To(value);
@@ -119,14 +119,14 @@ namespace sys
         [[nodiscard]] static consteval integer highest() noexcept { return std::numeric_limits<For>::max(); }
         [[nodiscard]] static consteval integer lowest() noexcept { return std::numeric_limits<For>::lowest(); }
         /// @brief All ones.
-        [[nodiscard]] static consteval integer ones() noexcept { return _as(For, ~_as(For, 0)); }
+        [[nodiscard]] static consteval integer ones() noexcept { return _as(~_as(0, For), For); }
         /// @brief An opinionated sentinel value.
         [[nodiscard]] static consteval integer sentinel() noexcept { return sys::bsentinel<For>(); }
 
         constexpr integer() noexcept = default;
         /// @brief From narrower-bounded.
         template <IBuiltinIntegerCanHold<For> T>
-        constexpr /* NOLINT(hicpp-explicit-conversions) */ integer(T v) noexcept : underlying(_as(For, v))
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ integer(T v) noexcept : underlying(_as(v, For))
         { }
         /// @note Saturating.
         template <typename T>
@@ -135,7 +135,7 @@ namespace sys
         { }
         /// @warning `unsafe` because this is truncating.
         template <sys::IBuiltinInteger T>
-        constexpr explicit integer(T v, decltype(unsafe)) noexcept : underlying(std::bit_cast<For>(_as(unsigned_t, std::bit_cast<std::make_unsigned_t<T>>(v))))
+        constexpr explicit integer(T v, decltype(unsafe)) noexcept : underlying(std::bit_cast<For>(_as(std::bit_cast<std::make_unsigned_t<T>>(v), unsigned_t)))
         { }
         /// @note Saturating.
         template <sys::IBuiltinInteger T>
@@ -152,7 +152,7 @@ namespace sys
         template <IBuiltinIntegerCanHold<For> T>
         constexpr integer& operator=(T v) noexcept
         {
-            this->underlying = _as(For, v);
+            this->underlying = _as(v, For);
             return *this;
         }
         constexpr integer& operator=(const integer& other) noexcept = default;
@@ -173,7 +173,7 @@ namespace sys
         template <sys::IBuiltinFloatingPoint T>
         [[nodiscard]] constexpr explicit operator T() const noexcept
         {
-            return _as(T, **this);
+            return _as(**this, T);
         }
 
         [[nodiscard]] constexpr explicit operator bool() const noexcept { return **this; }
@@ -255,18 +255,18 @@ namespace sys
             return std::cmp_greater_equal(a, *b);
         }
 
-        constexpr integer& operator++() noexcept { return (*this = integer(this->u() + _as(unsigned_t, 1), unsafe)); }
-        constexpr integer& operator--() noexcept { return (*this = integer(this->u() - _as(unsigned_t, 1), unsafe)); }
+        constexpr integer& operator++() noexcept { return (*this = integer(this->u() + _as(1, unsigned_t), unsafe)); }
+        constexpr integer& operator--() noexcept { return (*this = integer(this->u() - _as(1, unsigned_t), unsafe)); }
         constexpr integer operator++(int) noexcept
         {
             integer ret = *this;
-            *this = integer(this->u() + _as(unsigned_t, 1), unsafe);
+            *this = integer(this->u() + _as(1, unsigned_t), unsafe);
             return ret;
         }
         constexpr integer operator--(int) noexcept
         {
             integer ret = *this;
-            *this = integer(this->u() - _as(unsigned_t, 1), unsafe);
+            *this = integer(this->u() - _as(1, unsigned_t), unsafe);
             return ret;
         }
 
@@ -278,7 +278,7 @@ namespace sys
             if (**this == std::numeric_limits<For>::lowest()) [[unlikely]]
                 return integer(std::numeric_limits<For>::max());
             else [[likely]]
-                return integer(_as(For, -**this));
+                return integer(_as(-**this, For));
         }
         [[nodiscard]] friend constexpr integer operator+(integer a, integer b) noexcept { return integer(a.u() + b.u(), unsafe); }
         [[nodiscard]] friend constexpr integer operator-(integer a, integer b) noexcept { return integer(a.u() - b.u(), unsafe); }
@@ -294,14 +294,14 @@ namespace sys
                 return integer(std::numeric_limits<For>::max());
             }
             else [[likely]]
-                return integer(_as(For, *a / *b));
+                return integer(_as(*a / *b, For));
         }
         [[nodiscard]] friend constexpr integer operator%(integer a, integer b) noexcept
         {
             if (*b == 0) [[unlikely]]
                 return a;
             else [[likely]]
-                return integer(_as(For, *a % *b));
+                return integer(_as(*a % *b, For));
         }
 
         [[nodiscard]] constexpr integer operator~() const noexcept { return integer(~this->u(), unsafe); }
@@ -389,7 +389,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<int_least8_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least8_t>::min()))
         throw std::overflow_error("Literal too large for `i8`.");
 
-    return { _as(int_least8_t, lit) };
+    return { _as(lit, int_least8_t) };
 }
 /// @brief Literal suffix for `i16`.
 /* NOLINT(misc-use-internal-linkage) */ consteval i16 operator""_i16(ullong lit) noexcept
@@ -397,7 +397,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<int_least16_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least16_t>::min()))
         throw std::overflow_error("Literal too large for `i16`.");
 
-    return { _as(int_least16_t, lit) };
+    return { _as(lit, int_least16_t) };
 }
 /// @brief Literal suffix for `i32`.
 /* NOLINT(misc-use-internal-linkage) */ consteval i32 operator""_i32(ullong lit) noexcept
@@ -405,7 +405,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<int_least32_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least32_t>::min()))
         throw std::overflow_error("Literal too large for `i32`.");
 
-    return { _as(int_least32_t, lit) };
+    return { _as(lit, int_least32_t) };
 }
 /// @brief Literal suffix for `i64`.
 /* NOLINT(misc-use-internal-linkage) */ consteval i64 operator""_i64(ullong lit) noexcept
@@ -413,7 +413,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<int_least64_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least64_t>::min()))
         throw std::overflow_error("Literal too large for `i64`.");
 
-    return { _as(int_least64_t, lit) };
+    return { _as(lit, int_least64_t) };
 }
 /// @brief Literal suffix for `u8`.
 /* NOLINT(misc-use-internal-linkage) */ consteval u8 operator""_u8(ullong lit) noexcept
@@ -421,7 +421,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<uint_least8_t>::max()))
         throw std::overflow_error("Literal too large for `u8`.");
 
-    return { _as(uint_least8_t, lit) };
+    return { _as(lit, uint_least8_t) };
 }
 /// @brief Literal suffix for `u16`.
 /* NOLINT(misc-use-internal-linkage) */ consteval u16 operator""_u16(ullong lit) noexcept
@@ -429,7 +429,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<uint_least16_t>::max()))
         throw std::overflow_error("Literal too large for `u16`.");
 
-    return { _as(uint_least16_t, lit) };
+    return { _as(lit, uint_least16_t) };
 }
 /// @brief Literal suffix for `u32`.
 /* NOLINT(misc-use-internal-linkage) */ consteval u32 operator""_u32(ullong lit) noexcept
@@ -437,7 +437,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<uint_least32_t>::max()))
         throw std::overflow_error("Literal too large for `u32`.");
 
-    return { _as(uint_least32_t, lit) };
+    return { _as(lit, uint_least32_t) };
 }
 /// @brief Literal suffix for `u64`.
 /* NOLINT(misc-use-internal-linkage) */ consteval u64 operator""_u64(ullong lit) noexcept
@@ -445,7 +445,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<uint_least64_t>::max()))
         throw std::overflow_error("Literal too large for `u64`.");
 
-    return { _as(uint_least64_t, lit) };
+    return { _as(lit, uint_least64_t) };
 }
 /// @brief Literal suffix for `ssz`.
 /* NOLINT(misc-use-internal-linkage) */ consteval ssz operator""_z(ullong lit) noexcept
@@ -453,7 +453,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<ptrdiff_t>::max()) || std::cmp_less(lit, std::numeric_limits<ptrdiff_t>::min()))
         throw std::overflow_error("Literal too large for `ssz`.");
 
-    return { _as(ptrdiff_t, lit) };
+    return { _as(lit, ptrdiff_t) };
 }
 /// @brief Literal suffix for `sz`.
 /* NOLINT(misc-use-internal-linkage) */ consteval sz operator""_uz(ullong lit) noexcept
@@ -461,7 +461,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     if (std::cmp_greater(lit, std::numeric_limits<size_t>::max()))
         throw std::overflow_error("Literal too large for `sz`.");
 
-    return { _as(size_t, lit) };
+    return { _as(lit, size_t) };
 }
 // clang-format on
 // NOLINTEND(bugprone-exception-escape)
