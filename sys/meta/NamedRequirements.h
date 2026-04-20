@@ -71,7 +71,7 @@ namespace sys
     template <typename T>
     concept IScalar = std::is_scalar_v<T>;
     /// @ingroup sys
-    /// @brief Named requirement for C-struct equivalent (trivial AND standard layout) types.
+    /// @brief Named requirement for C-struct equivalent (trivial + standard-layout) types.
     template <typename T>
     concept ICStructEquivalent = std::is_trivial_v<T> && std::is_standard_layout_v<T>;
     /// @ingroup sys

@@ -133,26 +133,26 @@ namespace sys
         static constexpr codepoint_data read_codepoint(const std::span<const char32_t> range, decltype(unsafe)) noexcept
         {
             const u32 ret = _as(u32::underlying_type, range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
-            _retif(ch::read_codepoint_fail(), !ch::is_scalar(_as(char32_t, ret)));
-            return codepoint_data { .c = _as(char32_t, ret), .size_bytes = 1_uz };
+            _retif(ch::read_codepoint_fail(), !ch::is_scalar(_as(char32_t, *ret)));
+            return codepoint_data { .c = _as(char32_t, *ret), .size_bytes = 1_uz };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, decltype(unsafe))`
         static constexpr codepoint_data read_codepoint(const std::span<const char16_t> range, decltype(unsafe)) noexcept
         {
             const u32 lead = _as(u32::underlying_type, range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
-            _retif((codepoint_data { .c = _as(char32_t, lead), .size_bytes = 1_uz }), !ch::is_surrogate(_as(char32_t, lead))); // BMP
-            _retif(ch::read_codepoint_fail(), !ch::is_high_surrogate(_as(char32_t, lead)) || range.size() < 2uz);
+            _retif((codepoint_data { .c = _as(char32_t, *lead), .size_bytes = 1_uz }), !ch::is_surrogate(_as(char32_t, *lead))); // BMP
+            _retif(ch::read_codepoint_fail(), !ch::is_high_surrogate(_as(char32_t, *lead)) || range.size() < 2uz);
 
             const u32 trail = _as(u32::underlying_type, range[1] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
-            _retif(ch::read_codepoint_fail(), !ch::is_low_surrogate(_as(char32_t, trail)));
+            _retif(ch::read_codepoint_fail(), !ch::is_low_surrogate(_as(char32_t, *trail)));
 
-            return codepoint_data { .c = _as(char32_t, 0x10000_u32 + ((lead - 0xD800_u32) << 10_u32) + (trail - 0xDC00_u32)), .size_bytes = 2_uz };
+            return codepoint_data { .c = _as(char32_t, *(0x10000_u32 + ((lead - 0xD800_u32) << 10_u32) + (trail - 0xDC00_u32))), .size_bytes = 2_uz };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, decltype(unsafe))`
         static constexpr codepoint_data read_codepoint(const std::span<const char8_t> range, decltype(unsafe)) noexcept // NOLINT(readability-function-cognitive-complexity)
         {
             u32 ret = _as(u32::underlying_type, range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
-            _retif((codepoint_data { .c = _as(char32_t, ret), .size_bytes = 1_uz }), ret < 0x80_u32); // 1-byte sequence, fast path.
+            _retif((codepoint_data { .c = _as(char32_t, *ret), .size_bytes = 1_uz }), ret < 0x80_u32); // 1-byte sequence, fast path.
 
             sz len = 0_uz;
             if (ret >= 0xC2_u32 && ret < 0xE0_u32)
@@ -177,15 +177,15 @@ namespace sys
             for (sz i = 1_uz; i < len; i++)
             {
                 const u32 bi = _as(u32::underlying_type, range[i] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */);
-                _retif(ch::read_codepoint_fail(), !ch::is_continuation(_as(char8_t, bi)));
+                _retif(ch::read_codepoint_fail(), !ch::is_continuation(_as(char8_t, *bi)));
                 ret = (ret << 6_u32) | (bi & 0x3F_u32);
             }
 
             // Overlong + Scalar Checks
             constexpr u32 cpMinReq[] = { 0_u32, 0_u32, 0x80_u32, 0x800_u32, 0x10000_u32 };
-            _retif(ch::read_codepoint_fail(), ret < cpMinReq[len] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */ || !ch::is_scalar(_as(char32_t, ret)));
+            _retif(ch::read_codepoint_fail(), ret < cpMinReq[len] /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */ || !ch::is_scalar(_as(char32_t, *ret)));
 
-            return codepoint_data { .c = _as(char32_t, ret), .size_bytes = len };
+            return codepoint_data { .c = _as(char32_t, *ret), .size_bytes = len };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, decltype(unsafe))`
         static constexpr codepoint_data read_codepoint(const std::span<const char> range, decltype(unsafe)) noexcept
@@ -209,15 +209,15 @@ namespace sys
         static constexpr sz write_codepoint(char32_t c, char32_t out[], decltype(unsafe)) noexcept
         {
             const u32 ret = _as(u32::underlying_type, c);
-            out[0] =
-                ch::is_scalar(_as(char32_t, ret)) ? _as(char32_t, ret) : ch::replacement<char32_t>()[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */;
+            out[0] = ch::is_scalar(_as(char32_t, *ret)) ? _as(char32_t, *ret)
+                                                        : ch::replacement<char32_t>()[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */;
             return 1_uz;
         }
         /// @see `sys::ch::write_codepoint(char32_t, char32_t[], decltype(unsafe))`
         static constexpr sz write_codepoint(char32_t c, char16_t out[], decltype(unsafe)) noexcept
         {
             const u32 ret = _as(u32::underlying_type, c);
-            if (!ch::is_scalar(_as(char32_t, ret))) [[unlikely]]
+            if (!ch::is_scalar(_as(char32_t, *ret))) [[unlikely]]
             {
                 std::ranges::copy(ch::replacement<char16_t>(), out);
                 return ch::replacement<char16_t>().size();
@@ -225,45 +225,45 @@ namespace sys
 
             if (ret <= 0xFFFF_u32)
             {
-                out[0] = _as(char16_t, ret);
+                out[0] = _as(char16_t, *ret);
                 return 1_uz;
             }
 
             const u32 val = ret - 0x10000_u32;
-            out[0] = _as(char16_t, 0xD800_u32 + (val >> 10_u32));
-            out[1] = _as(char16_t, 0xDC00_u32 + (val & 0x3FF_u32));
+            out[0] = _as(char16_t, *(0xD800_u32 + (val >> 10_u32)));
+            out[1] = _as(char16_t, *(0xDC00_u32 + (val & 0x3FF_u32)));
             return 2_uz;
         }
         /// @see `sys::ch::write_codepoint(char32_t, char32_t[], decltype(unsafe))`
         static constexpr sz write_codepoint(char32_t c, char8_t out[], decltype(unsafe)) noexcept // NOLINT(readability-function-cognitive-complexity)
         {
             const u32 ret = _as(u32::underlying_type, c);
-            if (ch::is_scalar(_as(char32_t, ret))) [[likely]]
+            if (ch::is_scalar(_as(char32_t, *ret))) [[likely]]
             {
                 if (ret <= 0x7F_u32)
                 {
-                    out[0] = _as(char8_t, ret);
+                    out[0] = _as(char8_t, *ret);
                     return 1_uz;
                 }
                 if (ret <= 0x7FF_u32)
                 {
-                    out[0] = _as(char8_t, 0xC0_u32 | (ret >> 6_u32));
-                    out[1] = _as(char8_t, 0x80_u32 | (ret & 0x3F_u32));
+                    out[0] = _as(char8_t, *(0xC0_u32 | (ret >> 6_u32)));
+                    out[1] = _as(char8_t, *(0x80_u32 | (ret & 0x3F_u32)));
                     return 2_uz;
                 }
                 if (ret <= 0xFFFF_u32)
                 {
-                    out[0] = _as(char8_t, 0xE0_u32 | (ret >> 12_u32));
-                    out[1] = _as(char8_t, 0x80_u32 | ((ret >> 6_u32) & 0x3F_u32));
-                    out[2] = _as(char8_t, 0x80_u32 | (ret & 0x3F_u32));
+                    out[0] = _as(char8_t, *(0xE0_u32 | (ret >> 12_u32)));
+                    out[1] = _as(char8_t, *(0x80_u32 | ((ret >> 6_u32) & 0x3F_u32)));
+                    out[2] = _as(char8_t, *(0x80_u32 | (ret & 0x3F_u32)));
                     return 3_uz;
                 }
                 if (ret <= 0x10FFFF_u32)
                 {
-                    out[0] = _as(char8_t, 0xF0_u32 | (ret >> 18_u32));
-                    out[1] = _as(char8_t, 0x80_u32 | ((ret >> 12_u32) & 0x3F_u32));
-                    out[2] = _as(char8_t, 0x80_u32 | ((ret >> 6_u32) & 0x3F_u32));
-                    out[3] = _as(char8_t, 0x80_u32 | (ret & 0x3F_u32));
+                    out[0] = _as(char8_t, *(0xF0_u32 | (ret >> 18_u32)));
+                    out[1] = _as(char8_t, *(0x80_u32 | ((ret >> 12_u32) & 0x3F_u32)));
+                    out[2] = _as(char8_t, *(0x80_u32 | ((ret >> 6_u32) & 0x3F_u32)));
+                    out[3] = _as(char8_t, *(0x80_u32 | (ret & 0x3F_u32)));
                     return 4_uz;
                 }
             }

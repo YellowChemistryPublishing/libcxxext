@@ -37,7 +37,7 @@ namespace sys
             while (this->busy.test_and_set(std::memory_order_acquire))
                 thread_yield();
 
-            if (this->is_completed())
+            if (this->initialized.test(std::memory_order_relaxed))
             {
                 this->busy.clear(std::memory_order_release);
                 return true;
@@ -60,13 +60,8 @@ namespace sys
         /// @brief Waits until exactly one `.call_once(...)` has successfully completed, or returns immediately if already completed.
         void wait() noexcept
         {
-            if (this->is_completed()) [[likely]]
-                return;
-
-            while (this->busy.test_and_set(std::memory_order_acquire))
+            while (!this->initialized.test(std::memory_order_acquire))
                 thread_yield();
-
-            this->busy.clear(std::memory_order_release);
         }
 
         /// @brief Calls `func(args...)`, ensuring only one functor passed to `.call_once(...)` is ever run.

@@ -114,7 +114,7 @@ namespace sys
     public:
         using underlying_type = For;
 
-        [[nodiscard]] static consteval bool is_signed() noexcept { return std::is_signed_v<For>; }
+        [[nodiscard]] static consteval bool is_signed() noexcept { return IBuiltinIntegerSigned<For>; }
 
         [[nodiscard]] static consteval integer highest() noexcept { return std::numeric_limits<For>::max(); }
         [[nodiscard]] static consteval integer lowest() noexcept { return std::numeric_limits<For>::lowest(); }
@@ -273,7 +273,7 @@ namespace sys
         [[nodiscard]] constexpr integer operator+() const noexcept { return *this; }
         /// @note Be warned that the negation of a signed `integer<...>::lowest()` is not UB but instead `integer<...>::highest()`.
         [[nodiscard]] constexpr integer operator-() const noexcept
-        requires (std::is_signed_v<For>) // Unsigned negation is intentionally disallowed.
+        requires (IBuiltinIntegerSigned<For>) // Unsigned negation is intentionally disallowed.
         {
             if (**this == std::numeric_limits<For>::lowest()) [[unlikely]]
                 return integer(std::numeric_limits<For>::max());
@@ -287,7 +287,7 @@ namespace sys
         {
             if (*b == 0) [[unlikely]]
             {
-                if constexpr (std::is_signed_v<For>)
+                if constexpr (IBuiltinIntegerSigned<For>)
                     if (*a < 0)
                         return integer(std::numeric_limits<For>::lowest());
 
@@ -310,7 +310,7 @@ namespace sys
         [[nodiscard]] friend constexpr integer operator^(integer a, integer b) noexcept { return integer(a.u() ^ b.u(), unsafe); }
         [[nodiscard]] friend constexpr integer operator<<(integer a, integer b) noexcept
         {
-            if constexpr (std::is_signed_v<For>)
+            if constexpr (IBuiltinIntegerSigned<For>)
                 if (*b < 0) [[unlikely]]
                     return integer(a.u() >> (-b).u(), unsafe); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
 
@@ -318,7 +318,7 @@ namespace sys
         }
         [[nodiscard]] friend constexpr integer operator>>(integer a, integer b) noexcept
         {
-            if constexpr (std::is_signed_v<For>)
+            if constexpr (IBuiltinIntegerSigned<For>)
                 if (*b < 0) [[unlikely]]
                     return integer(a.u() << (-b).u(), unsafe); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
 

@@ -13,24 +13,22 @@ namespace sys
     /// @ingroup sys
     /// @brief Built-in signed integer type.
     template <typename T>
-    concept IBuiltinIntegerSigned =
-        std::same_as<T, signed char> || std::same_as<T, signed short> || std::same_as<T, signed int> || std::same_as<T, signed long> || std::same_as<T, signed long long>;
+    concept IBuiltinIntegerSigned = std::signed_integral<T> && !std::same_as<T, bool>;
     /// @ingroup sys
     /// @brief Built-in unsigned integer type.
     template <typename T>
-    concept IBuiltinIntegerUnsigned =
-        std::same_as<T, unsigned char> || std::same_as<T, unsigned short> || std::same_as<T, unsigned int> || std::same_as<T, unsigned long> || std::same_as<T, unsigned long long>;
+    concept IBuiltinIntegerUnsigned = std::unsigned_integral<T> && !std::same_as<T, bool>;
 
     // NOLINTEND(google-runtime-int)
 
     /// @ingroup sys
     /// @brief Built-in integer type.
     template <typename T>
-    concept IBuiltinInteger = IBuiltinIntegerSigned<T> || IBuiltinIntegerUnsigned<T>;
+    concept IBuiltinInteger = std::integral<T> && !std::same_as<T, bool>;
     /// @ingroup sys
     /// @brief Built-in floating-point type.
     template <typename T>
-    concept IBuiltinFloatingPoint = std::same_as<T, float> || std::same_as<T, double> || std::same_as<T, long double /* NOLINT(google-runtime-float) */>;
+    concept IBuiltinFloatingPoint = std::floating_point<T>;
     /// @ingroup sys
     /// @brief Built-in numeric type.
     template <typename T>

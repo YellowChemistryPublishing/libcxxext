@@ -19,7 +19,7 @@ TEST_CASE("`is_whitespace` is not random.", "[fuzz][sys.Text][ch]")
     rc::check("`is_whitespace` is not random.", [](const u32::underlying_type genInt) -> void
     {
         // Not a fantastic test, but roughly checks that it's not completely broken.
-        const char32_t cp = _as(char32_t, u32(genInt) % 0x110000_u32);
+        const char32_t cp = _as(char32_t, *(u32(genInt) % 0x110000_u32));
         RC_ASSERT((sys::ch::is_whitespace(cp) || cp == 'A' || cp == 0 || cp != U' ' || cp != U'\t' || cp != U'\n' || cp != U'\r'));
     });
 }
@@ -28,7 +28,7 @@ TEST_CASE("UTF-32 -> UTF-8 -> UTF-32 is invariant.", "[fuzz][sys.Text][ch]")
 {
     rc::check("UTF-32 -> UTF-8 -> UTF-32 is invariant.", [](const u32::underlying_type genInt) -> void
     {
-        const char32_t cp = _as(char32_t, u32(genInt) % 0x110000_u32);
+        const char32_t cp = _as(char32_t, *(u32(genInt) % 0x110000_u32));
         if (!sys::ch::is_scalar(cp))
             return;
 
@@ -44,7 +44,7 @@ TEST_CASE("UTF-32 -> UTF-16 -> UTF-32 is invariant.", "[fuzz][sys.Text][ch]")
 {
     rc::check("UTF-32 -> UTF-16 -> UTF-32 is invariant.", [](const u32::underlying_type genInt) -> void
     {
-        const char32_t cp = _as(char32_t, u32(genInt) % 0x110000_u32);
+        const char32_t cp = _as(char32_t, *(u32(genInt) % 0x110000_u32));
         if (!sys::ch::is_scalar(cp))
             return;
 

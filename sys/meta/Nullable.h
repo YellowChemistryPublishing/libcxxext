@@ -3,15 +3,15 @@
 /// @file
 
 #include <concepts>
-#include <type_traits>
 
 #include <LanguageSupport.h>
+#include <meta/Type.h>
 
 namespace sys::meta
 {
     /// @ingroup sys
     template <typename T>
-    requires (!std::is_reference_v<T>)
+    requires (!type<T>::is_ref())
     struct generic_nullable_adaptor
     {
     private:

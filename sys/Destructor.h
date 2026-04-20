@@ -6,6 +6,8 @@
 #include <utility>
 
 #include <LanguageSupport.h>
+#include <meta/InterfaceRequirements.h>
+#include <meta/NamedRequirements.h>
 
 namespace sys
 {
@@ -13,7 +15,7 @@ namespace sys
     /// @brief Wrapper for `noexcept` cleanup function.
     /// @note Pass `byref`.
     template <typename Func>
-    requires std::is_nothrow_invocable_v<Func&> && std::is_nothrow_move_constructible_v<Func> && std::is_nothrow_destructible_v<Func>
+    requires INothrowInvocable<Func&> && INothrowMoveConstructible<Func> && INothrowDestructible<Func>
     struct [[clang::scoped_lockable]] destructor final
     {
         /// @brief Construct with a cleanup function.
@@ -35,7 +37,7 @@ namespace sys
     /// @brief Moveable, no-op-able, wrapper for `noexcept` cleanup function.
     /// @note Pass `byref`.
     template <typename Func>
-    requires std::is_nothrow_invocable_v<Func&> && std::is_nothrow_move_constructible_v<Func> && std::is_nothrow_destructible_v<Func>
+    requires INothrowInvocable<Func&> && INothrowMoveConstructible<Func> && INothrowDestructible<Func>
     struct [[clang::scoped_lockable]] optional_destructor final
     {
         /// @brief Construct with a cleanup function.

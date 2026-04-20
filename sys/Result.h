@@ -14,6 +14,7 @@
 #include <LanguageSupport.h>
 #include <RecurringTemplate.h>
 #include <inline/Integer.inl>
+#include <meta/NamedRequirements.h>
 #include <meta/Nullable.h>
 #include <meta/Type.h>
 
@@ -73,7 +74,7 @@ namespace sys::internal
     /// @ingroup sys_internal
     /// @brief Type to use in result storage to represent `T`.
     template <typename T>
-    using result_storage_type = std::conditional_t<!std::is_lvalue_reference_v<T>, std::remove_cv_t<T>, std::remove_reference_t<T>*>;
+    using result_storage_type = std::conditional_t<!meta::type<T>::is_lvalue(), std::remove_cvref_t<T>, std::remove_reference_t<T>*>;
 
     /// @internal
     /// @ingroup sys_internal
@@ -87,7 +88,7 @@ namespace sys::internal
         static_assert(!meta::type<std::remove_cvref_t<T>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
         static_assert(!meta::type<std::remove_cvref_t<Err>>::template is_from<Result>(), "No monkey business with result types holding other result types!");
 
-        using ok_type = T;
+        using value_type = T;
         using err_type = Err;
     };
     /// @internal
@@ -122,7 +123,7 @@ namespace sys::internal
 
         /// @internal
         /// @brief Convert to a result with a single error state.
-        [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || std::is_lvalue_reference_v<T> || requires {
+        [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || meta::type<T>::is_lvalue() || requires {
             requires !std::same_as<T, void>;
             { T(std::declval<T&&>()) } noexcept;
         })
@@ -154,13 +155,13 @@ namespace sys::internal
         /// @internal
         /// @brief Constructs a result with a value.
         template <typename With>
-        constexpr void ctor_ok(With&& val) noexcept(std::is_lvalue_reference_v<T> || noexcept(T(std::forward<With>(val))))
+        constexpr void ctor_ok(With&& val) noexcept(meta::type<T>::is_lvalue() || noexcept(T(std::forward<With>(val))))
         requires requires {
-            requires !std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With&&>;
-            requires std::is_lvalue_reference_v<T> || requires { T(std::forward<With>(val)); };
+            requires !meta::type<T>::is_lvalue() || meta::type<With&&>::is_lvalue();
+            requires meta::type<T>::is_lvalue() || requires { T(std::forward<With>(val)); };
         }
         {
-            if constexpr (std::is_lvalue_reference_v<T>)
+            if constexpr (meta::type<T>::is_lvalue())
                 this->downcast().value = std::addressof(val);
             else
                 std::construct_at(std::addressof(this->downcast().value), std::forward<With>(val));
@@ -171,7 +172,7 @@ namespace sys::internal
         template <typename... Args>
         constexpr void ctor_ok(Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...)))
         requires requires {
-            requires !std::is_lvalue_reference_v<T>;
+            requires !meta::type<T>::is_lvalue();
             T(std::forward<Args>(args)...);
         }
         {
@@ -182,9 +183,9 @@ namespace sys::internal
         /// @internal
         /// @brief Takes the value of a good result.
         /// @warning `unsafe` because of unchecked tagged union access.
-        [[nodiscard]] constexpr T move(decltype(unsafe)) noexcept(std::is_lvalue_reference_v<T> || noexcept(T(std::declval<T&&>())))
+        [[nodiscard]] constexpr T move(decltype(unsafe)) noexcept(meta::type<T>::is_lvalue() || noexcept(T(std::declval<T&&>())))
         {
-            if constexpr (std::is_lvalue_reference_v<T>)
+            if constexpr (meta::type<T>::is_lvalue())
             {
                 T ret = *this->downcast().value;
                 this->downcast().status = result_status::empty;
@@ -207,9 +208,10 @@ namespace sys::internal
 namespace sys
 {
     /// @ingroup sys
-    /// @brief Tag type to force construction of a bad result.
-    struct error_tag final
-    { };
+    /// @brief Tag value to force construction of a bad result.
+    constexpr struct
+    {
+    } error_tag;
 
     /// @ingroup sys
     /// @brief Concept for types that can be stored in a result.
@@ -218,10 +220,9 @@ namespace sys
         { sizeof(T) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
     } || requires {
         requires !std::same_as<std::remove_cvref_t<T>, std::nullptr_t>;
-        requires !std::same_as<std::remove_cvref_t<T>, error_tag>;
-        requires std::is_lvalue_reference_v<T> || std::same_as<T, void> ||
-            (std::same_as<T, std::remove_cvref_t<T>> && !std::is_array_v<T> && std::is_move_constructible_v<T> && std::is_move_assignable_v<T> &&
-             std::is_nothrow_destructible_v<T>);
+        requires !std::same_as<std::remove_cvref_t<T>, decltype(error_tag)>;
+        requires meta::type<T>::is_lvalue() || std::same_as<T, void> ||
+            (meta::type<T>::is_unqualified() && !meta::type<T>::is_array() && (IMoveConstructible<T>) && (IMoveAssignable<T>) && (INothrowDestructible<T>));
     };
 
     /// @ingroup sys
@@ -231,7 +232,7 @@ namespace sys
     template <IResultStorable T, IResultStorable Err = void>
     requires (!requires {
                  { sizeof(T) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
-             } || !std::is_reference_v<Err>)            /* Intentionally don't support reference errors--doesn't really make sense. */
+             } || !meta::type<Err>::is_ref())           /* Intentionally don't support reference errors--doesn't really make sense. */
     class [[nodiscard, clang::consumable(unconsumed)]] result final : public internal::result_b<result, T, Err>,
                                                                       public internal::result_b_ok<result, T, Err>,
                                                                       public internal::result_b_err<result, T, Err>
@@ -265,7 +266,7 @@ namespace sys
         }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
-        constexpr result(error_tag, Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
+        constexpr result(decltype(error_tag), Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
         requires requires { this->ctor_err(std::forward<Args>(args)...); }
         {
             this->ctor_err(std::forward<Args>(args)...);
@@ -273,32 +274,32 @@ namespace sys
         /// @brief Constructs a result with an error.
         /// @note Participates in overload resolution only if `err` cannot construct a `T`.
         template <typename With>
-        constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
+        constexpr result(With&& err) noexcept(noexcept(result(error_tag, std::forward<With>(err))))
         requires requires {
             requires !std::same_as<With&&, result&&>;
             requires (!std::same_as<T, Err> && !std::same_as<T, With &&> && std::same_as<std::remove_cvref_t<With>, Err>) || !requires { T(std::forward<With>(err)); };
-            requires !std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With&&>;
+            requires !meta::type<T>::is_lvalue() || meta::type<With&&>::is_lvalue();
             requires requires { this->ctor_err(std::forward<With>(err)); };
         }
-            : result(error_tag(), std::forward<With>(err))
+            : result(error_tag, std::forward<With>(err))
         { }
         /// @brief Inplace constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
         /// @note Participates in overload resolution only if `args...` cannot construct a `T`.
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
+        constexpr result(Args&&... args) noexcept(noexcept(result(error_tag, std::forward<Args>(args)...)))
         requires requires {
             requires !requires { T(std::forward<Args>(args)...); };
             requires requires { this->ctor_err(std::forward<Args>(args)...); };
         }
-            : result(error_tag(), std::forward<Args>(args)...)
+            : result(error_tag, std::forward<Args>(args)...)
         { }
 
         // NOLINTEND(hicpp-explicit-conversions)
 
         constexpr result(const result&) = delete;
-        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>) &&
-                                                                                       std::is_nothrow_move_constructible_v<Err>)
+        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>) &&
+                                                                                       INothrowMoveConstructible<Err>)
         {
             switch (other.status)
             {
@@ -318,7 +319,7 @@ namespace sys
             switch (this->status)
             {
             [[likely]] case internal::result_status::ok:
-                if constexpr (!std::is_lvalue_reference_v<T>)
+                if constexpr (!meta::type<T>::is_lvalue())
                     std::destroy_at(std::addressof(this->value));
                 break;
             [[unlikely]] case internal::result_status::error:
@@ -330,7 +331,7 @@ namespace sys
         }
 
         result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(std::is_nothrow_move_constructible_v<result>)
+        result& operator=(result&& other) noexcept(INothrowMoveConstructible<result>)
         {
             _retif(*this, this == std::addressof(other));
             std::destroy_at(this);
@@ -369,7 +370,7 @@ namespace sys
         template <typename With>
         [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T move_or(With&& other) noexcept(
             noexcept(this->template result_b_ok<sys::result, T, Err>::move(unsafe)) && noexcept(T(std::forward<With>(other))))
-        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
+        requires (!meta::type<T>::is_lvalue() || meta::type<With &&>::is_lvalue())
         {
             _retif(T(std::forward<With>(other)), this->status != internal::result_status::ok);
             return this->template result_b_ok<sys::result, T, Err>::move(unsafe);
@@ -442,7 +443,7 @@ namespace sys
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
 
         result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(std::is_nothrow_move_constructible_v<result>)
+        result& operator=(result&& other) noexcept(INothrowMoveConstructible<result>)
         {
             swap(*this, other);
             return *this;
@@ -490,7 +491,7 @@ namespace sys
     /// @brief Specialization of `sys::result<...>` with a unit error type.
     /// @details For a result with a single possible error state, iow. a valueless error.
     template <IResultStorable T>
-    requires (!std::same_as<std::remove_cvref_t<T>, void>)
+    requires (!std::same_as<T, void>)
     class [[nodiscard, clang::consumable(unconsumed)]] result<T, void> final : public internal::result_b<result, T, void>, public internal::result_b_ok<result, T, void>
     {
         union
@@ -525,7 +526,7 @@ namespace sys
         /// @brief Construct an error result.
         constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
-        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept((std::is_lvalue_reference_v<T> || std::is_nothrow_move_constructible_v<T>))
+        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>))
         {
             switch (other.status)
             {
@@ -542,7 +543,7 @@ namespace sys
         }
         [[clang::callable_when("consumed", "unknown")]] ~result()
         {
-            if constexpr (!std::is_lvalue_reference_v<T>)
+            if constexpr (!meta::type<T>::is_lvalue())
                 if (this->status == internal::result_status::ok) [[likely]]
                     std::destroy_at(std::addressof(this->value));
         }
@@ -550,7 +551,7 @@ namespace sys
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
 
         result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(std::is_nothrow_move_constructible_v<result>)
+        result& operator=(result&& other) noexcept(INothrowMoveConstructible<result>)
         {
             _retif(*this, this == std::addressof(other));
             std::destroy_at(this);
@@ -582,7 +583,7 @@ namespace sys
         template <typename With>
         [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T move_or(With&& other) noexcept(
             noexcept(this->template result_b_ok<sys::result, T, void>::move(unsafe)) && noexcept(T(std::forward<With>(other))))
-        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
+        requires (!meta::type<T>::is_lvalue() || meta::type<With &&>::is_lvalue())
         {
             _retif(T(std::forward<With>(other)), this->status != internal::result_status::ok);
             return this->template result_b_ok<sys::result, T, void>::move(unsafe);
@@ -630,8 +631,8 @@ namespace sys
     requires requires {
         requires !requires {
             { sizeof(Err) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
-        } || !std::is_reference_v<Err>;
-        requires !std::same_as<std::remove_cvref_t<Err>, void>;
+        } || !meta::type<Err>::is_ref();
+        requires !std::same_as<Err, void>;
     }
     class [[nodiscard, clang::consumable(unconsumed)]] result<void, Err> final : public internal::result_b<result, void, Err>, public internal::result_b_err<result, void, Err>
     {
@@ -648,32 +649,32 @@ namespace sys
         [[clang::return_typestate(unconsumed)]] constexpr result() noexcept : status(internal::result_status::ok) { }
         /// @brief Inplace constructs a result with an error.
         template <typename... Args>
-        constexpr result(error_tag, Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
+        constexpr result(decltype(error_tag), Args&&... args) noexcept(noexcept(this->ctor_err(std::forward<Args>(args)...)))
         requires requires { this->ctor_err(std::forward<Args>(args)...); }
         {
             this->ctor_err(std::forward<Args>(args)...);
         }
         /// @brief Constructs a result with an error.
         template <typename With>
-        constexpr result(With&& err) noexcept(noexcept(result(error_tag(), std::forward<With>(err))))
+        constexpr result(With&& err) noexcept(noexcept(result(error_tag, std::forward<With>(err))))
         requires requires {
             requires !std::same_as<With&&, result&&>;
             requires requires { this->ctor_err(std::forward<With>(err)); };
         }
-            : result(error_tag(), std::forward<With>(err))
+            : result(error_tag, std::forward<With>(err))
         { }
         /// @brief Inplace constructs a result with an error.
         /// @see `sys::result<T, Err>::result(Args&&...)`
         template <typename... Args>
-        constexpr result(Args&&... args) noexcept(noexcept(result(error_tag(), std::forward<Args>(args)...)))
+        constexpr result(Args&&... args) noexcept(noexcept(result(error_tag, std::forward<Args>(args)...)))
         requires requires {
             requires sizeof...(Args) != 1uz;
             requires requires { this->ctor_err(std::forward<Args>(args)...); };
         }
-            : result(error_tag(), std::forward<Args>(args)...)
+            : result(error_tag, std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;
-        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept(std::is_nothrow_move_constructible_v<Err>) : status(other.status)
+        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept(INothrowMoveConstructible<Err>) : status(other.status)
         {
             switch (other.status)
             {
@@ -697,7 +698,7 @@ namespace sys
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
 
         result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(std::is_nothrow_move_constructible_v<result>)
+        result& operator=(result&& other) noexcept(INothrowMoveConstructible<result>)
         {
             _retif(*this, this == &other);
             std::destroy_at(this);
@@ -773,7 +774,7 @@ namespace sys::internal
     /// @warning Be careful, `T` must be empty-queryable after moved-from, for an underlying specialization of `sys::result<...>` to be valid in its entirety!
     template <IResultStorable T>
     requires requires {
-        requires !std::is_reference_v<T>;
+        requires !meta::type<T>::is_ref();
         meta::generic_nullable_adaptor<std::add_const_t<T>>(std::declval<std::add_const_t<T>&>()).is_null();
     }
     class [[nodiscard, clang::consumable(unconsumed)]] nullable_value_result : public internal::result_b<result, T, void>
@@ -801,8 +802,6 @@ namespace sys::internal
         {
             return !meta::generic_nullable_adaptor<std::add_const_t<T>>(this->value).is_null();
         }
-        /// @brief Whether the result is bad.
-        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(consumed)]] constexpr bool operator!() const noexcept { return !_as(bool, *this); }
 
         /// @brief Takes the value if the result has a good value.
         /// @pre `*this == true`
@@ -815,7 +814,7 @@ namespace sys::internal
         template <typename With>
         [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T move_or(With&& other) noexcept(
             noexcept(T(std::move(this->value))) && noexcept(T(std::forward<With>(other))))
-        requires (!std::is_lvalue_reference_v<T> || std::is_lvalue_reference_v<With &&>)
+        requires (!meta::type<T>::is_lvalue() || meta::type<With &&>::is_lvalue())
         {
             _retif(T(std::forward<With>(other)), !(*this));
             return std::move(this->value);

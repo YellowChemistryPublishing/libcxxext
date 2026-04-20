@@ -23,6 +23,7 @@
 #include <data/UnicodeCasing.h>
 #include <meta/Builtin.h>
 #include <meta/Container.h>
+#include <meta/Type.h>
 
 namespace sys
 {
@@ -500,8 +501,8 @@ namespace sys
             {
                 if constexpr (ICharacter<std::remove_cvref_t<decltype(sep)>>)
                     totalSize += sz(std::size(container)) - 1_uz;
-                else if constexpr (std::is_array_v<std::remove_cvref_t<decltype(sep)>>)
-                    totalSize += (sz(std::size(sep)) - 1_uz) * (sz(std::size(container)) - 1_uz);
+                else if constexpr (meta::type<std::remove_cvref_t<decltype(sep)>>::is_array())
+                    totalSize += (sz(std::max(std::size(sep), 1uz)) - 1_uz) * (sz(std::size(container)) - 1_uz);
                 else
                     totalSize += sz(std::size(sep)) * (sz(std::size(container)) - 1_uz);
             }
@@ -514,8 +515,8 @@ namespace sys
             {
                 if (needPrependSep)
                 {
-                    if constexpr (std::is_array_v<std::remove_cvref_t<decltype(sep)>>)
-                        ret.append(std::basic_string_view(sep));
+                    if constexpr (meta::type<std::remove_cvref_t<decltype(sep)>>::is_array())
+                        ret.append(std::basic_string_view(sep, std::max(std::size(sep), 1uz) - 1uz));
                     else
                         ret.append(sep);
                 }

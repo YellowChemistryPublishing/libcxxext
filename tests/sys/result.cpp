@@ -139,7 +139,7 @@ TEST_CASE("Value/error type semantics are correct.", "[sys][result]")
     []() -> sys::result<void> { return {}; }().expect();
     CHECK_FALSE([]() -> sys::result<void> { return nullptr; }());
     CHECK([]() -> sys::result<i32, i32> { return 4_i32; }().expect() == 4_i32);
-    CHECK([]() -> sys::result<i32, i32> { return { sys::error_tag(), 4_i32 }; }().expect_err() == 4_i32);
+    CHECK([]() -> sys::result<i32, i32> { return { sys::error_tag, 4_i32 }; }().expect_err() == 4_i32);
     CHECK([]() -> sys::result<i32> { return 4_i32; }().expect() == 4_i32);
     CHECK([]() -> sys::result<i32> { return nullptr; }().move_or(-1_i32) == -1_i32);
     []() -> sys::result<void, i32> { return {}; }().expect();
@@ -148,12 +148,12 @@ TEST_CASE("Value/error type semantics are correct.", "[sys][result]")
     CHECK([]() -> sys::result<std::string, const char*> { return "hallo"; }().expect() == "hallo");
     CHECK(std::string_view([]() -> sys::result<std::string, const char*> { return _as(const char*, "hallo"); }().expect_err()) == "hallo");
     CHECK([]() -> sys::result<std::string, const char*> { return { 4uz, 'a' }; }().expect() == "aaaa");
-    CHECK(std::string_view([]() -> sys::result<std::string, const char*> { return { sys::error_tag(), "oops" }; }().expect_err()) == "oops");
+    CHECK(std::string_view([]() -> sys::result<std::string, const char*> { return { sys::error_tag, "oops" }; }().expect_err()) == "oops");
 
     CHECK([]() -> sys::result<u64, i16> { return 10293948287_u64; }().expect() == 10293948287_u64);
     CHECK([]() -> sys::result<u64, i16> { return 10293948287_i64; }().expect() == 10293948287_u64);
     CHECK([]() -> sys::result<u64, i16> { return 12_i16; }().expect_err() == 12_i16);
-    CHECK([]() -> sys::result<u64, i16> { return { sys::error_tag(), 12_u64 }; }().expect_err() == 12_i16);
+    CHECK([]() -> sys::result<u64, i16> { return { sys::error_tag, 12_u64 }; }().expect_err() == 12_i16);
 }
 
 TEST_CASE("Value type can be reference.", "[sys][result]")

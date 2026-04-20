@@ -42,7 +42,7 @@ static_assert(!sys::IBuiltinIntegerSigned<unsigned long long>);
 // Rejects non-integer types.
 static_assert(!sys::IBuiltinIntegerSigned<float>);
 static_assert(!sys::IBuiltinIntegerSigned<double>);
-static_assert(!sys::IBuiltinIntegerSigned<char>);
+static_assert(!sys::IBuiltinIntegerSigned<unsigned char>);
 static_assert(!sys::IBuiltinIntegerSigned<bool>);
 static_assert(!sys::IBuiltinIntegerSigned<void>);
 static_assert(!sys::IBuiltinIntegerSigned<std::string>);
@@ -76,6 +76,7 @@ static_assert(!sys::IBuiltinIntegerUnsigned<std::string>);
 // ================================================================================
 
 // Accepts all built-in integer types.
+static_assert(sys::IBuiltinInteger<char>);
 static_assert(sys::IBuiltinInteger<signed char>);
 static_assert(sys::IBuiltinInteger<unsigned char>);
 static_assert(sys::IBuiltinInteger<signed int>);
@@ -90,7 +91,6 @@ static_assert(!sys::IBuiltinInteger<long double /* NOLINT(google-runtime-float) 
 
 // Rejects other types.
 static_assert(!sys::IBuiltinInteger<bool>);
-static_assert(!sys::IBuiltinInteger<char>);
 static_assert(!sys::IBuiltinInteger<std::string>);
 
 // ================================================================================
@@ -117,6 +117,7 @@ static_assert(!sys::IBuiltinFloatingPoint<std::string>);
 // ================================================================================
 
 // Accepts all numeric types.
+static_assert(sys::IBuiltinNumeric<char>);
 static_assert(sys::IBuiltinNumeric<signed int>);
 static_assert(sys::IBuiltinNumeric<unsigned long>);
 static_assert(sys::IBuiltinNumeric<float>);
@@ -125,7 +126,6 @@ static_assert(sys::IBuiltinNumeric<long double /* NOLINT(google-runtime-float) *
 
 // Rejects non-numeric types.
 static_assert(!sys::IBuiltinNumeric<bool>);
-static_assert(!sys::IBuiltinNumeric<char>);
 static_assert(!sys::IBuiltinNumeric<std::string>);
 static_assert(!sys::IBuiltinNumeric<void*>);
 

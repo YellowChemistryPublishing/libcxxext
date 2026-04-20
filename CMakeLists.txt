@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.30)
 project(libcxxext VERSION 1.0.0 LANGUAGES C CXX)
 
 include(CMakeDependentOption)
+include(cmake/config_support.cmake)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Config
@@ -15,16 +16,16 @@ endif()
 cmake_dependent_option(LIBCXXEXT_EXAMPLES "Build examples." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
 cmake_dependent_option(LIBCXXEXT_TESTS "Build tests." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
 cmake_dependent_option(LIBCXXEXT_COVERAGE "Enable coverage instrumentation for debug builds (gcc/clang)." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
-set(LIBCXXEXT_LIBRARY_TYPE "STATIC" CACHE STRING "Build type of libraries.")
+set(LIBCXXEXT_LIBRARY_TYPE "SHARED" CACHE STRING "Build type of libraries.")
+mark_as_enum(LIBCXXEXT_LIBRARY_TYPE "SHARED" "STATIC")
 set(LIBCXXEXT_EXPORT_PCH ON CACHE BOOL "Use and produce precompiled headers.")
 set(LIBCXXEXT_TEST_ASAN OFF CACHE BOOL "Enable AddressSanitizer for tests.")
 set(LIBCXXEXT_TEST_UBSAN OFF CACHE BOOL "Enable UndefinedBehaviorSanitizer for tests.")
 
 include(cmake/build_support.cmake)
+include(cmake/config_support.cmake)
 include(cmake/clang_tidy.cmake)
-
 include(cmake/gen_module_header.cmake)
-include(cmake/target_common.cmake)
 
 if(LIBCXXEXT_EXPORT_PCH)
     include(cmake/stdc.cmake)
