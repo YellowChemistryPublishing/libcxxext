@@ -355,7 +355,9 @@ namespace sys
         [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<T, void>() && noexcept(
             noexcept(std::move(*this).template result_b_err<sys::result, T, Err>::operator result<T, void>()))
         {
-            return std::move(*this).template result_b_err<sys::result, T, Err>::operator result<T, void>();
+            // MSVC thinks there's a non-returning branch (erroneously), otherwise.
+            result<T, void> ret = std::move(*this).template result_b_err<sys::result, T, Err>::operator result<T, void>();
+            return ret;
         }
 
         /// @brief Takes the value if the result has a good value.
