@@ -22,7 +22,7 @@ namespace sys
     /// @tparam DefaultConcurrentAccessors A statically-known default number of concurrent accesses, or `sys::bsentinel<T>()` to require a constructor argument.
     /// @details Implements `sys::INothrowDestructible`. Conditionally implements `sys::INothrowDefaultConstructible` when `DefaultConcurrentAccessors != sys::bsentinel<T>()`.
     template <sys::IBuiltinInteger T, T DefaultConcurrentAccessors = sys::bsentinel<T>()>
-    requires (DefaultConcurrentAccessors > _as(T, 0) || DefaultConcurrentAccessors == sys::bsentinel<T>())
+    requires (DefaultConcurrentAccessors >= _as(T, 0) || DefaultConcurrentAccessors == sys::bsentinel<T>())
     class [[clang::capability("semaphore")]] ordinary_semaphore final
     {
     private:
@@ -34,7 +34,7 @@ namespace sys
         requires (DefaultConcurrentAccessors != sys::bsentinel<T>())
         = default;
         /// @brief Constructs a new semaphore with the given initial count.
-        /// @pre `init_count > 0`.
+        /// @pre `init_count >= 0`.
         /// @warning `unsafe` because `this` has preconditions.
         constexpr explicit ordinary_semaphore(const sys::integer<T> init_count, decltype(unsafe)) noexcept /* NOLINT(bugprone-exception-escape) */
         requires (DefaultConcurrentAccessors == sys::bsentinel<T>())
@@ -42,11 +42,11 @@ namespace sys
         {
             if consteval
             {
-                throw std::domain_error("`init_count` must be larger than `0`.");
+                throw std::domain_error("`init_count` must be larger than or equal to `0`.");
             }
             else
             {
-                _contract_assert(init_count > 0);
+                _contract_assert(init_count >= 0);
             }
         }
         ordinary_semaphore(const ordinary_semaphore&) noexcept = delete;

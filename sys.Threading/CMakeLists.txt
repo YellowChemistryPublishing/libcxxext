@@ -10,11 +10,7 @@ if(NOT TARGET sys.Threading)
     else()
         target_link_libraries(libsyscor PRIVATE $<LINK_LIBRARY:WHOLE_ARCHIVE,tinycthread>)
     endif()
-    target_sources(libsyscor PUBLIC
-        FILE_SET HEADERS
-        BASE_DIRS "${CMAKE_SOURCE_DIR}/tinycthread/source"
-        FILES "${CMAKE_SOURCE_DIR}/tinycthread/source/tinycthread.h"
-    )
+    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../tinycthread/source/tinycthread.h" DESTINATION include COMPONENT headers_tinycthread)
     target_include_directories(libsyscor INTERFACE $<TARGET_PROPERTY:tinycthread,INTERFACE_INCLUDE_DIRECTORIES>)
 
     file(GLOB SYS_THREAD_HEADERS CONFIGURE_DEPENDS "*.h")

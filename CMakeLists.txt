@@ -23,7 +23,6 @@ set(LIBCXXEXT_TEST_ASAN OFF CACHE BOOL "Enable AddressSanitizer for tests.")
 set(LIBCXXEXT_TEST_UBSAN OFF CACHE BOOL "Enable UndefinedBehaviorSanitizer for tests.")
 
 include(cmake/build_support.cmake)
-include(cmake/config_support.cmake)
 include(cmake/clang_tidy.cmake)
 include(cmake/gen_module_header.cmake)
 
