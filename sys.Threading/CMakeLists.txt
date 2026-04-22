@@ -4,15 +4,6 @@ if(NOT TARGET sys.Threading)
     set(CMAKE_POLICY_VERSION_MINIMUM 3.10)
     add_subdirectory(../tinycthread "${CMAKE_BINARY_DIR}/tinycthread" EXCLUDE_FROM_ALL)
 
-    if(CMAKE_CXX_COMPILER_LINKER_FRONTEND_VARIANT STREQUAL "GNU")
-        # Because `ld.lld` targeting `win32` doesn't actually support `--push/pop-state`.
-        target_link_libraries(libsyscor PRIVATE -Wl,--whole-archive tinycthread -Wl,--no-whole-archive)
-    else()
-        target_link_libraries(libsyscor PRIVATE $<LINK_LIBRARY:WHOLE_ARCHIVE,tinycthread>)
-    endif()
-    install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../tinycthread/source/tinycthread.h" DESTINATION include COMPONENT headers_tinycthread)
-    target_include_directories(libsyscor INTERFACE $<TARGET_PROPERTY:tinycthread,INTERFACE_INCLUDE_DIRECTORIES>)
-
     file(GLOB SYS_THREAD_HEADERS CONFIGURE_DEPENDS "*.h")
 
     add_library(sys.Threading INTERFACE)
@@ -35,7 +26,7 @@ if(NOT TARGET sys.Threading)
     endif()
     target_link_libraries(sys.Threading
         INTERFACE
-        libsyscor
+        tinycthread
         sys
         $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
         $<$<AND:$<CONFIG:Debug>,$<BOOL:${LIBCXXEXT_COVERAGE}>>:sys.BuildSupport.EnableCoverage>

@@ -31,7 +31,6 @@ if(LIBCXXEXT_EXPORT_PCH)
     include(cmake/stdc++.cmake)
 endif()
 
-add_subdirectory(libsyscor)
 add_subdirectory(sys)
 add_subdirectory(sys.Containers)
 add_subdirectory(sys.Text)

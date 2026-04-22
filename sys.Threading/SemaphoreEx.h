@@ -42,12 +42,10 @@ namespace sys
         {
             if consteval
             {
-                throw std::domain_error("`init_count` must be larger than or equal to `0`.");
+                if (init_count < 0)
+                    throw std::domain_error("`init_count` must be larger than or equal to `0`.");
             }
-            else
-            {
-                _contract_assert(init_count >= 0);
-            }
+            _contract_assert(init_count >= 0);
         }
         ordinary_semaphore(const ordinary_semaphore&) noexcept = delete;
         ordinary_semaphore(ordinary_semaphore&&) noexcept = delete;

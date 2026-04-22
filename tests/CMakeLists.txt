@@ -17,7 +17,7 @@ foreach(TEST_FILE ${TESTS})
 
     add_test_with_catch2(${TEST_NAME} ${TEST_FILE})
     target_libcxxext_common_config(${TEST_NAME})
-    copy_dynlibs_to_build_target_dir(${TEST_NAME} libsyscor sys sys.Containers sys.Text sys.Threading)
+    copy_dynlibs_to_build_target_dir(${TEST_NAME} sys sys.Containers sys.Text sys.Threading)
     target_link_libraries(${TEST_NAME} PRIVATE rapidcheck)
     set_tests_properties(${TEST_NAME} PROPERTIES ENVIRONMENT_MODIFICATION "RC_PARAMS=string_prepend:max_success=1000 max_size=1000 ")
     set_target_properties(${TEST_NAME} PROPERTIES FOLDER "Tests")

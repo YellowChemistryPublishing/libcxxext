@@ -6,6 +6,8 @@
 /build/
 /*-build/
 /install/
+CMakeUserPresets.json
 CMakeFiles/
 
+.vs/
 __pycache__/
