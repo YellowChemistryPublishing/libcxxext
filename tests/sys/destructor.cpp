@@ -29,11 +29,13 @@ TEST_CASE("`sys::optional_destructor` does nothing if cleared.", "[sys][optional
     CHECK_FALSE(called);
 }
 
+// NOLINTBEGIN(misc-const-correctness): Spurious.
+
 TEST_CASE("`sys::optional_destructor` correctly transfers ownership on move.", "[sys][optional_destructor]")
 {
     static sz called = 0_uz;
     {
-        sys::optional_destructor d1 = [&]() noexcept -> void { called += 1_uz; };
+        sys::optional_destructor d1 = []() noexcept -> void { called += 1_uz; };
         const sys::optional_destructor d2 = std::move(d1);
     }
     {
@@ -64,4 +66,5 @@ TEST_CASE("`sys::optional_destructor` preserves cleared state on move.", "[sys][
     CHECK(called == 0_uz);
 }
 
+// NOLINTEND(misc-const-correctness)
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

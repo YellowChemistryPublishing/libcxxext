@@ -430,7 +430,7 @@ namespace sys
         {
             using std::swap;
 
-            constexpr auto swapOkWithErr = [](result& ok_res, result& err_res)
+            constexpr auto swapOkWithErr = [](result& ok_res, result& err_res) noexcept((INothrowMoveConstructible<T>) && INothrowMoveConstructible<Err>) -> void
             {
                 if constexpr (sizeof(internal::result_storage_type<Err>) <= sizeof(internal::result_storage_type<T>))
                 {
