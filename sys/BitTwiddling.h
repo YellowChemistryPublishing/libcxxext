@@ -15,27 +15,27 @@ namespace sys
     /// @brief The next power-of-two signed 32-bit integer.
     constexpr i32 nr2i32(i32 v) noexcept
     {
-        v--;
+        --v;
         v |= v >> 1_i32;
         v |= v >> 2_i32;
         v |= v >> 4_i32;
         v |= v >> 8_i32;
         v |= v >> 16_i32;
-        v++;
+        ++v;
         return v;
     }
     /// @ingroup sys
     /// @brief The next power-of-two signed 64-bit integer.
     constexpr i64 nr2i64(i64 v) noexcept
     {
-        v--;
+        --v;
         v |= v >> 1_i64;
         v |= v >> 2_i64;
         v |= v >> 4_i64;
         v |= v >> 8_i64;
         v |= v >> 16_i64;
         v |= v >> 32_i64;
-        v++;
+        ++v;
         return v;
     }
 

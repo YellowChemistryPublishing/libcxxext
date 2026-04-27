@@ -33,7 +33,7 @@ TEST_CASE("Construction and assignment.", "[sys][integer]")
     CHECK(u8(128.0f /* NOLINT(readability-magic-numbers) */) == 128);
     CHECK(u8(0b111111111, unsafe) == 0xFF);
 
-    const i8 a = -128 /* NOLINT(readability-magic-numbers) */;
+    const i8 a(-128 /* NOLINT(readability-magic-numbers) */);
     const u64 b = 0xFFFFFFFFFFFFFFFF_u64 /* NOLINT(readability-magic-numbers) */;
     u32 c(a);
     CHECK(c == 0);

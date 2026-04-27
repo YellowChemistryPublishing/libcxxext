@@ -337,11 +337,11 @@ namespace sys
             {
             case internal::result_status::ok:
                 if constexpr (!meta::type<T>::is_lvalue())
-                    std::destroy_at(this->storage.template data<T>());
+                    std::destroy_at(this->storage.template data<internal::result_storage_type<T>>());
                 break;
             case internal::result_status::error:
                 if constexpr (!meta::type<Err>::is_lvalue())
-                    std::destroy_at(this->storage.template data<Err>());
+                    std::destroy_at(this->storage.template data<internal::result_storage_type<Err>>());
                 break;
             default:;
             }
@@ -430,7 +430,7 @@ namespace sys
         {
             using std::swap;
 
-            constexpr auto swap_ok_with_err = [](result& ok_res, result& err_res)
+            constexpr auto swapOkWithErr = [](result& ok_res, result& err_res)
             {
                 if constexpr (sizeof(internal::result_storage_type<Err>) <= sizeof(internal::result_storage_type<T>))
                 {
@@ -454,14 +454,14 @@ namespace sys
                 case internal::result_status::ok:
                     swap(*a.storage.template data<internal::result_storage_type<T>>(), *b.storage.template data<internal::result_storage_type<T>>());
                     break;
-                case internal::result_status::error: swap_ok_with_err(a, b); break;
+                case internal::result_status::error: swapOkWithErr(a, b); break;
                 default: b.ctor_ok(a.move(unsafe));
                 }
                 break;
             case internal::result_status::error:
                 switch (b.status)
                 {
-                case internal::result_status::ok: swap_ok_with_err(b, a); break;
+                case internal::result_status::ok: swapOkWithErr(b, a); break;
                 case internal::result_status::error:
                     swap(*a.storage.template data<internal::result_storage_type<Err>>(), *b.storage.template data<internal::result_storage_type<Err>>());
                     break;
@@ -602,7 +602,7 @@ namespace sys
         {
             if constexpr (!meta::type<T>::is_lvalue())
                 if (this->status == internal::result_status::ok) [[likely]]
-                    std::destroy_at(this->downcast().storage.template data<T>());
+                    std::destroy_at(this->downcast().storage.template data<internal::result_storage_type<T>>());
         }
 
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
@@ -773,7 +773,7 @@ namespace sys
         {
             if constexpr (!meta::type<Err>::is_lvalue())
                 if (this->status == internal::result_status::error) [[unlikely]]
-                    std::destroy_at(this->storage.template data<Err>());
+                    std::destroy_at(this->storage.template data<internal::result_storage_type<Err>>());
         }
 
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)

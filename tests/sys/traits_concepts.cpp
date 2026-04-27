@@ -130,33 +130,33 @@ static_assert(!sys::IBuiltinNumeric<std::string>);
 static_assert(!sys::IBuiltinNumeric<void*>);
 
 // ================================================================================
-// Integer range containment. | `sys::IBuiltinIntegerCanHold`
+// Integer range containment. | `sys::IBuiltinIntegerNarrowerThan`
 // ================================================================================
 
 // Larger signed can hold smaller signed.
-static_assert(sys::IBuiltinIntegerCanHold<signed long long, signed char>);
-static_assert(sys::IBuiltinIntegerCanHold<signed long long, signed short>);
-static_assert(sys::IBuiltinIntegerCanHold<signed long long, signed int>);
+static_assert(sys::IBuiltinIntegerNarrowerThan<signed char, signed long long>);
+static_assert(sys::IBuiltinIntegerNarrowerThan<signed short, signed long long>);
+static_assert(sys::IBuiltinIntegerNarrowerThan<signed int, signed long long>);
 
 // Larger unsigned can hold smaller unsigned.
-static_assert(sys::IBuiltinIntegerCanHold<unsigned long long, unsigned char>);
-static_assert(sys::IBuiltinIntegerCanHold<unsigned long long, unsigned short>);
-static_assert(sys::IBuiltinIntegerCanHold<unsigned long long, unsigned int>);
+static_assert(sys::IBuiltinIntegerNarrowerThan<unsigned char, unsigned long long>);
+static_assert(sys::IBuiltinIntegerNarrowerThan<unsigned short, unsigned long long>);
+static_assert(sys::IBuiltinIntegerNarrowerThan<unsigned int, unsigned long long>);
 
 // Same type can hold itself.
-static_assert(sys::IBuiltinIntegerCanHold<signed int, signed int>);
-static_assert(sys::IBuiltinIntegerCanHold<unsigned int, unsigned int>);
+static_assert(sys::IBuiltinIntegerNarrowerThan<signed int, signed int>);
+static_assert(sys::IBuiltinIntegerNarrowerThan<unsigned int, unsigned int>);
 
 // Smaller cannot hold larger.
-static_assert(!sys::IBuiltinIntegerCanHold<signed char, signed int>);
-static_assert(!sys::IBuiltinIntegerCanHold<unsigned char, unsigned int>);
+static_assert(!sys::IBuiltinIntegerNarrowerThan<signed int, signed char>);
+static_assert(!sys::IBuiltinIntegerNarrowerThan<unsigned int, unsigned char>);
 
 // Unsigned cannot hold signed due to negative range.
-static_assert(!sys::IBuiltinIntegerCanHold<unsigned int, signed int>);
-static_assert(!sys::IBuiltinIntegerCanHold<unsigned long long, signed char>);
+static_assert(!sys::IBuiltinIntegerNarrowerThan<signed int, unsigned int>);
+static_assert(!sys::IBuiltinIntegerNarrowerThan<signed char, unsigned long long>);
 
 // Signed cannot hold unsigned due to upper range.
-static_assert(!sys::IBuiltinIntegerCanHold<signed int, unsigned int>);
+static_assert(!sys::IBuiltinIntegerNarrowerThan<unsigned int, signed int>);
 
 // ================================================================================
 // Character types. | `sys::ICharacter`

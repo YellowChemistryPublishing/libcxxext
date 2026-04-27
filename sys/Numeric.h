@@ -140,12 +140,12 @@ namespace sys
 
         constexpr integer() noexcept = default;
         /// @brief From narrower-bounded.
-        template <IBuiltinIntegerCanHold<For> T>
+        template <IBuiltinIntegerNarrowerThan<For> T>
         constexpr /* NOLINT(hicpp-explicit-conversions) */ integer(T v) noexcept : underlying(_as(v, For))
         { }
         /// @note Saturating.
         template <typename T>
-        requires ((!IBuiltinIntegerCanHold<T, For> && sys::IBuiltinInteger<T>) || sys::IBuiltinFloatingPoint<T>)
+        requires ((!IBuiltinIntegerNarrowerThan<T, For> && sys::IBuiltinInteger<T>) || sys::IBuiltinFloatingPoint<T>)
         constexpr explicit integer(T v) noexcept : underlying(bnumeric_cast<For>(v, unsafe))
         { }
         /// @warning `unsafe` because this is truncating.
@@ -164,8 +164,7 @@ namespace sys
         constexpr integer(integer&& other) noexcept : integer(other) /* NOLINT(performance-move-constructor-init) */ { }
         constexpr ~integer() noexcept = default;
 
-        template <typename T>
-        requires IBuiltinIntegerCanHold<For, T>
+        template <IBuiltinIntegerNarrowerThan<For> T>
         constexpr integer& operator=(T v) noexcept
         {
             this->underlying = _as(v, For);
@@ -300,9 +299,9 @@ namespace sys
             else [[likely]]
                 return integer(_as(-**this, For));
         }
-        [[nodiscard]] friend constexpr integer operator+(integer a, integer b) noexcept { return integer(a.u() + b.u(), unsafe); }
-        [[nodiscard]] friend constexpr integer operator-(integer a, integer b) noexcept { return integer(a.u() - b.u(), unsafe); }
-        [[nodiscard]] friend constexpr integer operator*(integer a, integer b) noexcept { return integer(a.u() * b.u(), unsafe); }
+        [[nodiscard]] friend constexpr integer operator+(integer a, integer b) noexcept { return integer(_as(a.u() + b.u(), For), unsafe); }
+        [[nodiscard]] friend constexpr integer operator-(integer a, integer b) noexcept { return integer(_as(a.u() - b.u(), For), unsafe); }
+        [[nodiscard]] friend constexpr integer operator*(integer a, integer b) noexcept { return integer(_as(a.u() * b.u(), For), unsafe); }
         [[nodiscard]] friend constexpr integer operator/(integer a, integer b) noexcept
         {
             if (*b == 0) [[unlikely]]
@@ -324,25 +323,25 @@ namespace sys
                 return integer(_as(*a % *b, For));
         }
 
-        [[nodiscard]] constexpr integer operator~() const noexcept { return integer(~this->u(), unsafe); }
-        [[nodiscard]] friend constexpr integer operator&(integer a, integer b) noexcept { return integer(a.u() & b.u(), unsafe); }
-        [[nodiscard]] friend constexpr integer operator|(integer a, integer b) noexcept { return integer(a.u() | b.u(), unsafe); }
-        [[nodiscard]] friend constexpr integer operator^(integer a, integer b) noexcept { return integer(a.u() ^ b.u(), unsafe); }
+        [[nodiscard]] constexpr integer operator~() const noexcept { return integer(_as(~this->u(), For), unsafe); }
+        [[nodiscard]] friend constexpr integer operator&(integer a, integer b) noexcept { return integer(_as(a.u() & b.u(), For), unsafe); }
+        [[nodiscard]] friend constexpr integer operator|(integer a, integer b) noexcept { return integer(_as(a.u() | b.u(), For), unsafe); }
+        [[nodiscard]] friend constexpr integer operator^(integer a, integer b) noexcept { return integer(_as(a.u() ^ b.u(), For), unsafe); }
         [[nodiscard]] friend constexpr integer operator<<(integer a, integer b) noexcept
         {
             if constexpr (IBuiltinIntegerSigned<For>)
                 if (*b < 0) [[unlikely]]
-                    return integer(a.u() >> (-b).u(), unsafe); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
+                    return integer(_as(a.u() >> (-b).u(), For), unsafe); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
 
-            return integer(a.u() << b.u(), unsafe);
+            return integer(_as(a.u() << b.u(), For), unsafe);
         }
         [[nodiscard]] friend constexpr integer operator>>(integer a, integer b) noexcept
         {
             if constexpr (IBuiltinIntegerSigned<For>)
                 if (*b < 0) [[unlikely]]
-                    return integer(a.u() << (-b).u(), unsafe); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
+                    return integer(_as(a.u() << (-b).u(), For), unsafe); // Note: `integer<...>::operator-()` produces signed max for negation of signed min, so safe.
 
-            return integer(a.u() >> b.u(), unsafe);
+            return integer(_as(a.u() >> b.u(), For), unsafe);
         }
 
         constexpr integer& operator+=(const integer& other) noexcept { return (*this = *this + other); }
