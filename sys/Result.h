@@ -121,7 +121,7 @@ namespace sys::internal
         constexpr void ctor_err(Args&&... args) noexcept(noexcept(Err(std::forward<Args>(args)...)))
         requires requires { Err(std::forward<Args>(args)...); }
         {
-            std::construct_at(this->downcast().storage.template data<Err>(), std::forward<Args>(args)...);
+            std::construct_at(this->downcast().storage.template data<result_storage_type<Err>>(), std::forward<Args>(args)...);
             this->downcast().status = result_status::error;
         }
 
@@ -132,15 +132,15 @@ namespace sys::internal
         {
             if constexpr (meta::type<Err>::is_lvalue())
             {
-                Err ret = **this->downcast().storage.template data<Err>();
+                Err ret = **this->downcast().storage.template data<result_storage_type<Err>>();
                 this->downcast().status = result_status::empty;
                 return ret;
             }
             else
             {
-                Err ret = std::move(*this->downcast().storage.template data<Err>());
-                std::destroy_at(this->downcast().storage.template data<Err>());
+                Err ret = std::move(*this->downcast().storage.template data<result_storage_type<Err>>());
                 this->downcast().status = result_status::empty;
+                std::destroy_at(this->downcast().storage.template data<result_storage_type<Err>>());
                 return ret;
             }
         }
@@ -220,8 +220,8 @@ namespace sys::internal
             else
             {
                 T ret = std::move(*this->downcast().storage.template data<result_storage_type<T>>());
-                std::destroy_at(this->downcast().storage.template data<result_storage_type<T>>());
                 this->downcast().status = result_status::empty;
+                std::destroy_at(this->downcast().storage.template data<result_storage_type<T>>());
                 return ret;
             }
         }
@@ -325,39 +325,33 @@ namespace sys
         {
             switch (other.status)
             {
-            [[likely]] case internal::result_status::ok:
-                this->ctor_ok(other.move(unsafe));
-                break;
-            [[unlikely]] case internal::result_status::error:
-                this->ctor_err(other.err(unsafe));
-                break;
-            [[unlikely]] case internal::result_status::empty:
-            [[unlikely]] default:
-                other.status = internal::result_status::empty;
+            case internal::result_status::ok: this->ctor_ok(other.move(unsafe)); break;
+            case internal::result_status::error: this->ctor_err(other.err(unsafe)); break;
+            default:;
             }
+            other.status = internal::result_status::empty;
         }
         [[clang::callable_when("consumed", "unknown")]] constexpr ~result()
         {
             switch (this->status)
             {
-            [[likely]] case internal::result_status::ok:
+            case internal::result_status::ok:
                 if constexpr (!meta::type<T>::is_lvalue())
                     std::destroy_at(this->storage.template data<T>());
                 break;
-            [[unlikely]] case internal::result_status::error:
-                std::destroy_at(this->storage.template data<Err>());
+            case internal::result_status::error:
+                if constexpr (!meta::type<Err>::is_lvalue())
+                    std::destroy_at(this->storage.template data<Err>());
                 break;
-            [[unlikely]] case internal::result_status::empty:
-            [[unlikely]] default:;
+            default:;
             }
         }
 
         result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(INothrowMoveConstructible<result>)
+        result& operator=(result&& other) noexcept((meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>)) &&
+                                                   (meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>)))
         {
-            _retif(*this, this == std::addressof(other));
-            std::destroy_at(this);
-            std::construct_at(this, std::move(other));
+            swap(*this, other);
             return *this;
         }
 
@@ -430,10 +424,58 @@ namespace sys
         }
 
         friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
-                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(INothrowMoveConstructible<result> &&
-                                                                                                                         INothrowMoveAssignable<result>)
+                         [[clang::param_typestate(unconsumed),
+                           clang::return_typestate(unconsumed)]] result& b) noexcept((meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>)) &&
+                                                                                     (meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>)))
         {
-            std::swap(a, b);
+            using std::swap;
+
+            constexpr auto swap_ok_with_err = [](result& ok_res, result& err_res)
+            {
+                if constexpr (sizeof(internal::result_storage_type<Err>) <= sizeof(internal::result_storage_type<T>))
+                {
+                    Err err = err_res.err(unsafe);
+                    err_res.ctor_ok(ok_res.move(unsafe));
+                    ok_res.ctor_err(std::move(err));
+                }
+                else
+                {
+                    T val = ok_res.move(unsafe);
+                    ok_res.ctor_err(err_res.err(unsafe));
+                    err_res.ctor_ok(std::move(val));
+                }
+            };
+
+            switch (a.status)
+            {
+            case internal::result_status::ok:
+                switch (b.status)
+                {
+                case internal::result_status::ok:
+                    swap(*a.storage.template data<internal::result_storage_type<T>>(), *b.storage.template data<internal::result_storage_type<T>>());
+                    break;
+                case internal::result_status::error: swap_ok_with_err(a, b); break;
+                default: b.ctor_ok(a.move(unsafe));
+                }
+                break;
+            case internal::result_status::error:
+                switch (b.status)
+                {
+                case internal::result_status::ok: swap_ok_with_err(b, a); break;
+                case internal::result_status::error:
+                    swap(*a.storage.template data<internal::result_storage_type<Err>>(), *b.storage.template data<internal::result_storage_type<Err>>());
+                    break;
+                default: b.ctor_err(a.err(unsafe));
+                }
+                break;
+            default:
+                switch (b.status)
+                {
+                case internal::result_status::ok: a.ctor_ok(b.move(unsafe)); break;
+                case internal::result_status::error: a.ctor_err(b.err(unsafe)); break;
+                default:;
+                }
+            }
         }
 
         friend struct sys::internal::result_b<result, T, Err>;
@@ -464,7 +506,7 @@ namespace sys
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
 
         result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(INothrowMoveConstructible<result>)
+        result& operator=(result&& other) noexcept
         {
             swap(*this, other);
             return *this;
@@ -546,36 +588,29 @@ namespace sys
         /// @brief Construct an error result.
         constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
-        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>))
+        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept(meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>)
         {
             switch (other.status)
             {
-            [[likely]] case internal::result_status::ok:
-                this->ctor_ok(other.move(unsafe));
-                break;
-            [[unlikely]] case internal::result_status::error:
-                this->status = internal::result_status::error;
-                [[fallthrough]];
-            [[unlikely]] case internal::result_status::empty:
-            [[unlikely]] default:
-                other.status = internal::result_status::empty;
+            case internal::result_status::ok: this->ctor_ok(other.move(unsafe)); break;
+            case internal::result_status::error: this->status = internal::result_status::error; [[fallthrough]];
+            case internal::result_status::empty:
+            default: other.status = internal::result_status::empty;
             }
         }
         [[clang::callable_when("consumed", "unknown")]] ~result()
         {
             if constexpr (!meta::type<T>::is_lvalue())
                 if (this->status == internal::result_status::ok) [[likely]]
-                    std::destroy_at(this->downcast().storage.template data<internal::result_storage_type<T>>());
+                    std::destroy_at(this->downcast().storage.template data<T>());
         }
 
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
 
         result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(INothrowMoveConstructible<result>)
+        result& operator=(result&& other) noexcept(meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>))
         {
-            _retif(*this, this == std::addressof(other));
-            std::destroy_at(this);
-            std::construct_at(this, std::move(other));
+            swap(*this, other);
             return *this;
         }
 
@@ -632,10 +667,47 @@ namespace sys
         }
 
         friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
-                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(INothrowMoveConstructible<result> &&
-                                                                                                                         INothrowMoveAssignable<result>)
+                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(meta::type<T>::is_lvalue() ||
+                                                                                                                         (INothrowSwappable<T> && INothrowMoveConstructible<T>))
         {
-            std::swap(a, b);
+            using std::swap;
+            switch (a.status)
+            {
+            case internal::result_status::ok:
+                switch (b.status)
+                {
+                case internal::result_status::ok:
+                    swap(*a.storage.template data<internal::result_storage_type<T>>(), *b.storage.template data<internal::result_storage_type<T>>());
+                    break;
+                case internal::result_status::error:
+                    b.ctor_ok(a.move(unsafe));
+                    a.status = internal::result_status::error;
+                    break;
+                default: b.ctor_ok(a.move(unsafe)); a.status = internal::result_status::empty;
+                }
+                break;
+            case internal::result_status::error:
+                switch (b.status)
+                {
+                case internal::result_status::ok:
+                    a.ctor_ok(b.move(unsafe));
+                    b.status = internal::result_status::error;
+                    break;
+                case internal::result_status::error: break;
+                default: swap(a.status, b.status);
+                }
+                break;
+            default:
+                switch (b.status)
+                {
+                case internal::result_status::ok:
+                    a.ctor_ok(b.move(unsafe));
+                    b.status = internal::result_status::empty;
+                    break;
+                case internal::result_status::error: swap(a.status, b.status); break;
+                default:;
+                }
+            }
         }
 
         friend struct sys::internal::result_b<result, T, void>;
@@ -691,31 +763,25 @@ namespace sys
         {
             switch (other.status)
             {
-            [[unlikely]] case internal::result_status::error:
-                this->ctor_err(other.err(unsafe));
-                break;
-            [[likely]] case internal::result_status::ok:
-                this->status = internal::result_status::ok;
-                [[fallthrough]];
-            [[unlikely]] case internal::result_status::empty:
-            [[unlikely]] default:
-                other.status = internal::result_status::empty;
+            case internal::result_status::error: this->ctor_err(other.err(unsafe)); break;
+            case internal::result_status::ok: this->status = internal::result_status::ok; [[fallthrough]];
+            case internal::result_status::empty:
+            default: other.status = internal::result_status::empty;
             }
         }
         [[clang::callable_when("consumed", "unknown")]] ~result()
         {
-            if (this->status == internal::result_status::error) [[unlikely]]
-                std::destroy_at(this->storage.template data<Err>());
+            if constexpr (!meta::type<Err>::is_lvalue())
+                if (this->status == internal::result_status::error) [[unlikely]]
+                    std::destroy_at(this->storage.template data<Err>());
         }
 
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
 
         result& operator=(const result&) = delete;
-        result& operator=(result&& other) noexcept(INothrowMoveConstructible<result>)
+        result& operator=(result&& other) noexcept(meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>))
         {
-            _retif(*this, this == &other);
-            std::destroy_at(this);
-            std::construct_at(this, std::move(other));
+            swap(*this, other);
             return *this;
         }
 
@@ -769,10 +835,47 @@ namespace sys
         }
 
         friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
-                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(INothrowMoveConstructible<result> &&
-                                                                                                                         INothrowMoveAssignable<result>)
+                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(meta::type<Err>::is_lvalue() ||
+                                                                                                                         (INothrowSwappable<Err> && INothrowMoveConstructible<Err>))
         {
-            std::swap(a, b);
+            using std::swap;
+            switch (a.status)
+            {
+            case internal::result_status::ok:
+                switch (b.status)
+                {
+                case internal::result_status::ok: break;
+                case internal::result_status::error:
+                    a.ctor_err(b.err(unsafe));
+                    b.status = internal::result_status::ok;
+                    break;
+                default: swap(a.status, b.status);
+                }
+                break;
+            case internal::result_status::error:
+                switch (b.status)
+                {
+                case internal::result_status::ok:
+                    a.ctor_err(b.err(unsafe));
+                    b.status = internal::result_status::ok;
+                    break;
+                case internal::result_status::error:
+                    swap(*a.storage.template data<internal::result_storage_type<Err>>(), *b.storage.template data<internal::result_storage_type<Err>>());
+                    break;
+                default: a.ctor_err(b.err(unsafe)); b.status = internal::result_status::empty;
+                }
+                break;
+            default:
+                switch (b.status)
+                {
+                case internal::result_status::ok: swap(a.status, b.status); break;
+                case internal::result_status::error:
+                    a.ctor_err(b.err(unsafe));
+                    b.status = internal::result_status::empty;
+                    break;
+                default:;
+                }
+            }
         }
 
         friend struct sys::internal::result_b<result, void, Err>;
