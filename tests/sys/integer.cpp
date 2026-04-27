@@ -135,12 +135,12 @@ TEST_CASE("Binary arithmetic operators.", "[sys][integer]")
     CHECK((0b1111_u8 & 0b1010_u8) == 0b1010_u8);
     CHECK((0b0101_u8 | 0b1010_u8) == 0b1111_u8);
     CHECK((0b0100_u8 ^ 0b1010_u8) == 0b1110_u8);
-    CHECK(0b11110000_u8 >> 4_u8 == 0b1111_u8);
-    CHECK(0b11110000_u8 << 2_u8 == 0b11000000_u8);
-    CHECK(0b1111_i8 >> 3_i8 == 0b1_i8);
-    CHECK(0b1111_i8 << 2_i8 == 0b111100_i8);
-    CHECK(0b1111_i8 >> -1_i8 == 0b11110_i8);
-    CHECK(0b1111_i8 << -2_i8 == 0b11_i8);
+    CHECK((0b11110000_u8 >> 4_u8) == 0b1111_u8);
+    CHECK((0b11110000_u8 << 2_u8) == 0b11000000_u8);
+    CHECK((0b1111_i8 >> 3_i8) == 0b1_i8);
+    CHECK((0b1111_i8 << 2_i8) == 0b111100_i8);
+    CHECK((0b1111_i8 >> -1_i8) == 0b11110_i8);
+    CHECK((0b1111_i8 << -2_i8) == 0b11_i8);
 
     u8 x = 0b1111_u8 /* NOLINT(readability-magic-numbers) */;
     CHECK((x &= 0b1010_u8) == 0b1010_u8);

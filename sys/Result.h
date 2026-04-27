@@ -799,14 +799,11 @@ namespace sys::internal
             value(std::forward<Args>(args)...)
         { }
         constexpr nullable_value_result(const nullable_value_result&) = delete;
-        constexpr nullable_value_result([[clang::return_typestate(unknown)]] nullable_value_result&& other) noexcept(INothrowSwappable<nullable_value_result>)
-        {
-            swap(*this, other);
-        }
+        constexpr nullable_value_result([[clang::return_typestate(unknown)]] nullable_value_result&& other) noexcept(INothrowSwappable<T>) { swap(*this, other); }
         [[clang::callable_when("consumed", "unknown")]] constexpr ~nullable_value_result() = default;
 
         nullable_value_result& operator=(const nullable_value_result&) = delete;
-        nullable_value_result& operator=([[clang::return_typestate(unknown)]] nullable_value_result&& other) noexcept(INothrowSwappable<nullable_value_result>)
+        nullable_value_result& operator=([[clang::return_typestate(unknown)]] nullable_value_result&& other) noexcept(INothrowSwappable<T>)
         {
             swap(*this, other);
             return *this;
