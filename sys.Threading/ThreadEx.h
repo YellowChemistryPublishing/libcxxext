@@ -208,7 +208,7 @@ namespace sys
                 return threading_error::init_failed;
             _nowarn_end_msvc();
 
-            releaseFunc.release(unsafe);
+            releaseFunc.clear();
             return managed_thread(th, unsafe);
         }
 

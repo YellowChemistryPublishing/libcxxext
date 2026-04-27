@@ -49,7 +49,8 @@ if(LIBCXXEXT_TESTS)
     find_program(GCOVR_EXECUTABLE gcovr)
     if(GCOVR_EXECUTABLE)
         add_custom_target(libcxxext_coverage
-            COMMAND ${GCOVR_EXECUTABLE} --lcov "${CMAKE_BINARY_DIR}/coverage.info" --gcov-ignore-parse-errors negative_hits.warn
+            COMMAND ${GCOVR_EXECUTABLE} --lcov "${CMAKE_BINARY_DIR}/coverage.info" --gcov-ignore-parse-errors negative_hits.warn "-f=^(build|(sys[\\.A-Za-z]*))/" "-e=^sys.Text/data/"
+            VERBATIM
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
     endif()

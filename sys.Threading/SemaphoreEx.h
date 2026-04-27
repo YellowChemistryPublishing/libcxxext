@@ -9,10 +9,10 @@
 #include <ConditionVariable.h>
 #include <LanguageSupport.h>
 #include <Mutex.h>
+#include <Numeric.h>
 #include <ResourceGuard.h>
 #include <Result.h>
 #include <ThreadingErrors.h>
-#include <inline/Integer.inl>
 #include <meta/Builtin.h>
 
 namespace sys

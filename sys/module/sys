@@ -18,8 +18,6 @@
 #include <data/ClWarnClang.h>           // IWYU pragma: export
 #include <data/ClWarnGCC.h>             // IWYU pragma: export
 #include <data/ClWarnMSVC.h>            // IWYU pragma: export
-#include <inline/Integer.inl>           // IWYU pragma: export
-#include <inline/Numeric.inl>           // IWYU pragma: export
 #include <meta/Builtin.h>               // IWYU pragma: export
 #include <meta/Container.h>             // IWYU pragma: export
 #include <meta/Function.h>              // IWYU pragma: export

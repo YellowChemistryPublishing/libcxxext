@@ -162,6 +162,32 @@ constexpr struct
 
 /// @}
 
+/// @defgroup builtin_integers Built-in Integer Types
+/// @ingroup tags
+/// @ingroup sys
+/// @brief Abbreviated built-in integer types.
+/// @note Pass `byval`.
+/// @{
+
+// NOLINTBEGIN(google-runtime-int)
+/// @brief Alias for `unsigned char`.
+using byte = unsigned char;
+/// @brief Alias for `signed char`.
+using sbyte = signed char;
+/// @brief Alias for `unsigned short`.
+using ushort = unsigned short;
+/// @brief Alias for `unsigned int`.
+using uint = unsigned int;
+/// @brief Alias for `unsigned long`.
+using ulong = unsigned long;
+/// @brief Alias for `long long`.
+using llong = long long;
+/// @brief Alias for `unsigned long long`.
+using ullong = unsigned long long;
+// NOLINTEND(google-runtime-int)
+
+/// @}
+
 #ifndef _contract_assert
 /// @def _contract_assert(cond, ...)
 /// @ingroup sys
