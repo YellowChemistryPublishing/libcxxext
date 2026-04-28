@@ -2,7 +2,6 @@
 
 /// @file
 
-#include <bit>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -117,7 +116,7 @@ namespace sys
     /// `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`, `sys::IBooleanTestable`, `sys::INothrowEqualityComparable`, `sys::INothrowSwappable`.
     /// @note Pass `byval`.
     template <sys::IBuiltinInteger For>
-    /* NOLINT(misc-use-internal-linkage) */ struct alignas(For) integer final
+    /* NOLINT(misc-use-internal-linkage) */ struct integer final
     {
     private:
         using signed_t = std::make_signed_t<For>;
@@ -125,7 +124,7 @@ namespace sys
 
         For underlying = 0;
 
-        [[nodiscard]] constexpr unsigned_t u() const noexcept { return std::bit_cast<unsigned_t>(**this); }
+        [[nodiscard]] constexpr unsigned_t u() const noexcept { return _as(**this, unsigned_t); }
     public:
         using underlying_type = For;
 
@@ -150,7 +149,7 @@ namespace sys
         { }
         /// @warning `unsafe` because this is truncating.
         template <sys::IBuiltinInteger T>
-        constexpr explicit integer(T v, decltype(unsafe)) noexcept : underlying(std::bit_cast<For>(_as(std::bit_cast<std::make_unsigned_t<T>>(v), unsigned_t)))
+        constexpr explicit integer(T v, decltype(unsafe)) noexcept : underlying(_as(v, For))
         { }
         /// @note Saturating.
         template <sys::IBuiltinInteger T>
@@ -161,7 +160,7 @@ namespace sys
         constexpr explicit integer(integer<T> v, decltype(unsafe)) noexcept : integer(*v, unsafe)
         { }
         constexpr integer(const integer& other) noexcept = default;
-        constexpr integer(integer&& other) noexcept : integer(other) /* NOLINT(performance-move-constructor-init) */ { }
+        constexpr integer(integer&&) noexcept = default;
         constexpr ~integer() noexcept = default;
 
         template <IBuiltinIntegerNarrowerThan<For> T>
@@ -171,11 +170,7 @@ namespace sys
             return *this;
         }
         constexpr integer& operator=(const integer& other) noexcept = default;
-        constexpr integer& operator=(integer&& other) noexcept
-        {
-            *this = other;
-            return *this;
-        }
+        constexpr integer& operator=(integer&&) noexcept = default;
 
         [[nodiscard]] constexpr For operator*() const noexcept { return this->underlying; }
         [[nodiscard]] constexpr For& operator*() noexcept { return this->underlying; }
