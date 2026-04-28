@@ -6,8 +6,8 @@
 
 #include <string_view>
 
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
 
 namespace sys
 {

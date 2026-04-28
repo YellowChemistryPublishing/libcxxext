@@ -7,8 +7,8 @@
 #include <string_view>
 
 #include <Char.h>
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
 #include <meta/Builtin.h>
 
 namespace sys

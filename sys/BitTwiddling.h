@@ -4,8 +4,8 @@
 
 #include <functional>
 
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
 
 // NOLINTBEGIN(readability-magic-numbers)
 

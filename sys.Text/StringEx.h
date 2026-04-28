@@ -17,8 +17,8 @@
 
 #include <Char.h>
 #include <CodepointIterator.h>
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
 #include <data/UnicodeCCC.h>
 #include <data/UnicodeCasing.h>
 #include <meta/Builtin.h>

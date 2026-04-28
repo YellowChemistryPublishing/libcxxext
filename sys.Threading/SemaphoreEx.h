@@ -7,6 +7,7 @@
 #include <stdexcept>
 
 #include <ConditionVariable.h>
+#include <Integer.h>
 #include <LanguageSupport.h>
 #include <Mutex.h>
 #include <Numeric.h>

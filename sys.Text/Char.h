@@ -8,8 +8,8 @@
 #include <string>
 #include <string_view>
 
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
 #include <data/UnicodeCasing.h>
 #include <data/UnicodeWhitespace.h>
 #include <meta/Builtin.h>

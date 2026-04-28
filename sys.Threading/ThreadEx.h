@@ -16,6 +16,7 @@
 
 #include <CompilerWarnings.h>
 #include <Destructor.h>
+#include <Integer.h>
 #include <LanguageSupport.h>
 #include <Numeric.h>
 #include <Result.h>
@@ -135,7 +136,7 @@ namespace sys
     /// @ingroup sys_threading
     /// @brief A spun-off thread lifetime that is joined upon destruction.
     /// @details
-    /// Implements `sys::INothrowMoveConstructible`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`, `sys::IBooleanTestable`.
+    /// Implements `sys::INothrowMoveConstructible`, `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`, `sys::IBooleanTestable`, `sys::INothrowSwappable`.
     /// @see
     /// For more information about joining thread handles, see
     /// [Rust Docs](https://doc.rust-lang.org/std/thread/struct.JoinHandle.html),
