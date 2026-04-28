@@ -219,7 +219,7 @@ namespace sys
         [[nodiscard]] bool joinable() const noexcept { return this->th != thrd_t {} && !thrd_equal(this->th, thrd_current()); }
 
         /// @brief Obtain information about this thread.
-        [[nodiscard]] thread thread() const noexcept { return { this->th, unsafe }; }
+        [[nodiscard]] sys::thread thread() const noexcept { return { this->th, unsafe }; }
 
         /// @brief Block-and-wait for this thread to complete execution, and obtain its exit code.
         result<sys::integer<int>, threading_error> join() noexcept

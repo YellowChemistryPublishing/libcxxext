@@ -1,6 +1,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 
 // NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
 #include <CompilerWarnings.h>
@@ -30,10 +31,10 @@ TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_stora
         RC_ASSERT(_asr(storage.data(), uintptr_t) % alignof(std::max_align_t) == 0uz);
         RC_ASSERT(sizeof(storage) == sizeof(std::array<uint64_t, 2048uz /* NOLINT(readability-magic-numbers) */>));
 
-        new(storage.data()) std::array<int64_t, 1024uz /* NOLINT(readability-magic-numbers) */>(val);
+        std::construct_at(storage.data(), val);
         RC_ASSERT(*storage.data() == val);
 
-        storage.data()->~array();
+        std::destroy_at(storage.data());
     });
 }
 

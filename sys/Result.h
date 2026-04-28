@@ -327,9 +327,8 @@ namespace sys
             {
             case internal::result_status::ok: this->ctor_ok(other.move(unsafe)); break;
             case internal::result_status::error: this->ctor_err(other.err(unsafe)); break;
-            default:;
+            default: other.status = internal::result_status::empty;
             }
-            other.status = internal::result_status::empty;
         }
         [[clang::callable_when("consumed", "unknown")]] constexpr ~result()
         {
@@ -351,7 +350,29 @@ namespace sys
         result& operator=(result&& other) noexcept((meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>)) &&
                                                    (meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>)))
         {
-            swap(*this, other);
+            if (this == std::addressof(other)) [[unlikely]]
+                return *this;
+
+            switch (this->status)
+            {
+            case internal::result_status::ok:
+                if constexpr (!meta::type<T>::is_lvalue())
+                    std::destroy_at(this->storage.template data<internal::result_storage_type<T>>());
+                break;
+            case internal::result_status::error:
+                if constexpr (!meta::type<Err>::is_lvalue())
+                    std::destroy_at(this->storage.template data<internal::result_storage_type<Err>>());
+                break;
+            default:;
+            }
+            this->status = internal::result_status::empty;
+            switch (other.status)
+            {
+            case internal::result_status::ok: this->ctor_ok(other.move(unsafe)); break;
+            case internal::result_status::error: this->ctor_err(other.err(unsafe)); break;
+            default: other.status = internal::result_status::empty;
+            }
+
             return *this;
         }
 
@@ -427,7 +448,8 @@ namespace sys
                                                         (meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>)))
 
         {
-            if ((b.status == internal::result_status::error && sizeof(internal::result_storage_type<Err>) <= sizeof(internal::result_storage_type<T>)) ||
+            if ((b.status == internal::result_status::ok && sizeof(internal::result_storage_type<T>) < sizeof(internal::result_storage_type<Err>)) ||
+                (b.status == internal::result_status::error && sizeof(internal::result_storage_type<Err>) <= sizeof(internal::result_storage_type<T>)) ||
                 b.status == internal::result_status::empty)
             {
                 result tmp = std::move(b);
@@ -554,7 +576,6 @@ namespace sys
             {
             case internal::result_status::ok: this->ctor_ok(other.move(unsafe)); break;
             case internal::result_status::error: this->status = internal::result_status::error; [[fallthrough]];
-            case internal::result_status::empty:
             default: other.status = internal::result_status::empty;
             }
         }
@@ -570,7 +591,20 @@ namespace sys
         result& operator=(const result&) = delete;
         result& operator=(result&& other) noexcept(meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>))
         {
-            swap(*this, other);
+            if (this == std::addressof(other)) [[unlikely]]
+                return *this;
+
+            if constexpr (!meta::type<T>::is_lvalue())
+                if (this->status == internal::result_status::ok) [[likely]]
+                    std::destroy_at(this->downcast().storage.template data<internal::result_storage_type<T>>());
+            this->status = internal::result_status::empty;
+            switch (other.status)
+            {
+            case internal::result_status::ok: this->ctor_ok(other.move(unsafe)); break;
+            case internal::result_status::error: this->status = internal::result_status::error; [[fallthrough]];
+            default: other.status = internal::result_status::empty;
+            }
+
             return *this;
         }
 
@@ -696,7 +730,6 @@ namespace sys
             {
             case internal::result_status::error: this->ctor_err(other.err(unsafe)); break;
             case internal::result_status::ok: this->status = internal::result_status::ok; [[fallthrough]];
-            case internal::result_status::empty:
             default: other.status = internal::result_status::empty;
             }
         }
@@ -712,7 +745,20 @@ namespace sys
         result& operator=(const result&) = delete;
         result& operator=(result&& other) noexcept(meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>))
         {
-            swap(*this, other);
+            if (this == std::addressof(other)) [[unlikely]]
+                return *this;
+
+            if constexpr (!meta::type<Err>::is_lvalue())
+                if (this->status == internal::result_status::error) [[unlikely]]
+                    std::destroy_at(this->storage.template data<internal::result_storage_type<Err>>());
+            this->status = internal::result_status::empty;
+            switch (other.status)
+            {
+            case internal::result_status::error: this->ctor_err(other.err(unsafe)); break;
+            case internal::result_status::ok: this->status = internal::result_status::ok; [[fallthrough]];
+            default: other.status = internal::result_status::empty;
+            }
+
             return *this;
         }
 

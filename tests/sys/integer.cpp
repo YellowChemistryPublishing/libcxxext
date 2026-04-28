@@ -141,6 +141,10 @@ TEST_CASE("Binary arithmetic operators.", "[sys][integer]")
     CHECK((0b1111_i8 << 2_i8) == 0b111100_i8);
     CHECK((0b1111_i8 >> -1_i8) == 0b11110_i8);
     CHECK((0b1111_i8 << -2_i8) == 0b11_i8);
+    CHECK((u8::ones() >> 12_u8) == 0b0_u8);
+    CHECK((u8::ones() << 12_u8) == 0b0_u8);
+    CHECK((i8::ones() >> -12_i8) == 0b0_i8);
+    CHECK((i8::ones() << -12_i8) == 0b0_i8);
 
     u8 x = 0b1111_u8 /* NOLINT(readability-magic-numbers) */;
     CHECK((x &= 0b1010_u8) == 0b1010_u8);
@@ -160,6 +164,14 @@ TEST_CASE("Binary arithmetic operators.", "[sys][integer]")
     CHECK((y >>= -1_i8) == 0b11110_i8);
     y = 0b1111_i8 /* NOLINT(readability-magic-numbers) */;
     CHECK((y <<= -2_i8) == 0b11_i8);
+    x = u8::ones();
+    CHECK((x >>= 12_u8) == 0b0_u8);
+    x = u8::ones();
+    CHECK((x <<= 12_u8) == 0b0_u8);
+    y = i8::ones();
+    CHECK((y >>= -12_i8) == 0b0_i8);
+    y = i8::ones();
+    CHECK((y <<= -12_i8) == 0b0_i8);
 }
 
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

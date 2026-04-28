@@ -5,7 +5,7 @@
         { "name": "check:cppfmt", "script": "workflows/cppfmt.py", "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/|tinycthread/)).*\\.(h|inl|c|cpp)$"] },
         { "name": "check:cpplint", "script": "workflows/cpplint.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
         { "name": "check:cpptest", "script": "workflows/cpptest.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
-        { "name": "check:cppcov", "script": "workflows/cppcov.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|(sys[\\.A-Za-z]*))/", "-e=^sys.Text/data/"] },
+        { "name": "check:cppcov", "script": "workflows/cppcov.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|(sys[\\.A-Za-z]*))/", "-e=sys\\.Text/data/"] },
         {
             "name":   "check:cpppack",
             "script": "workflows/cpppack.py",

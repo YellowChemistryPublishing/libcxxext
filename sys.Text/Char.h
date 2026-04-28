@@ -33,7 +33,7 @@ namespace sys
 
         /// @brief The replacement character, U+FFFD.
         template <ICharacter T>
-        static consteval std::basic_string_view<T> replacement() noexcept
+        static consteval std::basic_string_view<T> replacement()
         {
             if constexpr (std::same_as<T, char8_t>)
                 return u8"\uFFFD";
@@ -119,7 +119,7 @@ namespace sys
             sz size_bytes;
         };
     private:
-        static consteval codepoint_data read_codepoint_fail() noexcept
+        static consteval codepoint_data read_codepoint_fail()
         {
             return codepoint_data { .c = ch::replacement<char32_t>()[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */, .size_bytes = 1_uz };
         }
@@ -130,14 +130,14 @@ namespace sys
         /// @return `(char32_t codepoint, sz elements_read)`
         /// @warning `unsafe` because `range` has preconditions.
         /// @pre `range.empty() == false`
-        static constexpr codepoint_data read_codepoint(const std::span<const char32_t> range, decltype(unsafe)) noexcept
+        static constexpr codepoint_data read_codepoint(const std::span<const char32_t> range, decltype(unsafe))
         {
             const u32 ret = _as(range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */, u32::underlying_type);
             _retif(ch::read_codepoint_fail(), !ch::is_scalar(_as(*ret, char32_t)));
             return codepoint_data { .c = _as(*ret, char32_t), .size_bytes = 1_uz };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, decltype(unsafe))`
-        static constexpr codepoint_data read_codepoint(const std::span<const char16_t> range, decltype(unsafe)) noexcept
+        static constexpr codepoint_data read_codepoint(const std::span<const char16_t> range, decltype(unsafe))
         {
             const u32 lead = _as(range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */, u32::underlying_type);
             _retif((codepoint_data { .c = _as(*lead, char32_t), .size_bytes = 1_uz }), !ch::is_surrogate(_as(*lead, char32_t))); // BMP
@@ -149,7 +149,7 @@ namespace sys
             return codepoint_data { .c = _as(*(0x10000_u32 + ((lead - 0xD800_u32) << 10_u32) + (trail - 0xDC00_u32)), char32_t), .size_bytes = 2_uz };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, decltype(unsafe))`
-        static constexpr codepoint_data read_codepoint(const std::span<const char8_t> range, decltype(unsafe)) noexcept // NOLINT(readability-function-cognitive-complexity)
+        static constexpr codepoint_data read_codepoint(const std::span<const char8_t> range, decltype(unsafe)) // NOLINT(readability-function-cognitive-complexity)
         {
             u32 ret = _as(range[0] /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access) */, u32::underlying_type);
             _retif((codepoint_data { .c = _as(*ret, char32_t), .size_bytes = 1_uz }), ret < 0x80_u32); // 1-byte sequence, fast path.
@@ -188,13 +188,13 @@ namespace sys
             return codepoint_data { .c = _as(*ret, char32_t), .size_bytes = len };
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, decltype(unsafe))`
-        static constexpr codepoint_data read_codepoint(const std::span<const char> range, decltype(unsafe)) noexcept
+        static constexpr codepoint_data read_codepoint(const std::span<const char> range, decltype(unsafe))
         {
             using ctype = ch::unicode_equiv<char>;
             return read_codepoint(std::span<const ctype>(_asr(range.data(), const ctype*), range.size()), unsafe);
         }
         /// @see `sys::ch::read_codepoint(const std::span<const char32_t>, decltype(unsafe))`
-        static constexpr codepoint_data read_codepoint(const std::span<const wchar_t> range, decltype(unsafe)) noexcept
+        static constexpr codepoint_data read_codepoint(const std::span<const wchar_t> range, decltype(unsafe))
         {
             using ctype = ch::unicode_equiv<wchar_t>;
             return read_codepoint(std::span<const ctype>(_asr(range.data(), const ctype*), range.size()), unsafe);
@@ -206,7 +206,7 @@ namespace sys
         /// @return The number of elements written.
         /// @warning `unsafe` because `out` has preconditions.
         /// @pre `sys::ICharacter out[N] && sizeof(out) >= sizeof(char32_t)`
-        static constexpr sz write_codepoint(char32_t c, char32_t out[], decltype(unsafe)) noexcept
+        static constexpr sz write_codepoint(char32_t c, char32_t out[], decltype(unsafe))
         {
             const u32 ret = _as(c, u32::underlying_type);
             out[0] = ch::is_scalar(_as(*ret, char32_t)) ? _as(*ret, char32_t)
@@ -214,7 +214,7 @@ namespace sys
             return 1_uz;
         }
         /// @see `sys::ch::write_codepoint(char32_t, char32_t[], decltype(unsafe))`
-        static constexpr sz write_codepoint(char32_t c, char16_t out[], decltype(unsafe)) noexcept
+        static constexpr sz write_codepoint(char32_t c, char16_t out[], decltype(unsafe))
         {
             const u32 ret = _as(c, u32::underlying_type);
             if (!ch::is_scalar(_as(*ret, char32_t))) [[unlikely]]
@@ -235,7 +235,7 @@ namespace sys
             return 2_uz;
         }
         /// @see `sys::ch::write_codepoint(char32_t, char32_t[], decltype(unsafe))`
-        static constexpr sz write_codepoint(char32_t c, char8_t out[], decltype(unsafe)) noexcept // NOLINT(readability-function-cognitive-complexity)
+        static constexpr sz write_codepoint(char32_t c, char8_t out[], decltype(unsafe)) // NOLINT(readability-function-cognitive-complexity)
         {
             const u32 ret = _as(c, u32::underlying_type);
             if (ch::is_scalar(_as(*ret, char32_t))) [[likely]]
@@ -272,13 +272,13 @@ namespace sys
             return ch::replacement<char8_t>().size();
         }
         /// @see `sys::ch::write_codepoint(char32_t, char32_t[], decltype(unsafe))`
-        static constexpr sz write_codepoint(char32_t c, char out[], decltype(unsafe)) noexcept
+        static constexpr sz write_codepoint(char32_t c, char out[], decltype(unsafe))
         {
             using ctype = ch::unicode_equiv<char>;
             return write_codepoint(c, _asr(out, ctype*), unsafe);
         }
         /// @see `sys::ch::write_codepoint(char32_t, char32_t[], decltype(unsafe))`
-        static constexpr sz write_codepoint(char32_t c, wchar_t out[], decltype(unsafe)) noexcept
+        static constexpr sz write_codepoint(char32_t c, wchar_t out[], decltype(unsafe))
         {
             using ctype = ch::unicode_equiv<wchar_t>;
             return write_codepoint(c, _asr(out, ctype*), unsafe);

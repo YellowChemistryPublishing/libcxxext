@@ -101,13 +101,19 @@ def main(argv: List[str]) -> None:
     )
 
     md_report_path = f"{config.findings_reldir}/CoverageReport.md"
-    md_report_cmd = gcovr.cmd(cl_name=args.compiler) + [
-        "--filter",
-        args.regex_path_filter,
-        "--markdown",
-        "--gcov-object-directory",
-        args.build_dir_name,
-    ]
+    md_report_cmd = (
+        gcovr.cmd(cl_name=args.compiler)
+        + [
+            "--filter",
+            args.regex_path_filter,
+        ]
+        + (["--exclude", args.regex_path_exclude] if args.regex_path_exclude else [])
+        + [
+            "--markdown",
+            "--gcov-object-directory",
+            args.build_dir_name,
+        ]
+    )
 
     content, _ = exec_or_fail(md_report_cmd, capture_output=True)
     content = content.replace("# GCC Code Coverage Report\n\n", "").replace("##", "###")
