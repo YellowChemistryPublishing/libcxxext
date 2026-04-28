@@ -205,8 +205,8 @@ using ullong = unsigned long long;
             { }                                                                                                                          \
                                                                                                                                          \
             volatile uint_least64_t i = 5'000'000'000;                                                                                   \
-            while (i -= 1u)                                                                                                              \
-            { }                                                                                                                          \
+            while (i > 0)                                                                                                                \
+                i = i - 1;                                                                                                               \
                                                                                                                                          \
             std::terminate();                                                                                                            \
         }                                                                                                                                \

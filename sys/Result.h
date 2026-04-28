@@ -162,6 +162,7 @@ namespace sys::internal
                 else
                     return Result<T, void>(this->downcast().move(unsafe));
             [[unlikely]] case result_status::empty:
+                [[fallthrough]];
             [[unlikely]] default:
                 return Result<T, void>(unsafe);
             }
@@ -320,8 +321,7 @@ namespace sys
         // NOLINTEND(hicpp-explicit-conversions)
 
         constexpr result(const result&) = delete;
-        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>) &&
-                                                                                       (meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>))
+        constexpr result(result&& other) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>) && (meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>))
         {
             switch (other.status)
             {
@@ -371,7 +371,9 @@ namespace sys
         [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<T, void>() && noexcept(std::same_as<T, void> || meta::type<T>::is_lvalue() ||
                                                                                                                INothrowMoveConstructible<T>)
         {
+            _nowarn_begin_one_clang(_clwarn_clang_consumed);
             return _as(std::move(_as(*this, internal::result_b_err<result, T, Err>&)), result<T, void>);
+            _nowarn_end_clang();
         }
 
         /// @brief Takes the value if the result has a good value.
@@ -392,8 +394,7 @@ namespace sys
         }
         /// @brief Takes the value if the result has a good value.
         /// @pre `*this == true`
-        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T expect() noexcept(meta::type<T>::is_lvalue() ||
-                                                                                                                                   INothrowMoveConstructible<T>)
+        [[clang::set_typestate(consumed)]] constexpr T expect() noexcept(meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>)
         {
             _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad result!"); // LCOV_EXCL_LINE
             return this->move(unsafe);
@@ -408,8 +409,7 @@ namespace sys
         }
         /// @brief Take the error of a bad result.
         /// @pre `*this == false`
-        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr Err expect_err() noexcept(meta::type<Err>::is_lvalue() ||
-                                                                                                                                         INothrowMoveConstructible<Err>)
+        [[clang::set_typestate(consumed)]] constexpr Err expect_err() noexcept(meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>)
         {
             _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!"); // LCOV_EXCL_LINE
             return this->err(unsafe);
@@ -423,58 +423,22 @@ namespace sys
             return func(std::move(*this));
         }
 
-        friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
-                         [[clang::param_typestate(unconsumed),
-                           clang::return_typestate(unconsumed)]] result& b) noexcept((meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>)) &&
-                                                                                     (meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>)))
+        friend void swap(result& a, result& b) noexcept((meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>)) &&
+                                                        (meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>)))
+
         {
-            using std::swap;
-
-            constexpr auto swapOkWithErr = [](result& ok_res, result& err_res) -> void
+            if ((b.status == internal::result_status::error && sizeof(internal::result_storage_type<Err>) <= sizeof(internal::result_storage_type<T>)) ||
+                b.status == internal::result_status::empty)
             {
-                if constexpr (sizeof(internal::result_storage_type<Err>) <= sizeof(internal::result_storage_type<T>))
-                {
-                    Err err = err_res.err(unsafe);
-                    err_res.ctor_ok(ok_res.move(unsafe));
-                    ok_res.ctor_err(std::move(err));
-                }
-                else
-                {
-                    T val = ok_res.move(unsafe);
-                    ok_res.ctor_err(err_res.err(unsafe));
-                    err_res.ctor_ok(std::move(val));
-                }
-            };
-
-            switch (a.status)
+                result tmp = std::move(b);
+                b = std::move(a);
+                a = std::move(tmp);
+            }
+            else
             {
-            case internal::result_status::ok:
-                switch (b.status)
-                {
-                case internal::result_status::ok:
-                    swap(*a.storage.template data<internal::result_storage_type<T>>(), *b.storage.template data<internal::result_storage_type<T>>());
-                    break;
-                case internal::result_status::error: swapOkWithErr(a, b); break;
-                default: b.ctor_ok(a.move(unsafe));
-                }
-                break;
-            case internal::result_status::error:
-                switch (b.status)
-                {
-                case internal::result_status::ok: swapOkWithErr(b, a); break;
-                case internal::result_status::error:
-                    swap(*a.storage.template data<internal::result_storage_type<Err>>(), *b.storage.template data<internal::result_storage_type<Err>>());
-                    break;
-                default: b.ctor_err(a.err(unsafe));
-                }
-                break;
-            default:
-                switch (b.status)
-                {
-                case internal::result_status::ok: a.ctor_ok(b.move(unsafe)); break;
-                case internal::result_status::error: a.ctor_err(b.err(unsafe)); break;
-                default:;
-                }
+                result tmp = std::move(a);
+                a = std::move(b);
+                b = std::move(tmp);
             }
         }
 
@@ -500,7 +464,7 @@ namespace sys
         /// @brief Construct an error result.
         constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
-        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept : status(other.status) { other.status = internal::result_status::empty; }
+        constexpr result(result&& other) noexcept : status(other.status) { other.status = internal::result_status::empty; }
         [[clang::callable_when("consumed")]] constexpr ~result() = default;
 
         // NOLINTEND(hicpp-explicit-conversions, hicpp-member-init)
@@ -520,13 +484,13 @@ namespace sys
 
         /// @brief Expects the result to be good.
         /// @pre `*this == true`
-        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect() const noexcept
+        [[clang::set_typestate(consumed)]] void expect() const noexcept
         {
             _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad or empty result!"); // LCOV_EXCL_LINE
         }
         /// @brief Expects the result to be bad.
         /// @pre `*this == false`
-        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect_err() const noexcept
+        [[clang::set_typestate(consumed)]] void expect_err() const noexcept
         {
             _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!"); // LCOV_EXCL_LINE
         }
@@ -539,11 +503,7 @@ namespace sys
             return func(std::move(*this));
         }
 
-        friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
-                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept
-        {
-            std::swap(a.status, b.status);
-        }
+        friend void swap(result& a, result& b) noexcept { std::swap(a.status, b.status); }
 
         friend struct sys::internal::result_b<result, void, void>;
         template <template <typename, typename> class, typename, typename>
@@ -588,7 +548,7 @@ namespace sys
         /// @brief Construct an error result.
         constexpr result(std::nullptr_t) noexcept : status(internal::result_status::error) { }
         constexpr result(const result&) = delete;
-        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept(meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>)
+        constexpr result(result&& other) noexcept(meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>)
         {
             switch (other.status)
             {
@@ -644,8 +604,7 @@ namespace sys
         }
         /// @brief Takes the value if the result has a good value.
         /// @pre `*this == true`
-        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T expect() noexcept(meta::type<T>::is_lvalue() ||
-                                                                                                                                   INothrowMoveConstructible<T>)
+        [[clang::set_typestate(consumed)]] constexpr T expect() noexcept(meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>)
         {
             _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad result!"); // LCOV_EXCL_LINE
             return this->move(unsafe);
@@ -653,7 +612,7 @@ namespace sys
 
         /// @brief Expects the result to be bad.
         /// @pre `*this == false`
-        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect_err() const noexcept
+        [[clang::set_typestate(consumed)]] void expect_err() const noexcept
         {
             _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!"); // LCOV_EXCL_LINE
         }
@@ -666,47 +625,19 @@ namespace sys
             return func(std::move(*this));
         }
 
-        friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
-                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(meta::type<T>::is_lvalue() ||
-                                                                                                                         (INothrowSwappable<T> && INothrowMoveConstructible<T>))
+        friend void swap(result& a, result& b) noexcept(meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>))
         {
-            using std::swap;
-            switch (a.status)
+            if (b.status == internal::result_status::error || b.status == internal::result_status::empty)
             {
-            case internal::result_status::ok:
-                switch (b.status)
-                {
-                case internal::result_status::ok:
-                    swap(*a.storage.template data<internal::result_storage_type<T>>(), *b.storage.template data<internal::result_storage_type<T>>());
-                    break;
-                case internal::result_status::error:
-                    b.ctor_ok(a.move(unsafe));
-                    a.status = internal::result_status::error;
-                    break;
-                default: b.ctor_ok(a.move(unsafe)); a.status = internal::result_status::empty;
-                }
-                break;
-            case internal::result_status::error:
-                switch (b.status)
-                {
-                case internal::result_status::ok:
-                    a.ctor_ok(b.move(unsafe));
-                    b.status = internal::result_status::error;
-                    break;
-                case internal::result_status::error: break;
-                default: swap(a.status, b.status);
-                }
-                break;
-            default:
-                switch (b.status)
-                {
-                case internal::result_status::ok:
-                    a.ctor_ok(b.move(unsafe));
-                    b.status = internal::result_status::empty;
-                    break;
-                case internal::result_status::error: swap(a.status, b.status); break;
-                default:;
-                }
+                result tmp = std::move(b);
+                b = std::move(a);
+                a = std::move(tmp);
+            }
+            else
+            {
+                result tmp = std::move(a);
+                a = std::move(b);
+                b = std::move(tmp);
             }
         }
 
@@ -759,7 +690,7 @@ namespace sys
             : result(error_tag, std::forward<Args>(args)...)
         { }
         constexpr result(const result&) = delete;
-        constexpr result([[clang::return_typestate(unknown)]] result&& other) noexcept(meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>) : status(other.status)
+        constexpr result(result&& other) noexcept(meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>) : status(other.status)
         {
             switch (other.status)
             {
@@ -805,7 +736,7 @@ namespace sys
 
         /// @brief Expects the result to be good.
         /// @pre `*this == true`
-        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect() const noexcept
+        [[clang::set_typestate(consumed)]] void expect() const noexcept
         {
             _contract_assert(this->status == internal::result_status::ok, "Taking value for a bad or empty result!"); // LCOV_EXCL_LINE
         }
@@ -819,8 +750,7 @@ namespace sys
         }
         /// @brief Take the error of a bad result.
         /// @pre `*this == false`
-        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr Err expect_err() noexcept(meta::type<Err>::is_lvalue() ||
-                                                                                                                                         INothrowMoveConstructible<Err>)
+        [[clang::set_typestate(consumed)]] constexpr Err expect_err() noexcept(meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>)
         {
             _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!"); // LCOV_EXCL_LINE
             return this->err(unsafe);
@@ -834,47 +764,19 @@ namespace sys
             return func(std::move(*this));
         }
 
-        friend void swap([[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& a,
-                         [[clang::param_typestate(unconsumed), clang::return_typestate(unconsumed)]] result& b) noexcept(meta::type<Err>::is_lvalue() ||
-                                                                                                                         (INothrowSwappable<Err> && INothrowMoveConstructible<Err>))
+        friend void swap(result& a, result& b) noexcept(meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>))
         {
-            using std::swap;
-            switch (a.status)
+            if (b.status == internal::result_status::ok || b.status == internal::result_status::empty)
             {
-            case internal::result_status::ok:
-                switch (b.status)
-                {
-                case internal::result_status::ok: break;
-                case internal::result_status::error:
-                    a.ctor_err(b.err(unsafe));
-                    b.status = internal::result_status::ok;
-                    break;
-                default: swap(a.status, b.status);
-                }
-                break;
-            case internal::result_status::error:
-                switch (b.status)
-                {
-                case internal::result_status::ok:
-                    a.ctor_err(b.err(unsafe));
-                    b.status = internal::result_status::ok;
-                    break;
-                case internal::result_status::error:
-                    swap(*a.storage.template data<internal::result_storage_type<Err>>(), *b.storage.template data<internal::result_storage_type<Err>>());
-                    break;
-                default: a.ctor_err(b.err(unsafe)); b.status = internal::result_status::empty;
-                }
-                break;
-            default:
-                switch (b.status)
-                {
-                case internal::result_status::ok: swap(a.status, b.status); break;
-                case internal::result_status::error:
-                    a.ctor_err(b.err(unsafe));
-                    b.status = internal::result_status::empty;
-                    break;
-                default:;
-                }
+                result tmp = std::move(b);
+                b = std::move(a);
+                a = std::move(tmp);
+            }
+            else
+            {
+                result tmp = std::move(a);
+                a = std::move(b);
+                b = std::move(tmp);
             }
         }
 
@@ -902,11 +804,11 @@ namespace sys::internal
             value(std::forward<Args>(args)...)
         { }
         constexpr nullable_value_result(const nullable_value_result&) = delete;
-        constexpr nullable_value_result([[clang::return_typestate(unknown)]] nullable_value_result&& other) noexcept(INothrowSwappable<T>) { swap(*this, other); }
+        constexpr nullable_value_result(nullable_value_result&& other) noexcept(INothrowSwappable<T>) { swap(*this, other); }
         [[clang::callable_when("consumed", "unknown")]] constexpr ~nullable_value_result() = default;
 
         nullable_value_result& operator=(const nullable_value_result&) = delete;
-        nullable_value_result& operator=([[clang::return_typestate(unknown)]] nullable_value_result&& other) noexcept(INothrowSwappable<T>)
+        nullable_value_result& operator=(nullable_value_result&& other) noexcept(INothrowSwappable<T>)
         {
             swap(*this, other);
             return *this;
@@ -936,7 +838,7 @@ namespace sys::internal
         }
         /// @brief Takes the value if the result has a good value.
         /// @pre `*this == true`
-        [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T expect() noexcept(INothrowMoveConstructible<T>)
+        [[clang::set_typestate(consumed)]] constexpr T expect() noexcept(INothrowMoveConstructible<T>)
         {
             _contract_assert(*this, "Taking value for a bad result!"); // LCOV_EXCL_LINE
             return std::move(this->value);
@@ -944,7 +846,7 @@ namespace sys::internal
 
         /// @brief Expects the result to be bad.
         /// @pre `*this == false`
-        [[clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] void expect_err() const noexcept
+        [[clang::set_typestate(consumed)]] void expect_err() const noexcept
         {
             _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!"); // LCOV_EXCL_LINE
         }

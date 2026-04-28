@@ -11,15 +11,13 @@ endif()
 add_library(sys.BuildSupport.CompilerOptions INTERFACE)
 if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
     target_compile_options(sys.BuildSupport.CompilerOptions INTERFACE
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fconcepts-diagnostics-depth=4>
-
         $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU>,$<COMPILE_LANG_AND_ID:CXX,GNU>>:
         -fno-signaling-nans -fcx-limited-range -Wlogical-op -Wduplicated-cond -Wduplicated-branches
         -Wimplicit-fallthrough=5 -Walloc-zero -Wdangling-pointer=2 -Wmaybe-uninitialized>
         $<$<OR:$<COMPILE_LANG_AND_ID:C,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>>:
         -Wno-extra-semi -Wno-c++98-compat-extra-semi -Wno-c2y-extensions
         -Wimplicit-fallthrough -Wdocumentation -Wdangling -Wsometimes-uninitialized>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wnoexcept -Wnon-virtual-dtor>
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fconcepts-diagnostics-depth=4 -Wnoexcept -Wnon-virtual-dtor -Wno-attributes>
         $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:-Wconsumed -Wexceptions>
         # TODO(halloimdragon): Add `-Wunsafe-buffer-usage` for clang.
 

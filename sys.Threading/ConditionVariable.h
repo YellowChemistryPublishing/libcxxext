@@ -2,9 +2,13 @@
 
 /// @file
 
+#include <CompilerWarnings.h>
+
 #define NOMINMAX 1 // NOLINT(readability-identifier-naming)
 #include <concepts>
+_nowarn_begin_one_clang(_clwarn_clang_documentation);
 #include <tinycthread.h>
+_nowarn_end_clang();
 #undef NOMINMAX // NOLINT(misc-include-cleaner): Spurious.
 #ifdef call_once
 #undef call_once
@@ -61,7 +65,7 @@ namespace sys
         /// Be _very_ careful if you choose to wait with a `sys::reentrant_mutex`.
         template <typename T>
         requires (sys::meta::type<T>::template is_from<ordinary_mutex>())
-        [[nodiscard]] auto wait(T& mut) noexcept -> sys::result<void, threading_error>
+        [[nodiscard]] sys::result<void, threading_error> wait(T& mut) noexcept
         {
             _retif(threading_error::init_failed, !this->try_init());
             _retif(threading_error::operation_failed, cnd_wait(&this->cond, &mut.mut) != thrd_success);
@@ -87,7 +91,9 @@ namespace sys
             while (!std::forward<Pred>(pred)())
             {
                 auto waitRes = this->wait(mut);
+                _nowarn_begin_one_clang(_clwarn_clang_consumed);
                 _retif(waitRes, !waitRes);
+                _nowarn_end_clang();
             }
             return {};
         }

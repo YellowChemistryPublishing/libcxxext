@@ -367,7 +367,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
 // NOLINTBEGIN(bugprone-exception-escape)
 // clang-format off: C++23 -- no space b/w "" and literal suffix.
 /// @brief Literal suffix for `i8`.
-/* NOLINT(misc-use-internal-linkage) */ consteval i8 operator""_i8(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval i8 operator""_i8(ullong lit) 
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least8_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least8_t>::min()))
         throw std::overflow_error("Literal too large for `i8`.");
@@ -375,7 +375,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, int_least8_t) };
 }
 /// @brief Literal suffix for `i16`.
-/* NOLINT(misc-use-internal-linkage) */ consteval i16 operator""_i16(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval i16 operator""_i16(ullong lit) 
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least16_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least16_t>::min()))
         throw std::overflow_error("Literal too large for `i16`.");
@@ -383,7 +383,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, int_least16_t) };
 }
 /// @brief Literal suffix for `i32`.
-/* NOLINT(misc-use-internal-linkage) */ consteval i32 operator""_i32(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval i32 operator""_i32(ullong lit) 
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least32_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least32_t>::min()))
         throw std::overflow_error("Literal too large for `i32`.");
@@ -391,7 +391,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, int_least32_t) };
 }
 /// @brief Literal suffix for `i64`.
-/* NOLINT(misc-use-internal-linkage) */ consteval i64 operator""_i64(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval i64 operator""_i64(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<int_least64_t>::max()) || std::cmp_less(lit, std::numeric_limits<int_least64_t>::min()))
         throw std::overflow_error("Literal too large for `i64`.");
@@ -399,7 +399,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, int_least64_t) };
 }
 /// @brief Literal suffix for `u8`.
-/* NOLINT(misc-use-internal-linkage) */ consteval u8 operator""_u8(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval u8 operator""_u8(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least8_t>::max()))
         throw std::overflow_error("Literal too large for `u8`.");
@@ -407,7 +407,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, uint_least8_t) };
 }
 /// @brief Literal suffix for `u16`.
-/* NOLINT(misc-use-internal-linkage) */ consteval u16 operator""_u16(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval u16 operator""_u16(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least16_t>::max()))
         throw std::overflow_error("Literal too large for `u16`.");
@@ -415,7 +415,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, uint_least16_t) };
 }
 /// @brief Literal suffix for `u32`.
-/* NOLINT(misc-use-internal-linkage) */ consteval u32 operator""_u32(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval u32 operator""_u32(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least32_t>::max()))
         throw std::overflow_error("Literal too large for `u32`.");
@@ -423,7 +423,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, uint_least32_t) };
 }
 /// @brief Literal suffix for `u64`.
-/* NOLINT(misc-use-internal-linkage) */ consteval u64 operator""_u64(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval u64 operator""_u64(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<uint_least64_t>::max()))
         throw std::overflow_error("Literal too large for `u64`.");
@@ -431,7 +431,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, uint_least64_t) };
 }
 /// @brief Literal suffix for `ssz`.
-/* NOLINT(misc-use-internal-linkage) */ consteval ssz operator""_z(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval ssz operator""_z(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<ptrdiff_t>::max()) || std::cmp_less(lit, std::numeric_limits<ptrdiff_t>::min()))
         throw std::overflow_error("Literal too large for `ssz`.");
@@ -439,7 +439,7 @@ using ssz = ::sys::integer<ptrdiff_t>;
     return { _as(lit, ptrdiff_t) };
 }
 /// @brief Literal suffix for `sz`.
-/* NOLINT(misc-use-internal-linkage) */ consteval sz operator""_uz(ullong lit) noexcept
+/* NOLINT(misc-use-internal-linkage) */ consteval sz operator""_uz(ullong lit)
 {
     if (std::cmp_greater(lit, std::numeric_limits<size_t>::max()))
         throw std::overflow_error("Literal too large for `sz`.");

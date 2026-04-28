@@ -468,12 +468,12 @@ namespace sys
 
             Container ret;
             auto from = this->begin();
-            for (auto it = this->begin(); it <= this->end() - delimiter.size(); ++it)
+            for (auto it = this->begin(); it <= this->end() - ssz(delimiter.size()); ++it)
             {
-                if (std::basic_string_view<T>(it, it + delimiter.size()) == delimiter)
+                if (std::basic_string_view<T>(it, it + ssz(delimiter.size())) == delimiter)
                 {
                     meta::generic_container_adaptor(ret).append_back(string(from, it));
-                    it += delimiter.size() - 1z;
+                    it += ssz(delimiter.size()) - 1_z;
                     from = it + 1z;
                 }
             }

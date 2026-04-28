@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <stdexcept>
 
+#include <CompilerWarnings.h>
 #include <ConditionVariable.h>
 #include <Integer.h>
 #include <LanguageSupport.h>
@@ -43,8 +44,10 @@ namespace sys
         {
             if consteval
             {
+                _nowarn_begin_one_clang(_clwarn_clang_exceptions);
                 if (init_count < 0)
                     throw std::domain_error("`init_count` must be larger than or equal to `0`.");
+                _nowarn_end_clang();
             }
             _contract_assert(init_count >= 0);
         }

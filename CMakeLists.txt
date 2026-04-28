@@ -18,7 +18,7 @@ cmake_dependent_option(LIBCXXEXT_TESTS "Build tests." ON "LIBCXXEXT_DEVELOPMENT_
 cmake_dependent_option(LIBCXXEXT_COVERAGE "Enable coverage instrumentation for debug builds (gcc/clang)." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
 set(LIBCXXEXT_LIBRARY_TYPE "SHARED" CACHE STRING "Build type of libraries.")
 mark_as_enum(LIBCXXEXT_LIBRARY_TYPE "SHARED" "STATIC")
-set(LIBCXXEXT_EXPORT_PCH ON CACHE BOOL "Use and produce precompiled headers.")
+set(LIBCXXEXT_EXPORT_PCH OFF CACHE BOOL "Use and produce precompiled headers.")
 set(LIBCXXEXT_TEST_ASAN OFF CACHE BOOL "Enable AddressSanitizer for tests.")
 set(LIBCXXEXT_TEST_UBSAN OFF CACHE BOOL "Enable UndefinedBehaviorSanitizer for tests.")
 
