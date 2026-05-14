@@ -6,8 +6,19 @@
 #include <cstddef>
 #include <tuple>
 #include <type_traits>
+#include <utility> // NOLINT(misc-include-cleaner)
 
 #include <meta/Properties.h>
+
+/// @def _decltype_of(var)
+/// @ingroup sys
+/// @brief `std::remove_cvref_t<decltype(var)>`
+#define _decltype_of(var) std::remove_cvref_t<decltype(var)>
+
+/// @def _forward(var)
+/// @ingroup sys
+/// @brief `std::forward<decltype(var)>(var)`
+#define _forward(var) std::forward<decltype(var)>(var)
 
 namespace sys::meta
 {

@@ -44,6 +44,13 @@ TEST_CASE("`sys::optional_destructor` correctly transfers ownership on move.", "
         sys::optional_destructor d2 = functor();
         d1 = std::move(d2);
         d2.clear(); // NOLINT(bugprone-use-after-move)
+
+        _nowarn_begin_one_gcc("-Wself-move");
+        _nowarn_begin_one_clang(_clwarn_clang_self_move);
+        d1 = std::move(d1);
+        d2 = std::move(d2);
+        _nowarn_end_clang();
+        _nowarn_end_gcc();
     }
     CHECK(called == 2_uz);
 }

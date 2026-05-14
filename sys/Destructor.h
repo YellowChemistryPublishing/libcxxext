@@ -15,7 +15,7 @@ namespace sys
     /// @note Pass `byref`.
     /// @details Implements `sys::INothrowDestructible`.
     template <typename Func>
-    requires INothrowInvocable<Func&> && INothrowDestructible<Func>
+    requires INothrowCallable<Func&> && INothrowDestructible<Func>
     struct [[clang::scoped_lockable]] destructor final
     {
         /// @brief Construct with a cleanup function.
@@ -40,7 +40,7 @@ namespace sys
     /// Implements `sys::IMoveConstructible`, `sys::IMoveAssignable`, `sys::INothrowDestructible`.
     /// Conditionally implements `sys::INothrowMoveConstructible`, `sys::INothrowMoveAssignable`.
     template <typename Func>
-    requires INothrowInvocable<Func&> && INothrowDestructible<Func>
+    requires INothrowCallable<Func&> && INothrowDestructible<Func>
     struct [[clang::scoped_lockable]] optional_destructor final
     {
         /// @brief Construct with a cleanup function.

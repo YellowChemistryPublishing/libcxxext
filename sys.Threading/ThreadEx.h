@@ -152,10 +152,16 @@ namespace sys
         /* NOLINT(hicpp-explicit-conversions) */ managed_thread(std::nullptr_t) noexcept { }
         managed_thread(const managed_thread&) noexcept = delete;
         managed_thread(managed_thread&& other) noexcept { swap(*this, other); }
-        ~managed_thread() noexcept
+        ~managed_thread() noexcept /* NOLINT(bugprone-exception-escape) */
         {
+            _nowarn_begin_one_gcc("-Wterminate");
+            _nowarn_begin_one_clang(_clwarn_clang_exceptions);
+            _nowarn_begin_one_msvc(_clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does);
             if (this->joinable())
                 _contract_assert(thrd_join(this->th, nullptr) == thrd_success, "If this happens we're genuinely cooked.");
+            _nowarn_end_msvc();
+            _nowarn_end_clang();
+            _nowarn_end_gcc();
         }
 
         managed_thread& operator=(const managed_thread&) noexcept = delete;

@@ -1,4 +1,4 @@
-// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
@@ -8,7 +8,6 @@ _nowarn_end_gcc();
 
 #include <module/sys.Text>
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("`sys::ch::to_lower` Simple Casing", "[sys.Text][ch][to_lower]")
 {
     CHECK(sys::ch::to_lower('A') == U'a');
@@ -34,7 +33,6 @@ TEST_CASE("To Lower - Simple and Unconditional Special", "[sys.Text][string][to_
     CHECK(sys::str32(U"ẞ").to_lower() == U"ß");
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("To Lower - Final Sigma (Greek)", "[sys.Text][string][to_lower]")
 {
     // "Σ" (U+03A3) at end of word -> "ς" (U+03C2), else "σ" (U+03C3).
@@ -76,7 +74,6 @@ TEST_CASE("To Lower - Lithuanian", "[sys.Text][string][to_lower]")
     CHECK(s1 == U"i\u0307\u0300");
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("To Upper - Simple Casing", "[sys.Text][ch][to_upper]")
 {
     CHECK(sys::ch::to_upper('a') == U'A');
@@ -111,7 +108,6 @@ TEST_CASE("To Upper - Turkic (Turkish/Azeri)", "[sys.Text][string][to_upper]")
     CHECK(sys::str(u8"ı").to_upper(u8"tr") == u8"I");
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Case Folding", "[sys.Text][ch][fold]")
 {
     CHECK(sys::ch::fold('A') == U'a');
@@ -123,7 +119,6 @@ TEST_CASE("Case Folding", "[sys.Text][ch][fold]")
     CHECK(sys::str(u8"\u0049").fold(u8"tr") == u8"\u0131"); // Turkic: "I" -> "ı"
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Simple and Full Foldings", "[sys.Text][string][fold]")
 {
     CHECK(sys::str32(U"ẞ").fold() == U"ss");
@@ -161,4 +156,4 @@ TEST_CASE("Folding is Context Independent", "[sys.Text][string][fold]")
     CHECK(sys::str(u8"ΑΣ").fold() == u8"ασ");
 }
 
-// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)

@@ -17,7 +17,6 @@ _nowarn_end_gcc();
 static_assert(sys::INothrowDefaultConstructible<sys::binary_semaphore>);
 static_assert(!sys::INothrowDefaultConstructible<sys::semaphore>);
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Semaphore acquire/release works.", "[sys.Threading][semaphore]")
 {
     sys::semaphore sem(1_uz, unsafe);
@@ -28,7 +27,6 @@ TEST_CASE("Semaphore acquire/release works.", "[sys.Threading][semaphore]")
     sem.release(unsafe).expect();
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Semaphore constructors are available where expected.", "[sys.Threading][semaphore]")
 {
     sys::semaphore sem(2_uz, unsafe);
@@ -38,7 +36,6 @@ TEST_CASE("Semaphore constructors are available where expected.", "[sys.Threadin
     sem.release(unsafe).expect();
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Semaphore access guard releases on destruction.", "[sys.Threading][semaphore]")
 {
     sys::semaphore sem(1_uz, unsafe);

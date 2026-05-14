@@ -11,7 +11,6 @@ _nowarn_end_gcc();
 #include <module/sys>
 #include <module/sys.Threading>
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Condition variable wait / signal.", "[sys.Threading][cond_var]")
 {
     sys::cond_var cv;
@@ -34,7 +33,6 @@ TEST_CASE("Condition variable wait / signal.", "[sys.Threading][cond_var]")
     (void)t.join().expect();
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Condition variable broadcast wakes everyone.", "[sys.Threading][cond_var]")
 {
     constexpr i32 numWaiters = 5;

@@ -58,32 +58,27 @@ namespace sys
 
         constexpr integer() noexcept = default;
         /// @brief From narrower-bounded.
-        template <IBuiltinIntegerNarrowerThan<For> T>
-        constexpr /* NOLINT(hicpp-explicit-conversions) */ integer(T v) noexcept : underlying(_as(v, For))
-        { }
+        constexpr /* NOLINT(hicpp-explicit-conversions) */ integer(const IBuiltinIntegerNarrowerThan<For> auto v) noexcept : underlying(_as(v, For)) { }
         /// @note Saturating.
         template <typename T>
         requires ((!IBuiltinIntegerNarrowerThan<T, For> && sys::IBuiltinInteger<T>) || sys::IBuiltinFloatingPoint<T>)
-        constexpr explicit integer(T v) noexcept : underlying(bnumeric_cast<For>(v, unsafe))
+        constexpr explicit integer(const T v) noexcept : underlying(bnumeric_cast<For>(v, unsafe))
         { }
         /// @warning `unsafe` because this is truncating.
-        template <sys::IBuiltinInteger T>
-        constexpr explicit integer(T v, decltype(unsafe)) noexcept : underlying(_as(v, For))
-        { }
+        constexpr explicit integer(const sys::IBuiltinInteger auto v, decltype(unsafe)) noexcept : underlying(_as(v, For)) { }
         /// @note Saturating.
         template <sys::IBuiltinInteger T>
-        constexpr explicit integer(integer<T> v) noexcept : integer(*v)
+        constexpr explicit integer(const integer<T> v) noexcept : integer(*v)
         { }
         /// @warning `unsafe` because this is truncating.
         template <sys::IBuiltinInteger T>
-        constexpr explicit integer(integer<T> v, decltype(unsafe)) noexcept : integer(*v, unsafe)
+        constexpr explicit integer(const integer<T> v, decltype(unsafe)) noexcept : integer(*v, unsafe)
         { }
         constexpr integer(const integer& other) noexcept = default;
         constexpr integer(integer&&) noexcept = default;
         constexpr ~integer() noexcept = default;
 
-        template <IBuiltinIntegerNarrowerThan<For> T>
-        constexpr integer& operator=(T v) noexcept
+        constexpr integer& operator=(const IBuiltinIntegerNarrowerThan<For> auto v) noexcept
         {
             this->underlying = _as(v, For);
             return *this;
@@ -113,121 +108,111 @@ namespace sys
         [[nodiscard]] constexpr bool operator!() const noexcept { return !this->underlying; }
 
         template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator==(integer<For> a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator==(integer a, integer<T> b) noexcept
         {
             if constexpr (std::same_as<T, For>)
                 return a.underlying == b.underlying;
             else
                 return std::cmp_equal(a.underlying, b.underlying);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator==(integer<For> a, T b) noexcept
+        [[nodiscard]] friend constexpr bool operator==(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
                 return a.underlying == b;
             else
                 return std::cmp_equal(a.underlying, b);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator==(For a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator==(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
                 return a == b.underlying;
             else
                 return std::cmp_equal(a, b.underlying);
         }
         template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator<(integer<For> a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator<(integer a, integer<T> b) noexcept
         {
             if constexpr (std::same_as<T, For>)
                 return a.underlying < b.underlying;
             else
                 return std::cmp_less(a.underlying, b.underlying);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator<(integer<For> a, T b) noexcept
+        [[nodiscard]] friend constexpr bool operator<(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
                 return a.underlying < b;
             else
                 return std::cmp_less(a.underlying, b);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator<(For a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator<(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
                 return a < b.underlying;
             else
                 return std::cmp_less(a, b.underlying);
         }
         template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator<=(integer<For> a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator<=(integer a, integer<T> b) noexcept
         {
             if constexpr (std::same_as<T, For>)
                 return a.underlying <= b.underlying;
             else
                 return std::cmp_less_equal(a.underlying, b.underlying);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator<=(integer<For> a, T b) noexcept
+        [[nodiscard]] friend constexpr bool operator<=(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
                 return a.underlying <= b;
             else
                 return std::cmp_less_equal(a.underlying, b);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator<=(For a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator<=(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
                 return a <= b.underlying;
             else
                 return std::cmp_less_equal(a, b.underlying);
         }
         template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator>(integer<For> a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator>(integer a, integer<T> b) noexcept
         {
             if constexpr (std::same_as<T, For>)
                 return a.underlying > b.underlying;
             else
                 return std::cmp_greater(a.underlying, b.underlying);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator>(integer<For> a, T b) noexcept
+        [[nodiscard]] friend constexpr bool operator>(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
                 return a.underlying > b;
             else
                 return std::cmp_greater(a.underlying, b);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator>(For a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator>(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
                 return a > b.underlying;
             else
                 return std::cmp_greater(a, b.underlying);
         }
         template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator>=(integer<For> a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator>=(integer a, integer<T> b) noexcept
         {
             if constexpr (std::same_as<T, For>)
                 return a.underlying >= b.underlying;
             else
                 return std::cmp_greater_equal(a.underlying, b.underlying);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator>=(integer<For> a, T b) noexcept
+        [[nodiscard]] friend constexpr bool operator>=(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
                 return a.underlying >= b;
             else
                 return std::cmp_greater_equal(a.underlying, b);
         }
-        template <sys::IBuiltinInteger T>
-        [[nodiscard]] friend constexpr bool operator>=(For a, integer<T> b) noexcept
+        [[nodiscard]] friend constexpr bool operator>=(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<T, For>)
+            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
                 return a >= b.underlying;
             else
                 return std::cmp_greater_equal(a, b.underlying);
@@ -295,21 +280,21 @@ namespace sys
         {
             if constexpr (IBuiltinIntegerSigned<For>)
                 if (b.underlying < 0) [[unlikely]]
-                    return integer(_as(a.u() >> _as((-std::max(b.underlying, _as(-integer<For>::fixed_width<For>() + _as(1, For), For))), unsigned_t), For), unsafe) &
-                        integer(_as(-_as(b.underlying > -integer<For>::fixed_width<For>(), signed_t), For), unsafe);
+                    return integer(_as(a.u() >> _as((-std::max(b.underlying, _as(-integer::fixed_width<For>() + _as(1, For), For))), unsigned_t), For), unsafe) &
+                        integer(_as(-_as(b.underlying > -integer::fixed_width<For>(), signed_t), For), unsafe);
 
-            return integer(_as(a.u() << std::min(b.u(), _as(integer<For>::fixed_width<unsigned_t>() - _as(1, unsigned_t), unsigned_t)), For), unsafe) &
-                integer(_as(-_as(b.underlying < integer<For>::fixed_width<For>(), signed_t), For), unsafe);
+            return integer(_as(a.u() << std::min(b.u(), _as(integer::fixed_width<unsigned_t>() - _as(1, unsigned_t), unsigned_t)), For), unsafe) &
+                integer(_as(-_as(b.underlying < integer::fixed_width<For>(), signed_t), For), unsafe);
         }
         [[nodiscard]] friend constexpr integer operator>>(integer a, integer b) noexcept
         {
             if constexpr (IBuiltinIntegerSigned<For>)
                 if (b.underlying < 0) [[unlikely]]
-                    return integer(_as(a.u() << _as((-std::max(b.underlying, _as(-integer<For>::fixed_width<For>() + _as(1, For), For))), unsigned_t), For), unsafe) &
-                        integer(_as(-_as(b.underlying > -integer<For>::fixed_width<For>(), signed_t), For), unsafe);
+                    return integer(_as(a.u() << _as((-std::max(b.underlying, _as(-integer::fixed_width<For>() + _as(1, For), For))), unsigned_t), For), unsafe) &
+                        integer(_as(-_as(b.underlying > -integer::fixed_width<For>(), signed_t), For), unsafe);
 
-            return integer(_as(a.u() >> std::min(b.u(), _as(integer<For>::fixed_width<unsigned_t>() - _as(1, unsigned_t), unsigned_t)), For), unsafe) &
-                integer(_as(-_as(b.underlying < integer<For>::fixed_width<For>(), signed_t), For), unsafe);
+            return integer(_as(a.u() >> std::min(b.u(), _as(integer::fixed_width<unsigned_t>() - _as(1, unsigned_t), unsigned_t)), For), unsafe) &
+                integer(_as(-_as(b.underlying < integer::fixed_width<For>(), signed_t), For), unsafe);
         }
 
         constexpr integer& operator+=(const integer& other) noexcept { return (*this = *this + other); }
@@ -322,6 +307,9 @@ namespace sys
         constexpr integer& operator^=(const integer& other) noexcept { return (*this = *this ^ other); }
         constexpr integer& operator<<=(const integer& other) noexcept { return (*this = *this << other); }
         constexpr integer& operator>>=(const integer& other) noexcept { return (*this = *this >> other); }
+
+        template <sys::IBuiltinInteger U>
+        friend struct sys::integer;
     };
 } // namespace sys
 

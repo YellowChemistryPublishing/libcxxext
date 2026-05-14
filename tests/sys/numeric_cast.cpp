@@ -45,7 +45,6 @@ TEST_CASE("Casting within range returns valid result.", "[sys][bnumeric_cast]")
     CHECK(sys::bnumeric_cast<uint16_t>(65535.0f).expect() == 65535); // NOLINT(readability-magic-numbers)
     CHECK(sys::bnumeric_cast<int16_t>(-10.5f).expect() == -10);      // NOLINT(readability-magic-numbers)
 }
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Casting out of range returns empty result.", "[sys][bnumeric_cast]")
 {
     sys::bnumeric_cast<uint8_t>(300).expect_err();       // NOLINT(readability-magic-numbers)

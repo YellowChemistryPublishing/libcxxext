@@ -170,12 +170,8 @@ namespace sys
         constexpr explicit string(const std::span<const T> data) : string(data.begin(), data.end()) { }
         constexpr explicit string(const std::basic_string_view<T> data) : string(data.begin(), data.end()) { }
         /// @pre `++...beg == end`
-        template <std::input_iterator It>
-        constexpr explicit string(It beg, It end) : str(beg, end)
-        { }
-        template <IEnumerable Container>
-        constexpr explicit string(const Container& container) : string(std::begin(container), std::end(container))
-        { }
+        constexpr explicit string(std::input_iterator auto beg, std::input_iterator auto end) : str(beg, end) { }
+        constexpr explicit string(const IEnumerable auto& container) : string(std::begin(container), std::end(container)) { }
         /// @brief Construct from a single character.
         constexpr /* NOLINT(hicpp-explicit-conversions) */ string(const T c) : str(1uz, c) { }
         /// @brief Repeat a character.
@@ -454,7 +450,10 @@ namespace sys
         }
         /// @brief Split the string into substrings separated by `delimiter`.
         template <typename Container = std::vector<string>>
-        requires IAppendable<Container, T> && IAppendable<Container, string>
+        requires requires {
+            requires IAppendable<Container, T>;
+            requires IAppendable<Container, string>;
+        }
         [[nodiscard]] Container split(const std::basic_string_view<T> delimiter) const
         {
             if (delimiter.empty())
@@ -483,7 +482,10 @@ namespace sys
         }
         /// @brief Join the strings in `container` with `sep`.
         template <typename Container, typename Chars>
-        requires IEnumerable<Container> && IEmptyQueryable<Container>
+        requires requires {
+            requires IEnumerable<Container>;
+            requires IEmptyQueryable<Container>;
+        }
         [[nodiscard]] static string join(const Container& container, const Chars& sep)
         {
             if (meta::generic_container_adaptor(container).empty())

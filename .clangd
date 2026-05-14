@@ -8,6 +8,9 @@ CompileFlags:
         - -Wc2y-extensions
     CompilationDatabase: build
 
+Diagnostics:
+    UnusedIncludes: None
+
 Style:
     AngledHeaders:
         - ".*"

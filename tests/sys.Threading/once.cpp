@@ -4,7 +4,7 @@
 #include <thread>
 #include <vector>
 
-// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
@@ -15,7 +15,6 @@ _nowarn_end_gcc();
 #include <module/sys>
 #include <module/sys.Threading>
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Once executes exactly once sequentially.", "[sys.Threading][once]")
 {
     sys::once o;
@@ -45,7 +44,6 @@ TEST_CASE("Once correctly forwards arguments.", "[sys.Threading][once]")
     CHECK(o.is_completed());
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Once handles exceptions and allows retry.", "[sys.Threading][once]")
 {
     sys::once o;
@@ -106,7 +104,6 @@ TEST_CASE("Once actually guards under contention.", "[sys.Threading][once]")
     CHECK(o.is_completed());
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
 {
     sys::once o;
@@ -147,7 +144,6 @@ TEST_CASE("Once wait successfully blocks.", "[sys.Threading][once]")
     CHECK(o.is_completed());
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Once correctly handles `sys::result<...>` return types.", "[sys.Threading][once]")
 {
     sys::once o;
@@ -181,7 +177,6 @@ TEST_CASE("Once correctly handles `sys::result<...>` return types.", "[sys.Threa
     CHECK(o.is_completed());
     CHECK(count == 3_i32);
 }
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Once correctly handles void-as-error result types.", "[sys.Threading][once]")
 {
     sys::once o;
@@ -216,4 +211,4 @@ TEST_CASE("Once correctly handles void-as-error result types.", "[sys.Threading]
     CHECK(count == 3_i32);
 }
 
-// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)

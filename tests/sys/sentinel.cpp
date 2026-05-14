@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <limits>
 
-// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
@@ -11,7 +11,6 @@ _nowarn_end_gcc();
 
 #include <module/sys>
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Sentinels are picked with the right opinion.", "[sys][bsentinel]")
 {
     CHECK(sys::bsentinel<int32_t>() == std::numeric_limits<int32_t>::lowest());
@@ -25,4 +24,4 @@ TEST_CASE("Sentinels are picked with the right opinion.", "[sys][bsentinel]")
     CHECK(sys::bsentinel<char32_t>() == 0);
 }
 
-// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)

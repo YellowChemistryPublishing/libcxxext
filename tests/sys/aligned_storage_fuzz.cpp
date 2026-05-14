@@ -20,9 +20,9 @@ _nowarn_end_gcc();
 
 #include <module/sys>
 
-TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_storage]")
+TEST_CASE("[[fuzz]] sys::aligned_storage<...>", "[fuzz][sys][aligned_storage]")
 {
-    rc::check("Aligned storage writes match input data.", [](const std::array<int64_t, 1024uz /* NOLINT(readability-magic-numbers) */>& val) -> void
+    CHECK(rc::check("Aligned storage writes match input data.", [](const std::array<int64_t, 1024uz /* NOLINT(readability-magic-numbers) */>& val) -> void
     {
         sys::aligned_storage<std::array<int64_t, 1024uz /* NOLINT(readability-magic-numbers) */>, std::array<uint64_t, 2048uz /* NOLINT(readability-magic-numbers) */>,
                              std::max_align_t>
@@ -35,7 +35,7 @@ TEST_CASE("Aligned storage writes match input data.", "[fuzz][sys][aligned_stora
         RC_ASSERT(*storage.data() == val);
 
         std::destroy_at(storage.data());
-    });
+    }));
 }
 
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

@@ -7,6 +7,7 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <type_traits>
 
 #include <Integer.h>
 #include <LanguageSupport.h>
@@ -48,69 +49,47 @@ namespace sys
         }
 
         /// @brief Checks if a codepoint is a UTF-8 continuation byte.
-        template <ICharacter T>
-        static constexpr bool is_continuation(const T b) noexcept
+        static constexpr bool is_continuation(const ICharacter auto b) noexcept
         {
             return (u32(_as(b, u32::underlying_type)) & 0xC0_u32) == 0x80_u32; // NOLINT(readability-magic-numbers)
         }
         /// @brief Checks if a codepoint is a UTF-16 surrogate.
-        template <ICharacter T>
-        static constexpr bool is_surrogate(const T c) noexcept
+        static constexpr bool is_surrogate(const ICharacter auto c) noexcept
         {
             return _as(c, u32::underlying_type) >= 0xD800_u32 && _as(c, u32::underlying_type) <= 0xDFFF_u32; // NOLINT(readability-magic-numbers)
         }
         /// @brief Checks if a codepoint is a high UTF-16 surrogate.
-        template <ICharacter T>
-        static constexpr bool is_high_surrogate(const T c) noexcept
+        static constexpr bool is_high_surrogate(const ICharacter auto c) noexcept
         {
             return _as(c, u32::underlying_type) >= 0xD800_u32 && _as(c, u32::underlying_type) <= 0xDBFF_u32; // NOLINT(readability-magic-numbers)
         }
         /// @brief Checks if a codepoint is a low UTF-16 surrogate.
-        template <ICharacter T>
-        static constexpr bool is_low_surrogate(const T c) noexcept
+        static constexpr bool is_low_surrogate(const ICharacter auto c) noexcept
         {
             return _as(c, u32::underlying_type) >= 0xDC00_u32 && _as(c, u32::underlying_type) <= 0xDFFF_u32; // NOLINT(readability-magic-numbers)
         }
         /// @brief Checks if a codepoint is a valid scalar value.
-        template <ICharacter T>
-        static constexpr bool is_scalar(const T cp) noexcept
+        static constexpr bool is_scalar(const ICharacter auto cp) noexcept
         {
             return _as(cp, u32::underlying_type) <= 0x10FFFF_u32 && !ch::is_surrogate(cp); // NOLINT(readability-magic-numbers)
         }
 
         /// @brief Checks if a codepoint is considered whitespace.
-        template <ICharacter T>
-        static constexpr bool is_whitespace(const T c) noexcept
-        {
-            return internal::dchar_is_ws(_as(c, char32_t));
-        }
+        static constexpr bool is_whitespace(const ICharacter auto c) noexcept { return internal::dchar_is_ws(_as(c, char32_t)); }
 
         /// @brief Converts a codepoint to lowercase (simple mapping).
-        template <ICharacter T>
-        static constexpr char32_t to_lower(const T c) noexcept
-        {
-            return internal::dchar_to_lower_simple(_as(c, char32_t));
-        }
+        static constexpr char32_t to_lower(const ICharacter auto c) noexcept { return internal::dchar_to_lower_simple(_as(c, char32_t)); }
         /// @brief Converts a codepoint to uppercase (simple mapping).
-        template <ICharacter T>
-        static constexpr char32_t to_upper(const T c) noexcept
-        {
-            return internal::dchar_to_upper_simple(_as(c, char32_t));
-        }
+        static constexpr char32_t to_upper(const ICharacter auto c) noexcept { return internal::dchar_to_upper_simple(_as(c, char32_t)); }
         /// @brief Folds a codepoint (simple folding).
-        template <ICharacter T>
-        static constexpr char32_t fold(const T c) noexcept
-        {
-            return internal::dchar_fold_simple(_as(c, char32_t));
-        }
+        static constexpr char32_t fold(const ICharacter auto c) noexcept { return internal::dchar_fold_simple(_as(c, char32_t)); }
 
         /// @brief The number of buffer elements in a null-terminated string.
         /// @warning `unsafe` because `cstr` has preconditions.
         /// @pre `const char cstr[N] && cstr != nullptr && N > 0uz && cstr[N - 1z] == '\0'`
-        template <ICharacter T>
-        static constexpr sz buffer_size(const T* cstr, decltype(unsafe)) noexcept(noexcept(std::char_traits<T>::length(cstr)))
+        static constexpr sz buffer_size(const ICharacter auto* cstr, decltype(unsafe)) noexcept(noexcept(std::char_traits<std::remove_cvref_t<decltype(*cstr)>>::length(cstr)))
         {
-            return std::char_traits<T>::length(cstr);
+            return std::char_traits<std::remove_cvref_t<decltype(*cstr)>>::length(cstr);
         }
 
         struct codepoint_data

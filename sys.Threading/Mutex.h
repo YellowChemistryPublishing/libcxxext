@@ -9,6 +9,7 @@
 #undef call_once
 #endif
 
+#include <CompilerWarnings.h>
 #include <LanguageSupport.h>
 #include <Once.h>
 #include <ResourceGuard.h>
@@ -116,14 +117,30 @@ namespace sys
         /// }).move();
         /// @endcode
         /// @warning `unsafe` because `this` has preconditions.
-        result<void, threading_error> release(decltype(unsafe)) noexcept
+        result<void, threading_error> release(decltype(unsafe)) noexcept /* NOLINT(bugprone-exception-escape) */
         {
+            _nowarn_begin_one_gcc("-Wterminate");
+            _nowarn_begin_one_clang(_clwarn_clang_exceptions);
+            _nowarn_begin_one_msvc(_clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does);
             _contract_assert(this->o.is_completed(), "`.acquire()` never called!");
+            _nowarn_end_msvc();
+            _nowarn_end_clang();
+            _nowarn_end_gcc();
+
             _retif(threading_error::operation_failed, mtx_unlock(&this->mut) != thrd_success);
             return {};
         }
     private:
-        static void release_guard(ordinary_mutex* m) noexcept { _contract_assert(!m || m->release(unsafe), "If this happens we're genuinely cooked."); };
+        static void release_guard(ordinary_mutex* m) noexcept /* NOLINT(bugprone-exception-escape) */
+        {
+            _nowarn_begin_one_gcc("-Wterminate");
+            _nowarn_begin_one_clang(_clwarn_clang_exceptions);
+            _nowarn_begin_one_msvc(_clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does);
+            _contract_assert(!m || m->release(unsafe), "If this happens we're genuinely cooked.");
+            _nowarn_end_msvc();
+            _nowarn_end_clang();
+            _nowarn_end_gcc();
+        };
     public:
         /// @brief RAII guard for `sys::ordinary_mutex`.
         /// @details

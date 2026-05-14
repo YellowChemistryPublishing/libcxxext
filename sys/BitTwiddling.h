@@ -3,6 +3,7 @@
 /// @file
 
 #include <functional>
+#include <type_traits>
 
 #include <Integer.h>
 #include <LanguageSupport.h>
@@ -50,12 +51,11 @@ namespace sys
     constexpr u8 lbfs16(i16 val) noexcept { return u8(val, unsafe); }
 
     /// @ingroup sys
-    /// @brief Hash combiner for `std::hash<T>(t)` and `std::hash<U>(u)`.
-    template <typename T, typename U>
-    constexpr sz dhc2(const T& t, const U& u) noexcept(noexcept(std::hash<T>()(t)) && noexcept(std::hash<U>()(u)))
+    /// @brief Hash combiner for `std::hash<decltype(a)>(a)` and `std::hash<decltype(b)>(b)`.
+    constexpr sz dhc2(auto&& a, auto&& b) noexcept(noexcept(std::hash<std::remove_cvref_t<decltype(a)>>()(a)) && noexcept(std::hash<std::remove_cvref_t<decltype(b)>>()(b)))
     {
-        sz seed = std::hash<T>()(t);
-        return seed ^ (std::hash<U>()(u) + 0x9e3779b9_uz + (seed << 6_uz) + (seed >> 2_uz));
+        sz seed = std::hash<std::remove_cvref_t<decltype(a)>>()(a);
+        return seed ^ (std::hash<std::remove_cvref_t<decltype(b)>>()(b) + 0x9e3779b9_uz + (seed << 6_uz) + (seed >> 2_uz));
     }
 } // namespace sys
 

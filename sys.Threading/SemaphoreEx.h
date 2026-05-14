@@ -38,7 +38,7 @@ namespace sys
         /// @brief Constructs a new semaphore with the given initial count.
         /// @pre `init_count >= 0`.
         /// @warning `unsafe` because `this` has preconditions.
-        constexpr explicit ordinary_semaphore(const sys::integer<T> init_count, decltype(unsafe)) noexcept /* NOLINT(bugprone-exception-escape) */
+        constexpr explicit ordinary_semaphore(const sys::integer<T> init_count, decltype(unsafe))
         requires (DefaultConcurrentAccessors == sys::bsentinel<T>())
             : counter(init_count)
         {
@@ -62,7 +62,7 @@ namespace sys
         /// @post There must exist a corresponding, subsequent call to `.release(...)`, within a finite amount of time.
         /// @warning `unsafe` because `this` has postconditions.
         /// @return Propagated error from `sys::mutex::lock()`, `sys::cond_var::wait_until(...)`, or success.
-        sys::result<void, threading_error> acquire(decltype(unsafe)) noexcept
+        sys::result<void, threading_error> acquire(decltype(unsafe))
         {
             auto guardRes = this->mut.lock();
             _retif(guardRes.err(), !guardRes);
@@ -76,7 +76,7 @@ namespace sys
         /// @warning `unsafe` because `this` has preconditions.
         /// @return Propagated error from `sys::mutex::lock()`, `sys::cond_var::notify_one()`, or `threading_error::overflow` if the semaphore is already at its maximum capacity,
         /// otherwise success.
-        sys::result<void, threading_error> release(decltype(unsafe)) noexcept
+        sys::result<void, threading_error> release(decltype(unsafe)) noexcept /* NOLINT(bugprone-exception-escape) */
         {
             auto guardRes = this->mut.lock();
             _retif(guardRes.err(), !guardRes);
@@ -92,13 +92,22 @@ namespace sys
             return {};
         }
     private:
-        static void release_guard(ordinary_semaphore* sem) noexcept { _contract_assert(!sem || sem->release(unsafe), "If this happens we're genuinely cooked."); }
+        static void release_guard(ordinary_semaphore* sem) noexcept /* NOLINT(bugprone-exception-escape) */
+        {
+            _nowarn_begin_one_gcc("-Wterminate");
+            _nowarn_begin_one_clang(_clwarn_clang_exceptions);
+            _nowarn_begin_one_msvc(_clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does);
+            _contract_assert(!sem || sem->release(unsafe), "If this happens we're genuinely cooked.");
+            _nowarn_end_msvc();
+            _nowarn_end_clang();
+            _nowarn_end_gcc();
+        }
     public:
         using guard = sys::resource_guard<ordinary_semaphore, &ordinary_semaphore::release_guard>;
 
         /// @brief Attempts to acquire a permit.
         /// @return The error from `sys::ordinary_semaphore::acquire(...)`, or a guard on success.
-        sys::result<guard, threading_error> access() noexcept
+        sys::result<guard, threading_error> access()
         {
             auto acqRes = this->acquire(unsafe);
             _retif(acqRes.err(), !acqRes);

@@ -1,4 +1,5 @@
-// NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner)
+// NOLINTBEGIN(readability-function-cognitive-complexity, readability-magic-numbers)
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
@@ -18,7 +19,6 @@ TEST_CASE("Standard Whitespace", "[sys.Text][ch][is_whitespace]")
     CHECK(sys::ch::is_whitespace(u8'\v'));
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Unicode Whitespace (Exhaustive)", "[sys.Text][ch][is_whitespace]")
 {
     // Space Separators
@@ -75,4 +75,5 @@ TEST_CASE("Pathological Trimming Cases", "[sys.Text][string][trim]")
     CHECK(sys::str(u8"").trim().empty());
 }
 
-// NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner, readability-magic-numbers)
+// NOLINTEND(readability-function-cognitive-complexity, readability-magic-numbers)
+// NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-pointer-arithmetic, hicpp-no-array-decay, misc-include-cleaner)

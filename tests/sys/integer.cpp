@@ -1,6 +1,6 @@
 #include <cstdint>
 
-// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
@@ -10,7 +10,6 @@ _nowarn_end_gcc();
 
 #include <module/sys>
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Properties.", "[sys][integer]")
 {
     static_assert(sizeof(sys::integer<uint_least8_t>) == sizeof(uint_least8_t));
@@ -24,7 +23,6 @@ TEST_CASE("Properties.", "[sys][integer]")
     CHECK(i8::sentinel() == sys::bsentinel<i8::underlying_type>());
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Construction and assignment.", "[sys][integer]")
 {
     CHECK(i16() == 0);
@@ -53,7 +51,6 @@ TEST_CASE("Construction and assignment.", "[sys][integer]")
     CHECK(!!(y == *y));
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Testability and comparability.", "[sys][integer]")
 {
     const i32 x = -1_i32, y = 1_i32;
@@ -103,7 +100,6 @@ TEST_CASE("Unary arithmetic operators.", "[sys][integer]")
     CHECK(++--x == 0_i32);
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Binary arithmetic operators.", "[sys][integer]")
 {
     CHECK(2_i32 + 3_i32 == 5_i32);
@@ -174,4 +170,4 @@ TEST_CASE("Binary arithmetic operators.", "[sys][integer]")
     CHECK((y <<= -12_i8) == 0b0_i8);
 }
 
-// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)

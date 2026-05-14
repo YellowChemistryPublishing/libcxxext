@@ -1,4 +1,4 @@
-// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
@@ -8,7 +8,6 @@ _nowarn_end_gcc();
 
 #include <module/sys>
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Powers-of-two return themselves.", "[sys][nr2ixx][i32]")
 {
     CHECK(sys::nr2i32(1_i32) == 1_i32);
@@ -19,7 +18,6 @@ TEST_CASE("Powers-of-two return themselves.", "[sys][nr2ixx][i32]")
     CHECK(sys::nr2i32(1024_i32) == 1024_i32);
     CHECK(sys::nr2i32(65536_i32) == 65536_i32);
 }
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Non-powers-of-two round up.", "[sys][nr2ixx][i32]")
 {
     CHECK(sys::nr2i32(3_i32) == 4_i32);
@@ -32,7 +30,6 @@ TEST_CASE("Non-powers-of-two round up.", "[sys][nr2ixx][i32]")
 }
 TEST_CASE("Zero gives zero.", "[sys][nr2ixx][i32]") { CHECK(sys::nr2i32(0_i32) == 0_i32); }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Powers-of-two return themselves.", "[sys][nr2ixx][i64]")
 {
     CHECK(sys::nr2i64(1_i64) == 1_i64);
@@ -44,7 +41,6 @@ TEST_CASE("Powers-of-two return themselves.", "[sys][nr2ixx][i64]")
     CHECK(sys::nr2i64(65536_i64) == 65536_i64);
     CHECK(sys::nr2i64(4294967296_i64) == 4294967296_i64);
 }
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Non-powers-of-two round up.", "[sys][nr2ixx][i64]")
 {
     CHECK(sys::nr2i64(3_i64) == 4_i64);
@@ -58,4 +54,4 @@ TEST_CASE("Non-powers-of-two round up.", "[sys][nr2ixx][i64]")
 }
 TEST_CASE("Zero gives zero.", "[sys][nr2ixx][i64]") { CHECK(sys::nr2i64(0_i64) == 0_i64); }
 
-// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)

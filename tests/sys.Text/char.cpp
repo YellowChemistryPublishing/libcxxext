@@ -9,7 +9,6 @@ _nowarn_end_gcc();
 
 #include <module/sys.Text>
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Valid UTF-8 Sequences", "[sys.Text][ch][read_codepoint][utf8]")
 {
     // 1-byte.
@@ -113,7 +112,6 @@ TEST_CASE("Unpaired Surrogates", "[sys.Text][ch][read_codepoint][utf16]")
     CHECK(_as(cp3, uint32_t) == _as(sys::ch::replacement<char32_t>()[0], uint32_t));
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Write UTF-8", "[sys.Text][ch][write_codepoint]")
 {
     char8_t out[4] {};
@@ -135,7 +133,6 @@ TEST_CASE("Write UTF-8", "[sys.Text][ch][write_codepoint]")
     CHECK(out[1] == 0xBF);
     CHECK(out[2] == 0xBD);
 }
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Write UTF-16", "[sys.Text][ch][write_codepoint]")
 {
     char16_t out[2] {};

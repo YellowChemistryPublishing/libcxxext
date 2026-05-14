@@ -7,6 +7,7 @@
 #include <cstdio>    // NOLINT(misc-include-cleaner)
 #include <exception> // NOLINT(misc-include-cleaner)
 #include <print>     // NOLINT(misc-include-cleaner)
+#include <stdexcept>
 
 #include <Platform.h>
 
@@ -188,6 +189,18 @@ using ullong = unsigned long long;
 
 /// @}
 
+namespace sys
+{
+    /// @brief Exception thrown by the default contract assertion mechanism.
+    /// @details
+    /// Implements `sys::IDefaultConstructible`, `sys::ICopyConstructible`, `sys::IMoveConstructible`, `sys::ICopyAssignable`, `sys::IMoveAssignable`, `sys::INothrowDestructible`.
+    class contract_violation_exception : public std::runtime_error
+    {
+    public:
+        contract_violation_exception() : runtime_error("Precondition violation!") /* LCOV_EXCL_LINE */ { }
+    };
+} // namespace sys
+
 #ifndef _contract_assert
 /// @def _contract_assert(cond, ...)
 /// @ingroup sys
@@ -195,7 +208,7 @@ using ullong = unsigned long long;
 #define _contract_assert(cond, ...)                                                                                                      \
     do                                                                                                                                   \
     {                                                                                                                                    \
-        if (!(cond)) /* NOLINT(readability-simplify-boolean-expr) */                                                                     \
+        if (!(cond)) [[unlikely]] /* NOLINT(readability-simplify-boolean-expr) */                                                        \
         {                                                                                                                                \
             try                                                                                                                          \
             {                                                                                                                            \
@@ -208,7 +221,7 @@ using ullong = unsigned long long;
             while (i > 0)                                                                                                                \
                 i = i - 1;                                                                                                               \
                                                                                                                                          \
-            std::terminate();                                                                                                            \
+            throw ::sys::contract_violation_exception();                                                                                 \
         }                                                                                                                                \
     }                                                                                                                                    \
     while (false)

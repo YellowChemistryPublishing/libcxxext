@@ -10,6 +10,7 @@
 #include <Destructor.h>
 #include <Result.h>
 #include <ThreadEx.h>
+#include <meta/NamedRequirements.h>
 #include <meta/Type.h>
 
 namespace sys
@@ -68,6 +69,10 @@ namespace sys
         /// @note If an exception is thrown, this `sys::once` is not consumed, and remains incomplete.
         template <typename Func, typename... Args>
         void call_once(Func&& func, Args&&... args) noexcept(noexcept(func(std::forward<Args>(args)...)))
+        requires requires {
+            requires ICallable<Func, decltype(args)...>;
+            requires !meta::type<std::invoke_result_t<Func, decltype(args)...>>::template is_from<result>();
+        }
         {
             if (this->pre_call())
                 return;
@@ -84,8 +89,11 @@ namespace sys
         /// @note If an exception is thrown, this `sys::once` is not consumed, and remains incomplete.
         /// @see `sys::once::call_once(Func&& func, Args&&... args)`
         template <typename Func, typename... Args>
-        requires (meta::type<std::invoke_result_t<Func, Args && ...>>::template is_from<result>())
         sys::result<void, typename std::invoke_result_t<Func, Args&&...>::err_type> call_once(Func&& func, Args&&... args) noexcept(noexcept(func(std::forward<Args>(args)...)))
+        requires requires {
+            requires ICallable<Func, decltype(args)...>;
+            requires meta::type<std::invoke_result_t<Func, decltype(args)...>>::template is_from<result>();
+        }
         {
             if (this->pre_call())
                 return {};
