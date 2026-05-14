@@ -22,6 +22,7 @@
 #include <Result.h>
 #include <ThreadingErrors.h>
 #include <meta/NamedRequirements.h>
+#include <meta/Type.h>
 
 namespace sys
 {
@@ -185,7 +186,7 @@ namespace sys
 
             std::decay_t<Func>* f = [&]() noexcept(noexcept(std::decay_t<Func>(std::declval<Func&&>()))) -> std::decay_t<Func>*
             {
-                return new(std::nothrow) std::decay_t<Func>(std::forward<Func>(func)); // NOLINT(cppcoreguidelines-owning-memory)
+                return new(std::nothrow) std::decay_t<Func>(_forward(func)); // NOLINT(cppcoreguidelines-owning-memory)
             }();
             _retif(threading_error::oom, !f);
 

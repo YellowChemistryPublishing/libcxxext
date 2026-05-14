@@ -8,7 +8,8 @@ _nowarn_end_gcc();
 
 #include <module/sys>
 
-TEST_CASE("`sys::destructor` calls provided cleanup function on destruction.", "[sys][destructor]")
+TEST_CASE("destructor::destructor(), optional_destructor::optional_destructor(), destructor::~destructor(), optional_destructor::~optional_destructor()",
+          "[sys][destructor][optional_destructor]")
 {
     sz called = 0_uz;
     {
@@ -19,59 +20,57 @@ TEST_CASE("`sys::destructor` calls provided cleanup function on destruction.", "
     CHECK(called == 2_uz);
 }
 
-TEST_CASE("`sys::optional_destructor` does nothing if cleared.", "[sys][optional_destructor]")
-{
-    bool called = false;
-    {
-        sys::optional_destructor d = [&called]() noexcept -> void { called = true; };
-        d.clear();
-    }
-    CHECK_FALSE(called);
-}
-
-// NOLINTBEGIN(misc-const-correctness): Spurious.
-
-TEST_CASE("`sys::optional_destructor` correctly transfers ownership on move.", "[sys][optional_destructor]")
+TEST_CASE("optional_destructor::optional_destructor(optional_destructor&&), optional_destructor::operator=(optional_destructor&&)", "[sys][optional_destructor]")
 {
     static sz called = 0_uz;
+
     {
         sys::optional_destructor d1 = []() noexcept -> void { called += 1_uz; };
         const sys::optional_destructor d2 = std::move(d1);
     }
+
     {
         using functor = decltype([]() noexcept -> void { called += 1_uz; });
         sys::optional_destructor d1 = functor();
         sys::optional_destructor d2 = functor();
         d1 = std::move(d2);
-        d2.clear(); // NOLINT(bugprone-use-after-move)
 
         _nowarn_begin_one_gcc("-Wself-move");
         _nowarn_begin_one_clang(_clwarn_clang_self_move);
         d1 = std::move(d1);
-        d2 = std::move(d2);
+        d2 = std::move(d2); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
         _nowarn_end_clang();
         _nowarn_end_gcc();
     }
+
     CHECK(called == 2_uz);
 }
 
-TEST_CASE("`sys::optional_destructor` preserves cleared state on move.", "[sys][optional_destructor]")
+TEST_CASE("optional_destructor::clear()", "[sys][optional_destructor]")
 {
     static sz called = 0_uz;
-    using functor = decltype([]() noexcept -> void { called += 1_uz; });
+
     {
+        sys::optional_destructor d = []() noexcept -> void { called += 1_uz; };
+        d.clear();
+    }
+
+    {
+        using functor = decltype([]() noexcept -> void { called += 1_uz; });
         sys::optional_destructor d1 = functor();
         d1.clear();
         const sys::optional_destructor d2 = std::move(d1);
     }
+
     {
+        using functor = decltype([]() noexcept -> void { called += 1_uz; });
         sys::optional_destructor d1 = functor();
         sys::optional_destructor d2 = functor();
         d2.clear();
         d1 = std::move(d2);
     }
+
     CHECK(called == 0_uz);
 }
 
-// NOLINTEND(misc-const-correctness)
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

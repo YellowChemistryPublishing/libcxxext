@@ -12,7 +12,6 @@
 #include <span>
 #include <string>
 #include <string_view>
-#include <type_traits>
 #include <vector>
 
 #include <Char.h>
@@ -494,16 +493,16 @@ namespace sys
             sz totalSize = 0_uz;
             for (const auto& s : container)
             {
-                if constexpr (ICharacter<std::remove_cvref_t<decltype(s)>>)
+                if constexpr (ICharacter<_decltype_of(s)>)
                     totalSize += 1_uz;
                 else
                     totalSize += std::size(s);
             }
             if (std::size(container) > 1)
             {
-                if constexpr (ICharacter<std::remove_cvref_t<decltype(sep)>>)
+                if constexpr (ICharacter<_decltype_of(sep)>)
                     totalSize += sz(std::size(container)) - 1_uz;
-                else if constexpr (meta::type<std::remove_cvref_t<decltype(sep)>>::is_array())
+                else if constexpr (meta::type<_decltype_of(sep)>::is_array())
                     totalSize += (sz(std::max(std::size(sep), 1uz)) - 1_uz) * (sz(std::size(container)) - 1_uz);
                 else
                     totalSize += sz(std::size(sep)) * (sz(std::size(container)) - 1_uz);
@@ -517,7 +516,7 @@ namespace sys
             {
                 if (needPrependSep)
                 {
-                    if constexpr (meta::type<std::remove_cvref_t<decltype(sep)>>::is_array())
+                    if constexpr (meta::type<_decltype_of(sep)>::is_array())
                         ret.append(std::basic_string_view(sep, std::max(std::size(sep), 1uz) - 1uz));
                     else
                         ret.append(sep);

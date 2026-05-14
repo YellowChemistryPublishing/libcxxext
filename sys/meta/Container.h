@@ -5,10 +5,10 @@
 #include <concepts>
 #include <cstddef>
 #include <iterator>
-#include <type_traits>
 #include <utility>
 
 #include <LanguageSupport.h>
+#include <meta/Type.h>
 
 namespace sys::meta
 {
@@ -37,25 +37,25 @@ namespace sys::meta
         /// @brief (Potentially) inplace construct and append an element to an appendable `this->range`.
         template <typename... Args>
         constexpr void append_back(Args&&... args)
-        requires (requires { this->range.emplace_back(std::forward<Args>(args)...); } || requires { this->range.push_back(std::forward<Args>(args)...); } ||
-                  requires { this->range.push(std::forward<Args>(args)...); } || requires { this->range.append(std::forward<Args>(args)...); } || requires {
+        requires (requires { this->range.emplace_back(_forward(args)...); } || requires { this->range.push_back(_forward(args)...); } ||
+                  requires { this->range.push(_forward(args)...); } || requires { this->range.append(_forward(args)...); } || requires {
                       requires sizeof...(Args) > 0;
-                      (this->range << ... << std::forward<Args>(args));
+                      (this->range << ... << _forward(args));
                   })
         {
-            if constexpr (requires { this->range.emplace_back(std::forward<Args>(args)...); })
-                this->range.emplace_back(std::forward<Args>(args)...);
-            else if constexpr (requires { this->range.push_back(std::forward<Args>(args)...); })
-                this->range.push_back(std::forward<Args>(args)...);
-            else if constexpr (requires { this->range.push(std::forward<Args>(args)...); })
-                this->range.push(std::forward<Args>(args)...);
-            else if constexpr (requires { this->range.append(std::forward<Args>(args)...); })
-                this->range.append(std::forward<Args>(args)...);
+            if constexpr (requires { this->range.emplace_back(_forward(args)...); })
+                this->range.emplace_back(_forward(args)...);
+            else if constexpr (requires { this->range.push_back(_forward(args)...); })
+                this->range.push_back(_forward(args)...);
+            else if constexpr (requires { this->range.push(_forward(args)...); })
+                this->range.push(_forward(args)...);
+            else if constexpr (requires { this->range.append(_forward(args)...); })
+                this->range.append(_forward(args)...);
             else if constexpr (requires {
                                    requires sizeof...(Args) > 0;
-                                   (this->range << ... << std::forward<Args>(args));
+                                   (this->range << ... << _forward(args));
                                })
-                (this->range << ... << std::forward<Args>(args));
+                (this->range << ... << _forward(args));
         }
         constexpr void append_back(this auto&&) = delete;
     };
@@ -77,7 +77,7 @@ namespace sys
     /// @ingroup sys
     /// @brief Whether `T` is iterable.
     template <typename T, typename U = void>
-    concept IEnumerable = requires(T& range, std::remove_cvref_t<decltype(std::begin(range))> it) {
+    concept IEnumerable = requires(T& range, _decltype_of(std::begin(range)) it) {
         std::begin(range);
         std::end(range);
 
@@ -87,7 +87,7 @@ namespace sys
         requires (requires {
             requires std::same_as<U, void>;
             *std::begin(range);
-        } || std::same_as<std::remove_cvref_t<decltype(*std::begin(range))>, U>);
+        } || std::same_as<_decltype_of(*std::begin(range)), U>);
     };
 
     /// @ingroup sys

@@ -7,13 +7,13 @@
 #include <span>
 #include <string>
 #include <string_view>
-#include <type_traits>
 
 #include <Integer.h>
 #include <LanguageSupport.h>
 #include <data/UnicodeCasing.h>
 #include <data/UnicodeWhitespace.h>
 #include <meta/Builtin.h>
+#include <meta/Type.h>
 #include <meta/TypeSwitch.h>
 
 namespace sys
@@ -87,9 +87,9 @@ namespace sys
         /// @brief The number of buffer elements in a null-terminated string.
         /// @warning `unsafe` because `cstr` has preconditions.
         /// @pre `const char cstr[N] && cstr != nullptr && N > 0uz && cstr[N - 1z] == '\0'`
-        static constexpr sz buffer_size(const ICharacter auto* cstr, decltype(unsafe)) noexcept(noexcept(std::char_traits<std::remove_cvref_t<decltype(*cstr)>>::length(cstr)))
+        static constexpr sz buffer_size(const ICharacter auto* cstr, decltype(unsafe)) noexcept(noexcept(std::char_traits<_decltype_of(*cstr)>::length(cstr)))
         {
-            return std::char_traits<std::remove_cvref_t<decltype(*cstr)>>::length(cstr);
+            return std::char_traits<_decltype_of(*cstr)>::length(cstr);
         }
 
         struct codepoint_data

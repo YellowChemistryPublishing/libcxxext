@@ -14,6 +14,7 @@
 #include <LanguageSupport.h>
 #include <Numeric.h>
 #include <meta/Builtin.h>
+#include <meta/Type.h>
 
 namespace sys
 {
@@ -105,7 +106,6 @@ namespace sys
         }
 
         [[nodiscard]] constexpr explicit operator bool() const noexcept { return this->underlying; }
-        [[nodiscard]] constexpr bool operator!() const noexcept { return !this->underlying; }
 
         template <sys::IBuiltinInteger T>
         [[nodiscard]] friend constexpr bool operator==(integer a, integer<T> b) noexcept
@@ -117,14 +117,14 @@ namespace sys
         }
         [[nodiscard]] friend constexpr bool operator==(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
+            if constexpr (std::same_as<_decltype_of(b), For>)
                 return a.underlying == b;
             else
                 return std::cmp_equal(a.underlying, b);
         }
         [[nodiscard]] friend constexpr bool operator==(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
+            if constexpr (std::same_as<_decltype_of(a), For>)
                 return a == b.underlying;
             else
                 return std::cmp_equal(a, b.underlying);
@@ -139,14 +139,14 @@ namespace sys
         }
         [[nodiscard]] friend constexpr bool operator<(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
+            if constexpr (std::same_as<_decltype_of(b), For>)
                 return a.underlying < b;
             else
                 return std::cmp_less(a.underlying, b);
         }
         [[nodiscard]] friend constexpr bool operator<(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
+            if constexpr (std::same_as<_decltype_of(a), For>)
                 return a < b.underlying;
             else
                 return std::cmp_less(a, b.underlying);
@@ -161,14 +161,14 @@ namespace sys
         }
         [[nodiscard]] friend constexpr bool operator<=(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
+            if constexpr (std::same_as<_decltype_of(b), For>)
                 return a.underlying <= b;
             else
                 return std::cmp_less_equal(a.underlying, b);
         }
         [[nodiscard]] friend constexpr bool operator<=(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
+            if constexpr (std::same_as<_decltype_of(a), For>)
                 return a <= b.underlying;
             else
                 return std::cmp_less_equal(a, b.underlying);
@@ -183,14 +183,14 @@ namespace sys
         }
         [[nodiscard]] friend constexpr bool operator>(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
+            if constexpr (std::same_as<_decltype_of(b), For>)
                 return a.underlying > b;
             else
                 return std::cmp_greater(a.underlying, b);
         }
         [[nodiscard]] friend constexpr bool operator>(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
+            if constexpr (std::same_as<_decltype_of(a), For>)
                 return a > b.underlying;
             else
                 return std::cmp_greater(a, b.underlying);
@@ -205,14 +205,14 @@ namespace sys
         }
         [[nodiscard]] friend constexpr bool operator>=(integer a, const sys::IBuiltinInteger auto b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(b)>, For>)
+            if constexpr (std::same_as<_decltype_of(b), For>)
                 return a.underlying >= b;
             else
                 return std::cmp_greater_equal(a.underlying, b);
         }
         [[nodiscard]] friend constexpr bool operator>=(const sys::IBuiltinInteger auto a, integer b) noexcept
         {
-            if constexpr (std::same_as<std::remove_cvref_t<decltype(a)>, For>)
+            if constexpr (std::same_as<_decltype_of(a), For>)
                 return a >= b.underlying;
             else
                 return std::cmp_greater_equal(a, b.underlying);
@@ -261,6 +261,8 @@ namespace sys
 
                 return integer(std::numeric_limits<For>::max());
             }
+            else if (a == std::numeric_limits<For>::lowest() && b == -_as(1, For))
+                return std::numeric_limits<For>::max();
             else [[likely]]
                 return integer(_as(a.underlying / b.underlying, For));
         }

@@ -4,13 +4,13 @@
 
 #include <cmath>
 #include <limits>
-#include <type_traits>
 #include <utility>
 
 #include <LanguageSupport.h>
 #include <Platform.h>
 #include <Result.h>
 #include <meta/Builtin.h>
+#include <meta/Type.h>
 
 namespace sys
 {
@@ -68,12 +68,12 @@ namespace sys
     template <sys::IBuiltinInteger To>
     /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const sys::IBuiltinFloatingPoint auto value, decltype(unsafe)) noexcept
     {
-        if (!std::isfinite(value)) [[unlikely]]
-            return sys::bsentinel<To>();
-        else if (value <= _as(std::numeric_limits<To>::lowest(), std::remove_cvref_t<decltype(value)>)) [[unlikely]]
+        if (value <= _as(std::numeric_limits<To>::lowest(), _decltype_of(value))) [[unlikely]]
             return std::numeric_limits<To>::lowest();
-        else if (value >= _as(std::numeric_limits<To>::max(), std::remove_cvref_t<decltype(value)>)) [[unlikely]]
+        else if (value >= _as(std::numeric_limits<To>::max(), _decltype_of(value))) [[unlikely]]
             return std::numeric_limits<To>::max();
+        else if (!std::isfinite(value)) [[unlikely]]
+            return sys::bsentinel<To>();
         else [[likely]]
             return To(value);
     }
@@ -94,8 +94,7 @@ namespace sys
     /* NOLINT(misc-use-internal-linkage) */ constexpr result<To> bnumeric_cast(const sys::IBuiltinFloatingPoint auto value) noexcept
     {
         // Don't invert condition, need to catch NaN.
-        if (value >= _as(std::numeric_limits<To>::lowest(), std::remove_cvref_t<decltype(value)>) &&
-            value <= _as(std::numeric_limits<To>::max(), std::remove_cvref_t<decltype(value)>)) [[likely]]
+        if (value >= _as(std::numeric_limits<To>::lowest(), _decltype_of(value)) && value <= _as(std::numeric_limits<To>::max(), _decltype_of(value))) [[likely]]
             return To(value);
         else [[unlikely]]
             return nullptr;

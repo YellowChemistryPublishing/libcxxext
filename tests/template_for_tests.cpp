@@ -14,7 +14,6 @@ _nowarn_end_gcc();
 
 TEST_CASE("function name here, ...", "[sys][submodulenamehere][typenamehere]")
 {
-    [[maybe_unused]] volatile int i = 0;
     REQUIRE(true);
     // Although, we prefer `CHECK(...)` unless something must hold for a test to continue.
 }

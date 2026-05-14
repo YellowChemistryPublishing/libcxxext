@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <utility>
 
+#include <LanguageSupport.h>
 #include <meta/InterfaceRequirements.h>
 #include <meta/NamedRequirements.h>
 
@@ -56,12 +57,11 @@ namespace sys
         optional_destructor& operator=(const optional_destructor&) = delete;
         optional_destructor& operator=(optional_destructor&& other) noexcept(INothrowMoveAssignable<Func>)
         {
-            if (this != &other) [[likely]]
-            {
-                this->func = std::move(other.func);
-                this->execute = other.execute;
-                other.execute = false;
-            }
+            _retif(*this, this == &other);
+
+            this->func = std::move(other.func);
+            this->execute = other.execute;
+            other.execute = false;
             return *this;
         }
 

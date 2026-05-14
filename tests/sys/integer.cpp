@@ -10,50 +10,70 @@ _nowarn_end_gcc();
 
 #include <module/sys>
 
-TEST_CASE("Properties.", "[sys][integer]")
+TEST_CASE("integer::...", "[sys][integer]")
 {
-    static_assert(sizeof(sys::integer<uint_least8_t>) == sizeof(uint_least8_t));
-    static_assert(alignof(sys::integer<uint_least8_t>) == alignof(uint_least8_t));
+    STATIC_CHECK(sizeof(sys::integer<uint_least16_t>) == sizeof(uint_least16_t));
+    STATIC_CHECK(alignof(sys::integer<uint_least16_t>) == alignof(uint_least16_t));
+    STATIC_CHECK(std::same_as<i32::underlying_type, int_least32_t>);
 
-    CHECK_FALSE(u32::is_signed());
-    CHECK(i8::is_signed());
-    CHECK(i8::highest() == 127_i8);      // NOLINT(readability-magic-numbers)
-    CHECK(i16::lowest() == i16(-32768)); // NOLINT(readability-magic-numbers)
-    CHECK(u8::ones() == 0b11111111_u8);  // NOLINT(readability-magic-numbers)
-    CHECK(i8::sentinel() == sys::bsentinel<i8::underlying_type>());
+    STATIC_CHECK_FALSE(u32::is_signed());
+    STATIC_CHECK(i8::is_signed());
+    CHECK(u64::fixed_width() == sz(CHAR_BIT) * sz(sizeof(uint_least64_t)));
+    STATIC_CHECK(i8::highest() == 127_i8);      // NOLINT(readability-magic-numbers)
+    STATIC_CHECK(i16::lowest() == i16(-32768)); // NOLINT(readability-magic-numbers)
+    STATIC_CHECK(u8::ones() == 0b11111111_u8);  // NOLINT(readability-magic-numbers)
+    STATIC_CHECK(i8::sentinel() == sys::bsentinel<i8::underlying_type>());
 }
 
-TEST_CASE("Construction and assignment.", "[sys][integer]")
+TEST_CASE("integer::integer(...), integer::integer(const integer&), integer::integer(integer&&), integer::operator=(...), integer::operator=(const integer&), "
+          "integer::operator=(integer&&), integer::operator=()",
+          "[sys][integer]")
 {
     CHECK(i16() == 0);
-    CHECK(i64(1) == 1);
-    CHECK(i8(127) == 127);
+    CHECK(i64(127) == 127);
+    CHECK(i8(65535ll) == 127);
     CHECK(u8(128.0f /* NOLINT(readability-magic-numbers) */) == 128);
     CHECK(u8(0b111111111, unsafe) == 0xFF);
+    CHECK(u16(11409539282_i64) == u16::highest());
+    CHECK(u8(4095_u64, unsafe) == u8::ones());
 
-    const i8 a(-128 /* NOLINT(readability-magic-numbers) */);
-    const u64 b = 0xFFFFFFFFFFFFFFFF_u64 /* NOLINT(readability-magic-numbers) */;
-    u32 c(a);
-    CHECK(c == 0);
-    u32 d(b, unsafe);
-    CHECK(d == 0xFFFFFFFF_u32);
+    {
+        i8 val(-128 /* NOLINT(readability-magic-numbers) */);
+        CHECK(u32(val) == 0);
+        CHECK(u32(std::move(val) /* NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move, performance-move-const-arg) */) == 0);
+    }
 
-    i16 x = 3_i16;
-    i16 y(x);
-    CHECK(x == y);
-    x = 4_i16;
-    y = x;
-    CHECK(x == y);
-    y = _as(2, byte);
-    CHECK(y == 2);
+    {
+        u64 val = 0xFFFFFFFFFFFFFFFF_u64 /* NOLINT(readability-magic-numbers) */;
+        CHECK(u32(val, unsafe) == 0xFFFFFFFF_u32);
+        CHECK(u32(std::move(val) /* NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move, performance-move-const-arg) */, unsafe) == 0xFFFFFFFF_u32);
+    }
 
-    CHECK(*x == _as(x, i16::underlying_type));
-    CHECK(!!(y == *y));
+    {
+        i16 x = 3_i16;
+        i16 y(x);
+        CHECK(x == y);
+
+        x = 4_i16;
+        y = x;
+        CHECK(x == y);
+
+        y = _as(2, byte);
+        CHECK(y == 2);
+
+        x = std::move(y) /* NOLINT(performance-move-const-arg) */;
+        CHECK(x == 2);
+
+        CHECK(*x == _as(x, i16::underlying_type));
+        CHECK(!!(x == *x));
+    }
 }
 
-TEST_CASE("Testability and comparability.", "[sys][integer]")
+TEST_CASE("operator==(const integer&, ...), operator!=(const integer&, ...), operator<(const integer&, ...), operator<=(const integer&, ...), operator>(const integer&, ...), "
+          "operator>=(const integer&, ...)",
+          "[sys][integer]")
 {
-    const i32 x = -1_i32, y = 1_i32;
+    const i8 x = -1_i8, y = 1_i8;
 
     CHECK(x);
     CHECK(y);
@@ -69,26 +89,37 @@ TEST_CASE("Testability and comparability.", "[sys][integer]")
     CHECK_FALSE(x >= y);
     CHECK(x >= -1_i32);
 
-    CHECK(x == *x);
-    CHECK(x != *y);
-    CHECK(x < *y);
-    CHECK(x <= *y);
-    CHECK(x <= *-1_i32);
-    CHECK_FALSE(x > *y);
-    CHECK_FALSE(x >= *y);
-    CHECK(x >= *-1_i32);
+    CHECK(x == i32(x));
+    CHECK(x != i32(y));
+    CHECK(x < i32(y));
+    CHECK(x <= i32(y));
+    CHECK(x <= -1_i32);
+    CHECK_FALSE(x > i32(y));
+    CHECK_FALSE(x >= i32(y));
+    CHECK(x >= -1_i32);
 
-    CHECK(*x == x);
-    CHECK(*x != y);
-    CHECK(*x < y);
-    CHECK(*x <= y);
-    CHECK(*x <= -1_i32);
-    CHECK_FALSE(*x > y);
-    CHECK_FALSE(*x >= y);
-    CHECK(*x >= -1_i32);
+    CHECK(x == *i64(x));
+    CHECK(x != *i64(y));
+    CHECK(x < *i64(y));
+    CHECK(x <= *i64(y));
+    CHECK(x <= *-1_i64);
+    CHECK_FALSE(x > *i64(y));
+    CHECK_FALSE(x >= *i64(y));
+    CHECK(x >= -1_i64);
+
+    CHECK(*i64(x) == x);
+    CHECK(*i64(x) != y);
+    CHECK(*i64(x) < y);
+    CHECK(*i64(x) <= y);
+    CHECK(*i64(x) <= -1_i32);
+    CHECK_FALSE(*i64(x) > y);
+    CHECK_FALSE(*i64(x) >= y);
+    CHECK(*i64(x) >= -1_i32);
 }
 
-TEST_CASE("Unary arithmetic operators.", "[sys][integer]")
+TEST_CASE("integer::operator-(), integer::operator+(), integer::operator~(), integer::operator T(), integer::operator+(), integer::operator+(int), integer::operator-(), "
+          "integer::operator-(int)",
+          "[sys][integer]")
 {
     CHECK(-i32(-32) == +32_i32);
     CHECK(-i64::lowest() == +i64::highest());
@@ -96,11 +127,20 @@ TEST_CASE("Unary arithmetic operators.", "[sys][integer]")
     CHECK(_as(-1_i8, int) == -1);
     CHECK(_as(-1_i8, float) == -1.0f);
 
-    i32 x = 0_i32;
-    CHECK(++--x == 0_i32);
+    {
+        i32 x = 0_i32;
+        CHECK(x++ == 0_i32);
+        CHECK(x-- == 1_i32);
+        CHECK(++--x == 0_i32);
+    }
 }
 
-TEST_CASE("Binary arithmetic operators.", "[sys][integer]")
+TEST_CASE("operator+(const integer&, ...), operator-(const integer&, ...), operator*(const integer&, ...), operator/(const integer&, ...), operator%(const integer&, ...), "
+          "operator+=(const integer&), operator-=(const integer&), operator*=(const integer&), operator/=(const integer&), operator%=(const integer&), "
+          "operator&(const integer&, ...), operator|(const integer&, ...), operator^(const integer&, ...), operator<<(const integer&, ...), operator>>(const integer&, ...), "
+          "integer::operator&=(const integer&), integer::operator|=(const integer&), integer::operator^=(const integer&), integer::operator<<=(const integer&), "
+          "integer::operator>>=(const integer&)",
+          "[sys][integer]")
 {
     CHECK(2_i32 + 3_i32 == 5_i32);
     CHECK(1_i32 - 5_i32 == -4_i32);

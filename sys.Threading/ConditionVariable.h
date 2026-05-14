@@ -84,11 +84,11 @@ namespace sys
         [[nodiscard]] sys::result<void, threading_error> wait_until(T& mut, Pred&& pred) noexcept(noexcept(pred()))
         requires requires {
             requires sys::meta::type<T>::template is_from<ordinary_mutex>();
-            { std::forward<Pred>(pred)() } -> std::convertible_to<bool>;
+            { _forward(pred)() } -> std::convertible_to<bool>;
         }
         {
             _retif(threading_error::init_failed, !this->try_init());
-            while (!std::forward<Pred>(pred)())
+            while (!_forward(pred)())
             {
                 auto waitRes = this->wait(mut);
                 _nowarn_begin_one_clang(_clwarn_clang_consumed);

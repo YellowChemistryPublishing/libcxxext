@@ -151,7 +151,7 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("result<T, 
     if constexpr (!std::same_as<typename TestType::value_type, void>)
         CHECK(TestType(std::move(res) /* NOLINT(clang-analyzer-cplusplus.Move, bugprone-use-after-move) */).expect() == 456_i32);
     else
-        CHECK(TestType(std::move(res)).operator bool());
+        CHECK(TestType(std::move(res)).operator bool()); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK_FALSE(TestType(std::move(res) /* NOLINT(clang-analyzer-cplusplus.Move, bugprone-use-after-move) */).operator bool());
     CHECK_FALSE(TestType(std::move(res) /* NOLINT(clang-analyzer-cplusplus.Move, bugprone-use-after-move) */).operator!());
 }
@@ -170,7 +170,7 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("result<T, 
     if constexpr (!std::same_as<typename TestType::err_type, void>)
         CHECK(TestType(std::move(res) /* NOLINT(clang-analyzer-cplusplus.Move, bugprone-use-after-move) */).expect_err() == "bad"sv);
     else
-        CHECK(TestType(std::move(res)).operator!());
+        CHECK(TestType(std::move(res)).operator!()); // NOLINT(bugprone-use-after-move, clang-analyzer-cplusplus.Move)
     CHECK_FALSE(TestType(std::move(res) /* NOLINT(clang-analyzer-cplusplus.Move, bugprone-use-after-move) */).operator bool());
     CHECK_FALSE(TestType(std::move(res) /* NOLINT(clang-analyzer-cplusplus.Move, bugprone-use-after-move) */).operator!());
 }
