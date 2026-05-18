@@ -4,7 +4,6 @@
 
 #include <concepts>
 #include <cstddef>
-#include <functional>
 #include <type_traits>
 #include <utility>
 
@@ -149,7 +148,7 @@ namespace sys
     /// @ingroup sys
     /// @brief Named requirement for function object types.
     template <typename T, typename... Args>
-    concept IFunctionObject = std::is_object_v<T> && requires(T f, Args... args) { f(args...); };
+    concept IFunctionObject = std::is_object_v<T> && std::invocable<T, Args...>;
     /// @ingroup sys
     /// @brief Named requirement for hash object types.
     template <typename T, typename Key>
@@ -159,23 +158,19 @@ namespace sys
     /// @ingroup sys
     /// @brief Named requirement for callable types.
     template <typename T, typename... Args>
-    concept ICallable = requires(T f) { std::invoke(f, std::declval<Args>()...); };
+    concept ICallable = std::invocable<T, Args...>;
     /// @ingroup sys
     /// @brief Named requirement for unary predicate types.
     template <typename T, typename Arg>
-    concept IUnaryPredicate = IFunctionObject<T> && requires(T f, Arg arg) {
-        { f(arg) } -> IBooleanTestable;
-    };
+    concept IUnaryPredicate = std::predicate<T, Arg>;
     /// @ingroup sys
     /// @brief Named requirement for binary predicate types.
     template <typename T, typename Left, typename Right>
-    concept IBinaryPredicate = IFunctionObject<T> && requires(T f, Left a, Right b) {
-        { f(a, b) } -> IBooleanTestable;
-    };
+    concept IBinaryPredicate = std::predicate<T, Left, Right>;
     /// @ingroup sys
     /// @brief Named requirement for compare types.
     template <typename T, typename Left, typename Right>
-    concept ICompare = IBinaryPredicate<T, Left, Right> && requires(T comp, Left a, Right b) {
+    concept ICompare = std::relation<T, Left, Right> && requires(T comp, Left a, Right b) {
         { !comp(a, b) && !comp(b, a) } -> std::same_as<bool>;
     };
 }; // namespace sys

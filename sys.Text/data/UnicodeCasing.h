@@ -6,8 +6,8 @@
 
 #include <string_view>
 
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
 
 namespace sys
 {
@@ -12073,7 +12073,7 @@ namespace sys::internal
     /// @internal
     /// @ingroup sys_internal
     constexpr sz dchar_to_lower_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx,
-                                        [[maybe_unused]] const sys::lookahead_casing_context& lctx, decltype(unsafe)) noexcept
+                                        [[maybe_unused]] const sys::lookahead_casing_context& lctx, decltype(unsafe))
     {
         if (c == U'\u03A3' && fctx.is_preceded_by_cased && !lctx.followed_by_cased)
         {
@@ -12151,7 +12151,7 @@ namespace sys::internal
     /// @internal
     /// @ingroup sys_internal
     constexpr sz dchar_to_upper_special(char32_t out[], const char32_t c, const std::u8string_view lang, [[maybe_unused]] const sys::forward_casing_context& fctx,
-                                        [[maybe_unused]] const sys::lookahead_casing_context& lctx, decltype(unsafe)) noexcept
+                                        [[maybe_unused]] const sys::lookahead_casing_context& lctx, decltype(unsafe))
     {
         if (c == U'\u0069' && lang == u8"tr")
         {
@@ -12594,7 +12594,7 @@ namespace sys::internal
     }
     /// @internal
     /// @ingroup sys_internal
-    constexpr sz dchar_fold_special(char32_t out[], const char32_t c, const std::u8string_view lang, decltype(unsafe)) noexcept
+    constexpr sz dchar_fold_special(char32_t out[], const char32_t c, const std::u8string_view lang, decltype(unsafe))
     {
         if (c == U'\u0049' && lang == u8"tr")
         {

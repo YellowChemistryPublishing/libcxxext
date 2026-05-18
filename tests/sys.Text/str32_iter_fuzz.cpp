@@ -16,7 +16,7 @@ _nowarn_end_gcc();
 
 TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fuzz][sys.Text][codepoint_iter]")
 {
-    rc::check("Iterating over random bytes never crashes and exhausts buffer.", [](const std::vector<u8::underlying_type>& bytes) -> void
+    CHECK(rc::check([](const std::vector<u8::underlying_type>& bytes) -> void
     {
         const char8_t* start = _asr(bytes.data(), const char8_t*);
         const char8_t* endPtr = start + bytes.size(); // NOLINT(cppcoreguidelines-pro-bounds-pointer-arithmetic)
@@ -31,11 +31,11 @@ TEST_CASE("Iterating over random bytes never crashes and exhausts buffer.", "[fu
             if (doDeref)
                 (void)*it;
             doDeref = !doDeref;
-            ++it;
+            ++it /* NOLINT(bugprone-inc-dec-in-conditions) */;
             RC_ASSERT(++count <= sz(bytes.size()));
         }
         RC_ASSERT(it == end);
-    });
+    }));
 }
 
 // NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)

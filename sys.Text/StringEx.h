@@ -12,13 +12,12 @@
 #include <span>
 #include <string>
 #include <string_view>
-#include <type_traits>
 #include <vector>
 
 #include <Char.h>
 #include <CodepointIterator.h>
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
 #include <data/UnicodeCCC.h>
 #include <data/UnicodeCasing.h>
 #include <meta/Builtin.h>
@@ -170,12 +169,8 @@ namespace sys
         constexpr explicit string(const std::span<const T> data) : string(data.begin(), data.end()) { }
         constexpr explicit string(const std::basic_string_view<T> data) : string(data.begin(), data.end()) { }
         /// @pre `++...beg == end`
-        template <std::input_iterator It>
-        constexpr explicit string(It beg, It end) : str(beg, end)
-        { }
-        template <IEnumerable Container>
-        constexpr explicit string(const Container& container) : string(std::begin(container), std::end(container))
-        { }
+        constexpr explicit string(std::input_iterator auto beg, std::input_iterator auto end) : str(beg, end) { }
+        constexpr explicit string(const IEnumerable auto& container) : string(std::begin(container), std::end(container)) { }
         /// @brief Construct from a single character.
         constexpr /* NOLINT(hicpp-explicit-conversions) */ string(const T c) : str(1uz, c) { }
         /// @brief Repeat a character.
@@ -253,12 +248,12 @@ namespace sys
         constexpr explicit string(const sys::string<U>& other) : string(_as(other, std::basic_string_view<U>))
         { }
 
-        [[nodiscard]] bool empty() const { return this->str.empty(); }
-        [[nodiscard]] sz size() const { return this->str.size(); }
-        [[nodiscard]] sz capacity() const { return this->str.capacity(); }
-        [[nodiscard]] const T* c_str() const { return this->str.data(); }
-        [[nodiscard]] T* data() { return this->str.data(); }
-        [[nodiscard]] const T* data() const { return this->str.data(); }
+        [[nodiscard]] constexpr bool empty() const noexcept { return this->str.empty(); }
+        [[nodiscard]] constexpr sz size() const noexcept { return sz(this->str.size()); }
+        [[nodiscard]] constexpr sz capacity() const noexcept { return sz(this->str.capacity()); }
+        [[nodiscard]] constexpr const T* c_str() const noexcept { return this->str.data(); }
+        [[nodiscard]] constexpr T* data() noexcept { return this->str.data(); }
+        [[nodiscard]] constexpr const T* data() const noexcept { return this->str.data(); }
 
         [[nodiscard]] constexpr auto begin() const { return this->str.cbegin(); }
         [[nodiscard]] constexpr auto end() const { return this->str.cend(); }
@@ -454,7 +449,10 @@ namespace sys
         }
         /// @brief Split the string into substrings separated by `delimiter`.
         template <typename Container = std::vector<string>>
-        requires IAppendable<Container, T> && IAppendable<Container, string>
+        requires requires {
+            requires IAppendable<Container, T>;
+            requires IAppendable<Container, string>;
+        }
         [[nodiscard]] Container split(const std::basic_string_view<T> delimiter) const
         {
             if (delimiter.empty())
@@ -465,15 +463,21 @@ namespace sys
                     meta::generic_container_adaptor(ret).append_back(c);
                 return ret;
             }
+            if (delimiter.size() > this->size())
+            {
+                Container ret;
+                meta::generic_container_adaptor(ret).append_back(*this);
+                return ret;
+            }
 
             Container ret;
             auto from = this->begin();
-            for (auto it = this->begin(); it <= this->end() - delimiter.size(); ++it)
+            for (auto it = this->begin(); it <= this->end() - ssz(delimiter.size()); ++it)
             {
-                if (std::basic_string_view<T>(it, it + delimiter.size()) == delimiter)
+                if (std::basic_string_view<T>(it, it + ssz(delimiter.size())) == delimiter)
                 {
                     meta::generic_container_adaptor(ret).append_back(string(from, it));
-                    it += delimiter.size() - 1z;
+                    it += ssz(delimiter.size()) - 1_z;
                     from = it + 1z;
                 }
             }
@@ -483,7 +487,10 @@ namespace sys
         }
         /// @brief Join the strings in `container` with `sep`.
         template <typename Container, typename Chars>
-        requires IEnumerable<Container> && IEmptyQueryable<Container>
+        requires requires {
+            requires IEnumerable<Container>;
+            requires IEmptyQueryable<Container>;
+        }
         [[nodiscard]] static string join(const Container& container, const Chars& sep)
         {
             if (meta::generic_container_adaptor(container).empty())
@@ -492,16 +499,16 @@ namespace sys
             sz totalSize = 0_uz;
             for (const auto& s : container)
             {
-                if constexpr (ICharacter<std::remove_cvref_t<decltype(s)>>)
+                if constexpr (ICharacter<_decltype_of(s)>)
                     totalSize += 1_uz;
                 else
-                    totalSize += std::size(s);
+                    totalSize += sz(std::size(s));
             }
             if (std::size(container) > 1)
             {
-                if constexpr (ICharacter<std::remove_cvref_t<decltype(sep)>>)
+                if constexpr (ICharacter<_decltype_of(sep)>)
                     totalSize += sz(std::size(container)) - 1_uz;
-                else if constexpr (meta::type<std::remove_cvref_t<decltype(sep)>>::is_array())
+                else if constexpr (meta::type<_decltype_of(sep)>::is_array())
                     totalSize += (sz(std::max(std::size(sep), 1uz)) - 1_uz) * (sz(std::size(container)) - 1_uz);
                 else
                     totalSize += sz(std::size(sep)) * (sz(std::size(container)) - 1_uz);
@@ -515,7 +522,7 @@ namespace sys
             {
                 if (needPrependSep)
                 {
-                    if constexpr (meta::type<std::remove_cvref_t<decltype(sep)>>::is_array())
+                    if constexpr (meta::type<_decltype_of(sep)>::is_array())
                         ret.append(std::basic_string_view(sep, std::max(std::size(sep), 1uz) - 1uz));
                     else
                         ret.append(sep);

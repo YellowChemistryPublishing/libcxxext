@@ -16,6 +16,8 @@ foreach(TEST_FILE ${TESTS})
     set(TEST_NAME test_${TEST_NAME})
 
     add_test_with_catch2(${TEST_NAME} ${TEST_FILE})
+    target_link_libraries(${TEST_NAME} PRIVATE sys sys.Containers sys.Text sys.Threading)
+    target_include_directories(${TEST_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../sys.Threading")
     target_libcxxext_common_config(${TEST_NAME})
     copy_dynlibs_to_build_target_dir(${TEST_NAME} sys sys.Containers sys.Text sys.Threading)
     target_link_libraries(${TEST_NAME} PRIVATE rapidcheck)

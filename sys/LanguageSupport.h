@@ -7,6 +7,7 @@
 #include <cstdio>    // NOLINT(misc-include-cleaner)
 #include <exception> // NOLINT(misc-include-cleaner)
 #include <print>     // NOLINT(misc-include-cleaner)
+#include <stdexcept>
 
 #include <Platform.h>
 
@@ -162,6 +163,44 @@ constexpr struct
 
 /// @}
 
+/// @defgroup builtin_integers Built-in Integer Types
+/// @ingroup tags
+/// @ingroup sys
+/// @brief Abbreviated built-in integer types.
+/// @note Pass `byval`.
+/// @{
+
+// NOLINTBEGIN(google-runtime-int)
+/// @brief Alias for `unsigned char`.
+using byte = unsigned char;
+/// @brief Alias for `signed char`.
+using sbyte = signed char;
+/// @brief Alias for `unsigned short`.
+using ushort = unsigned short;
+/// @brief Alias for `unsigned int`.
+using uint = unsigned int;
+/// @brief Alias for `unsigned long`.
+using ulong = unsigned long;
+/// @brief Alias for `long long`.
+using llong = long long;
+/// @brief Alias for `unsigned long long`.
+using ullong = unsigned long long;
+// NOLINTEND(google-runtime-int)
+
+/// @}
+
+namespace sys
+{
+    /// @brief Exception thrown by the default contract assertion mechanism.
+    /// @details
+    /// Implements `sys::IDefaultConstructible`, `sys::ICopyConstructible`, `sys::IMoveConstructible`, `sys::ICopyAssignable`, `sys::IMoveAssignable`, `sys::INothrowDestructible`.
+    class contract_violation_exception : public std::runtime_error
+    {
+    public:
+        contract_violation_exception() : runtime_error("Precondition violation!") /* LCOV_EXCL_LINE */ { }
+    };
+} // namespace sys
+
 #ifndef _contract_assert
 /// @def _contract_assert(cond, ...)
 /// @ingroup sys
@@ -169,7 +208,7 @@ constexpr struct
 #define _contract_assert(cond, ...)                                                                                                      \
     do                                                                                                                                   \
     {                                                                                                                                    \
-        if (!(cond)) /* NOLINT(readability-simplify-boolean-expr) */                                                                     \
+        if (!(cond)) [[unlikely]] /* NOLINT(readability-simplify-boolean-expr) */                                                        \
         {                                                                                                                                \
             try                                                                                                                          \
             {                                                                                                                            \
@@ -178,11 +217,11 @@ constexpr struct
             catch (...)                                                                                                                  \
             { }                                                                                                                          \
                                                                                                                                          \
-            volatile uint_least64_t i = 5'000'000'000;                                                                                   \
-            while (i -= 1u)                                                                                                              \
-            { }                                                                                                                          \
+            volatile uint_least64_t i = 2'500'000'000;                                                                                   \
+            while (i > 0)                                                                                                                \
+                i = i - 1;                                                                                                               \
                                                                                                                                          \
-            std::terminate();                                                                                                            \
+            throw ::sys::contract_violation_exception();                                                                                 \
         }                                                                                                                                \
     }                                                                                                                                    \
     while (false)

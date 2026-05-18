@@ -188,8 +188,8 @@ def main(argv: List[str]) -> None:
                 """\
                 #include <string_view>
 
+                #include <Integer.h>
                 #include <LanguageSupport.h>
-                #include <Numeric.h>
 
                 namespace sys
                 {
@@ -329,7 +329,7 @@ def main(argv: List[str]) -> None:
                         f"""\
                         /// @internal
                         /// @ingroup sys_internal
-                        constexpr sz {name}(char32_t out[], const char32_t c, const std::u8string_view lang{context_params}, decltype(unsafe)) noexcept
+                        constexpr sz {name}(char32_t out[], const char32_t c, const std::u8string_view lang{context_params}, decltype(unsafe))
                         {{
                         """
                     ),

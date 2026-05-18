@@ -18,7 +18,7 @@ cmake_dependent_option(LIBCXXEXT_TESTS "Build tests." ON "LIBCXXEXT_DEVELOPMENT_
 cmake_dependent_option(LIBCXXEXT_COVERAGE "Enable coverage instrumentation for debug builds (gcc/clang)." ON "LIBCXXEXT_DEVELOPMENT_MODE" OFF)
 set(LIBCXXEXT_LIBRARY_TYPE "SHARED" CACHE STRING "Build type of libraries.")
 mark_as_enum(LIBCXXEXT_LIBRARY_TYPE "SHARED" "STATIC")
-set(LIBCXXEXT_EXPORT_PCH ON CACHE BOOL "Use and produce precompiled headers.")
+set(LIBCXXEXT_EXPORT_PCH OFF CACHE BOOL "Use and produce precompiled headers.")
 set(LIBCXXEXT_TEST_ASAN OFF CACHE BOOL "Enable AddressSanitizer for tests.")
 set(LIBCXXEXT_TEST_UBSAN OFF CACHE BOOL "Enable UndefinedBehaviorSanitizer for tests.")
 
@@ -30,6 +30,8 @@ if(LIBCXXEXT_EXPORT_PCH)
     include(cmake/stdc.cmake)
     include(cmake/stdc++.cmake)
 endif()
+
+add_subdirectory(sys.PlatformSupport.Threading)
 
 add_subdirectory(sys)
 add_subdirectory(sys.Containers)
@@ -49,9 +51,13 @@ if(LIBCXXEXT_TESTS)
     find_program(GCOVR_EXECUTABLE gcovr)
     if(GCOVR_EXECUTABLE)
         add_custom_target(libcxxext_coverage
-            COMMAND ${GCOVR_EXECUTABLE} --lcov "${CMAKE_BINARY_DIR}/coverage.info" --gcov-ignore-parse-errors negative_hits.warn
+            COMMAND
+            ${GCOVR_EXECUTABLE} --lcov "${CMAKE_BINARY_DIR}/coverage.info" --gcov-ignore-parse-errors negative_hits.warn --merge-mode-functions=merge-use-line-min
+            "-f=(out|build|(sys[\\.A-Za-z]*))/" "-e=sys\\.Text/data/" "${CMAKE_BINARY_DIR}"
+            VERBATIM
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
+        set_target_properties(libcxxext_coverage PROPERTIES ADDITIONAL_CLEAN_FILES "${CMAKE_BINARY_DIR}/coverage.info")
     endif()
 endif()
 

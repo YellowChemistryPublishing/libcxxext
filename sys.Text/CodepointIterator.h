@@ -2,13 +2,14 @@
 
 /// @file
 
+#include <compare>
 #include <span>
 #include <string>
 #include <string_view>
 
 #include <Char.h>
+#include <Integer.h>
 #include <LanguageSupport.h>
-#include <Numeric.h>
 #include <meta/Builtin.h>
 
 namespace sys
@@ -44,7 +45,10 @@ namespace sys
         /// @brief Pointer to the address of the current codepoint.
         constexpr const T* operator->() const noexcept { return this->cur; } // For `std::to_address(...)`.
         friend constexpr bool operator==(const codepoint_iter& a, const codepoint_iter& b) noexcept { return a.cur == b.cur && a.end == b.end; }
-        friend constexpr auto operator<=>(const codepoint_iter& a, const codepoint_iter& b) noexcept { return (a.cur <=> b.cur) != 0 ? a.cur <=> b.cur : a.end <=> b.end; }
+        friend constexpr auto operator<=>(const codepoint_iter& a, const codepoint_iter& b) noexcept
+        {
+            return (a.cur <=> b.cur) != std::strong_ordering::equal ? a.cur <=> b.cur : a.end <=> b.end;
+        }
 
         constexpr codepoint_iter& operator++() noexcept
         {

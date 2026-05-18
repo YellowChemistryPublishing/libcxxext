@@ -6,13 +6,15 @@
 #include <cstdint>
 #include <stdexcept>
 
+#include <CompilerWarnings.h>
 #include <ConditionVariable.h>
+#include <Integer.h>
 #include <LanguageSupport.h>
 #include <Mutex.h>
+#include <Numeric.h>
 #include <ResourceGuard.h>
 #include <Result.h>
 #include <ThreadingErrors.h>
-#include <inline/Integer.inl>
 #include <meta/Builtin.h>
 
 namespace sys
@@ -30,22 +32,24 @@ namespace sys
         sys::cond_var cv;
         T counter = DefaultConcurrentAccessors;
     public:
-        ordinary_semaphore() noexcept
+        ordinary_semaphore() noexcept /* LCOV_EXCL_BR_LINE */
         requires (DefaultConcurrentAccessors != sys::bsentinel<T>())
         = default;
         /// @brief Constructs a new semaphore with the given initial count.
         /// @pre `init_count >= 0`.
         /// @warning `unsafe` because `this` has preconditions.
-        constexpr explicit ordinary_semaphore(const sys::integer<T> init_count, decltype(unsafe)) noexcept /* NOLINT(bugprone-exception-escape) */
+        constexpr explicit ordinary_semaphore(const sys::integer<T> init_count, decltype(unsafe))
         requires (DefaultConcurrentAccessors == sys::bsentinel<T>())
-            : counter(init_count)
+            : counter(init_count) /* LCOV_EXCL_BR_LINE */
         {
             if consteval
             {
+                _nowarn_begin_one_clang(_clwarn_clang_exceptions);
                 if (init_count < 0)
                     throw std::domain_error("`init_count` must be larger than or equal to `0`.");
+                _nowarn_end_clang();
             }
-            _contract_assert(init_count >= 0);
+            _contract_assert(init_count >= 0); // LCOV_EXCL_BR_LINE
         }
         ordinary_semaphore(const ordinary_semaphore&) noexcept = delete;
         ordinary_semaphore(ordinary_semaphore&&) noexcept = delete;
@@ -58,13 +62,13 @@ namespace sys
         /// @post There must exist a corresponding, subsequent call to `.release(...)`, within a finite amount of time.
         /// @warning `unsafe` because `this` has postconditions.
         /// @return Propagated error from `sys::mutex::lock()`, `sys::cond_var::wait_until(...)`, or success.
-        sys::result<void, threading_error> acquire(decltype(unsafe)) noexcept
+        sys::result<void, threading_error> acquire(decltype(unsafe))
         {
             auto guardRes = this->mut.lock();
-            _retif(guardRes.err(), !guardRes);
-            _retif(waitRes.err(), auto waitRes = this->cv.wait_until(this->mut, [&]() -> bool { return this->counter > _as(0, T); }); !waitRes);
+            _retif(guardRes.err(), !guardRes);                                                                                                   // LCOV_EXCL_BR_LINE
+            _retif(waitRes.err(), auto waitRes = this->cv.wait_until(this->mut, [&]() -> bool { return this->counter > _as(0, T); }); !waitRes); // LCOV_EXCL_BR_LINE
 
-            --this->counter;
+            --this->counter; // LCOV_EXCL_BR_LINE
             return {};
         }
         /// @brief Releases a permit.
@@ -72,7 +76,7 @@ namespace sys
         /// @warning `unsafe` because `this` has preconditions.
         /// @return Propagated error from `sys::mutex::lock()`, `sys::cond_var::notify_one()`, or `threading_error::overflow` if the semaphore is already at its maximum capacity,
         /// otherwise success.
-        sys::result<void, threading_error> release(decltype(unsafe)) noexcept
+        sys::result<void, threading_error> release(decltype(unsafe)) noexcept /* NOLINT(bugprone-exception-escape) */
         {
             auto guardRes = this->mut.lock();
             _retif(guardRes.err(), !guardRes);
@@ -88,16 +92,25 @@ namespace sys
             return {};
         }
     private:
-        static void release_guard(ordinary_semaphore* sem) noexcept { _contract_assert(!sem || sem->release(unsafe), "If this happens we're genuinely cooked."); }
+        static void release_guard(ordinary_semaphore& sem) noexcept /* NOLINT(bugprone-exception-escape) */
+        {
+            _nowarn_begin_one_gcc("-Wterminate");
+            _nowarn_begin_one_clang(_clwarn_clang_exceptions);
+            _nowarn_begin_one_msvc(_clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does);
+            _contract_assert(sem.release(unsafe), "If this happens we're genuinely cooked."); // LCOV_EXCL_BR_LINE
+            _nowarn_end_msvc();
+            _nowarn_end_clang();
+            _nowarn_end_gcc();
+        }
     public:
         using guard = sys::resource_guard<ordinary_semaphore, &ordinary_semaphore::release_guard>;
 
         /// @brief Attempts to acquire a permit.
         /// @return The error from `sys::ordinary_semaphore::acquire(...)`, or a guard on success.
-        sys::result<guard, threading_error> access() noexcept
+        sys::result<guard, threading_error> access()
         {
-            auto acqRes = this->acquire(unsafe);
-            _retif(acqRes.err(), !acqRes);
+            auto acqRes = this->acquire(unsafe); // LCOV_EXCL_BR_LINE
+            _retif(acqRes.err(), !acqRes);       // LCOV_EXCL_BR_LINE
             return guard(*this, unsafe);
         }
     };

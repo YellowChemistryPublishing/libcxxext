@@ -1,13 +1,13 @@
 /.cache/
 /.vscode/
+.vs/
+__pycache__/
 
-/sys.Text/data_unicode/
-
+/out/
 /build/
 /*-build/
 /install/
 CMakeUserPresets.json
 CMakeFiles/
 
-.vs/
-__pycache__/
+/sys.Text/data_unicode/

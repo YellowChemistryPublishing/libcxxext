@@ -5,7 +5,7 @@
         { "name": "check:cppfmt", "script": "workflows/cppfmt.py", "with": ["-p=${run_on}", "-f=^(?!(.*build/|rapidcheck/|Catch2/|tinycthread/)).*\\.(h|inl|c|cpp)$"] },
         { "name": "check:cpplint", "script": "workflows/cpplint.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
         { "name": "check:cpptest", "script": "workflows/cpptest.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build"] },
-        { "name": "check:cppcov", "script": "workflows/cppcov.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|(sys[\\.A-Za-z]*))/"] },
+        { "name": "check:cppcov", "script": "workflows/cppcov.py", "with": ["-p=${run_on}", "-cl=${compiler_name}", "-d=.", "-b=${target_arch}-${run_on}-${compiler_name}-build", "-f=^(build|(sys[\\.A-Za-z]*))/", "-e=sys\\.Text/data/"] },
         {
             "name":   "check:cpppack",
             "script": "workflows/cpppack.py",
@@ -33,7 +33,7 @@
         {
             "checkset": "x86_64-linux-gcc-debug",
             "with":     {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "config": "Debug", "gen": "Unix Makefiles"},
-            "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"] }
+            "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppbuild"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"] }
         },
         {
             "checkset": "x86_64-linux-gcc-relwithdebinfo",
@@ -53,7 +53,7 @@
         {
             "checkset": "i686-linux-gcc-debug",
             "with":     {"run_on": "linux", "target_arch": "i686", "compiler_name": "gcc", "config": "Debug", "gen": "Unix Makefiles"},
-            "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"] }
+            "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppbuild"] }
         },
         {
             "checkset": "i686-linux-gcc-relwithdebinfo",

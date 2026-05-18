@@ -35,11 +35,11 @@ namespace sys
     concept IBuiltinNumeric = IBuiltinInteger<T> || IBuiltinFloatingPoint<T>;
 
     /// @ingroup sys
-    /// @brief Whether `T` can hold the entire range of `CanHold`.
-    template <typename T, typename CanHold>
-    concept IBuiltinIntegerCanHold =
-        IBuiltinInteger<T> && IBuiltinInteger<CanHold> && std::cmp_less_equal(std::numeric_limits<T>::lowest(), std::numeric_limits<CanHold>::lowest()) &&
-        std::cmp_greater_equal(std::numeric_limits<T>::max(), std::numeric_limits<CanHold>::max());
+    /// @brief Whether `Wider` can hold the entire range of `Narrower`.
+    template <typename Narrower, typename Wider>
+    concept IBuiltinIntegerNarrowerThan =
+        IBuiltinInteger<Wider> && IBuiltinInteger<Narrower> && std::cmp_less_equal(std::numeric_limits<Wider>::lowest(), std::numeric_limits<Narrower>::lowest()) &&
+        std::cmp_greater_equal(std::numeric_limits<Wider>::max(), std::numeric_limits<Narrower>::max());
 
     /// @ingroup sys
     /// @brief Whether `T` represents a unicode character.

@@ -53,6 +53,14 @@ def main(argv: List[str]) -> None:
         default=".*",
     )
     parser.add_argument(
+        "-e",
+        "--regex-path-exclude",
+        help="Filter for files to exclude from analysis.",
+        metavar="",
+        required=False,
+        default=None,
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         help="Extra logging messages to stdout.",
@@ -73,27 +81,39 @@ def main(argv: List[str]) -> None:
 
     os.makedirs(f"{args.build_dir_name}/coverage", exist_ok=True)
     gcovr.run(
-        [
-            "--filter",
-            args.regex_path_filter,
-            "--html",
-            "--html-details",
-            "-o",
-            f"{args.build_dir_name}/coverage/coverage_report.html",
-            args.build_dir_name,
-        ],
+        (
+            ["--filter", args.regex_path_filter]
+            + (
+                ["--exclude", args.regex_path_exclude]
+                if args.regex_path_exclude is not None
+                else []
+            )
+            + [
+                "--html",
+                "--html-details",
+                "-o",
+                f"{args.build_dir_name}/coverage/coverage_report.html",
+                args.build_dir_name,
+            ]
+        ),
         host_platform=args.platform,
         cl_name=args.compiler,
     )
 
     md_report_path = f"{config.findings_reldir}/CoverageReport.md"
-    md_report_cmd = gcovr.cmd(cl_name=args.compiler) + [
-        "--filter",
-        args.regex_path_filter,
-        "--markdown",
-        "--gcov-object-directory",
-        args.build_dir_name,
-    ]
+    md_report_cmd = (
+        gcovr.cmd(cl_name=args.compiler)
+        + [
+            "--filter",
+            args.regex_path_filter,
+        ]
+        + (["--exclude", args.regex_path_exclude] if args.regex_path_exclude else [])
+        + [
+            "--markdown",
+            "--gcov-object-directory",
+            args.build_dir_name,
+        ]
+    )
 
     content, _ = exec_or_fail(md_report_cmd, capture_output=True)
     content = content.replace("# GCC Code Coverage Report\n\n", "").replace("##", "###")

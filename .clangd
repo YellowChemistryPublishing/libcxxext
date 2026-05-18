@@ -4,9 +4,13 @@ CompileFlags:
         - -std=c++26
         - -Wno-c2y-extensions
     Remove:
+        - -fdiagnostics-all-candidates
         - -fconcepts-diagnostics-depth=4
         - -Wc2y-extensions
     CompilationDatabase: build
+
+Diagnostics:
+    UnusedIncludes: None
 
 Style:
     AngledHeaders:

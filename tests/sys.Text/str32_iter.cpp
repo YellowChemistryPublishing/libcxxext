@@ -1,4 +1,5 @@
 // NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)
+// NOLINTBEGIN(readability-function-cognitive-complexity)
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 _nowarn_begin_conv_comp();
@@ -11,7 +12,6 @@ _nowarn_begin_conv_comp();
 _nowarn_end_conv_comp();
 _nowarn_end_gcc();
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("UTF-8 Iteration (Valid)", "[sys.Text][codepoint_iter]")
 {
     sys::str s = u8"A\u00A2\u20AC\U00010348";
@@ -38,7 +38,6 @@ TEST_CASE("UTF-8 Iteration (Valid)", "[sys.Text][codepoint_iter]")
     CHECK(it == end);
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("UTF-16 Iteration (Valid)", "[sys.Text][codepoint_iter]")
 {
     sys::str16 s = u"A\u00A2\u20AC\U00010348";
@@ -99,4 +98,5 @@ TEST_CASE("Dereference Stability", "[sys.Text][codepoint_iter]")
     CHECK(*it == U'A');
 }
 
+// NOLINTEND(readability-function-cognitive-complexity)
 // NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)

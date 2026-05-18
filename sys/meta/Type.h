@@ -6,8 +6,19 @@
 #include <cstddef>
 #include <tuple>
 #include <type_traits>
+#include <utility> // NOLINT(misc-include-cleaner)
 
 #include <meta/Properties.h>
+
+/// @def _decltype_of(var)
+/// @ingroup sys
+/// @brief `std::remove_cvref_t<decltype(var)>`
+#define _decltype_of(var) std::remove_cvref_t<decltype(var)>
+
+/// @def _forward(var)
+/// @ingroup sys
+/// @brief `std::forward<decltype(var)>(var)`
+#define _forward(var) std::forward<decltype(var)>(var)
 
 namespace sys::meta
 {
@@ -32,7 +43,13 @@ namespace sys::meta
     /// @ingroup sys
     /// @brief Metadata for some type.
     template <typename T>
-    struct /* [[sys::static]] */ type final : meta_type
+    struct /* [[sys::static]] */ type final : is_unqualified_prop<std::same_as<T, std::remove_cvref_t<T>>>,
+                                              is_const_prop<std::is_const_v<T>>,
+                                              is_volatile_prop<std::is_volatile_v<T>>,
+                                              is_lvalue_prop<std::is_lvalue_reference_v<T>>,
+                                              is_rvalue_prop<std::is_rvalue_reference_v<T>>,
+                                              is_ref_prop<std::is_reference_v<T>>,
+                                              is_array_prop<std::is_array_v<T>>
     {
     private:
         template <typename, template <typename...> class>
@@ -196,26 +213,6 @@ namespace sys::meta
             static consteval bool value() { return true; }
         };
     public:
-        /// @brief Whether `T` is unqualified, either by `cv` or reference.
-        static consteval bool is_unqualified() { return std::same_as<T, std::remove_cvref_t<T>>; }
-
-        /// @brief Whether `T` is `const`.
-        static consteval bool is_const() { return std::is_const_v<T>; }
-        /// @brief Whether `T` is `volatile`.
-        static consteval bool is_volatile() { return std::is_volatile_v<T>; }
-        /// @brief Whether `T` is `const` or `volatile`.
-        static consteval bool is_cv_qualified() { return std::is_const_v<T> || std::is_volatile_v<T>; }
-
-        /// @brief Whether `T` is a `lvalue`.
-        static consteval bool is_lvalue() { return std::is_lvalue_reference_v<T>; }
-        /// @brief Whether `T` is a `rvalue`.
-        static consteval bool is_rvalue() { return std::is_rvalue_reference_v<T>; }
-        /// @brief Whether `T` is either reference type.
-        static consteval bool is_ref() { return std::is_reference_v<T>; }
-
-        /// @brief Whether `T` is a C-array.
-        static consteval bool is_array() { return std::is_array_v<T>; }
-
         /// @brief Whether `T` is defined from `Template`.
         template <template <typename...> class Template>
         static consteval bool is_from()

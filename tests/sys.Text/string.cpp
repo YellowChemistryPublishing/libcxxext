@@ -3,6 +3,7 @@
 #include <utility>
 
 // NOLINTBEGIN(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)
+// NOLINTBEGIN(readability-function-cognitive-complexity)
 
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
@@ -131,7 +132,6 @@ TEST_CASE("Iterator Boundaries", "[sys.Text][string][iter]")
     CHECK(*(s.end() - 1z) == u8'c');
 }
 
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("ASCII String Format", "[sys.Text][string][format]")
 {
     CHECK(std::format("{}", sys::str(u8"beans")) == "beans");
@@ -146,7 +146,6 @@ TEST_CASE("ASCII String Format", "[sys.Text][string][format]")
     CHECK(std::format(L"{}", sys::cstr("beans")) == L"beans");
     CHECK(std::format(L"{}", sys::wstr(L"beans")) == L"beans");
 }
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 TEST_CASE("Multibyte Unicode String Format", "[sys.Text][string][format]")
 {
     CHECK(std::format("{}", sys::cstr("A\u00A2\u20AC\U00010348")) == "A\u00A2\u20AC\U00010348");
@@ -172,4 +171,5 @@ TEST_CASE("String Format Specifiers", "[sys.Text][string][format]")
     CHECK(std::format("{:.3}", sys::str(u8"pumpkin")) == "pum");
 }
 
+// NOLINTEND(readability-function-cognitive-complexity)
 // NOLINTEND(bugprone-throwing-static-initialization, cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, misc-include-cleaner)
