@@ -450,7 +450,7 @@ namespace sys
         }
 
         /// @brief Take the error of a bad result.
-        /// @pre `*this == false`
+        /// @pre `!*this == true`
         [[nodiscard, clang::callable_when("consumed"), clang::set_typestate(unknown)]] constexpr Err err()
         requires (!std::same_as<Err, void> /* Result can hold an error and ... */ &&
                   (!meta::type<Err>::is_lvalue() /* `Err` is non-reference, otherwise ... */ || meta::type<Err>::is_lvalue() /* `Err` is reference and `other` is not xvalue. */))
@@ -459,7 +459,7 @@ namespace sys
             return this->err(unsafe);
         }
         /// @brief Take the error of a bad result.
-        /// @pre `*this == false`
+        /// @pre `!*this == true`
         [[clang::set_typestate(consumed)]] constexpr Err expect_err()
         {
             _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!"); // LCOV_EXCL_BR_LINE
@@ -545,7 +545,7 @@ namespace sys
             this->status = internal::result_status::empty;
         }
         /// @brief Expects the result to be bad.
-        /// @pre `*this == false`
+        /// @pre `!*this == true`
         [[clang::set_typestate(consumed)]] void expect_err()
         {
             _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!"); // LCOV_EXCL_BR_LINE
@@ -631,7 +631,7 @@ namespace sys::internal
         }
 
         /// @brief Expects the result to be bad.
-        /// @pre `*this == false`
+        /// @pre `!*this == true`
         [[clang::set_typestate(consumed)]] void expect_err() const
         {
             _contract_assert(!*this, "Taking error for a good or empty result!"); // LCOV_EXCL_BR_LINE

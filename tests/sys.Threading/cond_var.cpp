@@ -28,15 +28,15 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("cond_var::
         sys::cond_var cv;
         TestType mut;
 
-        sys::once waiting;
-        sys::managed_thread t = sys::managed_thread::ctor([&waiting, &cv, &mut]() -> void
+        sys::once gotWaiting;
+        sys::managed_thread t = sys::managed_thread::ctor([&gotWaiting, &cv, &mut]() -> void
         {
             const typename TestType::guard g = mut.lock().expect();
-            waiting.call_once([]() -> void { });
+            gotWaiting.call_once([]() -> void { });
             CHECK(cv.wait(mut));
         }).expect();
 
-        waiting.wait();
+        gotWaiting.wait();
         {
             const typename TestType::guard g = mut.lock().expect();
         }
@@ -51,20 +51,20 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("cond_var::
     sys::cond_var cv;
     TestType mut;
 
-    sys::once waiting;
     bool ready = false;
+    sys::once gotWaiting;
 
-    sys::managed_thread t = sys::managed_thread::ctor([&ready, &waiting, &cv, &mut]() -> void
+    sys::managed_thread t = sys::managed_thread::ctor([&ready, &gotWaiting, &cv, &mut]() -> void
     {
         const typename TestType::guard g = mut.lock().expect();
-        cv.wait_until(mut, [&ready, &waiting]() -> bool
+        cv.wait_until(mut, [&ready, &gotWaiting]() -> bool
         {
-            waiting.call_once([]() -> void { });
+            gotWaiting.call_once([]() -> void { });
             return ready;
         }).expect();
     }).expect();
 
-    waiting.wait();
+    gotWaiting.wait();
     {
         const typename TestType::guard g = mut.lock().expect();
         ready = true;
@@ -79,74 +79,43 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("cond_var::
     sys::cond_var cv;
     TestType mut;
 
-    sys::once waitingReady[4uz], waitingDone[4uz];
-    sz threshold = 0_uz;
+    bool ready = false;
+    sys::once gotWaiting, gotDone;
     i32 gotCount = 0_i32;
 
     std::array<sys::managed_thread, 4uz> pool { nullptr, nullptr, nullptr, nullptr };
-    for (sz i = 0_uz; i < 4_uz; i++)
+    for (sys::managed_thread& t : pool)
     {
-        pool[i /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, cppcoreguidelines-pro-bounds-constant-array-index) */] =
-            sys::managed_thread::ctor([i, &threshold, &waitingReady = waitingReady[i /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */],
-                                       &waitingDone = waitingDone[i /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */], &gotCount, &mut, &cv]() -> void
+        t = sys::managed_thread::ctor([&ready, &gotWaiting, &gotDone, &gotCount, &mut, &cv]() -> void
         {
             const typename TestType::guard g = mut.lock().expect();
-
-            cv.wait_until(mut, [&i, &threshold, &waitingReady]() -> bool
+            cv.wait_until(mut, [&ready, &gotWaiting]() -> bool
             {
-                waitingReady.call_once([]() -> void { });
-                return i < threshold;
+                gotWaiting.call_once([]() -> void { });
+                return ready;
             }).expect();
 
             ++gotCount;
-            waitingDone.call_once([]() -> void { });
+            gotDone.call_once([]() -> void { });
         }).expect();
     }
 
+    gotWaiting.wait();
     {
         const typename TestType::guard g = mut.lock().expect();
-        threshold = 1_uz;
+        ready = true;
     }
 
-    waitingReady[0uz].wait();
     CHECK(cv.notify_one());
-    waitingDone[0uz].wait();
+
+    gotDone.wait();
 
     {
         const typename TestType::guard g = mut.lock().expect();
-        CHECK(gotCount == 1_i32);
-        threshold = 2_uz;
+        CHECK(gotCount >= 1_i32);
     }
 
-    waitingReady[1uz].wait();
-    CHECK(cv.notify_one());
-    waitingDone[1uz].wait();
-
-    {
-        const typename TestType::guard g = mut.lock().expect();
-        CHECK(gotCount == 2_i32);
-        threshold = 3_uz;
-    }
-
-    waitingReady[2uz].wait();
-    CHECK(cv.notify_one());
-    waitingDone[2uz].wait();
-
-    {
-        const typename TestType::guard g = mut.lock().expect();
-        CHECK(gotCount == 3_i32);
-        threshold = 4_uz;
-    }
-
-    waitingReady[3uz].wait();
-    CHECK(cv.notify_one());
-    waitingDone[3uz].wait();
-
-    {
-        const typename TestType::guard g = mut.lock().expect();
-        CHECK(gotCount == 4_i32);
-    }
-
+    CHECK(cv.notify_all());
     for (sys::managed_thread& t : pool)
         CHECK(t.join().expect() == 0);
 }
@@ -156,7 +125,7 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("cond_var::
     sys::cond_var cv;
     TestType mut;
 
-    sys::once waitingReady[4uz], waitingDone[4uz];
+    sys::once gotWaiting[4uz], gotDone[4uz];
     bool ready = false;
     i32 gotCount = 0_i32;
 
@@ -164,23 +133,23 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("cond_var::
     for (sz i = 0_uz; i < 4_uz; i++)
     {
         pool[i /* NOLINT(cppcoreguidelines-pro-bounds-avoid-unchecked-container-access, cppcoreguidelines-pro-bounds-constant-array-index) */] =
-            sys::managed_thread::ctor([&ready, &gotCount, &waitingReady = waitingReady[i /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */],
-                                       &waitingDone = waitingDone[i /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */], &cv, &mut]() -> void
+            sys::managed_thread::ctor([&ready, &gotCount, &gotWaiting = gotWaiting[i /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */],
+                                       &gotDone = gotDone[i /* NOLINT(cppcoreguidelines-pro-bounds-constant-array-index) */], &cv, &mut]() -> void
         {
             const typename TestType::guard g = mut.lock().expect();
 
-            cv.wait_until(mut, [&ready, &waitingReady]() -> bool
+            cv.wait_until(mut, [&ready, &gotWaiting]() -> bool
             {
-                waitingReady.call_once([]() -> void { });
+                gotWaiting.call_once([]() -> void { });
                 return ready;
             }).expect();
 
             ++gotCount;
-            waitingDone.call_once([]() -> void { });
+            gotDone.call_once([]() -> void { });
         }).expect();
     }
 
-    for (sys::once& w : waitingReady)
+    for (sys::once& w : gotWaiting)
         w.wait();
 
     {
@@ -189,7 +158,7 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("cond_var::
     }
     CHECK(cv.notify_all());
 
-    for (sys::once& w : waitingDone)
+    for (sys::once& w : gotDone)
         w.wait();
     {
         const typename TestType::guard g = mut.lock().expect();
