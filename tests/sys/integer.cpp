@@ -154,6 +154,7 @@ TEST_CASE("operator+(const integer&, ...), operator-(const integer&, ...), opera
     CHECK(-1_i32 / 0_i32 == i32::lowest());
     CHECK(i32::lowest() / -1_i32 == i32::highest());
     CHECK((i32::lowest() + 1_i32) / -1_i32 == i32::highest());
+    CHECK(u32::lowest() / u32::highest() == 0_u32);
     CHECK(5_i32 % 2_i32 == 1_i32);
     CHECK(12_i32 % 0_i32 == 12_i32);
 

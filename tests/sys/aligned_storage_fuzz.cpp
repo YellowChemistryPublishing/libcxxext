@@ -22,7 +22,7 @@ _nowarn_end_gcc();
 
 TEST_CASE("[[fuzz]] sys::aligned_storage<...>", "[fuzz][sys][aligned_storage]")
 {
-    CHECK(rc::check("Aligned storage writes match input data.", [](const std::array<int64_t, 1024uz /* NOLINT(readability-magic-numbers) */>& val) -> void
+    CHECK(rc::check([](const std::array<int64_t, 1024uz /* NOLINT(readability-magic-numbers) */>& val) -> void
     {
         sys::aligned_storage<std::array<int64_t, 1024uz /* NOLINT(readability-magic-numbers) */>, std::array<uint64_t, 2048uz /* NOLINT(readability-magic-numbers) */>,
                              std::max_align_t>

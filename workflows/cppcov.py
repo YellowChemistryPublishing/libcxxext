@@ -58,7 +58,7 @@ def main(argv: List[str]) -> None:
         help="Filter for files to exclude from analysis.",
         metavar="",
         required=False,
-        default="",
+        default=None,
     )
     parser.add_argument(
         "-v",
@@ -85,7 +85,7 @@ def main(argv: List[str]) -> None:
             ["--filter", args.regex_path_filter]
             + (
                 ["--exclude", args.regex_path_exclude]
-                if args.regex_path_exclude
+                if args.regex_path_exclude is not None
                 else []
             )
             + [

@@ -182,17 +182,27 @@ namespace sys
 
                 return integer::highest();
             }
-            else if (a == integer::lowest() && b == -_as(1, For)) // LCOV_EXCL_BR_LINE
-                return integer::highest();
             else [[likely]]
+            {
+                if constexpr (IBuiltinIntegerSigned<For>)
+                    if (a == integer::lowest() && b == -_as(1, For)) [[unlikely]]
+                        return integer::highest();
+
                 return integer(_as(a.underlying / b.underlying, For));
+            }
         }
         [[nodiscard]] friend constexpr integer operator%(integer a, integer b) noexcept
         {
             if (b.underlying == 0) [[unlikely]]
                 return a;
             else [[likely]]
+            {
+                if constexpr (IBuiltinIntegerSigned<For>)
+                    if (a == integer::lowest() && b == -_as(1, For)) [[unlikely]]
+                        return integer(_as(0, For));
+
                 return integer(_as(a.underlying % b.underlying, For));
+            }
         }
 
         [[nodiscard]] constexpr integer operator~() const noexcept { return integer(_as(~this->u(), For), unsafe); }
