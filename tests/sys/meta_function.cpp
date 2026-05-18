@@ -1,4 +1,5 @@
-// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-const-correctness, misc-include-cleaner, readability-function-cognitive-complexity)
+// ^ `misc-const-correctness` because broken clang-tidy on Linux runner.
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
@@ -111,4 +112,4 @@ TEST_CASE("IFunc<...>", "[sys][IFunc]")
     STATIC_CHECK_FALSE(sys::IFunc<example_functor, void()>);
 }
 
-// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner, readability-function-cognitive-complexity)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-const-correctness, misc-include-cleaner, readability-function-cognitive-complexity)

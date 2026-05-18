@@ -49,8 +49,6 @@ elseif(MSVC)
 
         /permissive- /W4 /WX
 
-        /fp:fast
-
         /wd4324 /wd5030
 
         /w14242 /w14254 /w14263 /w14265 /w14287 /w14296 /w14311 /w14545

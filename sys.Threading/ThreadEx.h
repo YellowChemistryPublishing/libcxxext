@@ -189,43 +189,7 @@ namespace sys
         /// Otherwise, `.join()` returns `0`.
         template <typename Func>
         requires IFunctionObject<std::decay_t<Func>> && INothrowDestructible<std::decay_t<Func>>
-        static result<managed_thread, threading_error> ctor(Func&& func) noexcept(INothrowConstructibleFrom<std::decay_t<Func>, decltype(_forward(func))>)
-        {
-            internal::thread_handle th = nullptr;
-
-            std::decay_t<Func>* f = [&]() noexcept(INothrowConstructibleFrom<std::decay_t<Func>, decltype(_forward(func))>) -> std::decay_t<Func>*
-            { return new(std::nothrow) std::decay_t<Func>(_forward(func)) /* NOLINT(cppcoreguidelines-owning-memory)*/; }(); // LCOV_EXCL_BR_LINE
-            _retif(threading_error::oom, !f);
-
-            sys::optional_destructor onFail = [f]() noexcept -> void { ::operator delete(f /* NOLINT(cppcoreguidelines-owning-memory) */, std::nothrow); }; // LCOV_EXCL_BR_LINE
-
-            _nowarn_begin_one_msvc(4702);
-            if (th.create([](void* arg) noexcept -> int
-            {
-                int ret = 0; // NOLINT(misc-const-correctness): Not on the other `constexpr` branch!
-                const std::decay_t<Func>* func = _as(arg, std::decay_t<Func>*);
-                _defer([func]() noexcept -> void { delete func /* NOLINT(cppcoreguidelines-owning-memory) */; }); // LCOV_EXCL_BR_LINE
-
-                try
-                {
-                    if constexpr (std::convertible_to<std::invoke_result_t<std::decay_t<Func>>, int>)
-                        ret = _as((*func)(), int); // LCOV_EXCL_BR_LINE
-                    else
-                        (void)(*func)();
-                }
-                catch (...)
-                {
-                    return sys::bsentinel<int>();
-                }
-
-                return ret;
-            }, _as(f, void*), unsafe) != internal::threading_error::ok)
-                return threading_error::init_failed;
-            _nowarn_end_msvc();
-
-            onFail.clear();
-            return managed_thread(th, unsafe);
-        }
+        static result<managed_thread, threading_error> ctor(Func&& func) noexcept(INothrowConstructibleFrom<std::decay_t<Func>, decltype(_forward(func))>);
 
         /// @brief Whether this managed thread is valid (i.e. non-empty).
         [[nodiscard]] explicit operator bool() const noexcept { return _as(this->th, bool); }
@@ -257,6 +221,51 @@ namespace sys
 
         friend void swap(managed_thread& a, managed_thread& b) noexcept { std::swap(a.th, b.th); }
     };
+
+    /// @brief Trampoline off a `sys::managed_thread` executing `func`.
+    /// @details
+    /// If `func()` returns exactly `int`, its successful invocation produces `.join() == func()`.
+    /// If `func()` throws, the result of `.join()` is `sys::bsentinel<int>()`.
+    /// Otherwise, `.join()` returns `0`.
+    template <typename Func>
+    requires IFunctionObject<std::decay_t<Func>> && INothrowDestructible<std::decay_t<Func>>
+    inline result<managed_thread, threading_error> managed_thread::ctor(Func&& func) noexcept(INothrowConstructibleFrom<std::decay_t<Func>, decltype(_forward(func))>)
+    {
+        internal::thread_handle th = nullptr;
+
+        std::decay_t<Func>* f = [&]() noexcept(INothrowConstructibleFrom<std::decay_t<Func>, decltype(_forward(func))>) -> std::decay_t<Func>*
+        { return new(std::nothrow) std::decay_t<Func>(_forward(func)) /* NOLINT(cppcoreguidelines-owning-memory)*/; }(); // LCOV_EXCL_BR_LINE
+        _retif(threading_error::oom, !f);
+
+        sys::optional_destructor onFail = [f]() noexcept -> void { ::operator delete(f /* NOLINT(cppcoreguidelines-owning-memory) */, std::nothrow); }; // LCOV_EXCL_BR_LINE
+
+        _nowarn_begin_one_msvc(4702);
+        if (th.create([](void* arg) noexcept -> int
+        {
+            int ret = 0; // NOLINT(misc-const-correctness): Not on the other `constexpr` branch!
+            const std::decay_t<Func>* func = _as(arg, std::decay_t<Func>*);
+            _defer([func]() noexcept -> void { delete func /* NOLINT(cppcoreguidelines-owning-memory) */; }); // LCOV_EXCL_BR_LINE
+
+            try
+            {
+                if constexpr (std::convertible_to<std::invoke_result_t<std::decay_t<Func>>, int>)
+                    ret = _as((*func)(), int); // LCOV_EXCL_BR_LINE
+                else
+                    (void)(*func)();
+            }
+            catch (...)
+            {
+                return sys::bsentinel<int>();
+            }
+
+            return ret;
+        }, _as(f, void*), unsafe) != internal::threading_error::ok)
+            return threading_error::init_failed;
+        _nowarn_end_msvc();
+
+        onFail.clear();
+        return managed_thread(th, unsafe);
+    }
 
     /// @ingroup sys_threading
     /// @brief Nullable-value specialization for `sys::result<sys::managed_thread, void>`.

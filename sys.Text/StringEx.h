@@ -463,6 +463,12 @@ namespace sys
                     meta::generic_container_adaptor(ret).append_back(c);
                 return ret;
             }
+            if (delimiter.size() > this->size())
+            {
+                Container ret;
+                meta::generic_container_adaptor(ret).append_back(*this);
+                return ret;
+            }
 
             Container ret;
             auto from = this->begin();
