@@ -189,13 +189,13 @@ namespace sys
         /// Otherwise, `.join()` returns `0`.
         template <typename Func>
         requires IFunctionObject<std::decay_t<Func>> && INothrowDestructible<std::decay_t<Func>>
-        static auto ctor(Func&& func) noexcept(INothrowConstructibleFrom<std::decay_t<Func>, decltype(_forward(func))>) -> result<managed_thread, threading_error>
+        static auto ctor(Func&& func) noexcept(INothrowConstructibleFrom<std::decay_t<Func>, decltype(_forward(func))>)
         {
             internal::thread_handle th = nullptr;
 
             std::decay_t<Func>* f = [&]() noexcept(INothrowConstructibleFrom<std::decay_t<Func>, decltype(_forward(func))>) -> std::decay_t<Func>*
             { return new(std::nothrow) std::decay_t<Func>(_forward(func)) /* NOLINT(cppcoreguidelines-owning-memory)*/; }(); // LCOV_EXCL_BR_LINE
-            _retif(threading_error::oom, !f);
+            _retif((result<managed_thread, threading_error>(threading_error::oom)), !f);
 
             sys::optional_destructor onFail = [f]() noexcept -> void { ::operator delete(f /* NOLINT(cppcoreguidelines-owning-memory) */, std::nothrow); }; // LCOV_EXCL_BR_LINE
 
@@ -220,11 +220,11 @@ namespace sys
 
                 return ret;
             }, _as(f, void*), unsafe) != internal::threading_error::ok)
-                return threading_error::init_failed;
+                return result<managed_thread, threading_error>(threading_error::init_failed);
             _nowarn_end_msvc();
 
             onFail.clear();
-            return managed_thread(th, unsafe);
+            return result<managed_thread, threading_error>(managed_thread(th, unsafe));
         }
 
         /// @brief Whether this managed thread is valid (i.e. non-empty).

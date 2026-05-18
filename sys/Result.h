@@ -207,9 +207,7 @@ namespace sys
     /// @ingroup sys
     /// @brief Concept for types that can be stored in a result.
     template <typename T>
-    concept IResultStorable = !requires {
-        { sizeof(T) } -> std::same_as<size_t>; /* Allow declaration with incomplete type. */
-    } || requires {
+    concept IResultStorable = requires {
         requires !std::same_as<std::remove_cvref_t<T>, std::nullptr_t>;
         requires !std::same_as<std::remove_cvref_t<T>, decltype(error_tag)>;
         requires meta::type<T>::is_lvalue() || std::same_as<T, void> ||
