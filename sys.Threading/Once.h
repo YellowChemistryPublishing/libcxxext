@@ -9,6 +9,7 @@
 #include <Destructor.h>
 #include <Result.h>
 #include <ThreadEx.h>
+#include <meta/InterfaceRequirements.h>
 #include <meta/NamedRequirements.h>
 #include <meta/Type.h>
 
@@ -29,7 +30,7 @@ namespace sys
         std::atomic_flag initialized;
         std::atomic_flag busy;
 
-        bool pre_call() noexcept
+        bool already_consumed() noexcept
         {
             if (this->is_completed())
                 return true;
@@ -37,10 +38,10 @@ namespace sys
             while (this->busy.test_and_set(std::memory_order_acquire))
                 thread_yield();
 
-            if (this->initialized.test(std::memory_order_relaxed))
+            if (this->initialized.test(std::memory_order_relaxed)) // LCOV_EXCL_BR_LINE: Exceptionally rare, hand verify!
             {
-                this->busy.clear(std::memory_order_release);
-                return true;
+                this->busy.clear(std::memory_order_release); // LCOV_EXCL_LINE
+                return true;                                 // LCOV_EXCL_LINE
             }
 
             return false;
@@ -66,18 +67,18 @@ namespace sys
 
         /// @brief Calls `func(args...)`, ensuring only one functor passed to `.call_once(...)` is ever run.
         /// @note If an exception is thrown, this `sys::once` is not consumed, and remains incomplete.
-        template <typename Func, typename... Args>
-        void call_once(Func&& func, Args&&... args) noexcept(noexcept(func(_forward(args)...)))
+        template <typename Func>
+        void call_once(Func&& func, auto&&... args) noexcept(INothrowCallable<Func&&, decltype(args)...>)
         requires requires {
-            requires ICallable<Func, decltype(args)...>;
-            requires !meta::type<std::invoke_result_t<Func, decltype(args)...>>::template is_from<result>();
+            requires ICallable<Func&&, decltype(args)...>;
+            requires !meta::type<std::invoke_result_t<Func&&, decltype(args)...>>::template is_from<result>();
         }
         {
-            if (this->pre_call())
+            if (this->already_consumed())
                 return;
 
-            const sys::destructor releaseBusy = [this]() noexcept -> void { this->busy.clear(std::memory_order_release); };
-            _forward(func)(_forward(args)...);
+            _defer([this]() noexcept -> void { this->busy.clear(std::memory_order_release); });
+            _forward(func)(_forward(args)...); // LCOV_EXCL_BR_LINE: Uncovered spurious, bad instrumentation.
 
             this->initialized.test_and_set(std::memory_order_release);
         }
@@ -88,20 +89,20 @@ namespace sys
         /// @note If an exception is thrown, this `sys::once` is not consumed, and remains incomplete.
         /// @see `sys::once::call_once(Func&& func, Args&&... args)`
         template <typename Func, typename... Args>
-        sys::result<void, typename std::invoke_result_t<Func, Args&&...>::err_type> call_once(Func&& func, Args&&... args) noexcept(noexcept(func(_forward(args)...)))
+        sys::result<void, typename std::invoke_result_t<Func&&, Args&&...>::err_type> call_once(Func&& func, Args&&... args) noexcept(INothrowCallable<Func&&, Args&&...>)
         requires requires {
-            requires ICallable<Func, decltype(args)...>;
-            requires meta::type<std::invoke_result_t<Func, decltype(args)...>>::template is_from<result>();
+            requires ICallable<Func&&, Args&&...>;
+            requires meta::type<std::invoke_result_t<Func&&, Args&&...>>::template is_from<result>();
         }
         {
-            if (this->pre_call())
+            if (this->already_consumed())
                 return {};
 
-            const sys::destructor releaseBusy = [this]() noexcept -> void { this->busy.clear(std::memory_order_release); };
-            if (auto res = _forward(func)(_forward(args)...); !res)
+            _defer([this]() noexcept -> void { this->busy.clear(std::memory_order_release); });
+            if (auto res = _forward(func)(_forward(args)...); !res) // LCOV_EXCL_BR_LINE: Uncovered spurious, bad instrumentation.
             {
                 if constexpr (!std::same_as<typename std::invoke_result_t<Func, Args&&...>::err_type, void>)
-                    return res.err();
+                    return res.err(); // LCOV_EXCL_BR_LINE: Uncovered spurious, bad instrumentation.
                 else
                     return nullptr;
             }

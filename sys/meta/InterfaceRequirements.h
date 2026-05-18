@@ -15,7 +15,8 @@ namespace sys
     /// @ingroup sys
     /// @brief Interface for functor types that can be nothrow invoked.
     template <typename Func, typename... Args>
-    concept INothrowCallable = std::is_nothrow_invocable_v<Func, Args...>;
+    concept INothrowCallable = std::is_nothrow_invocable_v<Func, Args...> &&
+        (std::same_as<std::remove_cvref_t<std::invoke_result_t<Func, Args...>>, void> || std::is_nothrow_destructible_v<std::invoke_result_t<Func, Args...>>);
 
     template <typename T, typename... From>
     concept IConstructibleFrom = std::constructible_from<T, From...>;

@@ -75,3 +75,8 @@ namespace sys
     template <typename Func>
     optional_destructor(Func&&) -> optional_destructor<std::remove_reference_t<Func>>;
 } // namespace sys
+
+/// @def _defer(...)
+/// @ingroup sys
+/// @brief Defer a nothrow callable to execute at the end of the current scope, with a `sys::destructor<...>`.
+#define _defer(...) const ::sys::destructor _ppcat(_deferred, __LINE__) = (__VA_ARGS__);

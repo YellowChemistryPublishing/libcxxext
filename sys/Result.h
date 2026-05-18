@@ -20,45 +20,6 @@
 #include <meta/TypeSwitch.h>
 #include <traits/RecurringTemplate.h>
 
-// NOLINTBEGIN(bugprone-macro-parentheses)
-/// @def _res_movret(out_decl, res_xval)
-/// @ingroup sys
-/// @brief Initialize `out_decl` with `res_xval`, early-returning if `res_xval` is an error.
-#define _res_movret(out_decl, res_xval)              \
-    _nowarn_begin_one_clang(_clwarn_clang_consumed); \
-    auto _ppcat(_result, __LINE__) = res_xval;       \
-    if (!_ppcat(_result, __LINE__))                  \
-    {                                                \
-        return [](auto& res) -> auto                 \
-        {                                            \
-            if constexpr (requires { res.err(); })   \
-                return res.err();                    \
-            else                                     \
-                return nullptr;                      \
-        }(_ppcat(_result, __LINE__));                \
-    }                                                \
-    out_decl = _ppcat(_result, __LINE__).move();     \
-    _nowarn_end_clang();
-/// @def _res_movcoret(out_decl, res_xval)
-/// @ingroup sys
-/// @brief Initialize `out_decl` with `res_xval`, early-coroutine-returning if `res_xval` is an error.
-#define _res_movcoret(out_decl, res_xval)            \
-    _nowarn_begin_one_clang(_clwarn_clang_consumed); \
-    auto _ppcat(_result, __LINE__) = res_xval;       \
-    if (!_ppcat(_result, __LINE__))                  \
-    {                                                \
-        co_return [](auto& res) -> auto              \
-        {                                            \
-            if constexpr (requires { res.err(); })   \
-                return res.err();                    \
-            else                                     \
-                return nullptr;                      \
-        }(_ppcat(_result, __LINE__));                \
-    }                                                \
-    out_decl = _ppcat(_result, __LINE__).move();     \
-    _nowarn_end_clang();
-// NOLINTEND(bugprone-macro-parentheses)
-
 namespace sys::internal
 {
     /// @internal
@@ -517,8 +478,8 @@ namespace sys
             return func(std::move(*this));
         }
 
-        friend void swap(result& a, result& b) noexcept((meta::type<T>::is_lvalue() || (INothrowSwappable<T> && INothrowMoveConstructible<T>)) &&
-                                                        (meta::type<Err>::is_lvalue() || (INothrowSwappable<Err> && INothrowMoveConstructible<Err>)))
+        friend void swap(result& a,
+                         result& b) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>) && (meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>))
 
         {
             if ((b.status == internal::result_status::ok && sizeof(internal::result_storage_type<T>) < sizeof(internal::result_storage_type<Err>)) ||
@@ -708,3 +669,42 @@ namespace sys
         using internal::nullable_value_result<T*>::operator=;
     };
 } // namespace sys
+
+// NOLINTBEGIN(bugprone-macro-parentheses)
+/// @def _res_movret(out_decl, res_xval)
+/// @ingroup sys
+/// @brief Initialize `out_decl` with `res_xval`, early-returning if `res_xval` is an error.
+#define _res_movret(out_decl, res_xval)              \
+    _nowarn_begin_one_clang(_clwarn_clang_consumed); \
+    auto _ppcat(_result, __LINE__) = res_xval;       \
+    if (!_ppcat(_result, __LINE__))                  \
+    {                                                \
+        return [](auto& res) -> auto                 \
+        {                                            \
+            if constexpr (requires { res.err(); })   \
+                return res.err();                    \
+            else                                     \
+                return nullptr;                      \
+        }(_ppcat(_result, __LINE__));                \
+    }                                                \
+    out_decl = _ppcat(_result, __LINE__).move();     \
+    _nowarn_end_clang();
+/// @def _res_movcoret(out_decl, res_xval)
+/// @ingroup sys
+/// @brief Initialize `out_decl` with `res_xval`, early-coroutine-returning if `res_xval` is an error.
+#define _res_movcoret(out_decl, res_xval)            \
+    _nowarn_begin_one_clang(_clwarn_clang_consumed); \
+    auto _ppcat(_result, __LINE__) = res_xval;       \
+    if (!_ppcat(_result, __LINE__))                  \
+    {                                                \
+        co_return [](auto& res) -> auto              \
+        {                                            \
+            if constexpr (requires { res.err(); })   \
+                return res.err();                    \
+            else                                     \
+                return nullptr;                      \
+        }(_ppcat(_result, __LINE__));                \
+    }                                                \
+    out_decl = _ppcat(_result, __LINE__).move();     \
+    _nowarn_end_clang();
+// NOLINTEND(bugprone-macro-parentheses)

@@ -248,12 +248,12 @@ namespace sys
         constexpr explicit string(const sys::string<U>& other) : string(_as(other, std::basic_string_view<U>))
         { }
 
-        [[nodiscard]] bool empty() const { return this->str.empty(); }
-        [[nodiscard]] sz size() const { return this->str.size(); }
-        [[nodiscard]] sz capacity() const { return this->str.capacity(); }
-        [[nodiscard]] const T* c_str() const { return this->str.data(); }
-        [[nodiscard]] T* data() { return this->str.data(); }
-        [[nodiscard]] const T* data() const { return this->str.data(); }
+        [[nodiscard]] constexpr bool empty() const noexcept { return this->str.empty(); }
+        [[nodiscard]] constexpr sz size() const noexcept { return sz(this->str.size()); }
+        [[nodiscard]] constexpr sz capacity() const noexcept { return sz(this->str.capacity()); }
+        [[nodiscard]] constexpr const T* c_str() const noexcept { return this->str.data(); }
+        [[nodiscard]] constexpr T* data() noexcept { return this->str.data(); }
+        [[nodiscard]] constexpr const T* data() const noexcept { return this->str.data(); }
 
         [[nodiscard]] constexpr auto begin() const { return this->str.cbegin(); }
         [[nodiscard]] constexpr auto end() const { return this->str.cend(); }
@@ -496,7 +496,7 @@ namespace sys
                 if constexpr (ICharacter<_decltype_of(s)>)
                     totalSize += 1_uz;
                 else
-                    totalSize += std::size(s);
+                    totalSize += sz(std::size(s));
             }
             if (std::size(container) > 1)
             {

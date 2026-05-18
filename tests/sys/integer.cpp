@@ -101,11 +101,15 @@ TEST_CASE("operator==(const integer&, ...), operator!=(const integer&, ...), ope
     CHECK(x == *i64(x));
     CHECK(x != *i64(y));
     CHECK(x < *i64(y));
+    CHECK(x < 23ll);
     CHECK(x <= *i64(y));
     CHECK(x <= *-1_i64);
+    CHECK(x <= -1ll);
     CHECK_FALSE(x > *i64(y));
+    CHECK_FALSE(x > -1ll);
     CHECK_FALSE(x >= *i64(y));
     CHECK(x >= -1_i64);
+    CHECK(x >= -2ll);
 
     CHECK(*i64(x) == x);
     CHECK(*i64(x) != y);
@@ -148,6 +152,8 @@ TEST_CASE("operator+(const integer&, ...), operator-(const integer&, ...), opera
     CHECK(5_i32 / 2_i32 == 2_i32);
     CHECK(1_i32 / 0_i32 == i32::highest());
     CHECK(-1_i32 / 0_i32 == i32::lowest());
+    CHECK(i32::lowest() / -1_i32 == i32::highest());
+    CHECK((i32::lowest() + 1_i32) / -1_i32 == i32::highest());
     CHECK(5_i32 % 2_i32 == 1_i32);
     CHECK(12_i32 % 0_i32 == 12_i32);
 

@@ -2,19 +2,17 @@
 
 /// @file
 
-#define NOMINMAX 1 // NOLINT(readability-identifier-naming)
-#include <tinycthread.h>
-#undef NOMINMAX // NOLINT(misc-include-cleaner): Spurious.
-#ifdef call_once
-#undef call_once
-#endif
-
 #include <CompilerWarnings.h>
 #include <LanguageSupport.h>
 #include <Once.h>
 #include <ResourceGuard.h>
 #include <Result.h>
 #include <ThreadingErrors.h>
+
+#if !defined(_libcxxext_mock_sup_mut) || !_libcxxext_mock_sup_mut
+#include <sup/MutexHandle.h>
+#include <sup/ThreadingErrors.h>
+#endif
 
 namespace sys
 {
@@ -27,14 +25,14 @@ namespace sys
     template <bool IsRecursive>
     class [[clang::capability("mutex")]] ordinary_mutex final
     {
-        mtx_t mut {};
+        internal::mutex_handle mut = nullptr;
         once o;
 
         result<void> try_init() noexcept
         {
             return this->o.call_once([&]() noexcept -> sys::result<void>
             {
-                _retif(nullptr, mtx_init(&this->mut, _as(mtx_plain, unsigned) | _as(mtx_timed, unsigned) | _as(IsRecursive ? mtx_recursive : 0, unsigned)) != thrd_success);
+                _retif(nullptr, this->mut.create<IsRecursive>() != internal::threading_error::ok);
                 return {};
             });
         }
@@ -42,10 +40,10 @@ namespace sys
         /// @brief Run a possibly-failing, acquire routine.
         /// @pre `this->try_init() && this->o.is_completed()`
         /// @warning `unsafe` because `this` has preconditions.
-        template <int (*Acquire)(mtx_t*)>
-        bool acq(int& ret, decltype(unsafe)) noexcept
+        template <internal::threading_error (internal::mutex_handle::*Acquire)()>
+        bool acq(internal::threading_error& ret, decltype(unsafe)) noexcept
         {
-            return (ret = Acquire(&this->mut)) == thrd_success;
+            return (ret = (this->mut.*Acquire)()) == internal::threading_error::ok;
         }
     public:
         ordinary_mutex() noexcept = default;
@@ -54,7 +52,7 @@ namespace sys
         ~ordinary_mutex() noexcept
         {
             if (this->o.is_completed()) [[likely]]
-                mtx_destroy(&this->mut);
+                this->mut.destroy();
         }
 
         ordinary_mutex& operator=(const ordinary_mutex&) noexcept = delete;
@@ -74,9 +72,9 @@ namespace sys
         /// @warning `unsafe` because `this` has preconditions.
         result<void, threading_error> acquire(decltype(unsafe)) noexcept
         {
-            int ret = thrd_success;
+            internal::threading_error ret = internal::threading_error::ok;
             _retif(threading_error::init_failed, !this->try_init());
-            _retif(threading_error::operation_failed, !this->acq<&mtx_lock>(ret, unsafe));
+            _retif(threading_error::operation_failed, !this->acq<&internal::mutex_handle::lock>(ret, unsafe));
             return {};
         }
         /// @brief Try to acquire the lock on `this`, returning `threading_error::operation_failed` immediately if the lock is already held.
@@ -93,11 +91,10 @@ namespace sys
         /// @warning `unsafe` because `this` has preconditions.
         result<void, threading_error> try_acquire(decltype(unsafe)) noexcept
         {
+            internal::threading_error ret = internal::threading_error::ok;
             _retif(threading_error::init_failed, !this->try_init());
-
-            int ret = thrd_success;
-            _retif(threading_error::busy, !this->acq<&mtx_trylock>(ret, unsafe) && ret == thrd_busy);
-            _retif(threading_error::operation_failed, ret != thrd_success);
+            _retif(threading_error::busy, !this->acq<&internal::mutex_handle::try_lock>(ret, unsafe) && ret == internal::threading_error::busy);
+            _retif(threading_error::operation_failed, ret != internal::threading_error::ok);
             return {};
         }
         /// @brief Release the lock on `this`.
@@ -122,21 +119,21 @@ namespace sys
             _nowarn_begin_one_gcc("-Wterminate");
             _nowarn_begin_one_clang(_clwarn_clang_exceptions);
             _nowarn_begin_one_msvc(_clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does);
-            _contract_assert(this->o.is_completed(), "`.acquire()` never called!");
+            _contract_assert(this->o.is_completed(), "`.acquire()` never called!"); // LCOV_EXCL_BR_LINE
             _nowarn_end_msvc();
             _nowarn_end_clang();
             _nowarn_end_gcc();
 
-            _retif(threading_error::operation_failed, mtx_unlock(&this->mut) != thrd_success);
+            _retif(threading_error::operation_failed, this->mut.unlock() != internal::threading_error::ok);
             return {};
         }
     private:
-        static void release_guard(ordinary_mutex* m) noexcept /* NOLINT(bugprone-exception-escape) */
+        static void release_guard(ordinary_mutex& m) noexcept /* NOLINT(bugprone-exception-escape) */
         {
             _nowarn_begin_one_gcc("-Wterminate");
             _nowarn_begin_one_clang(_clwarn_clang_exceptions);
             _nowarn_begin_one_msvc(_clwarn_msvc_function_function_assumed_not_to_throw_an_exception_but_does);
-            _contract_assert(!m || m->release(unsafe), "If this happens we're genuinely cooked.");
+            _contract_assert(m.release(unsafe), "If this happens we're genuinely cooked."); // LCOV_EXCL_BR_LINE
             _nowarn_end_msvc();
             _nowarn_end_clang();
             _nowarn_end_gcc();
@@ -152,8 +149,8 @@ namespace sys
         {
             _retif(threading_error::init_failed, !this->try_init());
 
-            int ret = thrd_success;
-            _retif(threading_error::operation_failed, !this->acq<&mtx_lock>(ret, unsafe));
+            internal::threading_error ret = internal::threading_error::ok;
+            _retif(threading_error::operation_failed, !this->acq<&internal::mutex_handle::lock>(ret, unsafe));
             return guard(*this, unsafe);
         }
         /// @brief Try to lock this mutex and obtain a lock guard for it, if possible.
@@ -161,9 +158,9 @@ namespace sys
         {
             _retif(threading_error::init_failed, !this->try_init());
 
-            int ret = thrd_success;
-            _retif(threading_error::busy, !this->acq<&mtx_trylock>(ret, unsafe) && ret == thrd_busy);
-            _retif(threading_error::operation_failed, ret != thrd_success);
+            internal::threading_error ret = internal::threading_error::ok;
+            _retif(threading_error::busy, !this->acq<&internal::mutex_handle::try_lock>(ret, unsafe) && ret == internal::threading_error::busy);
+            _retif(threading_error::operation_failed, ret != internal::threading_error::ok);
             return guard(*this, unsafe);
         }
         // TODO(halloimdragon): `try_lock_for(...)`.

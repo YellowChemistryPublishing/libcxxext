@@ -23,7 +23,7 @@ namespace sys
     /// ...
     /// res.~T();
     /// @endcode
-    template <typename T, void (*Release)(T*) noexcept>
+    template <typename T, void (*Release)(T&) noexcept>
     struct [[clang::scoped_lockable]] resource_guard final
     {
     private:
@@ -38,7 +38,7 @@ namespace sys
         ~resource_guard() noexcept
         {
             if (this->resource)
-                Release(this->resource);
+                Release(*this->resource);
         }
 
         resource_guard& operator=(const resource_guard&) noexcept = delete;
@@ -47,6 +47,8 @@ namespace sys
             swap(*this, other);
             return *this;
         }
+
+        explicit operator bool() const noexcept { return this->resource; }
 
         friend void swap(resource_guard& a, resource_guard& b) noexcept { std::swap(a.resource, b.resource); }
     };

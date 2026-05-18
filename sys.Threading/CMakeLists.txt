@@ -1,9 +1,4 @@
 if(NOT TARGET sys.Threading)
-    set(TINYCTHREAD_DISABLE_TESTS ON CACHE INTERNAL "" FORCE)
-    set(TINYCTHREAD_INSTALL OFF CACHE INTERNAL "" FORCE)
-    set(CMAKE_POLICY_VERSION_MINIMUM 3.10)
-    add_subdirectory(../tinycthread "${CMAKE_BINARY_DIR}/tinycthread" EXCLUDE_FROM_ALL)
-
     file(GLOB SYS_THREAD_HEADERS CONFIGURE_DEPENDS "*.h")
 
     add_library(sys.Threading INTERFACE)
@@ -26,7 +21,7 @@ if(NOT TARGET sys.Threading)
     endif()
     target_link_libraries(sys.Threading
         INTERFACE
-        tinycthread
+        sys.PlatformSupport.Threading
         sys
         $<$<BOOL:${LIBCXXEXT_DEVELOPMENT_MODE}>:sys.BuildSupport.WarningsAsErrors>
         $<$<AND:$<CONFIG:Debug>,$<BOOL:${LIBCXXEXT_COVERAGE}>>:sys.BuildSupport.EnableCoverage>

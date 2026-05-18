@@ -348,8 +348,6 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("result<T, 
 
 TEST_CASE("swap(result<T, U>&, result<T, U>&)", "[sys][result]")
 {
-    using std::swap;
-
     {
         sys::result<i8, std::string> res1 = 1_i8;
         sys::result<i8, std::string> res2 = "err";
@@ -438,7 +436,6 @@ TEST_CASE("result<void, void>", "[sys][result]")
 
 TEST_CASE("result<T*, void>", "[sys][result]")
 {
-    using std::swap;
     int i = 0;
 
     {

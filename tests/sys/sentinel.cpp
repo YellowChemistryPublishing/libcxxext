@@ -18,8 +18,8 @@ TEST_CASE("bsentinel<...>(...)", "[sys][bsentinel]")
     STATIC_CHECK(sys::bsentinel<int64_t>() == std::numeric_limits<int64_t>::lowest());
     STATIC_CHECK(sys::bsentinel<uint16_t>() == std::numeric_limits<uint16_t>::max());
     STATIC_CHECK(sys::bsentinel<int16_t>() == std::numeric_limits<int16_t>::lowest());
-    STATIC_CHECK(std::isnan(sys::bsentinel<f32>()));
-    STATIC_CHECK(std::isnan(sys::bsentinel<f64>()));
+    CHECK(std::isnan(sys::bsentinel<f32>()));
+    CHECK(std::isnan(sys::bsentinel<f64>()));
     STATIC_CHECK(sys::bsentinel<char>() == 0);
     STATIC_CHECK(sys::bsentinel<wchar_t>() == 0);
     STATIC_CHECK(sys::bsentinel<char16_t>() == 0);

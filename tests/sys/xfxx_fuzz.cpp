@@ -17,7 +17,7 @@ _nowarn_end_gcc();
 
 #include <module/sys>
 
-TEST_CASE("`i16` => `lsb` + `msb` => `i16` is an invariant.", "[fuzz][sys][xfxx]")
+TEST_CASE("[[fuzz]] x_msb = hbfs16(x), x_lsb = lbfs16(x) => s16fb2(x_msb, x_lsb) == x", "[fuzz][sys][s16fb2][hbfs16][lbfs16]")
 {
     rc::check("`i16` => `lsb` + `msb` => `i16` is an invariant.",
               [](const int16_t val) -> void { RC_ASSERT(sys::s16fb2(sys::hbfs16(i16(val)), sys::lbfs16(i16(val))) == i16(val)); });

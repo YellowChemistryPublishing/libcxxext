@@ -1,4 +1,4 @@
-// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTBEGIN(bugprone-throwing-static-initialization, misc-const-correctness, misc-include-cleaner): `misc-const-correctness` because broken clang-tidy on Linux runner.
 #include <CompilerWarnings.h>
 _nowarn_begin_one_gcc(_clwarn_gcc_redundant_decls);
 
@@ -13,7 +13,7 @@ TEST_CASE("destructor::destructor(), optional_destructor::optional_destructor(),
 {
     sz called = 0_uz;
     {
-        const sys::destructor d1 = [&called]() noexcept -> void { called += 1_uz; };
+        _defer([&called]() noexcept -> void { called += 1_uz; });
         const sys::optional_destructor d2 = [&called]() noexcept -> void { called += 1_uz; };
         CHECK(called == 0_uz);
     }
@@ -22,7 +22,7 @@ TEST_CASE("destructor::destructor(), optional_destructor::optional_destructor(),
 
 TEST_CASE("optional_destructor::optional_destructor(optional_destructor&&), optional_destructor::operator=(optional_destructor&&)", "[sys][optional_destructor]")
 {
-    static sz called = 0_uz;
+    static /* NOLINT(misc-const-correctness) */ sz called = 0_uz;
 
     {
         sys::optional_destructor d1 = []() noexcept -> void { called += 1_uz; };
@@ -73,4 +73,4 @@ TEST_CASE("optional_destructor::clear()", "[sys][optional_destructor]")
     CHECK(called == 0_uz);
 }
 
-// NOLINTEND(bugprone-throwing-static-initialization, misc-include-cleaner)
+// NOLINTEND(bugprone-throwing-static-initialization, misc-const-correctness, misc-include-cleaner)

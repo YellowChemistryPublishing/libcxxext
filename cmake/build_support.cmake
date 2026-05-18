@@ -17,7 +17,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang|AppleClang)$")
         $<$<OR:$<COMPILE_LANG_AND_ID:C,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>>:
         -Wno-extra-semi -Wno-c++98-compat-extra-semi -Wno-c2y-extensions
         -Wimplicit-fallthrough -Wdocumentation -Wdangling -Wsometimes-uninitialized>
-        $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fconcepts-diagnostics-depth=4 -Wnoexcept -Wnon-virtual-dtor -Wno-attributes>
+        $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fdiagnostics-all-candidates -fconcepts-diagnostics-depth=4 -Wnoexcept -Wnon-virtual-dtor -Wno-attributes>
         $<$<COMPILE_LANG_AND_ID:CXX,Clang,AppleClang>:-Wconsumed -Wexceptions>
         # TODO(halloimdragon): Add `-Wunsafe-buffer-usage` for clang.
 
@@ -100,4 +100,12 @@ target_compile_options(sys.BuildSupport.UndefinedSanitizer INTERFACE
 target_link_options(sys.BuildSupport.UndefinedSanitizer INTERFACE
     $<$<OR:$<LINK_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<LINK_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:
     -fsanitize=undefined,implicit-conversion,nullability -fsanitize-recover=undefined,float-cast-overflow,float-divide-by-zero>
+)
+
+add_library(sys.BuildSupport.LeakSanitizer INTERFACE)
+target_compile_options(sys.BuildSupport.LeakSanitizer INTERFACE
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-fsanitize=leak>
+)
+target_link_options(sys.BuildSupport.LeakSanitizer INTERFACE
+    $<$<OR:$<LINK_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<LINK_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-fsanitize=leak>
 )

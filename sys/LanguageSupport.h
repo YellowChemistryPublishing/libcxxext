@@ -217,7 +217,7 @@ namespace sys
             catch (...)                                                                                                                  \
             { }                                                                                                                          \
                                                                                                                                          \
-            volatile uint_least64_t i = 5'000'000'000;                                                                                   \
+            volatile uint_least64_t i = 2'500'000'000;                                                                                   \
             while (i > 0)                                                                                                                \
                 i = i - 1;                                                                                                               \
                                                                                                                                          \

@@ -68,12 +68,12 @@ namespace sys
     template <sys::IBuiltinInteger To>
     /* NOLINT(misc-use-internal-linkage) */ constexpr To bnumeric_cast(const sys::IBuiltinFloatingPoint auto value, decltype(unsafe)) noexcept
     {
-        if (value <= _as(std::numeric_limits<To>::lowest(), _decltype_of(value))) [[unlikely]]
+        if (std::isnan(value)) [[unlikely]] // Don't rearrange, MSVC will cook you on /fp:fast.
+            return sys::bsentinel<To>();
+        else if (value <= _as(std::numeric_limits<To>::lowest(), _decltype_of(value))) [[unlikely]]
             return std::numeric_limits<To>::lowest();
         else if (value >= _as(std::numeric_limits<To>::max(), _decltype_of(value))) [[unlikely]]
             return std::numeric_limits<To>::max();
-        else if (!std::isfinite(value)) [[unlikely]]
-            return sys::bsentinel<To>();
         else [[likely]]
             return To(value);
     }
@@ -89,7 +89,7 @@ namespace sys
             return To(value);
     }
     /// @ingroup sys
-    /// @brief Exact-value cast `From` to `To`, or error if the value is out of range.
+    /// @brief Truncating cast `From` to `To`, or error if the value is out of range.
     template <sys::IBuiltinInteger To>
     /* NOLINT(misc-use-internal-linkage) */ constexpr result<To> bnumeric_cast(const sys::IBuiltinFloatingPoint auto value) noexcept
     {
