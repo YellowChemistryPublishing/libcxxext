@@ -267,7 +267,7 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("result<T, 
     res = std::move(resFrom);
 
     CHECK_FALSE(resFrom /* NOLINT(bugprone-use-after-move) */.operator bool());
-    CHECK_FALSE(resFrom.operator!());
+    CHECK_FALSE(resFrom /* NOLINT(clang-analyzer-cplusplus.Move) */.operator!());
     CHECK_FALSE(res.operator bool());
     CHECK_FALSE(res.operator!());
 }
