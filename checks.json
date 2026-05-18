@@ -33,7 +33,7 @@
         {
             "checkset": "x86_64-linux-gcc-debug",
             "with":     {"run_on": "linux", "target_arch": "x86_64", "compiler_name": "gcc", "config": "Debug", "gen": "Unix Makefiles"},
-            "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"] }
+            "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppbuild"], "check:cpptest": ["check:cppbuild"], "check:cppcov": ["check:cpptest"] }
         },
         {
             "checkset": "x86_64-linux-gcc-relwithdebinfo",
@@ -53,7 +53,7 @@
         {
             "checkset": "i686-linux-gcc-debug",
             "with":     {"run_on": "linux", "target_arch": "i686", "compiler_name": "gcc", "config": "Debug", "gen": "Unix Makefiles"},
-            "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppconf"] }
+            "runs":     { "check:cppconf": [], "check:cppbuild": ["check:cppconf"], "check:cpplint": ["check:cppbuild"] }
         },
         {
             "checkset": "i686-linux-gcc-relwithdebinfo",
