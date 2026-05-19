@@ -31,9 +31,11 @@ if(LIBCXXEXT_EXPORT_PCH)
     include(cmake/stdc++.cmake)
 endif()
 
+add_subdirectory(sys.PlatformSupport.Alloc)
 add_subdirectory(sys.PlatformSupport.Threading)
 
 add_subdirectory(sys)
+add_subdirectory(sys.Alloc)
 add_subdirectory(sys.Containers)
 add_subdirectory(sys.Text)
 add_subdirectory(sys.Threading)

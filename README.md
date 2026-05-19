@@ -78,9 +78,11 @@ This project provides some universal tooling for C++, for upstream consumption.
 | `sys.BuildSupport.EnableCoverage`     | Interface target for enabling coverage instrumentation and data generation, if supported. |
 | `sys.BuildSupport.AddressSanitizer`   | Interface target for enabling `asan`, if supported.                                       |
 | `sys.BuildSupport.UndefinedSanitizer` | Interface target for enabling `ubsan`, if supported.                                      |
+| `sys.BuildSupport.LeakSanitizer`      | Interface target for enabling `lsan`, if supported.                                       |
 | `sys`                                 | Basic core functions and utilities.                                                       |
 | `sys.Containers`                      | Additional collections for data.                                                          |
 | `sys.Text`                            | Unicode-encoded string functionality.                                                     |
+| `sys.PlatformSupport.Threading`       | Default platform support library for `sys.Threading`.                                     |
 | `sys.Threading`                       | Generic thread support and tasks.                                                         |
 
 ## See Also
