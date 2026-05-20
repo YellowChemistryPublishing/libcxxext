@@ -9,7 +9,7 @@
 #include <Result.h>
 #include <ThreadingErrors.h>
 
-#if !defined(_libcxxext_mock_sup_mut) || !_libcxxext_mock_sup_mut
+#if !defined(_libcxxext_internal_mock_sup_mut) || !_libcxxext_internal_mock_sup_mut
 #include <sup/MutexHandle.h>
 #include <sup/ThreadingErrors.h>
 #endif

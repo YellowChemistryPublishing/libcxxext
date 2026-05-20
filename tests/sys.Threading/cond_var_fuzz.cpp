@@ -74,10 +74,10 @@ namespace sys::internal
     };
 } // namespace sys::internal
 
-#define _libcxxext_mock_sup_cv 1
+#define _libcxxext_internal_mock_sup_cv 1
 #include <module/sys.Threading>
 
-TEST_CASE("[[fuzz]] cond_var", "[sys.Threading][cond_var]")
+TEST_CASE("[[fuzz]] cond_var", "[fuzz][sys.Threading][cond_var]")
 {
     std::srand(_as(std::time({}), unsigned)) /* NOLINT(bugprone-random-generator-seed) */;
 

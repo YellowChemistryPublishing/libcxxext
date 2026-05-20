@@ -18,7 +18,7 @@ TEST_CASE("integer::...", "[sys][integer]")
 
     STATIC_CHECK_FALSE(u32::is_signed());
     STATIC_CHECK(i8::is_signed());
-    CHECK(u64::fixed_width() == sz(CHAR_BIT) * sz(sizeof(uint_least64_t)));
+    CHECK(u64::bits() == sz(CHAR_BIT) * sz(sizeof(uint_least64_t)));
     STATIC_CHECK(i8::highest() == 127_i8);      // NOLINT(readability-magic-numbers)
     STATIC_CHECK(i16::lowest() == i16(-32768)); // NOLINT(readability-magic-numbers)
     STATIC_CHECK(u8::ones() == 0b11111111_u8);  // NOLINT(readability-magic-numbers)

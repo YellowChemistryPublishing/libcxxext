@@ -17,8 +17,8 @@
 
 /// @internal
 /// @ingroup sys_internal
-/// @def _internal_pragma(...)
-#define _internal_pragma(...) _Pragma(#__VA_ARGS__)
+/// @def _libcxxext_internal_pragma(...)
+#define _libcxxext_internal_pragma(...) _Pragma(#__VA_ARGS__)
 
 /// @def _nowarn_begin_clang()
 /// @ingroup sys
@@ -116,13 +116,13 @@
 #if _libcxxext_compiler_clang
 
 #undef _nowarn_begin_clang
-#define _nowarn_begin_clang() _internal_pragma(clang diagnostic push) _internal_pragma(clang diagnostic ignored "-Wextra-semi")
+#define _nowarn_begin_clang() _libcxxext_internal_pragma(clang diagnostic push) _libcxxext_internal_pragma(clang diagnostic ignored "-Wextra-semi")
 #undef _nowarn_clang
-#define _nowarn_clang(compilerWarning) _internal_pragma(clang diagnostic ignored compilerWarning)
+#define _nowarn_clang(compilerWarning) _libcxxext_internal_pragma(clang diagnostic ignored compilerWarning)
 #undef _nowarn_begin_one_clang
 #define _nowarn_begin_one_clang(compilerWarning) _nowarn_begin_clang() _nowarn_clang(compilerWarning)
 #undef _nowarn_end_clang
-#define _nowarn_end_clang() _internal_pragma(clang diagnostic pop)
+#define _nowarn_end_clang() _libcxxext_internal_pragma(clang diagnostic pop)
 
 #undef _nowarn_begin_conv_comp
 #define _nowarn_begin_conv_comp()                              \
@@ -167,13 +167,13 @@
 #elif _libcxxext_compiler_gcc
 
 #undef _nowarn_begin_gcc
-#define _nowarn_begin_gcc() _internal_pragma(GCC diagnostic push)
+#define _nowarn_begin_gcc() _libcxxext_internal_pragma(GCC diagnostic push)
 #undef _nowarn_gcc
-#define _nowarn_gcc(compilerWarning) _internal_pragma(GCC diagnostic ignored compilerWarning)
+#define _nowarn_gcc(compilerWarning) _libcxxext_internal_pragma(GCC diagnostic ignored compilerWarning)
 #undef _nowarn_begin_one_gcc
 #define _nowarn_begin_one_gcc(compilerWarning) _nowarn_begin_gcc() _nowarn_gcc(compilerWarning)
 #undef _nowarn_end_gcc
-#define _nowarn_end_gcc() _internal_pragma(GCC diagnostic pop)
+#define _nowarn_end_gcc() _libcxxext_internal_pragma(GCC diagnostic pop)
 
 #undef _nowarn_begin_conv_comp
 #define _nowarn_begin_conv_comp()              \
@@ -210,13 +210,13 @@
 #elif _libcxxext_compiler_msvc
 
 #undef _nowarn_begin_msvc
-#define _nowarn_begin_msvc() _internal_pragma(warning(push))
+#define _nowarn_begin_msvc() _libcxxext_internal_pragma(warning(push))
 #undef _nowarn_msvc
-#define _nowarn_msvc(compilerWarning) _internal_pragma(warning(disable : compilerWarning))
+#define _nowarn_msvc(compilerWarning) _libcxxext_internal_pragma(warning(disable : compilerWarning))
 #undef _nowarn_begin_one_msvc
 #define _nowarn_begin_one_msvc(compilerWarning) _nowarn_begin_msvc() _nowarn_msvc(compilerWarning)
 #undef _nowarn_end_msvc
-#define _nowarn_end_msvc() _internal_pragma(warning(pop))
+#define _nowarn_end_msvc() _libcxxext_internal_pragma(warning(pop))
 
 #undef _nowarn_begin_conv_comp
 #define _nowarn_begin_conv_comp()                                                                                           \

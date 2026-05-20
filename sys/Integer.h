@@ -45,7 +45,7 @@ namespace sys
 
         [[nodiscard]] static consteval bool is_signed() noexcept { return IBuiltinIntegerSigned<For>; }
         template <typename T = integer<size_t>>
-        [[nodiscard]] static constexpr T fixed_width() noexcept(noexcept(T(sizeof(For) * CHAR_BIT)))
+        [[nodiscard]] static constexpr T bits() noexcept(noexcept(T(sizeof(For) * CHAR_BIT)))
         {
             return T(sizeof(For) * CHAR_BIT);
         }
@@ -213,21 +213,21 @@ namespace sys
         {
             if constexpr (IBuiltinIntegerSigned<For>)
                 if (b.underlying < 0) [[unlikely]]
-                    return integer(_as(a.u() >> _as((-std::max(b.underlying, _as(-integer::fixed_width<For>() + _as(1, For), For))), unsigned_t), For), unsafe) &
-                        integer(_as(-_as(b.underlying > -integer::fixed_width<For>(), signed_t), For), unsafe);
+                    return integer(_as(a.u() >> _as((-std::max(b.underlying, _as(-integer::bits<For>() + _as(1, For), For))), unsigned_t), For), unsafe) &
+                        integer(_as(-_as(b.underlying > -integer::bits<For>(), signed_t), For), unsafe);
 
-            return integer(_as(a.u() << std::min(b.u(), _as(integer::fixed_width<unsigned_t>() - _as(1, unsigned_t), unsigned_t)), For), unsafe) &
-                integer(_as(-_as(b.underlying < integer::fixed_width<For>(), signed_t), For), unsafe);
+            return integer(_as(a.u() << std::min(b.u(), _as(integer::bits<unsigned_t>() - _as(1, unsigned_t), unsigned_t)), For), unsafe) &
+                integer(_as(-_as(b.underlying < integer::bits<For>(), signed_t), For), unsafe);
         }
         [[nodiscard]] friend constexpr integer operator>>(integer a, integer b) noexcept
         {
             if constexpr (IBuiltinIntegerSigned<For>)
                 if (b.underlying < 0) [[unlikely]]
-                    return integer(_as(a.u() << _as((-std::max(b.underlying, _as(-integer::fixed_width<For>() + _as(1, For), For))), unsigned_t), For), unsafe) &
-                        integer(_as(-_as(b.underlying > -integer::fixed_width<For>(), signed_t), For), unsafe);
+                    return integer(_as(a.u() << _as((-std::max(b.underlying, _as(-integer::bits<For>() + _as(1, For), For))), unsigned_t), For), unsafe) &
+                        integer(_as(-_as(b.underlying > -integer::bits<For>(), signed_t), For), unsafe);
 
-            return integer(_as(a.u() >> std::min(b.u(), _as(integer::fixed_width<unsigned_t>() - _as(1, unsigned_t), unsigned_t)), For), unsafe) &
-                integer(_as(-_as(b.underlying < integer::fixed_width<For>(), signed_t), For), unsafe);
+            return integer(_as(a.u() >> std::min(b.u(), _as(integer::bits<unsigned_t>() - _as(1, unsigned_t), unsigned_t)), For), unsafe) &
+                integer(_as(-_as(b.underlying < integer::bits<For>(), signed_t), For), unsafe);
         }
 
         constexpr integer& operator+=(const integer& other) noexcept { return (*this = *this + other); }

@@ -19,7 +19,7 @@
 #include <meta/NamedRequirements.h>
 #include <meta/Type.h>
 
-#if !defined(_libcxxext_mock_sup_thread) || !_libcxxext_mock_sup_thread
+#if !defined(_libcxxext_internal_mock_sup_thread) || !_libcxxext_internal_mock_sup_thread
 #include <sup/ThreadHandle.h>
 #include <sup/ThreadingErrors.h>
 #endif

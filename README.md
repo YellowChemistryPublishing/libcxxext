@@ -80,8 +80,10 @@ This project provides some universal tooling for C++, for upstream consumption.
 | `sys.BuildSupport.UndefinedSanitizer` | Interface target for enabling `ubsan`, if supported.                                      |
 | `sys.BuildSupport.LeakSanitizer`      | Interface target for enabling `lsan`, if supported.                                       |
 | `sys`                                 | Basic core functions and utilities.                                                       |
+| `sys.Alloc`                           | Allocators.                                                                               |
 | `sys.Containers`                      | Additional collections for data.                                                          |
 | `sys.Text`                            | Unicode-encoded string functionality.                                                     |
+| `sys.PlatformSupport.Alloc`           | Default platform support library for `sys.Alloc`.                                         |
 | `sys.PlatformSupport.Threading`       | Default platform support library for `sys.Threading`.                                     |
 | `sys.Threading`                       | Generic thread support and tasks.                                                         |
 

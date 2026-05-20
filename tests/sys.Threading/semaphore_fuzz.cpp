@@ -118,13 +118,13 @@ namespace sys::internal
     };
 } // namespace sys::internal
 
-#define _libcxxext_mock_sup_mut 1
-#define _libcxxext_mock_sup_cv 1
+#define _libcxxext_internal_mock_sup_mut 1
+#define _libcxxext_internal_mock_sup_cv 1
 #include <module/sys.Threading>
 
 TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("[[fuzz]] binary_semaphore, semaphore, ordinary_semaphore<...>",
-                                                                     "[sys.Threading][binary_semaphore][semaphore][ordinary_semaphore]", sys::binary_semaphore, sys::semaphore,
-                                                                     (sys::ordinary_semaphore<uint_least8_t, _as(1, uint_least8_t)>))
+                                                                     "[fuzz][sys.Threading][binary_semaphore][semaphore][ordinary_semaphore]", sys::binary_semaphore,
+                                                                     sys::semaphore, (sys::ordinary_semaphore<uint_least8_t, _as(1, uint_least8_t)>))
 {
     std::srand(_as(std::time({}), unsigned)) /* NOLINT(bugprone-random-generator-seed) */;
 
@@ -168,7 +168,7 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("[[fuzz]] b
 }
 
 TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("[[fuzz]] semaphore, ordinary_semaphore<...>",
-                                                                     "[sys.Threading][binary_semaphore][semaphore][ordinary_semaphore]", sys::semaphore,
+                                                                     "[fuzz][sys.Threading][binary_semaphore][semaphore][ordinary_semaphore]", sys::semaphore,
                                                                      (sys::ordinary_semaphore<uint_least8_t, _as(2, uint_least8_t)>))
 {
     std::srand(_as(std::time({}), unsigned)) /* NOLINT(bugprone-random-generator-seed) */;

@@ -89,10 +89,10 @@ namespace sys::internal
     static inline void thread_yield(decltype(unsafe)) noexcept { thrd_yield(); }
 } // namespace sys::internal
 
-#define _libcxxext_mock_sup_thread 1
+#define _libcxxext_internal_mock_sup_thread 1
 #include <module/sys.Threading>
 
-TEST_CASE("[[fuzz]] managed_thread", "[sys.Threading][managed_thread]")
+TEST_CASE("[[fuzz]] managed_thread", "[fuzz][sys.Threading][managed_thread]")
 {
     std::srand(_as(std::time({}), unsigned)) /* NOLINT(bugprone-random-generator-seed) */;
 

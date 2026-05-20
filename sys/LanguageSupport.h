@@ -25,6 +25,10 @@
 /// @ingroup lib
 /// @brief Core system functionality.
 
+/// @defgroup sys_alloc sys.Alloc
+/// @ingroup lib
+/// @brief Allocator functionality.
+
 /// @defgroup sys_containers sys.Containers
 /// @ingroup lib
 /// @brief Container library.

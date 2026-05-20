@@ -92,9 +92,9 @@ namespace sys
     /// @ingroup sys
     /// @brief Named requirement for implicit lifetime types.
     template <typename T>
-    concept IImplicitLifetime = IScalar<std::remove_cvref_t<T>> ||
-        (std::is_aggregate_v<std::remove_cvref_t<T>> && std::is_trivially_constructible_v<std::remove_cvref_t<T>> && std::is_trivially_destructible_v<std::remove_cvref_t<T>>) ||
-        std::is_array_v<std::remove_cvref_t<T>>;
+    concept IImplicitLifetime = IScalar<std::remove_cv_t<T>> ||
+        (std::is_aggregate_v<std::remove_cv_t<T>> && std::is_trivially_constructible_v<std::remove_cv_t<T>> && std::is_trivially_destructible_v<std::remove_cv_t<T>>) ||
+        std::is_array_v<std::remove_cv_t<T>>;
 
     // Library-Wide
 
