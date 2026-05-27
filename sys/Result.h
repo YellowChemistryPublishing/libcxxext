@@ -38,7 +38,7 @@ namespace sys::internal
     /// @brief Type to use in result storage to represent `T`.
     template <typename T>
     using result_storage_type = meta::type_switch<meta::type_case<std::same_as<std::remove_cvref_t<T>, void>, byte>,
-                                                  meta::type_case<meta::type<T>::is_lvalue(), std::remove_reference_t<T>*>, meta::type_case<true, std::remove_cvref_t<T>>>;
+                                                  meta::type_case<meta::type<T>::is_lvalue_ref(), std::remove_reference_t<T>*>, meta::type_case<true, std::remove_cvref_t<T>>>;
 
     /// @internal
     /// @ingroup sys_internal
@@ -72,13 +72,13 @@ namespace sys::internal
 
         /// @internal
         /// @brief Constructs a result with an error.
-        constexpr void ctor_err(auto&& val) noexcept(meta::type<Err>::is_lvalue() || noexcept(IConstructibleFrom<Err, decltype(val)>))
+        constexpr void ctor_err(auto&& val) noexcept(meta::type<Err>::is_lvalue_ref() || noexcept(IConstructibleFrom<Err, decltype(val)>))
         requires requires {
-            requires !meta::type<Err>::is_lvalue() || meta::type<decltype(val)>::is_lvalue();
-            requires meta::type<Err>::is_lvalue() || IConstructibleFrom<Err, decltype(val)>;
+            requires !meta::type<Err>::is_lvalue_ref() || meta::type<decltype(val)>::is_lvalue_ref();
+            requires meta::type<Err>::is_lvalue_ref() || IConstructibleFrom<Err, decltype(val)>;
         }
         {
-            if constexpr (meta::type<Err>::is_lvalue())
+            if constexpr (meta::type<Err>::is_lvalue_ref())
                 *this->downcast().storage.template data<result_storage_type<Err>>() = std::addressof(val);
             else
                 std::construct_at(this->downcast().storage.template data<result_storage_type<Err>>(), _forward(val));
@@ -96,9 +96,9 @@ namespace sys::internal
         /// @internal
         /// @brief Takes the error of a bad result.
         /// @warning `unsafe` because of unchecked tagged union access.
-        [[nodiscard]] constexpr Err err(decltype(unsafe)) noexcept(meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>)
+        [[nodiscard]] constexpr Err err(decltype(unsafe)) noexcept(meta::type<Err>::is_lvalue_ref() || INothrowMoveConstructible<Err>)
         {
-            if constexpr (meta::type<Err>::is_lvalue())
+            if constexpr (meta::type<Err>::is_lvalue_ref())
             {
                 Err ret = **this->downcast().storage.template data<result_storage_type<Err>>();
                 this->downcast().status = result_status::empty;
@@ -115,7 +115,7 @@ namespace sys::internal
 
         /// @internal
         /// @brief Convert to a result with a single error state.
-        [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || meta::type<T>::is_lvalue() || requires {
+        [[nodiscard]] constexpr explicit operator Result<T, void>() && noexcept(std::same_as<T, void> || meta::type<T>::is_lvalue_ref() || requires {
             requires !std::same_as<T, void>;
             requires INothrowMoveConstructible<T>;
         })
@@ -147,13 +147,13 @@ namespace sys::internal
 
         /// @internal
         /// @brief Constructs a result with a value.
-        constexpr void ctor_ok(auto&& val) noexcept(meta::type<T>::is_lvalue() || INothrowConstructibleFrom<T, decltype(val)>)
+        constexpr void ctor_ok(auto&& val) noexcept(meta::type<T>::is_lvalue_ref() || INothrowConstructibleFrom<T, decltype(val)>)
         requires requires {
-            requires !meta::type<T>::is_lvalue() || meta::type<decltype(val)>::is_lvalue();
-            requires meta::type<T>::is_lvalue() || IConstructibleFrom<T, decltype(val)>;
+            requires !meta::type<T>::is_lvalue_ref() || meta::type<decltype(val)>::is_lvalue_ref();
+            requires meta::type<T>::is_lvalue_ref() || IConstructibleFrom<T, decltype(val)>;
         }
         {
-            if constexpr (meta::type<T>::is_lvalue())
+            if constexpr (meta::type<T>::is_lvalue_ref())
                 *this->downcast().storage.template data<result_storage_type<T>>() = std::addressof(val);
             else
                 std::construct_at(this->downcast().storage.template data<result_storage_type<T>>(), _forward(val));
@@ -163,7 +163,7 @@ namespace sys::internal
         /// @brief Inplace constructs a result with a value.
         constexpr void ctor_ok(auto&&... args) noexcept(INothrowConstructibleFrom<T, decltype(args)...>)
         requires requires {
-            requires !meta::type<T>::is_lvalue();
+            requires !meta::type<T>::is_lvalue_ref();
             requires IConstructibleFrom<T, decltype(args)...>;
         }
         {
@@ -174,9 +174,9 @@ namespace sys::internal
         /// @internal
         /// @brief Takes the value of a good result.
         /// @warning `unsafe` because of unchecked tagged union access.
-        [[nodiscard]] constexpr T move(decltype(unsafe)) noexcept(meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>)
+        [[nodiscard]] constexpr T move(decltype(unsafe)) noexcept(meta::type<T>::is_lvalue_ref() || INothrowMoveConstructible<T>)
         {
-            if constexpr (meta::type<T>::is_lvalue())
+            if constexpr (meta::type<T>::is_lvalue_ref())
             {
                 T ret = **this->downcast().storage.template data<result_storage_type<T>>();
                 this->downcast().status = result_status::empty;
@@ -210,7 +210,7 @@ namespace sys
     concept IResultStorable = requires {
         requires !std::same_as<std::remove_cvref_t<T>, std::nullptr_t>;
         requires !std::same_as<std::remove_cvref_t<T>, decltype(error_tag)>;
-        requires meta::type<T>::is_lvalue() || std::same_as<T, void> ||
+        requires meta::type<T>::is_lvalue_ref() || std::same_as<T, void> ||
             (meta::type<T>::is_unqualified() && !meta::type<T>::is_array() && (IMoveConstructible<T>) && (INothrowDestructible<T>));
     };
 
@@ -240,10 +240,10 @@ namespace sys
             : status(internal::result_status::ok)
         { }
         /// @brief Constructs a result with a value.
-        constexpr result(auto&& val) noexcept(meta::type<T>::is_lvalue() || INothrowConstructibleFrom<T, decltype(val)>)
+        constexpr result(auto&& val) noexcept(meta::type<T>::is_lvalue_ref() || INothrowConstructibleFrom<T, decltype(val)>)
         requires requires {
             requires !std::same_as<T, void>; // Result can hold a value and ...
-            requires ((meta::type<T>::is_lvalue() && std::convertible_to<decltype(val), T>) ||
+            requires ((meta::type<T>::is_lvalue_ref() && std::convertible_to<decltype(val), T>) ||
                       (std::same_as<_decltype_of(val), T> && IConstructibleFrom<T, decltype(val)>)); // `T` is reference or copy/move constructible.
         }
         {
@@ -275,11 +275,11 @@ namespace sys
         }
         /// @brief Constructs a result with an error.
         /// @note Participates in overload resolution only if `T` and `Err` are distinct, or `std::same_as<T, void>`.
-        constexpr result(auto&& err) noexcept(meta::type<Err>::is_lvalue() || INothrowConstructibleFrom<Err, decltype(err)>)
+        constexpr result(auto&& err) noexcept(meta::type<Err>::is_lvalue_ref() || INothrowConstructibleFrom<Err, decltype(err)>)
         requires requires {
             requires !std::same_as<Err, void>;                                                // Result can hold an error and ...
             requires !std::same_as<std::remove_reference_t<T>, std::remove_reference_t<Err>>; // Value and error types are distinct and ...
-            requires ((meta::type<Err>::is_lvalue() && std::convertible_to<decltype(err), Err>) ||
+            requires ((meta::type<Err>::is_lvalue_ref() && std::convertible_to<decltype(err), Err>) ||
                       (std::same_as<_decltype_of(err), Err> && IConstructibleFrom<Err, decltype(err)>)); // `Err` is reference or copy/move constructible.
         }
             : result(error_tag, _forward(err))
@@ -299,8 +299,8 @@ namespace sys
         // NOLINTEND(hicpp-explicit-conversions)
 
         constexpr result(const result&) noexcept = delete;
-        constexpr result(result&& other) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T> || std::same_as<T, void>) &&
-                                                  (meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err> || std::same_as<Err, void>))
+        constexpr result(result&& other) noexcept((meta::type<T>::is_lvalue_ref() || INothrowMoveConstructible<T> || std::same_as<T, void>) &&
+                                                  (meta::type<Err>::is_lvalue_ref() || INothrowMoveConstructible<Err> || std::same_as<Err, void>))
         {
             switch (other.status)
             {
@@ -331,11 +331,11 @@ namespace sys
             switch (this->status) // LCOV_EXCL_BR_LINE
             {
             [[likely]] case internal::result_status::ok:
-                if constexpr (!meta::type<T>::is_lvalue() && !std::same_as<T, void>)
+                if constexpr (!meta::type<T>::is_lvalue_ref() && !std::same_as<T, void>)
                     std::destroy_at(this->storage.template data<internal::result_storage_type<T>>());
                 break;
             [[unlikely]] case internal::result_status::error:
-                if constexpr (!meta::type<Err>::is_lvalue() && !std::same_as<Err, void>)
+                if constexpr (!meta::type<Err>::is_lvalue_ref() && !std::same_as<Err, void>)
                     std::destroy_at(this->storage.template data<internal::result_storage_type<Err>>());
                 break;
             [[likely]] default:;
@@ -343,8 +343,8 @@ namespace sys
         }
 
         result& operator=(const result&) noexcept = delete;
-        result& operator=(result&& other) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T> || std::same_as<T, void>) &&
-                                                   (meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err> || std::same_as<Err, void>))
+        result& operator=(result&& other) noexcept((meta::type<T>::is_lvalue_ref() || INothrowMoveConstructible<T> || std::same_as<T, void>) &&
+                                                   (meta::type<Err>::is_lvalue_ref() || INothrowMoveConstructible<Err> || std::same_as<Err, void>))
         {
             if (this == std::addressof(other)) [[unlikely]]
                 return *this;
@@ -352,11 +352,11 @@ namespace sys
             switch (this->status)
             {
             [[likely]] case internal::result_status::ok:
-                if constexpr (!meta::type<T>::is_lvalue() && !std::same_as<T, void>)
+                if constexpr (!meta::type<T>::is_lvalue_ref() && !std::same_as<T, void>)
                     std::destroy_at(this->storage.template data<internal::result_storage_type<T>>());
                 break;
             [[unlikely]] case internal::result_status::error:
-                if constexpr (!meta::type<Err>::is_lvalue() && !std::same_as<Err, void>)
+                if constexpr (!meta::type<Err>::is_lvalue_ref() && !std::same_as<Err, void>)
                     std::destroy_at(this->storage.template data<internal::result_storage_type<Err>>());
                 break;
             [[unlikely]] default:;
@@ -402,7 +402,7 @@ namespace sys
         }
 
         /// @brief Convert to a result with a single error state.
-        [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<T, void>() && noexcept(meta::type<T>::is_lvalue() || INothrowMoveConstructible<T> ||
+        [[nodiscard, clang::set_typestate(unknown)]] constexpr explicit operator result<T, void>() && noexcept(meta::type<T>::is_lvalue_ref() || INothrowMoveConstructible<T> ||
                                                                                                                std::same_as<T, void>)
         requires (!std::same_as<Err, void>)
         {
@@ -421,17 +421,17 @@ namespace sys
         }
         /// @brief `this->move()` if the result is good, otherwise `other`.
         [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T move_or(auto&&... inplace_other) noexcept(
-            (meta::type<T>::is_lvalue() || (INothrowMoveConstructible<T> && INothrowConstructibleFrom<T, decltype(inplace_other)...>)))
+            (meta::type<T>::is_lvalue_ref() || (INothrowMoveConstructible<T> && INothrowConstructibleFrom<T, decltype(inplace_other)...>)))
         requires requires {
             requires !std::same_as<T, void>; // Result can hold a value and ...
             requires (requires {
                 // `T` is non-reference and constructible from `inplace_other...`, otherwise ...
-                requires !meta::type<T>::is_lvalue();
+                requires !meta::type<T>::is_lvalue_ref();
                 requires IConstructibleFrom<T, decltype(inplace_other)...>;
             } || requires {
                 // `T` is reference and `other` is not xvalue.
                 requires sizeof...(inplace_other) == 1uz;
-                requires meta::type<typename meta::parameter_pack<decltype(inplace_other)...>::template at<0>>::is_lvalue();
+                requires meta::type<typename meta::parameter_pack<decltype(inplace_other)...>::template at<0>>::is_lvalue_ref();
             });
         }
         {
@@ -453,7 +453,8 @@ namespace sys
         /// @pre `!*this == true`
         [[nodiscard, clang::callable_when("consumed"), clang::set_typestate(unknown)]] constexpr Err err()
         requires (!std::same_as<Err, void> /* Result can hold an error and ... */ &&
-                  (!meta::type<Err>::is_lvalue() /* `Err` is non-reference, otherwise ... */ || meta::type<Err>::is_lvalue() /* `Err` is reference and `other` is not xvalue. */))
+                  (!meta::type<Err>::is_lvalue_ref() /* `Err` is non-reference, otherwise ... */ ||
+                   meta::type<Err>::is_lvalue_ref() /* `Err` is reference and `other` is not xvalue. */))
         {
             _contract_assert(this->status == internal::result_status::error, "Taking error for a good or empty result!"); // LCOV_EXCL_BR_LINE
             return this->err(unsafe);
@@ -471,13 +472,13 @@ namespace sys
 
         /// @brief Apply `func(*this)` and return its output.
         [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr auto transform(ICallable<result&&> auto&& func) && noexcept(
-            INothrowCallable<decltype(func), result&&>)
+            INothrowCallable<decltype(func), result&&>) -> std::invoke_result_t<decltype(func), result&&>
         {
             return func(std::move(*this));
         }
 
-        friend void swap(result& a,
-                         result& b) noexcept((meta::type<T>::is_lvalue() || INothrowMoveConstructible<T>) && (meta::type<Err>::is_lvalue() || INothrowMoveConstructible<Err>))
+        friend void swap(result& a, result& b) noexcept((meta::type<T>::is_lvalue_ref() || INothrowMoveConstructible<T>) &&
+                                                        (meta::type<Err>::is_lvalue_ref() || INothrowMoveConstructible<Err>))
 
         {
             if ((b.status == internal::result_status::ok && sizeof(internal::result_storage_type<T>) < sizeof(internal::result_storage_type<Err>)) ||
@@ -554,7 +555,7 @@ namespace sys
 
         /// @brief Apply `func(*this)` and return its output.
         [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr auto transform(ICallable<result&&> auto&& func) && noexcept(
-            noexcept(func(std::move(*this))))
+            noexcept(func(std::move(*this)))) -> std::invoke_result_t<decltype(func), result&&>
         {
             return func(std::move(*this));
         }
@@ -615,7 +616,7 @@ namespace sys::internal
         [[nodiscard, clang::callable_when("consumed", "unconsumed"), clang::set_typestate(unknown)]] constexpr T move_or(auto&& other) noexcept(
             INothrowMoveConstructible<T> && INothrowConstructibleFrom<T, decltype(other)>)
         requires requires {
-            requires !meta::type<T>::is_lvalue() || meta::type<decltype(other)>::is_lvalue();
+            requires !meta::type<T>::is_lvalue_ref() || meta::type<decltype(other)>::is_lvalue_ref();
             requires IConstructibleFrom<T, decltype(other)>;
         }
         {

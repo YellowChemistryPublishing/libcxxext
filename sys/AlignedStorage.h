@@ -36,7 +36,7 @@ namespace sys
         /// @brief Pointer to storage.
         template <typename T = meta::parameter_pack<Ts...>::template at<0>>
         requires (meta::parameter_pack<Ts...>::template contains<T>() || std::same_as<T, void>)
-        [[nodiscard]] constexpr auto* data(this auto&& _this) noexcept
+        [[nodiscard]] constexpr auto data(this auto&& _this) noexcept -> meta::replace_cv<T, decltype(_this)>*
         {
             return _asr(std::addressof(_this.mem), meta::replace_cv<T, decltype(_this)>*);
         }

@@ -9,9 +9,9 @@ _nowarn_end_gcc();
 #include <module/sys>
 #include <module/sys.Alloc>
 
-TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("system_allocator<void>, small_buffer_allocator<void, ...>, dynamic_allocator<void, ...>",
-                                                                     "[sys.Alloc][system_allocator][small_buffer_allocator][dynamic_allocator]", sys::system_allocator<void>,
-                                                                     (sys::small_buffer_allocator<void, 256_uz>), (sys::dynamic_allocator<void, 128_uz>))
+TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("system_allocator<void>, inplace_allocator<void, ...>, small_buffer_allocator<void, ...>",
+                                                                     "[sys.Alloc][system_allocator][inplace_allocator][small_buffer_allocator]", sys::system_allocator<void>,
+                                                                     (sys::inplace_allocator<void, 256_uz>), (sys::small_buffer_allocator<void, 128_uz>))
 {
     STATIC_CHECK(sys::IAllocator<TestType>); // NOLINT(clang-analyzer-unix.Malloc)
 
@@ -55,10 +55,10 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("system_all
     }
 }
 
-TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("system_allocator<T>, small_buffer_allocator<T, ...>, dynamic_allocator<T, ...>",
-                                                                     "[sys.Alloc][system_allocator][small_buffer_allocator][dynamic_allocator]",
-                                                                     sys::system_allocator<uint_least64_t>, (sys::small_buffer_allocator<uint_least64_t, 128uz>),
-                                                                     (sys::dynamic_allocator<uint_least64_t, 64uz>))
+TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("system_allocator<T>, inplace_allocator<T, ...>, small_buffer_allocator<T, ...>",
+                                                                     "[sys.Alloc][system_allocator][inplace_allocator][small_buffer_allocator]",
+                                                                     sys::system_allocator<uint_least64_t>, (sys::inplace_allocator<uint_least64_t, 256_uz>),
+                                                                     (sys::small_buffer_allocator<uint_least64_t, 128_uz>))
 {
     TestType malloc;
 
@@ -86,9 +86,9 @@ TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("system_all
     malloc.dealloc(gotMem, 128_uz /* NOLINT(readability-magic-numbers) */, unsafe);
 }
 
-TEST_CASE("dynamic_allocator<...>", "[sys.Alloc][dynamic_allocator]")
+TEST_CASE("small_buffer_allocator<...>", "[sys.Alloc][small_buffer_allocator]")
 {
-    sys::dynamic_allocator<uint_least64_t, 4uz> malloc;
+    sys::small_buffer_allocator<uint_least64_t, 4uz> malloc;
     uint_least64_t* gotMem = nullptr;
 
     CHECK((gotMem = malloc.alloc(4_uz, unsafe)));

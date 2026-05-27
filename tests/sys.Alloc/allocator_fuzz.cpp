@@ -44,11 +44,10 @@ namespace sys::internal
 #define _libcxxext_internal_mock_sup_alloc 1
 #include <module/sys.Alloc>
 
-TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("[[fuzz]] system_allocator<...>, small_buffer_allocator<...>, dynamic_allocator<...>",
-                                                                     "[fuzz][sys.Alloc][system_allocator][small_buffer_allocator][dynamic_allocator]",
-                                                                     (sys::system_allocator<uint_least16_t>),
-                                                                     (sys::small_buffer_allocator<uint_least16_t, *sz(u16::highest() / 2_u8)>),
-                                                                     (sys::dynamic_allocator<uint_least16_t, *sz(u16::highest() / 2_u8)>))
+TEMPLATE_TEST_CASE /* NOLINT(modernize-use-trailing-return-type) */ ("[[fuzz]] system_allocator<...>, inplace_allocator<...>, small_buffer_allocator<...>",
+                                                                     "[fuzz][sys.Alloc][system_allocator][inplace_allocator][small_buffer_allocator]",
+                                                                     (sys::system_allocator<uint_least16_t>), (sys::inplace_allocator<uint_least16_t, *sz(u16::highest() / 2_u8)>),
+                                                                     (sys::small_buffer_allocator<uint_least16_t, *sz(u16::highest() / 2_u8)>))
 {
     CHECK(rc::check([](const std::array<uint_least16_t, 2uz>& a) -> void
     {

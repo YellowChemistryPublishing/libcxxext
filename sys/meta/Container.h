@@ -8,6 +8,7 @@
 #include <utility>
 
 #include <LanguageSupport.h>
+#include <meta/NamedRequirements.h>
 #include <meta/Type.h>
 
 namespace sys::internal
@@ -16,7 +17,7 @@ namespace sys::internal
     /// @ingroup sys_internal
     template <typename T, typename... Args>
     concept IEmpty = requires(T range) {
-        { range.empty() } -> std::convertible_to<bool>;
+        { range.empty() } -> IBooleanTestable;
     };
     /// @internal
     /// @ingroup sys_internal
@@ -136,17 +137,30 @@ namespace sys
         requires requires {
             requires std::same_as<U, void>;
             *std::begin(range);
-        } || std::same_as<_decltype_of(*std::begin(range)), U>;
+        } || requires {
+            requires !std::same_as<U, void>;
+            requires std::same_as<_decltype_of(*std::begin(range)), U>;
+        };
     };
 
     /// @ingroup sys
     /// @brief Whether `T` can be checked for emptiness.
     template <typename T>
     concept IEmptyQueryable = requires(T& range) {
-        { meta::generic_container_adaptor(range).empty() } -> std::convertible_to<bool>;
+        { meta::generic_container_adaptor(range).empty() } -> IBooleanTestable;
     };
     /// @ingroup sys
     /// @brief Whether `T` can be appended to.
     template <typename T, typename... U>
     concept IAppendable = requires(T& range) { meta::generic_container_adaptor(range).append_back(std::declval<U&&>()...); };
+
+    template <typename T>
+    concept IContiguousRange = requires(T& range) {
+        { std::data(range) } -> std::same_as<std::remove_pointer_t<decltype(std::data(range))>*>;
+        requires requires {
+            { std::size(range) } -> std::convertible_to<ptrdiff_t>;
+        } || requires {
+            { std::size(range) } -> std::convertible_to<size_t>;
+        };
+    };
 } // namespace sys

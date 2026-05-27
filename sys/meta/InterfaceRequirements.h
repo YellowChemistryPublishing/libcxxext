@@ -27,6 +27,14 @@ namespace sys
     template <typename T, typename... From>
     concept INothrowConstructibleFrom = std::is_destructible_v<T> && std::is_nothrow_constructible_v<T, From...>;
 
+    template <typename T, typename From>
+    concept INothrowAssignableFrom = std::is_destructible_v<T> && std::is_nothrow_assignable_v<T, From>;
+
     template <typename T>
-    concept ITriviallyRelocatable = meta::type<T>::is_unqualified() && (std::is_trivial_v<T> || std::derived_from<T, traits::trivially_relocatable<T>>);
+    concept ITriviallyDestructible = std::is_trivially_destructible_v<T>;
+
+    template <typename T>
+    concept ITriviallyRelocatable = !meta::type<T>::is_ref() &&
+        (std::is_scalar_v<std::remove_cv_t<T>> || std::is_trivially_move_constructible_v<std::remove_cv_t<T>> ||
+         std::derived_from<std::remove_cv_t<T>, traits::trivially_relocatable<T>>);
 } // namespace sys

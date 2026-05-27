@@ -27,8 +27,8 @@ namespace sys::meta
         using is_valid_prop<false>::is_valid;
         using is_const_prop<false>::is_const;
         using is_volatile_prop<false>::is_volatile;
-        using is_lvalue_prop<false>::is_lvalue;
-        using is_rvalue_prop<false>::is_rvalue;
+        using is_lvalue_prop<false>::is_lvalue_ref;
+        using is_rvalue_prop<false>::is_rvalue_ref;
         using is_noexcept_prop<false>::is_noexcept;
         using is_member_func_prop<false>::is_member_func;
 
@@ -112,82 +112,82 @@ namespace sys::meta
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) /* Appease `clang-format`. */&> : function_signature<T (For::*)(Args...)>, is_lvalue_prop<true>
     {
-        using is_lvalue_prop<true>::is_lvalue;
+        using is_lvalue_prop<true>::is_lvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) &&> : function_signature<T (For::*)(Args...)>, is_rvalue_prop<true>
     {
-        using is_rvalue_prop<true>::is_rvalue;
+        using is_rvalue_prop<true>::is_rvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) const&> : function_signature<T (For::*)(Args...) const>, is_lvalue_prop<true>
     {
-        using is_lvalue_prop<true>::is_lvalue;
+        using is_lvalue_prop<true>::is_lvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) const&&> : function_signature<T (For::*)(Args...) const>, is_rvalue_prop<true>
     {
-        using is_rvalue_prop<true>::is_rvalue;
+        using is_rvalue_prop<true>::is_rvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) volatile&> : function_signature<T (For::*)(Args...) volatile>, is_lvalue_prop<true>
     {
-        using is_lvalue_prop<true>::is_lvalue;
+        using is_lvalue_prop<true>::is_lvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) volatile&&> : function_signature<T (For::*)(Args...) volatile>, is_rvalue_prop<true>
     {
-        using is_rvalue_prop<true>::is_rvalue;
+        using is_rvalue_prop<true>::is_rvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) const volatile&> : function_signature<T (For::*)(Args...) const volatile>, is_lvalue_prop<true>
     {
-        using is_lvalue_prop<true>::is_lvalue;
+        using is_lvalue_prop<true>::is_lvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) const volatile&&> : function_signature<T (For::*)(Args...) const volatile>, is_rvalue_prop<true>
     {
-        using is_rvalue_prop<true>::is_rvalue;
+        using is_rvalue_prop<true>::is_rvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) & noexcept> : function_signature<T (For::*)(Args...) noexcept>, is_lvalue_prop<true>
     {
-        using is_lvalue_prop<true>::is_lvalue;
+        using is_lvalue_prop<true>::is_lvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) && noexcept> : function_signature<T (For::*)(Args...) noexcept>, is_rvalue_prop<true>
     {
-        using is_rvalue_prop<true>::is_rvalue;
+        using is_rvalue_prop<true>::is_rvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) const & noexcept> : function_signature<T (For::*)(Args...) const noexcept>, is_lvalue_prop<true>
     {
-        using is_lvalue_prop<true>::is_lvalue;
+        using is_lvalue_prop<true>::is_lvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) const && noexcept> : function_signature<T (For::*)(Args...) const noexcept>, is_rvalue_prop<true>
     {
-        using is_rvalue_prop<true>::is_rvalue;
+        using is_rvalue_prop<true>::is_rvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) volatile & noexcept> : function_signature<T (For::*)(Args...) volatile noexcept>, is_lvalue_prop<true>
     {
-        using is_lvalue_prop<true>::is_lvalue;
+        using is_lvalue_prop<true>::is_lvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) volatile && noexcept> : function_signature<T (For::*)(Args...) volatile noexcept>, is_rvalue_prop<true>
     {
-        using is_rvalue_prop<true>::is_rvalue;
+        using is_rvalue_prop<true>::is_rvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) const volatile & noexcept> : function_signature<T (For::*)(Args...) const volatile noexcept>, is_lvalue_prop<true>
     {
-        using is_lvalue_prop<true>::is_lvalue;
+        using is_lvalue_prop<true>::is_lvalue_ref;
     };
     template <typename For, typename T, typename... Args>
     struct function_signature<T (For::*)(Args...) const volatile && noexcept> : function_signature<T (For::*)(Args...) const volatile noexcept>, is_rvalue_prop<true>
     {
-        using is_rvalue_prop<true>::is_rvalue;
+        using is_rvalue_prop<true>::is_rvalue_ref;
     };
     /// @endcond
 } // namespace sys::meta

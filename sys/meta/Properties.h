@@ -54,14 +54,14 @@ namespace sys::meta
     template <bool Value>
     struct /* [[sys::static]] */ is_lvalue_prop : meta_type
     {
-        static consteval bool is_lvalue() { return Value; }
+        static consteval bool is_lvalue_ref() { return Value; }
     };
     /// @ingroup sys
     /// @brief Metadata is rvalue reference attribute.
     template <bool Value>
     struct /* [[sys::static]] */ is_rvalue_prop : meta_type
     {
-        static consteval bool is_rvalue() { return Value; }
+        static consteval bool is_rvalue_ref() { return Value; }
     };
     /// @ingroup sys
     /// @brief Metadata is reference attribute.

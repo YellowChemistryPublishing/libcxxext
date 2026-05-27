@@ -9,6 +9,7 @@
 #include <utility> // NOLINT(misc-include-cleaner)
 
 #include <meta/Properties.h>
+#include <meta/TypeSwitch.h>
 
 /// @def _decltype_of(var)
 /// @ingroup sys
@@ -296,11 +297,48 @@ namespace sys::meta
         }
     };
 
+    // clang-format off
+
     /// @ingroup sys
-    /// @brief Obtain the type `T`, inherited with the `cv` qualifiers of a reference-stripped `With`.
-    template <typename T, typename With>
-    using replace_cv = std::conditional_t<
-        std::is_const_v<std::remove_reference_t<With>>,
-        std::add_const_t<std::conditional_t<std::is_volatile_v<std::remove_reference_t<With>>, std::add_volatile_t<std::remove_cvref_t<T>>, std::remove_cvref_t<T>>>,
-        std::conditional_t<std::is_volatile_v<std::remove_reference_t<With>>, std::add_volatile_t<std::remove_cvref_t<T>>, std::remove_cvref_t<T>>>;
+    /// @brief Obtain a cv-ref-stripped `T` forwarded with the qualifiers of a reference-stripped `Like`.
+    template <typename T, typename Like>
+    using replace_cv = type_switch
+    <
+        type_case<
+            type<std::remove_reference_t<Like>>::is_const() && type<std::remove_reference_t<Like>>::is_volatile(),
+            const volatile std::remove_cvref_t<T>
+        >,
+        type_case<
+            type<std::remove_reference_t<Like>>::is_const(),
+            const std::remove_cvref_t<T>
+        >,
+        type_case<
+            type<std::remove_reference_t<Like>>::is_volatile(),
+            volatile std::remove_cvref_t<T>
+        >,
+        type_case<
+            true,
+            std::remove_cvref_t<T>
+        >
+    >;
+    /// @ingroup sys
+    /// @brief Obtain a cv-ref-stripped `T` forwarded with the qualifiers of `Like`.
+    template <typename T, typename Like>
+    using forwarded_like = type_switch
+    <
+        type_case<
+            type<Like>::is_rvalue_ref(),
+            replace_cv<T, Like>&&
+        >,
+        type_case<
+            type<Like>::is_lvalue_ref(),
+            replace_cv<T, Like>&
+        >,
+        type_case<
+            true,
+            replace_cv<T, Like>
+        >
+    >;
+
+    // clang-format on
 } // namespace sys::meta

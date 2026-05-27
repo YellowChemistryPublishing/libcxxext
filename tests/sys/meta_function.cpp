@@ -75,8 +75,8 @@ TEST_CASE("meta::function_signature<...>::is_signature_of<...>()", "[sys][meta][
     STATIC_CHECK_FALSE(sys::meta::function_signature<example_type>::is_signature_of<int (*)(int)>());
 }
 
-TEST_CASE("meta::function_signature<...>::is_const(), meta::function_signature<...>::is_volatile(), meta::function_signature<...>::is_lvalue(), "
-          "meta::function_signature<...>::is_rvalue()",
+TEST_CASE("meta::function_signature<...>::is_const(), meta::function_signature<...>::is_volatile(), meta::function_signature<...>::is_lvalue_ref(), "
+          "meta::function_signature<...>::is_rvalue_ref()",
           "[sys][meta][function_signature]")
 {
     STATIC_CHECK(sys::meta::function_signature<decltype(&example_type::c_fn)>::is_const());
@@ -85,12 +85,12 @@ TEST_CASE("meta::function_signature<...>::is_const(), meta::function_signature<.
     STATIC_CHECK(sys::meta::function_signature<decltype(&example_type::cv_fn)>::is_volatile());
 
     STATIC_CHECK(sys::meta::function_signature<decltype(&example_type::cl_fn)>::is_const());
-    STATIC_CHECK(sys::meta::function_signature<decltype(&example_type::cl_fn)>::is_lvalue());
-    STATIC_CHECK_FALSE(sys::meta::function_signature<decltype(&example_type::cl_fn)>::is_rvalue());
+    STATIC_CHECK(sys::meta::function_signature<decltype(&example_type::cl_fn)>::is_lvalue_ref());
+    STATIC_CHECK_FALSE(sys::meta::function_signature<decltype(&example_type::cl_fn)>::is_rvalue_ref());
 
     STATIC_CHECK(sys::meta::function_signature<decltype(&example_type::cr_fn)>::is_const());
-    STATIC_CHECK_FALSE(sys::meta::function_signature<decltype(&example_type::cr_fn)>::is_lvalue());
-    STATIC_CHECK(sys::meta::function_signature<decltype(&example_type::cr_fn)>::is_rvalue());
+    STATIC_CHECK_FALSE(sys::meta::function_signature<decltype(&example_type::cr_fn)>::is_lvalue_ref());
+    STATIC_CHECK(sys::meta::function_signature<decltype(&example_type::cr_fn)>::is_rvalue_ref());
 }
 
 TEST_CASE("IFunc<...>", "[sys][IFunc]")

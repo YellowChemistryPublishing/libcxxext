@@ -14,6 +14,7 @@
 #include <LanguageSupport.h>
 #include <Numeric.h>
 #include <meta/Builtin.h>
+#include <meta/InterfaceRequirements.h>
 #include <meta/Type.h>
 
 namespace sys
@@ -45,7 +46,7 @@ namespace sys
 
         [[nodiscard]] static consteval bool is_signed() noexcept { return IBuiltinIntegerSigned<For>; }
         template <typename T = integer<size_t>>
-        [[nodiscard]] static constexpr T bits() noexcept(noexcept(T(sizeof(For) * CHAR_BIT)))
+        [[nodiscard]] static constexpr T bits() noexcept(INothrowConstructibleFrom<T, decltype(sizeof(For) * CHAR_BIT)>)
         {
             return T(sizeof(For) * CHAR_BIT);
         }
@@ -244,6 +245,9 @@ namespace sys
         template <IBuiltinInteger T>
         friend struct sys::integer;
     };
+
+    template <IBuiltinInteger T>
+    integer(T&) -> integer<T>;
 
     template <IBuiltinInteger T, IBuiltinInteger U>
     [[nodiscard]] constexpr bool operator==(const integer<T> a, const integer<U> b) noexcept
