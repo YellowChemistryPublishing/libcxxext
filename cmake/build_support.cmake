@@ -72,7 +72,7 @@ target_compile_options(sys.BuildSupport.Hardening INTERFACE
 
 add_library(sys.BuildSupport.EnableCoverage INTERFACE)
 target_compile_options(sys.BuildSupport.EnableCoverage INTERFACE
-    $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-O0 -g -fprofile-arcs -ftest-coverage>
+    $<$<OR:$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>,$<COMPILE_LANG_AND_ID:CXX,GNU,Clang,AppleClang>>:-O0 -g -fprofile-arcs -ftest-coverage -fprofile-abs-path>
     $<$<OR:$<COMPILE_LANG_AND_ID:C,MSVC>,$<COMPILE_LANG_AND_ID:CXX,MSVC>>:/Zi /Od>
 )
 target_link_options(sys.BuildSupport.EnableCoverage INTERFACE

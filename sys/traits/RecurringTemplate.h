@@ -15,6 +15,7 @@ namespace sys::traits
     /// Implements `sys::INothrowDefaultConstructible`, `sys::INothrowCopyConstructible`, `sys::INothrowMoveConstructible`, `sys::INothrowCopyAssignable`,
     /// `sys::INothrowMoveAssignable`, `sys::INothrowDestructible`.
     template <typename T>
+    requires (meta::type<T>::is_unqualified())
     struct recurring_template
     {
     protected:
@@ -34,9 +35,9 @@ namespace sys::traits
 
         /// @private
         /// @brief Downcasts to `T`.
-        constexpr auto& downcast(this auto&& _this) noexcept // LCOV_EXCL_LINE
+        constexpr auto downcast(this auto&& _this) noexcept -> meta::replace_cv<T, decltype(_this)>& // LCOV_EXCL_LINE
         {
-            return *_as(std::addressof(_this), meta::replace_cv<recurring_type, std::remove_reference_t<decltype(_this)>>*); // LCOV_EXCL_LINE
+            return _as(_this, meta::replace_cv<T, decltype(_this)>&); // LCOV_EXCL_LINE
         }
     };
 } // namespace sys::traits

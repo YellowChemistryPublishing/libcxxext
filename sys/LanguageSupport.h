@@ -25,6 +25,10 @@
 /// @ingroup lib
 /// @brief Core system functionality.
 
+/// @defgroup sys_alloc sys.Alloc
+/// @ingroup lib
+/// @brief Allocator functionality.
+
 /// @defgroup sys_containers sys.Containers
 /// @ingroup lib
 /// @brief Container library.
@@ -91,12 +95,20 @@ constexpr struct
 /// @def _weak
 /// @ingroup sys
 /// @brief Mark a function as weak.
+#if !_libcxxext_compiler_msvc
 #define _weak [[gnu::weak]]
+#else
+#define _weak
+#endif
 
 /// @def _pure
 /// @ingroup sys
 /// @brief Mark a function as pure.
+#if !_libcxxext_compiler_msvc
 #define _pure [[gnu::pure]]
+#else
+#define _pure
+#endif
 
 /// @def _pure_const
 /// @ingroup sys
@@ -128,6 +140,17 @@ constexpr struct
 #define _packed [[gnu::packed]]
 #else
 #define _packed __declspec(align(1))
+#endif
+
+/// @def _trivial_abi
+/// @ingroup sys
+/// @brief Allow passing a non-trivial type in registers.
+#if _libcxxext_compiler_clang
+#define _trivial_abi [[clang::trivial_abi]]
+#elif _libcxxext_compiler_gcc
+#define _trivial_abi __attribute__((trivial_abi))
+#else
+#define _trivial_abi
 #endif
 
 /// @def _no_unique_address

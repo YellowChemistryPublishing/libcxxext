@@ -16,7 +16,7 @@
 
 #include <sup/ThreadingErrors.h>
 
-#if !defined(_libcxxext_mock_sup_cv) || !_libcxxext_mock_sup_cv
+#if !defined(_libcxxext_internal_mock_sup_cv) || !_libcxxext_internal_mock_sup_cv
 #include <sup/CondVarHandle.h>
 #endif
 

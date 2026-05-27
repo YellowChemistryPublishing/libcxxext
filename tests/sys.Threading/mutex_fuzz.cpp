@@ -82,10 +82,10 @@ namespace sys::internal
     };
 } // namespace sys::internal
 
-#define _libcxxext_mock_sup_mut 1
+#define _libcxxext_internal_mock_sup_mut 1
 #include <module/sys.Threading>
 
-TEST_CASE("[[fuzz]] mutex", "[sys.Threading][mutex]")
+TEST_CASE("[[fuzz]] mutex", "[fuzz][sys.Threading][mutex]")
 {
     std::srand(_as(std::time({}), unsigned)) /* NOLINT(bugprone-random-generator-seed) */;
 
@@ -136,7 +136,7 @@ TEST_CASE("[[fuzz]] mutex", "[sys.Threading][mutex]")
     }));
 }
 
-TEST_CASE("[[fuzz]] reentrant_mutex", "[sys.Threading][reentrant_mutex]")
+TEST_CASE("[[fuzz]] reentrant_mutex", "[fuzz][sys.Threading][reentrant_mutex]")
 {
     std::srand(_as(std::time({}), unsigned)) /* NOLINT(bugprone-random-generator-seed) */;
 

@@ -1,5 +1,5 @@
 if(NOT TARGET sys)
-    file(GLOB_RECURSE SYS_HEADERS CONFIGURE_DEPENDS "*.h" "*.inl")
+    file(GLOB SYS_HEADERS CONFIGURE_DEPENDS "*.h" "*.inl" "data/*.h" "data/*.inl" "meta/*.h" "meta/*.inl" "traits/*.h" "traits/*.inl")
 
     add_library(sys INTERFACE)
     target_libcxxext_common_config(sys)
